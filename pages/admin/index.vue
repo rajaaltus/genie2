@@ -1,12 +1,19 @@
 <template>
   <v-app>
-    <h1>Welcome</h1>
+    <PageHeader :title="$metaInfo.title" /> 
   </v-app>
 </template>
 
 <script>
-
-
+import PageHeader from '@/components/PageHeader'
 export default {
+  head() {
+    return {
+      title: 'Dashboard'
+    }
+  }, 
+  components: {
+    PageHeader
+  }
 }
 </script>

@@ -7,6 +7,7 @@
       :mini-variant.sync="mini"
       permanent
       app
+      dark
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
@@ -74,6 +75,7 @@
     </v-navigation-drawer>
     <v-content>
       <v-container>
+       
         <nuxt />
       </v-container>
     </v-content>
@@ -82,12 +84,16 @@
 </template>
 
 <script>
+import PageHeader from '@/components/PageHeader'
 export default {
   head () {
 		return {
 			'title': 'ARMS Admin - ' + this.$route.name
 		}
-	},
+  },
+  components: {
+    PageHeader
+  },
   data () {
     return {
       drawer: true,

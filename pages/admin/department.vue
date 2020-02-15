@@ -1,63 +1,56 @@
 <template>
 	<v-app>
-      <v-dialog v-model="Ydialog" persistent max-width="30%">
-					<v-card>
-						<v-card-title>
-							<span class="headline">Select Reporting Year</span>
-						</v-card-title>
-						<v-card-text>
-							<v-container>
-								<v-row>
-									<v-col cols="4">
-										<v-select
-											v-model="selectedYear"
-											:items="reportYears"
-											item-text="val"
-											item-value="id"
-											label="Reporing Year"
-											required
-											class="text-center"
-										></v-select>
-									</v-col>
-								</v-row>
-							</v-container>
-						</v-card-text>
-						<v-card-actions>
+		<!-- Year POPUP DIALOG -->
+		<v-dialog v-model="Ydialog" persistent max-width="30%">
+			<v-card>
+				<v-card-title>
+					<span class="headline">Select Reporting Year</span>
+				</v-card-title>
+				<v-card-text>
+					<v-container>
+						<v-row>
 							<v-spacer></v-spacer>
-							<v-btn color="blue" text @click="Ydialog = false">
-								Close
-							</v-btn>
-							<v-btn color="blue" text @click="setReportingYear">
-								Set
-							</v-btn>
-						</v-card-actions>
-					</v-card>
-				</v-dialog>
-			<v-container>
-							<v-select
-								v-model="selectedYear"
-								:items="reportYears"
-								item-text="val"
-								item-value="id"
-								label="Reporing Year"
-								required
-								@input="changeReportingYear"
-							></v-select>
-				
-			
-					<p class="uk-article">
-						<span class="frm-title">A. Introduction (in about 150 words); specifically indicate the recognition / contribution of the Department during the year to policies, planning and programmes at State / National and International levels.</span>
-					</p>
-					<div>
-						<client-only>
-							<ckeditor v-model="departmentAbout.introduction" :editor="editor" :config="editorConfig"></ckeditor>
-						</client-only>
-					</div>
-		
+							<v-col cols="12">
+								<v-select
+									v-model="selectedYear"
+									:items="reportYears"
+									item-text="val"
+									item-value="id"
+									label="Reporing Year"
+									required
+									class="text-center"
+								></v-select>
+							</v-col>
+						</v-row>
+					</v-container>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="blue" text @click="Ydialog = false">
+						Close
+					</v-btn>
+					<v-btn color="blue" text @click="setReportingYear">
+						Set
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+			</v-dialog>
+			<!-- Year Dialog ends here -->
 
+			<v-container>
+				<PageHeader :title="$metaInfo.title" :reportYears="reportYears" /> 
+			
+				<p class="mb-3">
+					<span >A. Introduction (in about 150 words); specifically indicate the recognition / contribution of the Department during the year to policies, planning and programmes at State / National and International levels.</span>
+				</p>
 				<div>
-					<p>
-						<span class="frm-title">B. New facilities developed, new initiatives taken up by the Department(s) within NIMHANS during the year.</span>
+					<client-only>
+						<ckeditor v-model="departmentAbout.introduction" :editor="editor" :config="editorConfig"></ckeditor>
+					</client-only>
+				</div>
+				<div>
+					<p class="mt-3">
+						<span>B. New facilities developed, new initiatives taken up by the Department(s) within NIMHANS during the year.</span>
 					</p>
 					<div>
 						<client-only>
@@ -65,26 +58,129 @@
 						</client-only>
 					</div>
 				</div>
-
-				<v-btn @click="addProfile">
-					Submit
-				</v-btn>
-					
-	</v-container>
+				<v-row>
+					<v-spacer></v-spacer>
+					<v-btn @click="addProfile" color="success" class="ma-3">
+						Submit
+					</v-btn>
+				</v-row>
+			</v-container>
+				<v-container>
+				<v-row class="mx-3 mb-4">
+				<span class="theme-border"><h1 class="headline ml-3">Department Images</h1></span>
+				</v-row>
+				
+				<v-row align="center my-2 mx-1" justify="space-between">
+				<v-img
+					src="https://picsum.photos/id/11/100/60"
+					lazy-src="https://picsum.photos/id/11/100/60"
+					aspect-ratio="1"
+					class="grey lighten-2"
+					max-width="500"
+					max-height="300"
+				>
+					<template v-slot:placeholder>
+						<v-row
+							class="fill-height ma-0"
+							align="center"
+							justify="center"
+						>
+							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+						</v-row>
+					</template>
+				</v-img>
+				<v-img
+					src="https://picsum.photos/id/11/100/60"
+					lazy-src="https://picsum.photos/id/11/100/60"
+					aspect-ratio="1"
+					class="grey lighten-2"
+					max-width="500"
+					max-height="300"
+				>
+					<template v-slot:placeholder>
+						<v-row
+							class="fill-height ma-0"
+							align="center"
+							justify="center"
+						>
+							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+						</v-row>
+					</template>
+				</v-img>
+				<v-img
+					src="https://picsum.photos/id/11/100/60"
+					lazy-src="https://picsum.photos/id/11/100/60"
+					aspect-ratio="1"
+					class="grey lighten-2"
+					max-width="500"
+					max-height="300"
+				>
+					<template v-slot:placeholder>
+						<v-row
+							class="fill-height ma-0"
+							align="center"
+							justify="center"
+						>
+							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+						</v-row>
+					</template>
+				</v-img>
+				</v-row>
+				<v-row align="center my-2 mx-1" justify="space-between">
+					<v-col cols="12" md=6 sm=4 lg=3>
+					<v-file-input
+						:rules="rules"
+						accept="image/png, image/jpeg, image/bmp"
+						placeholder="Pick an avatar"
+						prepend-icon="mdi-camera"
+						label="Avatar"
+  					></v-file-input>
+						</v-col>
+						<v-col cols="12" md=6 sm=4 lg=3>
+						<v-file-input
+						:rules="rules"
+						accept="image/png, image/jpeg, image/bmp"
+						placeholder="Pick an avatar"
+						prepend-icon="mdi-camera"
+						label="Avatar"
+  					></v-file-input>
+						</v-col>
+						<v-col cols="12" md=6 sm=4 lg=3>
+						<v-file-input
+						:rules="rules"
+						accept="image/png, image/jpeg, image/bmp"
+						placeholder="Pick an avatar"
+						prepend-icon="mdi-camera"
+						label="Avatar"
+  					></v-file-input>
+						</v-col>
+				</v-row>
+			</v-container>
 	</v-app>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
+import PageHeader from '@/components/PageHeader'
 import Swal from 'sweetalert2'
 if(process.client) {
 	require('~/plugins/ckeditor');
 }
 export default {
-	name: 'DepartmentAbout',
+	head() {
+    return {
+      title: 'Departments'
+    }
+	}, 
+	components: {
+		PageHeader
+	},
 	data: () => ({		
+		rules: [
+        value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+      ],
 		Ydialog: false,
-		editorConfig: {},
+		editorConfig: { height: '400px' },
 		selectedYear: 0,		
 		departmentAbout: 
 		{			
@@ -185,10 +281,10 @@ export default {
 		
 	},	
 	mounted () {
-		// if (this.$store.state.selectedYear == 0)
-		// 	this.Ydialog = true;
-		// else
-		// 	this.selectedYear = this.$store.state.selectedYear
+		if (this.$store.state.selectedYear == 0)
+			this.Ydialog = true;
+		else
+			this.selectedYear = this.$store.state.selectedYear
 
 		// console.log(this.$store.state.depabout.aboutData.result);
 		// this.departmentAbout = Object.assign({}, this.$store.state.depabout.aboutData.result[0]);
@@ -325,14 +421,13 @@ export default {
   height: 40px;
   vertical-align: center !important;
 }
-.uk-grid-grey {
-  margin-top: 0 !important;
-  background: none !important;
-  box-shadow: none !important;
-}
+
 .ck.ck-toolbar {
   background: none !important;
   border-radius: 0.4em 0.4em 0 0 !important;
+}
+.ck.ck-editor__main>.ck-editor__editable {
+	min-height: 350px;
 }
 
 </style>

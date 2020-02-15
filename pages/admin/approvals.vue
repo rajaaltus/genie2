@@ -1,12 +1,20 @@
 <template>
   <v-app>
-    <h1>Approvals</h1>
+    <PageHeader :title="$metaInfo.title" /> 
   </v-app>
 </template>
 
 <script>
 
-
+import PageHeader from '@/components/PageHeader'
 export default {
-}
+  head() {
+    return {
+      title: 'Approvals'
+    }
+  }, 
+  components: {
+    PageHeader
+  }
+} 
 </script>
