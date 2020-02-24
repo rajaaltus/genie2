@@ -181,7 +181,7 @@ export default {
 		password: 'Password',
 		registerForm: false,
 		loginData: {
-			login: '',
+			email: '',
 			password: ''
 		},
 		registerData: {
@@ -223,7 +223,7 @@ export default {
 		async signIn () {
 			await this.$auth.loginWith("local", {
 				data: {
-					username: this.loginData.login,
+					email: this.loginData.login,
 					password: this.loginData.password,
 					rememberMe: true
 				}
