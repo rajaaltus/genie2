@@ -73,13 +73,19 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <v-app-bar
+      app
+      color="blue-grey"
+      dark
+    >
+      <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <v-toolbar-title>Toolbar</v-toolbar-title>
+    </v-app-bar>
     <v-content>
       <v-container>
-       
         <nuxt />
       </v-container>
     </v-content>
-    
   </v-app>
 </template>
 
@@ -112,3 +118,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--fixed v-navigation-drawer--mini-variant v-navigation-drawer--open theme--dark {
+ top: 0 !important; 
+}
+</style>
