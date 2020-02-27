@@ -70,7 +70,7 @@
 				<span class="theme-border"><h1 class="headline ml-3">Department Images</h1></span>
 				</v-row>
 				
-				<v-row align="center my-2 mx-1" justify="space-between">
+				<v-row class="center my-2 mx-1" justify="space-between">
 				<v-img
 					src="https://picsum.photos/id/11/100/60"
 					lazy-src="https://picsum.photos/id/11/100/60"
@@ -81,8 +81,7 @@
 				>
 					<template v-slot:placeholder>
 						<v-row
-							class="fill-height ma-0"
-							align="center"
+							class="fill-height ma-0"							
 							justify="center"
 						>
 							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -99,8 +98,7 @@
 				>
 					<template v-slot:placeholder>
 						<v-row
-							class="fill-height ma-0"
-							align="center"
+							class="fill-height ma-0"							
 							justify="center"
 						>
 							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -117,8 +115,7 @@
 				>
 					<template v-slot:placeholder>
 						<v-row
-							class="fill-height ma-0"
-							align="center"
+							class="fill-height ma-0"							
 							justify="center"
 						>
 							<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -126,7 +123,7 @@
 					</template>
 				</v-img>
 				</v-row>
-				<v-row align="center my-2 mx-1" justify="space-between">
+				<v-row class="center my-2 mx-1" justify="space-between">
 					<v-col cols="12" md=6 sm=4 lg=3>
 					<v-file-input
 						:rules="rules"
@@ -134,7 +131,9 @@
 						placeholder="Pick an avatar"
 						prepend-icon="mdi-camera"
 						label="Avatar"
+						v-model="chosenFile"
   					></v-file-input>
+					  <v-btn color="primary" right @click="onFileChange">Upload</v-btn>
 						</v-col>
 						<v-col cols="12" md=6 sm=4 lg=3>
 						<v-file-input
@@ -181,22 +180,28 @@ export default {
       ],
 		Ydialog: false,
 		editorConfig: { height: '400px' },
-		selectedYear: 0,		
+		selectedYear: 0,				
+		chosenFile: null,
 		departmentAbout: 
 		{			
-			annualYear: 0,			
-			departmentId: 0,
-			status: "VALID",
+			annual_year: 0,			
+			department_id: 0,
+			id: 0,
+			status: "published",
 			introduction: "",
-			facilities: ""
+            facilities: "",
+            image_1: 0,
+            image_2: 0,
+            image_3: 0
 		},
 		editedItem: 
 		{			
-			annualYear: 0,			
-			departmentId: 0,
-			status: "VALID",
+			annual_year: 0,			
+			department_id: 0,
+			id: 0,
+			status: "published",
 			introduction: "",
-			facilities: ""
+            		facilities: ""            
 		},
 		file: '',
 		addDepartmentImage:
@@ -233,7 +238,9 @@ export default {
 			}
 		],
 		selectedYear: 0,
-		aboutImages: []
+		aboutImages: [],
+		user_id: 0,
+		user_department_id: 0
 	}),
 	computed: {
 		// ...mapState("depabout", ["aboutData", "deptImages", "deptImageContents", "addedImageId", "departmentProfileId"]),	
@@ -243,7 +250,14 @@ export default {
 		editor () {
 			return process.client ? require('@ckeditor/ckeditor5-build-classic') : null
 		},
-	
+		// // eslint-disable-next-line vue/return-in-computed-property
+		// introductionText () {
+		// 	return this.aboutData.result.introduction;
+		// },
+		// // eslint-disable-next-line vue/return-in-computed-property
+		// facilitiesText () {
+		// 	return this.aboutData.result.facilities;
+		// },	
 		// deptId () {
 		// 	return this.aboutData.result.departmentId;
 		// },
@@ -261,7 +275,8 @@ export default {
 		}
 	},
 	async fetch ({store}) {
-		// let id = store.state.auth.user.id
+		let id = 1;
+		console.log(id);
 		// await store.dispatch('user/setUserProfile', {id: id})
 		// 	.catch(err => {
 		// 		this.snackbar = true
@@ -270,12 +285,12 @@ export default {
 		// let deptId = store.state.user.userProfile.result.departmentId;
 		// let userId = store.state.user.userProfile.result.userId;		
 		// this.selectedYear = store.state.selectedYear;
-		// let queryString = ''
-		// console.log(deptId);
+		let queryString = ''
+		//console.log(deptId);
 
-		// queryString = `departmentId.equals=${deptId}`;
-		// console.log(queryString);
-		// await store.dispatch('depabout/setAboutData', {query: queryString});
+		queryString = `filter[department_id]=${id}`;
+		console.log(queryString);
+		await store.dispatch('depabout/getDeptProfileData', {query: queryString});
 		// queryString = `departmentProfileId.equals=${deptId}`
 		// await store.dispatch('depabout/getAllDepartmentImages', {query: queryString});
 		
@@ -285,7 +300,11 @@ export default {
 			this.Ydialog = true;
 		else
 			this.selectedYear = this.$store.state.selectedYear
-
+		console.log(this.selectedYear);
+		
+		if(this.$store.state.auth.loggedIn)
+			this.user_id = this.$store.state.auth.user.id;
+		//console.log(this.user_id);
 		// console.log(this.$store.state.depabout.aboutData.result);
 		// this.departmentAbout = Object.assign({}, this.$store.state.depabout.aboutData.result[0]);
 		
@@ -351,6 +370,20 @@ export default {
 		handleFileUpload () {
 			this.file = this.$refs.file.files[0];
 		},
+		onFileChange() {
+			let formData = new FormData();
+            if(this.chosenFile){
+				//console.log(this.chosenFile.name);				
+				formData.append("file", this.chosenFile);
+				//console.log(formData);
+				var query = {
+					deptProfileId: 1,
+					data: formData      
+				};
+				console.log(query);
+				this.$store.dispatch("depabout/addDeptProfileImage", query);
+			}
+        },
 		async submitFile () {		
 			var fileName = this.file.name;			
 			var imageCode = this.uniqueID;
