@@ -168,7 +168,7 @@ if(process.client) {
 export default {
 	head() {
     return {
-      title: 'Departments'
+      title: 'About the Department'
     }
 	}, 
 	components: {

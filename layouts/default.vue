@@ -8,12 +8,12 @@
       app
       dark
       >
-      <!--<v-list-item v-if="!mini" class="px-4 py-8">
-          <v-img  src="/logo.png" max-width="50%"></v-img>
+      <v-list-item v-if="!mini" class="px-3 py-3">
+          <v-img  src="/logo.png" max-width="35%"></v-img>
       </v-list-item>
       <v-list-item  v-else class="px-2 py-6">
-        <v-img src="/favicon.ico" max-width="100%"></v-img>
-      </v-list-item>-->
+        <v-img  src="/logo.png" max-width="100%"></v-img>
+      </v-list-item>
 
       <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -22,9 +22,9 @@
           
           <v-list-item link style="padding:0 0 0 7px;">
               <v-list-item-content>
-                <v-list-item-title class="title">{{this.$store.state.auth.user.username}}</v-list-item-title>
-                <v-list-item-subtitle>{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
-                <v-list-item-subtitle>{{this.$store.state.auth.user.userType}}</v-list-item-subtitle>
+                <v-list-item-title class="name-title">{{this.$store.state.auth.user.username}}</v-list-item-title>
+                <v-list-item-subtitle class="name-subtitle">{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
+                
               </v-list-item-content>
           </v-list-item>
       </v-list-item>
@@ -71,6 +71,7 @@
           class="px-2"
           dense
         >
+        
         <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -79,6 +80,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      
 
       <template v-slot:append>
         <v-list-item  nav dense link @click="logout">
@@ -142,6 +144,14 @@ export default {
 <style scoped>
 .v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--fixed v-navigation-drawer--mini-variant v-navigation-drawer--open theme--dark {
  top: 0 !important; 
+}
+.name-title
+{
+  font-size: 14px;
+}
+.name-subtitle
+{
+  font-size: 12px;
 }
 .menu-title
 {

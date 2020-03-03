@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="6" sm="4" lg="3" class="mt-2">
-      <span class="theme-border"><h1 class="headline ml-3">{{ title }}</h1></span>
+      <v-col cols="12" md="8" sm="12" lg="6" class="mt-2 pt-2 pb-0" style="padding:0;">
+      <span class="theme-border"><h1 class="ml-3">{{ title }}</h1></span>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md="6" sm="4" lg="3" v-if="reportYears">
@@ -27,7 +27,7 @@ export default {
 
 <style>
 .theme-border {
-  border-left: 5px #8BC34A solid;
+  border-left: 5px #29ac3c solid;
   float: left;
   margin-left: 0;
 }
