@@ -55,20 +55,19 @@ export default {
 				endpoints: {
 					login: { 
 						headers: {'Content-type': 'application/json' },
-						url: '/auth/authenticate', 
+						url: '/auth/local', 
 						method: 'post',
-						propertyName: 'data.token'
+						propertyName: 'jwt'
 					},
 					logout: false,
 					user: { 
 						headers: {'Content-type': 'application/json' },
 						url: '/users/me', 
             method: 'get', 
-            propertyName: 'data'
+            propertyName: false
 					}
 				},
         tokenType: 'Bearer',
-        tokenRequired: 'true'
 			}
 		}
   },
@@ -77,7 +76,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
 	axios: {
-		 baseURL: 'https://api2.ourlao.com/directus'
+		 baseURL: 'https://api2.ourlao.com'
 		// baseURL: 'http://35.247.148.226:18081/api'
 		// baseURL: 'http://arms.nimhans.ac.in:18080/api'
 	},
