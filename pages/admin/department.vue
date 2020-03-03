@@ -189,10 +189,10 @@ export default {
 			id: 0,
 			status: "published",
 			introduction: "",
-            facilities: "",
-            image_1: 0,
-            image_2: 0,
-            image_3: 0
+			facilities: "",
+			image_1: 0,
+			image_2: 0,
+			image_3: 0
 		},
 		editedItem: 
 		{			
@@ -201,7 +201,7 @@ export default {
 			id: 0,
 			status: "published",
 			introduction: "",
-            		facilities: ""            
+			facilities: ""            
 		},
 		file: '',
 		addDepartmentImage:
@@ -290,7 +290,7 @@ export default {
 
 		queryString = `filter[department_id]=${id}`;
 		console.log(queryString);
-		await store.dispatch('depabout/getDeptProfileData', {query: queryString});
+		// await store.dispatch('depabout/getDeptProfileData', {query: queryString});
 		// queryString = `departmentProfileId.equals=${deptId}`
 		// await store.dispatch('depabout/getAllDepartmentImages', {query: queryString});
 		

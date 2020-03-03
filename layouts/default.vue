@@ -2,27 +2,35 @@
   <v-app>
      <v-navigation-drawer
       v-model="drawer"
-      clipped
-      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+      
+      src="/dashboard_back.jpg"
       :mini-variant.sync="mini"
       permanent
       app
       dark
     >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>{{this.$store.state.auth.user.lastName}}</v-list-item-title>
-
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
+      <v-list-item v-if="!mini" class="px-4 py-8">
+          <v-img  src="/logo.png" max-width="60%"></v-img>
       </v-list-item>
+      <v-list-item  v-else class="px-2 py-6">
+        <v-img src="/favicon.ico" max-width="100%"></v-img>
+      </v-list-item>
+
+      <v-list>
+            <v-list-item class="px-2">
+              <v-list-item-avatar>
+                <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+              </v-list-item-avatar>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title class="title">{{this.$store.state.auth.user.username}}</v-list-item-title>
+                <v-list-item-subtitle>{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{this.$store.state.auth.user.userType}}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
       <v-list-item dense>
         <v-list-item-icon>
             <v-icon>mdi-account</v-icon>
@@ -75,11 +83,9 @@
     </v-navigation-drawer>
     <v-app-bar
       app
-      color="blue-grey"
-      dark
+      color="#EEEEEE"
     >
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <v-toolbar-title>Toolbar</v-toolbar-title>
     </v-app-bar>
     <v-content>
       <v-container>
