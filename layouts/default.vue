@@ -8,12 +8,13 @@
       app
       dark
       >
-      <!--<v-list-item v-if="!mini" class="px-4 py-8">
-          <v-img  src="/logo.png" max-width="50%"></v-img>
+
+      <v-list-item v-if="!mini" class="px-3 py-3">
+          <v-img  src="/logo.png" max-width="35%"></v-img>
       </v-list-item>
       <v-list-item  v-else class="px-2 py-6">
-        <v-img src="/favicon.ico" max-width="100%"></v-img>
-      </v-list-item>-->
+        <v-img  src="/logo.png" max-width="100%"></v-img>
+      </v-list-item>
 
       <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -22,9 +23,9 @@
           
           <v-list-item link style="padding:0 0 0 7px;">
               <v-list-item-content>
-                <v-list-item-title class="title">{{this.$store.state.auth.user.username}}</v-list-item-title>
-                <v-list-item-subtitle>{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
-                <v-list-item-subtitle>{{this.$store.state.auth.user.userType}}</v-list-item-subtitle>
+                <v-list-item-title class="name-title">{{this.$store.state.auth.user.username}}</v-list-item-title>
+                <v-list-item-subtitle class="name-subtitle">{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
+                
               </v-list-item-content>
           </v-list-item>
       </v-list-item>
@@ -79,8 +80,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list> -->
-      <v-list nav dense>
-       
+      <v-list nav>
         <template v-for="item in items">
           <v-list-group
             v-if="item.children"
@@ -93,7 +93,7 @@
           >
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title >
+                <v-list-item-title class="menu-title">
                   {{ item.title }}
                 </v-list-item-title>
               </v-list-item-content>
@@ -106,12 +106,13 @@
               router
               dense
               exact
+              class="px-2"
             >
               <v-list-item-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>
+                <v-list-item-title class="menu-title">
                   {{ child.title }}
                 </v-list-item-title>
               </v-list-item-content>
@@ -130,7 +131,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>
+              <v-list-item-title class="menu-title">
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -262,6 +263,15 @@ export default {
   font-weight: normal;
   color: #f5f5f5;
 }
+.name-title
+{
+  font-size: 14px;
+}
+.name-subtitle
+{
+  font-size: 12px;
+}
+
 .chivron {
   border-left: 5px solid green;
 }

@@ -67,7 +67,7 @@
 			</v-container>
 				<v-container>
 				<v-row class="mx-3 mb-4">
-				<span class="theme-border"><h1 class="headline ml-3">Department Images</h1></span>
+				<span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
 				</v-row>
 				
 				<v-row class="center my-2 mx-1" justify="space-between">
@@ -168,7 +168,7 @@ if(process.client) {
 export default {
 	head() {
     return {
-      title: 'Departments'
+      title: 'About the Department'
     }
 	}, 
 	components: {
