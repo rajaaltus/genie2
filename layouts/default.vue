@@ -31,7 +31,7 @@
 
       <v-divider></v-divider>
      
-      <v-list-item dense>
+      <v-list-item dense link to="/user_profile">
           <v-list-item-icon>
             <v-icon color="green darken-1">mdi-account</v-icon>
           </v-list-item-icon>
@@ -40,7 +40,7 @@
           </v-list-item-content>
       </v-list-item>
 
-      <v-list-item dense>
+      <v-list-item dense link to="/settings">
          <v-list-item-icon>
             <v-icon color="orange">mdi-cogs</v-icon>
           </v-list-item-icon>
@@ -80,6 +80,7 @@
         </v-list-item>
       </v-list> -->
       <v-list nav dense>
+       
         <template v-for="item in items">
           <v-list-group
             v-if="item.children"
@@ -103,9 +104,8 @@
               :to="child.to"
               link
               router
+              dense
               exact
-              class="px-2"
-              
             >
               <v-list-item-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
@@ -124,7 +124,7 @@
             link
             router
             exact
-            class="px-2"
+            dense
           >
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
@@ -222,6 +222,22 @@ export default {
                 icon: 'mdi-chevron-double-right',
                 to: '/admin/activities/students'
               },
+            ]
+          },
+          { title: 'Approval Status', icon: 'mdi-cards', to: '/admin/approvals' },
+          { title: 'Reports', icon: 'mdi-chart-bar', to: '/admin/reports' },
+        ],
+        itemsFaculty: [
+          { title: 'Home', icon: 'mdi-home', to: '/admin' },
+          { 
+            title: 'Activities & Resources', 
+            icon: 'mdi-library', 
+            children: [
+              {
+                title: 'Faculty / Staff',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/activities/faculties'
+              }
             ]
           },
           { title: 'Approval Status', icon: 'mdi-cards', to: '/admin/approvals' },
