@@ -60,7 +60,7 @@
 
       <v-divider></v-divider>
 
-      <v-list nav>
+      <!-- <v-list nav>
         <v-list-item
           v-for="item in items"
           :key="item.title"
@@ -78,7 +78,66 @@
             <v-list-item-title class="menu-title">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+      </v-list> -->
+      <v-list nav dense>
+        <template v-for="item in items">
+          <v-list-group
+            v-if="item.children"
+            :key="item.title"
+            :to="item.to"
+            v-model="item.model"
+            :prepend-icon="item.icon"
+            append-icon=""
+            color="green"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title >
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.to"
+              link
+              router
+              exact
+              class="px-2"
+              
+            >
+              <v-list-item-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ child.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item
+            v-else
+            :key="item.title"
+            :to="item.to"
+            link
+            router
+            exact
+            class="px-2"
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </v-list>
+
 
       <template v-slot:append>
         <v-list-item  nav dense link @click="logout">
@@ -123,10 +182,50 @@ export default {
       drawer: true,
         items: [
           { title: 'Home', icon: 'mdi-home', to: '/admin' },
-          { title: 'Department', icon: 'mdi-hospital-building', to: '/admin/department' },
-          { title: 'Activities & Resources', icon: 'mdi-library', to: '/..' },
+          { 
+            title: 'Department', 
+            icon: 'mdi-hospital-building',
+            children: [
+              {
+                title: 'About',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/departments'
+              },
+              {
+                title: 'Patient Care Activities',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/departments/pcActivities'
+              },
+              {
+                title: 'HRD',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/departments/hrd'
+              },
+              {
+                title: 'Faculty / Staff',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/departments/faculty'
+              }
+            ]  
+          },
+          { 
+            title: 'Activities & Resources', 
+            icon: 'mdi-library', 
+            children: [
+              {
+                title: 'Faculty / Staff',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/activities/faculties'
+              },
+              {
+                title: 'Students',
+                icon: 'mdi-chevron-double-right',
+                to: '/admin/activities/students'
+              },
+            ]
+          },
           { title: 'Approval Status', icon: 'mdi-cards', to: '/admin/approvals' },
-          { title: 'Reports', icon: 'mdi-chart-bar', to: '/' },
+          { title: 'Reports', icon: 'mdi-chart-bar', to: '/admin/reports' },
         ],
         mini: true,
     }
@@ -140,13 +239,14 @@ export default {
 </script>
 
 <style scoped>
-.v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--fixed v-navigation-drawer--mini-variant v-navigation-drawer--open theme--dark {
- top: 0 !important; 
-}
+
 .menu-title
 {
   font-size: 14px;
   font-weight: normal;
   color: #f5f5f5;
+}
+.chivron {
+  border-left: 5px solid green;
 }
 </style>
