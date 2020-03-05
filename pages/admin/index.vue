@@ -2,7 +2,7 @@
   <v-app>
     <PageHeader :title="$metaInfo.title" />
     <pre>
-      {{this.$store.state.auth.user}}
+      {{this.$store.state.user.fullUser}}
     </pre>
   </v-app>
 </template>
@@ -17,6 +17,10 @@ export default {
   }, 
   components: {
     PageHeader
+  },
+  async fetch({store}) {
+    let userId = store.state.auth.user.id;
+    await store.dispatch('user/setFullUser', {id: userId})
   }
 }
 </script>

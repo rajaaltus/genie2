@@ -3,6 +3,8 @@ export const state = () => ({
 	loggedIn: false,
 	strategy: "local",
 	user: false,
+	fullUser: {},
+	avatarUrl: null,
 	userProfile: {
 		success: false,
 		result: [],
@@ -25,3 +27,31 @@ export const getters = {
 		return state.user;
 	}
 };
+
+export const mutations = {
+	SET_FULL_USER (state, fullUser) {
+		state.fullUser = fullUser;
+		state.avatarUrl = fullUser.avatar.url;
+	}
+};
+
+
+export const actions = {
+	async setFullUser ({commit}, {id}) {
+		await this.$axios.$get(`/users/${id}`)
+			.then(response =>  {
+			// handle success
+				commit("SET_FULL_USER", response);
+			})
+			.catch((e) => {
+			// handle error
+				commit("SET_FULL_USER", error);
+			})
+			.finally(function () {
+			// always executed
+				// console.log('finally');
+			});
+	}
+};
+
+	
