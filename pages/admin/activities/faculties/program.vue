@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    
     <PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" /> 
     <v-row>
       <v-col cols="12" md="3" lg="3">
@@ -24,7 +23,7 @@ import FacultyActivities from '@/components/FacultyActivities'
 export default {
   head() {
     return {
-      title: 'Program'
+      title: 'Programmes & Events'
     }
   }, 
   components: {

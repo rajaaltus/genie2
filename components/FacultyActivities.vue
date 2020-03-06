@@ -1,6 +1,5 @@
 <template>
   <v-list>
-    <v-subheader>Activities</v-subheader>
     <v-list-item-group color="success">
       <v-list-item
         v-for="(item, i) in $store.state.activities"
@@ -17,3 +16,10 @@
     </v-list-item-group>
   </v-list>
 </template>
+<style scoped>
+.disp
+{
+  font-size: 15px;
+  font-weight: normal;
+}
+</style>
