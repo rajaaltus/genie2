@@ -38,7 +38,7 @@
 			<!-- Year Dialog ends here -->
 
 			<v-container>
-				<PageHeader :title="$metaInfo.title" :reportYears="reportYears" /> 
+				<PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" /> 
 			
 				<p class="mb-3">
 					<span >A. Introduction (in about 150 words); specifically indicate the recognition / contribution of the Department during the year to policies, planning and programmes at State / National and International levels.</span>

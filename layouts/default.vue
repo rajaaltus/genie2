@@ -17,8 +17,11 @@
       </v-list-item>
 
       <v-list-item class="px-2">
-          <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-list-item-avatar v-if="$store.state.user.avatarUrl">
+            <v-img :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-avatar v-else>
+            <v-icon dark>mdi-account-circle</v-icon>
           </v-list-item-avatar>
           
           <v-list-item link style="padding:0 0 0 7px;">
@@ -61,25 +64,6 @@
 
       <v-divider></v-divider>
 
-      <!-- <v-list nav>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          :to="item.to"
-          router
-          exact
-          link
-          class="px-2"
-          dense
-        >
-        <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="menu-title">{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list> -->
       <v-list nav>
         <template v-for="item in items">
           <v-list-group
