@@ -17,8 +17,11 @@
       </v-list-item>
 
       <v-list-item class="px-2">
-          <v-list-item-avatar>
-            <v-img :src="`https://api2.ourlao.com${$store.state.user.avatar_url}`"></v-img>
+          <v-list-item-avatar v-if="$store.state.user.avatarUrl">
+            <v-img :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-avatar v-else>
+            <v-icon dark>mdi-account-circle</v-icon>
           </v-list-item-avatar>
           
           <v-list-item link style="padding:0 0 0 7px;">

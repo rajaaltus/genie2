@@ -45,7 +45,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_FULL_USER", error);
+				//commit("SET_FULL_USER", error);
 			})
 			.finally(function () {
 			// always executed
