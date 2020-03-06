@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<div>
 		<div v-if="dialog">
 			<v-dialog
 				v-model="dialog"
@@ -22,7 +22,7 @@
 				</v-card>
 			</v-dialog>
 		</div>
-	</v-container>
+	</div>
 </template>
 
 <script>
