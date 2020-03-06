@@ -1,13 +1,14 @@
 export const state = () => ({
   selectedYear: 0,
 	activities: [],
-	studentActivities: []
+	studentActivities: [],
+	reportYears: []
 });
 
 export const mutations = {
   SET_REPORTING_YEAR (state, selectedYear) {
 		state.selectedYear = selectedYear;
-  },
+	},
   SETACTIVITIES (state, activities) {
 		state.activities = [	
 			{

@@ -7,12 +7,13 @@
       <v-spacer></v-spacer>
       <v-col cols="12" md="6" sm="4" lg="3" v-if="reportYears">
         <v-select
-          v-model="$store.state.selectedYear"
+          v-model="selectedYear"
           :items="reportYears"
           item-text="val"
           item-value="id"
-          label="Reporing Year"
+          label="Reporting Year"
           required
+          @input="changeReportingYear"
         ></v-select>
       </v-col>
     </v-row>
@@ -21,8 +22,15 @@
 
 <script>
 export default {
-  props: ['title', 'reportYears']
+  props: ['title', 'reportYears', 'selectedYear'],
+  
+  methods: {
+    async changeReportingYear () {
+			await this.$store.dispatch('setReportingYear', this.selectedYear)
+		}
+  }
 }
+
 </script>
 
 <style>
