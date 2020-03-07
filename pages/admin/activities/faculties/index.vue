@@ -7,30 +7,30 @@
           <FacultyActivities />
         </v-card>
       </v-col>
+	  
       <v-col cols="12" md="9" lg="9">
-        <v-card class="mx-auto">
-					<v-row align="center" justify="start" no-gutters>
-					<v-col cols="12" md="4" lg="4" v-for="(activity, index) in $store.state.activities" :key="index">
-					<v-card
-						class="ma-4"
-						outlined
-					>
-						<v-list-item three-line>
-							<v-list-item-content>
-								<v-list-item-title class="headline mb-1">{{activity.title}} <v-icon v-text="activity.icon" class="float-right"></v-icon></v-list-item-title>
-								<v-list-item-subtitle>Total Activities: {{ getActivityCount(activity.id) }}</v-list-item-subtitle>
-							</v-list-item-content>
-						</v-list-item>
-						<div>
-							
-						</div>
-						<v-card-actions>
-							<v-btn color="success" link :to="activity.path">View</v-btn>
-						</v-card-actions>
-					</v-card>
-					</v-col>
-					</v-row>
-        </v-card>
+        
+			<v-row align="center" justify="start" no-gutters>
+			<v-col cols="12" md="4" lg="4" v-for="(activity, index) in $store.state.activities" :key="index">
+			<v-alert class="mr-2"
+				border="left"
+				colored-border
+				color="yellow accent-4"
+				elevation="2"
+				tile
+			>
+				<v-list-item three-line>
+					<v-list-item-content>
+						<v-list-item-title class="mb-0"><v-icon v-text="activity.icon"></v-icon> {{activity.title}} </v-list-item-title>
+						<v-list-item-subtitle><h1 class="count-disp">{{ getActivityCount(activity.id) }}</h1></v-list-item-subtitle>
+					</v-list-item-content>
+				</v-list-item>
+				<!--<v-btn color="success" class="float-right" small link :to="activity.path">View</v-btn>-->
+				
+			</v-alert>
+			</v-col>
+			</v-row>
+        
       </v-col>
     </v-row>
   </v-app>
@@ -43,7 +43,7 @@ import FacultyActivities from '@/components/FacultyActivities'
 export default {
   head() {
     return {
-      title: 'Faculty Dashboard'
+      title: 'Activities & Resources of Faculty / Staff'
     }
   }, 
   components: {
@@ -117,3 +117,13 @@ export default {
   }
 } 
 </script>
+<style scoped>
+
+.count-disp
+{
+	text-align: right;
+	padding-right: 30px;
+	float:right;
+	font-size: 30px;
+}
+</style>

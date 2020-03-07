@@ -1,6 +1,5 @@
 <template>
   <v-list>
-    <v-subheader>Activities</v-subheader>
     <v-list-item-group v-model="item" color="success">
       <v-list-item
         v-for="(item, i) in $store.state.studentActivities"
