@@ -190,6 +190,11 @@ export default {
 		locations: ['NIMHANS', 'OUTSIDE_NIMHANS'],
 		colloborations: ['DEPARTMENTAL', 'INTERDEPARTMENTAL'],
 		approvals: ['PENDING', "REJECTED", 'APPROVED'],
-  })
+  }),
+  methods: {
+    reset () {
+			this.$refs.form.reset();
+		},
+  }
 }
 </script>

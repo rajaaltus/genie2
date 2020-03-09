@@ -12,6 +12,12 @@
         <VisitorForm />
       </v-col>
     </v-row>
+    <hr class="my-6">
+    <v-row>
+      <v-col cols="12" md="12">
+        <VisitorTable :reportYears="reportYears" />
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
@@ -21,6 +27,7 @@ import PageHeader from '@/components/PageHeader'
 import FacultyActivities from '@/components/FacultyActivities'
 import YearDialog from '@/components/YearDialog'
 import VisitorForm from '@/components/forms/VisitorForm'
+import VisitorTable from '@/components/tables/VisitorTable'
 export default {
   head() {
     return {
@@ -31,7 +38,8 @@ export default {
     PageHeader,
     FacultyActivities,
     YearDialog,
-    VisitorForm
+    VisitorForm,
+    VisitorTable
   },
   data: () => ({
     reportYears: [
