@@ -7,9 +7,7 @@
           <FacultyActivities />
         </v-card>
       </v-col>
-	  
       <v-col cols="12" md="9" lg="9">
-        
 			<v-row align="center" justify="start" no-gutters>
 			<v-col cols="12" md="4" lg="4" v-for="(activity, index) in $store.state.activities" :key="index">
 			<v-alert class="mr-2"
@@ -25,12 +23,9 @@
 						<v-list-item-subtitle><h1 class="count-disp">{{ getActivityCount(activity.id) }}</h1></v-list-item-subtitle>
 					</v-list-item-content>
 				</v-list-item>
-				<!--<v-btn color="success" class="float-right" small link :to="activity.path">View</v-btn>-->
-				
 			</v-alert>
 			</v-col>
 			</v-row>
-        
       </v-col>
     </v-row>
   </v-app>
@@ -54,8 +49,13 @@ export default {
     
   }),
   async fetch ({store}) {
-    await store.dispatch('setActivities');
-
+		await store.dispatch('setActivities');
+		
+		if(store.state.user.fullUser){
+      let userId = store.state.auth.user.id;
+      await store.dispatch('user/setFullUser', {id: userId})
+		}
+		
     let id = store.state.auth.user.id;
 		let queryString = ''
 		if (store.state.auth.user.userType==='DEPARTMENT')
@@ -73,7 +73,6 @@ export default {
 		await store.dispatch('recognition/setRecognitionsData', {qs: queryString})
 		await store.dispatch('patent/setPatentsData', {qs: queryString})
 		await store.dispatch('assignment/setAssignmentsData', {qs: queryString})
-		// await store.dispatch('theses/setThesesData', {qs: queryString})
   },
   methods: {
 		 getActivityCount (id) {
@@ -123,7 +122,6 @@ export default {
 {
 	text-align: right;
 	padding-right: 30px;
-	float:right;
 	font-size: 30px;
 }
 </style>

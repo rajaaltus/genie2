@@ -8,7 +8,6 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        
 					<v-row align="center" justify="start" no-gutters>
 					<v-col cols="12" md="4" lg="4" v-for="(activity, index) in $store.state.studentActivities" :key="index">
 					<v-alert class="mr-2"
@@ -24,12 +23,9 @@
 							<v-list-item-subtitle><h1 class="count-disp">{{ getActivityCount(activity.id) }}</h1></v-list-item-subtitle>
 						</v-list-item-content>
 					</v-list-item>
-					<!--<v-btn color="success" class="float-right" small link :to="activity.path">View</v-btn>-->
-					
 					</v-alert>
 					</v-col>
 					</v-row>
-        
       </v-col>
     </v-row>
   </v-app>

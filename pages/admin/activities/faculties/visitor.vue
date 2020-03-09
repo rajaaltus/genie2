@@ -1,6 +1,7 @@
 <template>
   <v-app>
-   <PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" /> 
+    <YearDialog v-if="$store.state.selectedYear==0" />
+    <PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" /> 
     <v-row>
       <v-col cols="12" md="3" lg="3">
         <v-card class="mx-auto">
@@ -8,9 +9,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <v-card class="mx-auto">
-					
-        </v-card>
+        <VisitorForm />
       </v-col>
     </v-row>
   </v-app>
@@ -20,6 +19,8 @@
 
 import PageHeader from '@/components/PageHeader'
 import FacultyActivities from '@/components/FacultyActivities'
+import YearDialog from '@/components/YearDialog'
+import VisitorForm from '@/components/forms/VisitorForm'
 export default {
   head() {
     return {
@@ -28,7 +29,9 @@ export default {
   }, 
   components: {
     PageHeader,
-    FacultyActivities
+    FacultyActivities,
+    YearDialog,
+    VisitorForm
   },
   data: () => ({
     reportYears: [
@@ -48,11 +51,14 @@ export default {
 				id: 2020,
 				val: '2020-2021'
 			}
-    ],
-    selectedYear: 0,
+    ]
   }),
   async fetch({store}) {
     await store.dispatch('setActivities');
+    if(store.state.user.fullUser){
+      let userId = store.state.auth.user.id;
+      await store.dispatch('user/setFullUser', {id: userId})
+    }
   },
   methods: {
     async changeReportingYear () {
