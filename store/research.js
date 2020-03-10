@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	researchCount: 0,
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_RESEARCH_COUNT (state, researchCount) {
+		state.researchCount = researchCount;
 	}
 };
 
@@ -47,9 +51,21 @@ export const actions = {
 			.finally(function () {
 			// always executed
 			});
-
-		  
 	},
+	async countResearch ({commit}, {qs}) {
+		await this.$axios.$get(`/research-activities/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_RESEARCH_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_RESEARCH_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async researchAdd ({commit}, payload) {
 		await this.$axios.$post('/research-activities', payload)
 			.then(response =>  {

@@ -7,7 +7,8 @@ export const state = () => ({
 		error: {},
 	},
 	publicationTypes: {},
-	journalArticle: []
+	journalArticle: [],
+	publicationsCount: 0
 });
 
 export const getters =  {
@@ -35,6 +36,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PUBLICATIONS_COUNT (state, publicationsCount) {
+		state.publicationsCount = publicationsCount;
 	},
 	SET_PUBLICATIONTYPES (state, publicationTypes) {
 		state.publicationTypes = publicationTypes;
@@ -68,7 +72,20 @@ export const actions = {
 			// always executed
 			});
 	},
-
+	async countPublications ({commit}, {qs}) {
+		await this.$axios.$get(`/publications/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PUBLICATIONS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_PUBLICATIONS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async setPublicationsData ({commit}, {qs}) {
 		 await this.$axios.$get(`/publications?${qs}`)
 			.then(response =>  {

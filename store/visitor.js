@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	visitorsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_VISITORS_COUNT (state, visitorsCount) {
+		state.visitorsCount = visitorsCount;
 	}
 };
 
@@ -50,9 +54,21 @@ export const actions = {
 			// always executed
 				// console.log('finally');
 			});
-
-		  
 	},
+	async countVisitors ({commit}, {qs}) {
+		await this.$axios.$get(`/visitors/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_VISITORS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_VISITORS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async addVisitor ({commit}, payload) {
 		await this.$axios.$post('/visitors', payload)
 			.then(response =>  {

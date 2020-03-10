@@ -56,61 +56,62 @@ export default {
       await store.dispatch('user/setFullUser', {id: userId})
 		}
 		
-    let id = store.state.auth.user.id;
+		let id = store.state.auth.user.id;
+		let deptId = store.state.auth.user.department;
 		let queryString = ''
-		if (store.state.auth.user.userType==='DEPARTMENT')
-			queryString = `deleted_ne=true`;
+		if (store.state.auth.user.userType==='Department')
+			queryString = `department.id=${deptId}&deleted_ne=true`;
 		else
-			queryString = `user.id=${id}`;
-		await store.dispatch('program/setProgrammesData', {qs: queryString})
-		await store.dispatch('visitor/setVisitorsData', {qs: queryString})
-		await store.dispatch('training/setTrainingsData', {qs: queryString})
-		await store.dispatch('presentation/setPresentationsData', {qs: queryString})
-		await store.dispatch('participation/setParticipationsData', {qs: queryString})
-		await store.dispatch('public/setPublicData', {qs: queryString})
-		await store.dispatch('research/setResearchData', {qs: queryString})
-		await store.dispatch('publication/setPublicationsData', {qs: queryString})
-		await store.dispatch('recognition/setRecognitionsData', {qs: queryString})
-		await store.dispatch('patent/setPatentsData', {qs: queryString})
-		await store.dispatch('assignment/setAssignmentsData', {qs: queryString})
+			queryString = `department.id=${deptId}&user.id=${id}&deleted_ne=true`;
+				await store.dispatch('program/countProgrammes', {qs: queryString})
+				await store.dispatch('visitor/countVisitors', {qs: queryString})
+				await store.dispatch('training/countTrainings', {qs: queryString})
+				await store.dispatch('presentation/countPresentations', {qs: queryString})
+				await store.dispatch('participation/countParticipations', {qs: queryString})
+				await store.dispatch('public/countPublicEngagements', {qs: queryString})
+				await store.dispatch('research/countResearch', {qs: queryString})
+				await store.dispatch('publication/countPublications', {qs: queryString})
+				await store.dispatch('recognition/countRecognitions', {qs: queryString})
+				await store.dispatch('patent/countPatents', {qs: queryString})
+				await store.dispatch('assignment/countAssignments', {qs: queryString})
   },
   methods: {
 		 getActivityCount (id) {
 			if (id==1) {
-				return this.$store.state.program.programmesData.result.length
+				return this.$store.state.program.programmesCount
 			}
 			if (id==2) {
-				return this.$store.state.visitor.visitorsData.result.length
+				return this.$store.state.visitor.visitorsCount
 			}
 			if (id==3) {
-				return this.$store.state.training.trainingsData.result.length
+				return this.$store.state.training.trainingsCount
 			}
 			if (id==4) {
-				return this.$store.state.presentation.presentationsData.result.length
+				return this.$store.state.presentation.presentationsCount
 			}
 			if (id==5) {
-				return this.$store.state.participation.participationsData.result.length
+				return this.$store.state.participation.participationsCount
 			}
 			if (id==6) {
-				return this.$store.state.public.publicData.result.length
+				return this.$store.state.public.publicCount
 			}
 			if (id==7) {
-				return this.$store.state.research.researchData.result.length
+				return this.$store.state.research.researchCount
 			}
 			if (id==8) {
-				return this.$store.state.publication.publicationsData.result.length
+				return this.$store.state.publication.publicationsCount
 			}
 			if (id==9) {
-				return this.$store.state.recognition.recognitionsData.result.length
+				return this.$store.state.recognition.recognitionsCount
 			}
 			if (id==10) {
-				return this.$store.state.patent.patentsData.result.length
+				return this.$store.state.patent.patentsCount
 			}
 			if (id==11) {
-				return this.$store.state.assignment.assignmentsData.result.length
+				return this.$store.state.assignment.assignmentsCount
 			}
 			if (id==12) {
-				return this.$store.state.theses.thesesData.result.length
+				return this.$store.state.theses.thesesCount
 			}
     }
   }

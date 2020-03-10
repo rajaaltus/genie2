@@ -15,7 +15,7 @@
     <hr class="my-6">
     <v-row>
       <v-col cols="12" md="12">
-        <ProgramTable :reportYears="reportYears" />
+        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" />
       </v-col>
     </v-row>
   </v-app>
@@ -65,30 +65,28 @@ export default {
     if(store.state.user.fullUser){
       let userId = store.state.auth.user.id;
       await store.dispatch('user/setFullUser', {id: userId})
-    }
+  }
    
     //Filter Query Fetch
-	
     let userId = store.state.auth.user.id
-    let deptId = store.state.user.fullUser.department.id;
+    let deptId = store.state.auth.user.department
 		let queryString = '';
-		console.log('Userid:'+userId+',deptId:'+deptId+',QS:'+queryString );
 		if (store.state.auth.user.userType==='Faculty' || store.state.auth.user.userType==='Student') {
-			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true`;
+			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
 			// console.log(queryString);
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
 		}
 		else {
-			queryString = `department.id=${deptId}&deleted_ne=true`;
+			queryString = `department.id=${deptId}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
   },
   mounted () {
-   
+   this.reloadData();
   },
   methods: {
     async changeReportingYear () {
-			await this.$store.dispatch('setReportingYear', this.selectedYear)
+      await this.$store.dispatch('setReportingYear', this.selectedYear)
     },
     async reloadData () {
 			this.loading = true;
@@ -96,7 +94,7 @@ export default {
 			let userId = this.$store.state.user.userProfile.result.userId;
 			let queryString = '';
 			
-			if (this.$store.state.auth.user.authorities[0]==='ROLE_FACULTY' || this.$store.state.auth.user.authorities[0]==='ROLE_STUDENT') {
+			if (this.$store.state.auth.user.userType==='Faculty' || this.$store.state.auth.user.userType==='Student') {
 			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.store.state.selectedYear}`;
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}

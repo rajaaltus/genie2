@@ -6,7 +6,7 @@
         md="12"
       >
         <v-select
-          v-model="program.userProfileId"
+          v-model="program.user"
           :items="staffs"
           item-value="id"
           item-text="firstname"
@@ -47,7 +47,7 @@
         </v-col>
         <v-col cols="4">
           <v-select
-            v-model="program.level"
+            v-model="program.forum"
             :rules="[v => !!v || 'Item is required']"
             :items="programLevels"
             label="Forum*"
@@ -55,7 +55,7 @@
         </v-col>
         <v-col cols="4">
           <v-select
-            v-model="program.colloboration"
+            v-model="program.colloborations"
             :items="colloborations"
             label="Colloborations"
           ></v-select>
@@ -64,7 +64,7 @@
      <v-row>
         <v-col cols="4">
           <v-menu
-            v-model="duration_from"
+            v-model="from_date"
             :rules="[v => !!v || 'Item is required']"
             :close-on-content-click="true"
             :nudge-right="40"
@@ -74,17 +74,17 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="program.durationFrom"
+                v-model="program.from_date"
                 label="From Date"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="program.durationFrom" color="green lighten-1" @input="menu1 = false"></v-date-picker>
+            <v-date-picker v-model="program.from_date" color="green lighten-1" @input="menu1 = false"></v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="4">
           <v-menu
-            v-model="duration_to"
+            v-model="to_date"
             :rules="[v => !!v || 'Item is required']"
             :close-on-content-click="true"
             :nudge-right="40"
@@ -94,16 +94,16 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="program.durationTo"
+                v-model="program.to_date"
                 label="To Date"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="program.durationTo" color="green lighten-1" @input="menu2 = false"></v-date-picker>
+            <v-date-picker v-model="program.to_date" color="green lighten-1" @input="menu2 = false"></v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="4">
-          <v-text-field v-model="program.participantsCount"
+          <v-text-field v-model="program.participants_count"
             :rules="[v => !!v || 'Item is required']"
             type="number"
             label="Participants Count*"
@@ -124,7 +124,7 @@
         <v-row>
         <v-container fluid>
           <v-textarea
-            v-model="program.briefReport"
+            v-model="program.brief_report"
             counter
             label="Brief Report"
             :value="value"
@@ -147,6 +147,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
   data: () => ({
     duration_from: false,
@@ -154,46 +155,92 @@ export default {
 		valid: true,
     program: 
 		{
-			annualYear: 0,
-			type: "",
-			name: "",
-			location: "",
-			level: "",
-			colloboration: "",
-			durationFrom: new Date().toISOString().substr(0, 10),
-			durationTo: new Date().toISOString().substr(0, 10),
-			coordinators: "",
-			participantsCount: 0,
-			briefReport: "",
-			status: "VALID",
-			approvalStatus: "PENDING",
-			approvedBy: "",
-			approvedDate: "",
-			rejectedReason: "",
-			departmentId: 0,
-			userProfileId: 0
+      annual_year: 0,
+      type: "",
+      name: "",
+      location: "",
+      forum: "",
+      colloborations: "",
+      from_date: "",
+      to_date: "",
+      participants_count: 0,
+      coordinators: "",
+      brief_report: "",
+      deleted: false,
+      approval_status: "Pending",
+      approved_by: "",
+      department: 0,
+      user: 0,
+      rejected_reason: null
     },
     programTypes: [
-			'CONFERENCE',
-			'WORKSHOP',
-			'SEMINAR',
-			'SYMPOSIUM',
-			'SCIENTIFIC'
+			'Conference',
+			'Workshop',
+			'Seminar',
+			'Symposium',
+			'Scientific'
 		],
 		programLevels: [
-			'INTERNATIONAL',
-			'NATIONAL',
-			'REGIONAL',
-			'STATE',
-			'LOCAL'
+			'International',
+			'National',
+			'Regional',
+			'State',
+			'Local'
 		],
 		locations: ['NIMHANS', 'OUTSIDE_NIMHANS'],
-		colloborations: ['DEPARTMENTAL', 'INTERDEPARTMENTAL'],
-		approvals: ['PENDING', "REJECTED", 'APPROVED'],
+		colloborations: ['Departmental', 'Interdepartmental'],
+		approvals: ['Pending', "Rejected", 'Approved'],
   }),
   methods: {
     reset () {
 			this.$refs.form.reset();
+    },
+    async programAdd () {
+			if (this.$refs.form.validate()) {
+				this.program.annual_year = this.$store.state.selectedYear;
+				this.program.department = this.$store.state.auth.user.department;
+				if (this.program.user == 0)
+					this.program.user = this.$store.state.auth.user.id;
+				var payload = this.program;
+				// console.log(payload)
+			 	this.$store.dispatch('program/addProgram', payload)
+					.then(resp => {
+						Swal.fire({
+							title: 'Success',
+							text: 'Added Successfully!',
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500
+						})
+						this.reset();
+						this.reloadData();
+					})
+					.catch(err => {
+            Swal.fire({
+              title: 'Something Wrong!',
+              text: err,
+              icon: 'warning',
+              showConfirmButton: false,
+							timer: 4500
+            })
+					});
+			}
+    },
+    async reloadData () {
+			this.loading = true;
+			let deptId = this.$store.state.auth.user.department;
+			let userId = this.$store.state.auth.user.id;
+			let queryString = '';
+			
+			if (this.$store.state.auth.user.userType==='Faculty' || this.$store.state.auth.user.userType==='Student') {
+			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.store.state.selectedYear}`;
+			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
+			}
+			else {
+				queryString = `department.id=${deptId}&nnual_year=${this.store.state.selectedYear}&deleted_ne=true`;
+			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
+			}
+			this.loading = false;
 		},
   }
 }

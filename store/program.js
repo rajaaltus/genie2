@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	programmesCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PROGRAMMES_COUNT (state, programmesCount) {
+		state.programmesCount = programmesCount;
 	}
 };
 
@@ -49,9 +53,21 @@ export const actions = {
 			// always executed
 				
 			});
-
-		  
 	},
+	async countProgrammes ({commit}, {qs}) {
+		await this.$axios.$get(`/programmes/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PROGRAMMES_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_PROGRAMMES_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async addProgram ({commit}, payload) {
 		await this.$axios.$post('/programmes', payload)
 			.then(response =>  {

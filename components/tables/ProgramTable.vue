@@ -164,7 +164,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  props: ['reportYears'],
+  props: ['reportYears', 'annualYear'],
   data: () => ({
     loading: false,
     dialog: false,
@@ -255,6 +255,7 @@ export default {
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
   },
+
   methods: {
     getColor (approvalStatus) {
 			if (approvalStatus === 'Rejected') return 'red'
@@ -262,10 +263,10 @@ export default {
 			else return 'green'
     },
     editItem (item) {
-    this.editedIndex = this.programmesData.indexOf(item)
-    this.editedItem = Object.assign({}, item)
-    console.log(this.editedItem)
-    this.dialog = true
+      this.editedIndex = this.programmesData.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      console.log(this.editedItem)
+      this.dialog = true
 		},
 
 		deleteItem (item) {
