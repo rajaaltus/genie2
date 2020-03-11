@@ -200,7 +200,9 @@ export default {
 				this.program.annual_year = this.$store.state.selectedYear;
 				this.program.department = this.$store.state.auth.user.department;
 				if (this.program.user == 0)
-					this.program.user = this.$store.state.auth.user.id;
+          this.program.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.role.id==4)
+          this.program.approval_status = 'Approved';
 				var payload = this.program;
 				// console.log(payload)
 			 	this.$store.dispatch('program/addProgram', payload)
@@ -233,11 +235,11 @@ export default {
 			let queryString = '';
 			
 			if (this.$store.state.auth.user.userType==='Faculty' || this.$store.state.auth.user.userType==='Student') {
-			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.store.state.selectedYear}`;
+			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}
 			else {
-				queryString = `department.id=${deptId}&nnual_year=${this.store.state.selectedYear}&deleted_ne=true`;
+				queryString = `department.id=${deptId}&annual_year=${this.$store.state.selectedYear}&deleted_ne=true`;
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}
 			this.loading = false;

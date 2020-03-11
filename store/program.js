@@ -87,7 +87,7 @@ export const actions = {
 		// commit('SET_PROGRAMMESDATA', programmesData)
 	},
 	async updateProgram ({commit}, payload) {
-		await this.$axios.$put('/programmes', payload)
+		await this.$axios.$put(`/programmes/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PROGRAMMESDATA", response);

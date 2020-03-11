@@ -15,13 +15,14 @@
     <hr class="my-6">
     <v-row>
       <v-col cols="12" md="12">
-        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" />
+        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :programmesData="programmesData"/>
       </v-col>
     </v-row>
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PageHeader from '@/components/PageHeader'
 import FacultyActivities from '@/components/FacultyActivities'
 import YearDialog from '@/components/YearDialog'
@@ -80,6 +81,11 @@ export default {
 			queryString = `department.id=${deptId}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
+  },
+  computed: {
+    ...mapState({
+      programmesData: state => state.programmesData
+    })
   },
   mounted () {
    this.reloadData();

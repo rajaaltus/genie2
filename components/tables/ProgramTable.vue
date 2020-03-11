@@ -163,8 +163,9 @@
 
 <script>
 import { mapState } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
-  props: ['reportYears', 'annualYear'],
+  props: ['reportYears', 'annualYear', 'programmesData'],
   data: () => ({
     loading: false,
     dialog: false,
@@ -190,24 +191,43 @@ export default {
     ],
     editedItem: {
 			annual_year: 0,
-			type: "",
-			name: "",
-			location: "",
-			forum: "",
-			colloborations: "",
-			from_date: new Date().toISOString().substr(0, 10),
-			to_date: new Date().toISOString().substr(0, 10),
-			coordinators: "",
-			participants_count: 0,
-			brief_report: "",
-			status: "VALID",
-			approval_status: "PENDING",
-			approvedBy: "",
-			approvedDate: "",
-			rejectedReason: "",
-			departmentId: 0,
-			userProfileId: 0
+      type: "",
+      name: "",
+      location: "",
+      forum: "",
+      colloborations: "",
+      from_date: "",
+      to_date: "",
+      participants_count: 0,
+      coordinators: "",
+      brief_report: "",
+      deleted: false,
+      approval_status: "Pending",
+      approved_by: "",
+      department: 0,
+      user: 0,
+      rejected_reason: null
     },
+    deletedItem: {
+      annual_year: 0,
+      type: "",
+      name: "",
+      location: "",
+      forum: "",
+      colloborations: "",
+      from_date: "",
+      to_date: "",
+      participants_count: 0,
+      coordinators: "",
+      brief_report: "",
+      deleted: false,
+      approval_status: "Pending",
+      approved_by: "",
+      department: 0,
+      user: 0,
+      rejected_reason: null
+    },
+    editedIndex: -1,
     programTypes: [
 			'Conference',
 			'Workshop',
@@ -270,30 +290,44 @@ export default {
 		},
 
 		deleteItem (item) {
-			 const index = this.programmesData.indexOf(item)
-			 this.deletedItem = Object.assign({}, item)
+      this.deletedItem = Object.assign({}, item)
 			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
-			this.deletedItem.annualYear = this.deletedItem.annualYear;
-			this.deletedItem.id = this.deletedItem.id;
 			this.deletedItem.deleted = true
 			var payload = this.deletedItem;
 			console.log(payload);
-			var vm = this;
-			confirm('Are you sure you want to delete this item?') && 	this.$store.dispatch('program/updateProgram', payload)
+      var vm = this;
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          this.loading = true;
+          this.$store.dispatch('program/updateProgram', payload)
 				.then(resp => {
+          this.loading = false;
 					Swal.fire({
 						title: 'Success',
 						text: 'Deleted Successfully!',
-						type: 'success',
+						icon: 'success',
 						showConfirmButton: false,
 						timer: 1500
 					})
-					this.reloadData();
-				})
-				.catch(err => {
-					this.snackbar = true
-					this.submitMessage = err
-				});
+					  this.reloadData();
+          })
+          Swal.fire({
+              title: 'Something Wrong!',
+              text: err,
+              icon: 'warning',
+              showConfirmButton: false,
+							timer: 4500
+          })
+        }
+      })
 		},
     async reloadData () {
 			this.loading = true;
@@ -321,11 +355,8 @@ export default {
 
 		save () {
 			if (this.editedIndex > -1) {
-				// Object.assign(this.program[this.editedIndex], this.editedItem)
-				this.editedItem.annualYear = this.programmesData[this.editedIndex].annualYear;
-				this.editedItem.id = this.programmesData[this.editedIndex].id;
-				if(this.$store.state.auth.user.userType!='Department')
-					this.editedItem.approvalStatus = 'PENDING'
+				if(this.$store.state.auth.user.role.id!=4)
+					this.editedItem.approvalStatus = 'Pending'
 				var payload = this.editedItem;
 				console.log(payload);
 				// var vm = this;
@@ -334,15 +365,20 @@ export default {
 						Swal.fire({
 							title: 'Success',
 							text: 'Updated Successfully!',
-							type: 'success',
+							icon: 'success',
 							showConfirmButton: false,
 							timer: 1500
 						})
 						this.reloadData();
 					})
 					.catch(err => {
-						this.snackbar = true
-						this.submitMessage = err
+						Swal.fire({
+              title: 'Something Wrong!',
+              text: err,
+              icon: 'warning',
+              showConfirmButton: false,
+							timer: 4500
+            })
 					});
 			} else {
 				// this.program.push(this.editedItem)
