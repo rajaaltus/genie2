@@ -66,8 +66,7 @@
           <v-menu
             v-model="from_date"
             :rules="[v => !!v || 'Item is required']"
-            :close-on-content-click="true"
-            :nudge-right="40"
+            :close-on-content-click="false"
             transition="scale-transition"
             offset-y
             min-width="290px"
@@ -86,9 +85,8 @@
           <v-menu
             v-model="to_date"
             :rules="[v => !!v || 'Item is required']"
-            :close-on-content-click="true"
-            :nudge-right="40"
             transition="scale-transition"
+            :close-on-content-click="false"
             offset-y
             min-width="290px"
           >
@@ -122,14 +120,38 @@
         </v-col> 
         </v-row>
         <v-row>
-        <v-container fluid>
-          <v-textarea
-            v-model="program.brief_report"
-            counter
-            label="Brief Report"
-            :value="value"
-          ></v-textarea>
-        </v-container>
+          <v-col cols="6" md="6" sm="12">
+            <v-container fluid>
+              <v-textarea
+                v-model="program.brief_report"
+                counter
+                label="Brief Report"
+                :value="value"
+              ></v-textarea>
+            </v-container>
+          </v-col>
+          <v-col cols="6" md="6" sm="12">
+            <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
+            <v-img
+              :src="`https://api2.ourlao.com${this.image_url}`"
+              lazy-src="https://picsum.photos/id/11/450/175"
+              aspect-ratio="1"
+              class="grey lighten-2"
+              max-width="100%"
+              max-height="175"
+            >
+            <v-btn small color="success" dark @click="$refs.image.click()">Upload Image</v-btn>
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                </v-row>
+              </template>
+            </v-img>
+          </v-col>
+        
         </v-row>
     </v-form>
     </v-col>
@@ -171,8 +193,11 @@ export default {
       approved_by: "",
       department: 0,
       user: 0,
-      rejected_reason: null
+      rejected_reason: null,
+      image: 0
     },
+    selectedFile: null,
+    image_url: null,
     programTypes: [
 			'Conference',
 			'Workshop',
@@ -193,7 +218,8 @@ export default {
   }),
   methods: {
     reset () {
-			this.$refs.form.reset();
+      this.$refs.form.reset();
+      this.image_url = null;
     },
     async programAdd () {
 			if (this.$refs.form.validate()) {
@@ -243,7 +269,20 @@ export default {
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}
 			this.loading = false;
-		},
+    },
+    async handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData()
+      data.append('files', this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: 'POST',
+        url: '/upload',
+        data
+      })
+      this.image_url = uploadRes.data[0].url;
+      this.program.image = uploadRes.data[0].id;
+    }
   }
 }
 </script>

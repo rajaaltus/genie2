@@ -142,6 +142,17 @@
                       ></v-textarea>
                     </v-container>
                   </v-row>
+                  <v-row>
+                    <v-img
+                      :src="`https://api2.ourlao.com${image_url}`"
+                      lazy-src="https://picsum.photos/id/11/450/175"
+                      aspect-ratio="1"
+                      class="grey lighten-2"
+                      max-width="100%"
+                      max-height="400"
+                    >
+                    </v-img>
+                  </v-row>
                 </v-container>
               </v-card-text>
             </v-card>
@@ -206,8 +217,9 @@ export default {
       approved_by: "",
       department: 0,
       user: 0,
-      rejected_reason: null
+      rejected_reason: null,
     },
+    image_url: 'https://picsum.photos/id/11/450/175',
     deletedItem: {
       annual_year: 0,
       type: "",
@@ -225,7 +237,7 @@ export default {
       approved_by: "",
       department: 0,
       user: 0,
-      rejected_reason: null
+      rejected_reason: null,
     },
     editedIndex: -1,
     programTypes: [
@@ -285,6 +297,8 @@ export default {
     editItem (item) {
       this.editedIndex = this.programmesData.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      if(this.editedItem.image)
+        this.image_url = this.editedItem.image.url;
       console.log(this.editedItem)
       this.dialog = true
 		},
