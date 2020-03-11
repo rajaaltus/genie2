@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	thesesCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_THESES_COUNT (state, thesesCount) {
+		state.thesesCount = thesesCount;
 	}
 };
 
@@ -63,8 +67,21 @@ export const actions = {
 			.finally(function () {
 			// always executed
 			});
-		
 	},
+	async countTheses ({commit}, {qs}) {
+		await this.$axios.$get(`/theses/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_THESES_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_THESES_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async updateTheses ({commit}, payload) {
 		await this.$axios.$put('/theses', payload)
 			.then(response =>  {

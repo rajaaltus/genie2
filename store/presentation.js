@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	presentationsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PRESENTATIONS_COUNT (state, presentationsCount) {
+		state.presentationsCount = presentationsCount;
 	}
 };
 
@@ -50,9 +54,21 @@ export const actions = {
 			// always executed
 				// console.log('finally');
 			});
-
-		  
 	},
+	async countPresentations ({commit}, {qs}) {
+		await this.$axios.$get(`/presentations/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PRESENTATIONS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_PRESENTATIONS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async addPresentation ({commit}, payload) {
 		await this.$axios.$post('/presentations', payload)
 			.then(response =>  {

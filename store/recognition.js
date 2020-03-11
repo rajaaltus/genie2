@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	recognitionsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_RECOGNITIONS_COUNT (state, recognitionsCount) {
+		state.recognitionsCount = recognitionsCount;
 	}
 };
 
@@ -47,9 +51,21 @@ export const actions = {
 			.finally(function () {
 			// always executed
 			});
-
-		  
 	},
+	async countRecognitions ({commit}, {qs}) {
+		await this.$axios.$get(`/recognitions/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_RECOGNITIONS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_RECOGNITIONS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async recognitionAdd ({commit}, payload) {
 		await this.$axios.$post('/recognitions', payload)
 			.then(response =>  {

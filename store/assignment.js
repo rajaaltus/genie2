@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	assignmentsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_ASSIGNMENTS_COUNT (state, assignmentsCount) {
+		state.assignmentsCount = assignmentsCount;
 	}
 };
  
@@ -49,6 +53,20 @@ export const actions = {
 			});
 		  
 	},
+	async countAssignments ({commit}, {qs}) {
+		await this.$axios.$get(`/key-assignments/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_ASSIGNMENTS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_ASSIGNMENTS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async assignmentAdd ({commit}, payload) {
 		await this.$axios.$post('/key-assignments', payload)
 			.then(response =>  {

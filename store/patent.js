@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	patentsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PATENTS_COUNT (state, patentsCount) {
+		state.patentsCount = patentsCount;
 	}
 };
 
@@ -47,9 +51,21 @@ export const actions = {
 			.finally(function () {
 			// always executed
 			});
-
-		  
 	},
+	async countPatents ({commit}, {qs}) {
+		await this.$axios.$get(`/patents/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PATENTS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_PATENTS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async patentAdd ({commit}, payload) {
 		await this.$axios.$post('/patents', payload)
 			.then(response =>  {

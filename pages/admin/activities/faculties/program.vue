@@ -12,15 +12,22 @@
         <ProgramForm />
       </v-col>
     </v-row>
-    
+    <hr class="my-6">
+    <v-row>
+      <v-col cols="12" md="12">
+        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :programmesData="programmesData"/>
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PageHeader from '@/components/PageHeader'
 import FacultyActivities from '@/components/FacultyActivities'
 import YearDialog from '@/components/YearDialog'
 import ProgramForm from '@/components/forms/ProgramForm'
+import ProgramTable from '@/components/tables/ProgramTable'
 export default {
   head() {
     return {
@@ -31,7 +38,8 @@ export default {
     PageHeader,
     FacultyActivities,
     YearDialog,
-    ProgramForm
+    ProgramForm,
+    ProgramTable
   },
   data: () => ({
     reportYears: [
@@ -58,15 +66,50 @@ export default {
     if(store.state.user.fullUser){
       let userId = store.state.auth.user.id;
       await store.dispatch('user/setFullUser', {id: userId})
+  }
+   
+    //Filter Query Fetch
+    let userId = store.state.auth.user.id
+    let deptId = store.state.auth.user.department
+		let queryString = '';
+		if (store.state.auth.user.userType==='Faculty' || store.state.auth.user.userType==='Student') {
+			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+			// console.log(queryString);
+			await store.dispatch('program/setProgrammesData', {qs: queryString})
+		}
+		else {
+			queryString = `department.id=${deptId}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
   },
+  computed: {
+    ...mapState({
+      programmesData: state => state.programmesData
+    })
+  },
   mounted () {
-   
+   this.reloadData();
   },
   methods: {
     async changeReportingYear () {
-			await this.$store.dispatch('setReportingYear', this.selectedYear)
-		}
+      await this.$store.dispatch('setReportingYear', this.selectedYear)
+    },
+    async reloadData () {
+			this.loading = true;
+			let deptId = this.$store.state.user.userProfile.result.departmentId;
+			let userId = this.$store.state.user.userProfile.result.userId;
+			let queryString = '';
+			
+			if (this.$store.state.auth.user.userType==='Faculty' || this.$store.state.auth.user.userType==='Student') {
+			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.store.state.selectedYear}`;
+			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
+			}
+			else {
+				queryString = `department.id=${deptId}&nnual_year=${this.store.state.selectedYear}&deleted_ne=true`;
+			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
+			}
+			this.loading = false;
+		},
   }
   
 } 

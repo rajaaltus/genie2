@@ -5,7 +5,8 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
-	}
+	},
+	publicEngagementsCount: 0
 });
 
 export const getters =  {
@@ -30,6 +31,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PUBLICENGAGEMENTS_COUNT (state, publicEngagementsCount) {
+		state.publicEngagementsCount = publicEngagementsCount;
 	}
 };
 
@@ -47,9 +51,21 @@ export const actions = {
 			.finally(function () {
 			// always executed
 			});
-
-		  
 	},
+	async countPublicEngagements ({commit}, {qs}) {
+		await this.$axios.$get(`/public-engagements/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PUBLICENGAGEMENTS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			 commit("SET_PUBLICENGAGEMENTS_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async publicAdd ({commit}, payload) {
 		await this.$axios.$post('/public-engagements', payload)
 			.then(response =>  {
