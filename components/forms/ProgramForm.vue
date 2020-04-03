@@ -133,7 +133,7 @@
           <v-col cols="6" md="6" sm="12">
             <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
             <v-img
-              :src="`https://api2.ourlao.com${this.image_url}`"
+              :src="`process.env.baseUrl${this.image_url}`"
               lazy-src="https://picsum.photos/id/11/450/175"
               aspect-ratio="1"
               class="grey lighten-2"

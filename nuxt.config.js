@@ -77,8 +77,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
 	axios: {
-		 baseURL: 'https://api2.ourlao.com'
-		// baseURL: 'http://35.247.148.226:18081/api'
+		//  baseURL: 'https://api2.ourlao.com'
+		baseURL: 'http://localhost:1338'
 		// baseURL: 'http://arms.nimhans.ac.in:18080/api'
 	},
 

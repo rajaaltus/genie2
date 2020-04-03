@@ -144,8 +144,8 @@
                   </v-row>
                   <v-row>
                     <v-img
-                      :src="`https://api2.ourlao.com${image_url}`"
-                      lazy-src="https://picsum.photos/id/11/450/175"
+                      :src="`${$axios.defaults.baseURL}${image_url}`"
+                      lazy-src="/image_placeholder.png"
                       aspect-ratio="1"
                       class="grey lighten-2"
                       max-width="100%"
@@ -219,7 +219,7 @@ export default {
       user: 0,
       rejected_reason: null,
     },
-    image_url: 'https://picsum.photos/id/11/450/175',
+    image_url: '/logo.png',
     deletedItem: {
       annual_year: 0,
       type: "",
@@ -304,7 +304,10 @@ export default {
 		},
 
 		deleteItem (item) {
-      this.deletedItem = Object.assign({}, item)
+      this.deletedItem = Object.assign({}, {
+        id: item.id,
+        deleted: item.deleted
+      });
 			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
 			this.deletedItem.deleted = true
 			var payload = this.deletedItem;
@@ -369,8 +372,10 @@ export default {
 
 		save () {
 			if (this.editedIndex > -1) {
-				if(this.$store.state.auth.user.role.id!=4)
-					this.editedItem.approvalStatus = 'Pending'
+				if(this.$auth.user.userType==='DEPARTMENT')
+          this.editedItem.approval_status = 'Approved'
+        else  
+          this.editedItem.approval_status = 'Pending'
 				var payload = this.editedItem;
 				console.log(payload);
 				// var vm = this;
