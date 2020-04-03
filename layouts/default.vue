@@ -16,7 +16,21 @@
         <v-img  src="/logo.png" max-width="100%"></v-img>
       </v-list-item>
 
-       <v-img v-if="!mini" :aspect-ratio="16/9" :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`">
+       <v-img 
+        v-if="!mini" 
+        :aspect-ratio="16/9" 
+        :src="`${$axios.defaults.baseURL}${$store.state.user.avatarUrl}`"
+        lazy-src="/avatar-big.webp"
+       >
+       <template v-slot:placeholder>
+        <v-row
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+        >
+          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+        </v-row>
+      </template>
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
           <v-col>
             <div class="subheading">{{this.$store.state.auth.user.username}}</div>
@@ -26,7 +40,20 @@
         </v-img>
       <v-list-item v-else class="px-2">
           <v-list-item-avatar v-if="$store.state.user.avatarUrl">
-            <v-img :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`"></v-img>
+            <v-img 
+            :src="`${$axios.defaults.baseURL}${$store.state.user.avatarUrl}`"
+            lazy-src="/avatar-default-icon.png"
+            >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+              </v-row>
+            </template>
+            </v-img>
           </v-list-item-avatar>
           <v-list-item-avatar v-else>
             <v-icon dark>mdi-account-circle</v-icon>
