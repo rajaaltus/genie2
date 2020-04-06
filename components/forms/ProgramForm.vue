@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
     <v-row>
-     
+    <pre>{{program}}</pre>
       <v-col cols="12" md="12">
       <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
         <v-row>
@@ -33,6 +33,7 @@
             :rules="[v => !!v || 'Item is required']"
             :items="programNames"
             item-text="name"
+            item-value="name"
             label="Program Name*"
             required
           >
@@ -67,7 +68,7 @@
      <v-row>
         <v-col cols="4">
           <v-menu
-            v-model="from_date"
+            v-model="duration_from"
             :rules="[v => !!v || 'Item is required']"
             :close-on-content-click="false"
             transition="scale-transition"
@@ -86,7 +87,7 @@
         </v-col>
         <v-col cols="4">
           <v-menu
-            v-model="to_date"
+            v-model="duration_to"
             :rules="[v => !!v || 'Item is required']"
             transition="scale-transition"
             :close-on-content-click="false"
@@ -129,7 +130,6 @@
                 v-model="program.brief_report"
                 counter
                 label="Brief Report"
-                :value="value"
               ></v-textarea>
             </v-container>
           </v-col>
@@ -137,7 +137,7 @@
             <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
             <v-img
               :src="`${$axios.defaults.baseURL}${this.image_url}`"
-              lazy-src="/image-placeholder.png"
+              lazy-src="/image_placeholder.png"
               aspect-ratio="1"
               class="grey lighten-2"
               max-width="100%"
@@ -236,8 +236,10 @@ export default {
           this.program.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType==='DEPARTMENT')
           this.program.approval_status = 'Approved';
+        if (typeof this.program.name === 'object')
+          this.program.name = this.program.name.name
 				var payload = this.program;
-				// console.log(payload)
+				console.log(payload)
 			 	this.$store.dispatch('program/addProgram', payload)
 					.then(resp => {
 						Swal.fire({

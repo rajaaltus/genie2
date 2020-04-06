@@ -220,4 +220,14 @@ export const actions = {
 			.finally(function () {
 			});
 	},
+	async deleteFile ({commit}, {id}) {
+		await this.$axios.$delete(`/upload/files/${id}`)
+		.then(response => {
+			return true;
+		})
+		.catch((e) => {
+		})
+		.finally(function () {
+		});
+	}
 };

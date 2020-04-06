@@ -97,6 +97,7 @@ export default {
   computed: {
     ...mapState({
       programmesData: state => state.programmesData,
+      
     })
   },
   mounted () {

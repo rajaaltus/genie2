@@ -105,11 +105,11 @@ export const actions = {
 		await this.$axios.$put(`/programmes/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
-				commit("SET_PROGRAMMESDATA", response);
+				// commit("SET_PROGRAMMESDATA", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PROGRAMMESDATA", error);
+				// commit("SET_PROGRAMMESDATA", error);
 			})
 			.finally(function () {
 			// always executed

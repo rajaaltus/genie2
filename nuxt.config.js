@@ -52,7 +52,7 @@ export default {
   ],
    
   graphql: {
-    endpoint: 'http://localhost:1338/graphql',
+    endpoint: 'http://site1.localhost/graphql',
     AST: false,
     options: {},
   },
@@ -84,7 +84,7 @@ export default {
   */
 	axios: {
 		//  baseURL: 'https://api2.ourlao.com'
-		baseURL: 'http://localhost:1338'
+		baseURL: 'http://site1.localhost'
 		// baseURL: 'http://arms.nimhans.ac.in:18080/api'
 	},
 
