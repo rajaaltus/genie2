@@ -6,7 +6,8 @@ export const state = () => ({
 		result: [],
 		error: {},
 	},
-	programmesCount: 0
+	programmesCount: 0,
+	programNames: []
 });
 
 export const getters =  {
@@ -34,6 +35,9 @@ export const mutations = {
 	},
 	SET_PROGRAMMES_COUNT (state, programmesCount) {
 		state.programmesCount = programmesCount;
+	},
+	SET_PROGRAM_NAMES (state, programNames) {
+		state.programNames = programNames.programmes;
 	}
 };
 
@@ -53,6 +57,17 @@ export const actions = {
 			// always executed
 				
 			});
+	},
+	async setProgramNames ({commit}) {
+		const query = `
+			query {
+				programmes(sort: "id:desc", where:{annual_year: 2020, department: {id: 6}}) {
+					name
+				}
+			}
+		`;
+		const programNames = await this.$graphql.request(query);
+		commit('SET_PROGRAM_NAMES', programNames);
 	},
 	async countProgrammes ({commit}, {qs}) {
 		await this.$axios.$get(`/programmes/count?${qs}`)

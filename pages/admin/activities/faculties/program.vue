@@ -9,13 +9,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <ProgramForm />
+        <ProgramForm :programNames="$store.state.program.programNames" :dataFrom="$store.state.staffs" />
       </v-col>
     </v-row>
     <hr class="my-6">
     <v-row>
       <v-col cols="12" md="12">
-        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :programmesData="programmesData"/>
+        <ProgramTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :programmesData="$store.state.program.programmesData"/>
       </v-col>
     </v-row>
   </v-app>
@@ -28,6 +28,7 @@ import FacultyActivities from '@/components/FacultyActivities'
 import YearDialog from '@/components/YearDialog'
 import ProgramForm from '@/components/forms/ProgramForm'
 import ProgramTable from '@/components/tables/ProgramTable'
+import Swal from 'sweetalert2'
 export default {
   head() {
     return {
@@ -59,13 +60,24 @@ export default {
 				id: 2020,
 				val: '2020-2021'
 			}
-    ]
+    ],
+    staffs: []
   }),
   async fetch({store}) {
     await store.dispatch('setActivities');
+
     if(store.state.user.fullUser){
       let userId = store.state.auth.user.id;
       await store.dispatch('user/setFullUser', {id: userId})
+
+    await store.dispatch('program/setProgramNames');
+
+    if(store.state.staffs.length==0) {
+      let qs = '';
+      qs = `department.id=${store.state.auth.user.department}&blocked_ne=true`
+		  await store.dispatch('setStaffs', {qs: qs})
+    }
+      
   }
    
     //Filter Query Fetch
@@ -84,7 +96,7 @@ export default {
   },
   computed: {
     ...mapState({
-      programmesData: state => state.programmesData
+      programmesData: state => state.programmesData,
     })
   },
   mounted () {

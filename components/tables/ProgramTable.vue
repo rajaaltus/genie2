@@ -267,7 +267,7 @@ export default {
   },
   watch: {
 		dialog (val) {
-			val || this.close()
+      val || this.close()
 		},
   },
   async fetch ({store}) {
@@ -277,7 +277,7 @@ export default {
     let deptId = store.state.user.fullUser.department.id;
 		let queryString = '';
 		console.log('Userid:'+userId+',deptId:'+deptId+',QS:'+queryString );
-		if (store.state.auth.user.userType==='Faculty' || store.state.auth.user.userType==='Student') {
+		if (store.state.auth.user.userType==='FACULTY' || store.state.auth.user.userType==='STUDENT') {
 			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true`;
 			// console.log(queryString);
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
@@ -287,11 +287,13 @@ export default {
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
   },
-
+  async mounted () {
+    this.reloadData();
+  },
   methods: {
-    getColor (approvalStatus) {
-			if (approvalStatus === 'Rejected') return 'red'
-			else if (approvalStatus === 'Pending') return 'orange'
+    getColor (approval_status) {
+			if (approval_status === 'Rejected') return 'red'
+			else if (approval_status === 'Pending') return 'orange'
 			else return 'green'
     },
     editItem (item) {
@@ -372,6 +374,7 @@ export default {
 
 		save () {
 			if (this.editedIndex > -1) {
+        Swal.fire(this.$auth.user.userType);
 				if(this.$auth.user.userType==='DEPARTMENT')
           this.editedItem.approval_status = 'Approved'
         else  

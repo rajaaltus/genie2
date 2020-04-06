@@ -1,5 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
-
+import colors from 'vuetify/es5/util/colors';
 export default {
   mode: 'spa',
   /*
@@ -48,8 +47,15 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    'nuxt-graphql-request'
   ],
+   
+  graphql: {
+    endpoint: 'http://localhost:1338/graphql',
+    AST: false,
+    options: {},
+  },
   auth: {
 		strategies: {
 			local: {

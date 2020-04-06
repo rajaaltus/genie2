@@ -59,7 +59,7 @@ export default {
 		let id = store.state.auth.user.id;
 		let deptId = store.state.auth.user.department;
 		let queryString = ''
-		if (store.state.auth.user.userType==='Department')
+		if (store.state.auth.user.userType==='DEPARTMENT')
 			queryString = `department.id=${deptId}&deleted_ne=true`;
 		else
 			queryString = `department.id=${deptId}&user.id=${id}&deleted_ne=true`;
@@ -74,6 +74,9 @@ export default {
 				await store.dispatch('recognition/countRecognitions', {qs: queryString})
 				await store.dispatch('patent/countPatents', {qs: queryString})
 				await store.dispatch('assignment/countAssignments', {qs: queryString})
+		let qs = ''
+		qs = `department.id=${deptId}&blocked_ne=true`
+		await store.dispatch('setStaffs', {qs: qs})
   },
   methods: {
 		 getActivityCount (id) {

@@ -68,7 +68,6 @@ export default {
     async setReportingYear () {
 			this.Ydialog = false;
 			await this.$store.dispatch('setReportingYear', this.selectedYear)
-			console.log(this.selectedYear)
 		},
   }
 }

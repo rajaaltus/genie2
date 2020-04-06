@@ -2,10 +2,18 @@ export const state = () => ({
   selectedYear: 0,
 	activities: [],
 	studentActivities: [],
-	reportYears: []
+	reportYears: [],
+	students: [],
+	staffs: [],
 });
 
 export const mutations = {
+	SET_STUDENTS (state, students) {
+		state.students = students;
+	},
+	SET_STAFFS (state, staffs) {
+		state.staffs = staffs;
+	},
   SET_REPORTING_YEAR (state, selectedYear) {
 		state.selectedYear = selectedYear;
 	},
@@ -191,5 +199,25 @@ export const actions = {
 	},
 	async setStudentActivities ({commit}, studentActivities) {
 		commit('SET_STUDENT_ACTIVITIES', studentActivities);
+	},
+	async setStudents ({commit}, {qs}) {
+		await this.$axios.$get(`/users?${qs}`)
+			.then(response => {
+				commit('SET_STUDENTS', response);
+			})
+			.catch((e) => {
+			})
+			.finally(function () {
+			});
+	},
+	async setStaffs ({commit}, {qs}) {
+		await this.$axios.$get(`/users?${qs}`)
+			.then(response => {
+				commit('SET_STAFFS', response);
+			})
+			.catch((e) => {
+			})
+			.finally(function () {
+			});
 	},
 };
