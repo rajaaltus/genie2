@@ -105,13 +105,13 @@ export const actions = {
 		await this.$axios.$delete(`/programmes/${id}`)
 			.then(response =>  {
 			// handle success
-				commit("SET_PROGRAMMESDATA", response);
-				console.log(response);
+				// commit("SET_PROGRAMMESDATA", response);
+				// console.log(response);
 			})
 			.catch((e) => {
 			// handle error
 				console.log(error);
-				commit("SET_PROGRAMMESDATA", error);
+				// commit("SET_PROGRAMMESDATA", error);
 			})
 			.finally(function () {
 			// always executed

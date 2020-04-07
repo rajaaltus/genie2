@@ -142,6 +142,17 @@
                       ></v-textarea>
                     </v-container>
                   </v-row>
+                  <v-row>
+                    <v-img
+                      :src="`${$axios.defaults.baseURL}${image_url}`"
+                      lazy-src="/image_placeholder.png"
+                      aspect-ratio="1"
+                      class="grey lighten-2"
+                      max-width="100%"
+                      max-height="400"
+                    >
+                    </v-img>
+                  </v-row>
                 </v-container>
               </v-card-text>
             </v-card>
@@ -206,8 +217,9 @@ export default {
       approved_by: "",
       department: 0,
       user: 0,
-      rejected_reason: null
+      rejected_reason: null,
     },
+    image_url: '/logo.png',
     deletedItem: {
       annual_year: 0,
       type: "",
@@ -225,7 +237,7 @@ export default {
       approved_by: "",
       department: 0,
       user: 0,
-      rejected_reason: null
+      rejected_reason: null,
     },
     editedIndex: -1,
     programTypes: [
@@ -285,12 +297,17 @@ export default {
     editItem (item) {
       this.editedIndex = this.programmesData.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      if(this.editedItem.image)
+        this.image_url = this.editedItem.image.url;
       console.log(this.editedItem)
       this.dialog = true
 		},
 
 		deleteItem (item) {
-      this.deletedItem = Object.assign({}, item)
+      this.deletedItem = Object.assign({}, {
+        id: item.id,
+        deleted: item.deleted
+      });
 			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
 			this.deletedItem.deleted = true
 			var payload = this.deletedItem;
@@ -355,8 +372,10 @@ export default {
 
 		save () {
 			if (this.editedIndex > -1) {
-				if(this.$store.state.auth.user.role.id!=4)
-					this.editedItem.approvalStatus = 'Pending'
+				if(this.$auth.user.userType==='DEPARTMENT')
+          this.editedItem.approval_status = 'Approved'
+        else  
+          this.editedItem.approval_status = 'Pending'
 				var payload = this.editedItem;
 				console.log(payload);
 				// var vm = this;

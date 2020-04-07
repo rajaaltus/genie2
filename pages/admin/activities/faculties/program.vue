@@ -105,7 +105,7 @@ export default {
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}
 			else {
-				queryString = `department.id=${deptId}&nnual_year=${this.store.state.selectedYear}&deleted_ne=true`;
+				queryString = `department.id=${deptId}&annual_year=${this.$store.state.selectedYear}&deleted_ne=true`;
 			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
 			}
 			this.loading = false;

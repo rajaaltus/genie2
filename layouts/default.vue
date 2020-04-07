@@ -16,7 +16,15 @@
         <v-img  src="/logo.png" max-width="100%"></v-img>
       </v-list-item>
 
-      <v-list-item class="px-2">
+       <v-img v-if="!mini" :aspect-ratio="16/9" :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`">
+        <v-row align="end" class="lightbox white--text pa-2 fill-height">
+          <v-col>
+            <div class="subheading">{{this.$store.state.auth.user.username}}</div>
+            <div class="body-1">{{this.$store.state.auth.user.email}}</div>
+          </v-col>
+        </v-row>
+        </v-img>
+      <v-list-item v-else class="px-2">
           <v-list-item-avatar v-if="$store.state.user.avatarUrl">
             <v-img :src="`https://api2.ourlao.com${$store.state.user.avatarUrl}`"></v-img>
           </v-list-item-avatar>
