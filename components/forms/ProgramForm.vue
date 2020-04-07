@@ -16,7 +16,6 @@
       </v-col>
     </v-row>
     <v-row>
-    <pre>{{program}}</pre>
       <v-col cols="12" md="12">
       <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
         <v-row>
