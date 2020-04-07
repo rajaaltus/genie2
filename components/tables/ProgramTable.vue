@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="programmesData"
+      :items="programmesData.result"
       sort-by="updated_at"
       sort-desc
       class="elevation-1"
@@ -138,20 +138,49 @@
                         v-model="editedItem.brief_report"
                         counter
                         label="Brief Report"
-                        :value="value"
                       ></v-textarea>
                     </v-container>
                   </v-row>
                   <v-row>
-                    <v-img
-                      :src="`${$axios.defaults.baseURL}${image_url}`"
-                      lazy-src="/image_placeholder.png"
-                      aspect-ratio="1"
-                      class="grey lighten-2"
-                      max-width="100%"
-                      max-height="400"
-                    >
-                    </v-img>
+                    <v-hover>
+                      <template v-slot:default="{ hover }">
+                          <v-img
+                            :src="`${$axios.defaults.baseURL}${image_url}`"
+                            lazy-src="/image_placeholder.png"
+                            aspect-ratio="1"
+                            class="grey lighten-2"
+                            max-width="100%"
+                            max-height="400"
+                          >
+                            <template v-slot:placeholder>
+                              <v-row
+                                class="fill-height ma-0"
+                                align="center"
+                                justify="center"
+                              >
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                              </v-row>
+                            </template>
+                            <v-fade-transition>
+                              <v-overlay
+                                v-if="hover"
+                                absolute
+                                color="#036358"
+                              >
+                                <v-btn @click="$refs.image.click()">
+                                  {{ image_url ? 'Edit Image' : 'Upload Image' }}
+                                </v-btn>
+                              </v-overlay>
+                            </v-fade-transition>
+                          </v-img>
+                        </template>
+                      </v-hover>
+                      <input ref="image"
+                        type="file"
+                        style="display:none;"
+                        label="File input"
+                        @change="handleFileUpload"
+							        >
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -218,8 +247,10 @@ export default {
       department: 0,
       user: 0,
       rejected_reason: null,
+      image: 0
     },
-    image_url: '/logo.png',
+    image_url: '/image_placeholder.png',
+    selectedFile: null,
     deletedItem: {
       annual_year: 0,
       type: "",
@@ -238,6 +269,7 @@ export default {
       department: 0,
       user: 0,
       rejected_reason: null,
+      image: 0
     },
     editedIndex: -1,
     programTypes: [
@@ -259,15 +291,16 @@ export default {
 		approvals: ['Pending', "Rejected", 'Approved'],
   }),
   computed: {
-    ...mapState({
-      programmesData: state => state.program.programmesData.result,
-      staffs: state => state.staffs
-    })
+    // ...mapState({
+    //   programmesData: state => state.program.programmesData.result,
+    //   staffs: state => state.staffs
+    // })
+    ...mapState(['program/programmesData', 'staffs'])
     
   },
   watch: {
 		dialog (val) {
-			val || this.close()
+      val || this.close()
 		},
   },
   async fetch ({store}) {
@@ -277,7 +310,7 @@ export default {
     let deptId = store.state.user.fullUser.department.id;
 		let queryString = '';
 		console.log('Userid:'+userId+',deptId:'+deptId+',QS:'+queryString );
-		if (store.state.auth.user.userType==='Faculty' || store.state.auth.user.userType==='Student') {
+		if (store.state.auth.user.userType==='FACULTY' || store.state.auth.user.userType==='STUDENT') {
 			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true`;
 			// console.log(queryString);
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
@@ -287,15 +320,32 @@ export default {
 			await store.dispatch('program/setProgrammesData', {qs: queryString})
     }
   },
-
+  async mounted () {
+    this.reloadData();
+  },
   methods: {
-    getColor (approvalStatus) {
-			if (approvalStatus === 'Rejected') return 'red'
-			else if (approvalStatus === 'Pending') return 'orange'
+    async handleFileUpload (event) {
+      await this.$store.dispatch('deleteFile', {id: this.editedItem.image.id})
+      console.log(this.editedItem.image.id + ': deleted');
+			this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData()
+      data.append('files', this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: 'POST',
+        url: '/upload',
+        data
+      })
+      this.image_url = uploadRes.data[0].url;
+      this.editedItem.image = uploadRes.data[0].id;
+		},
+    getColor (approval_status) {
+			if (approval_status === 'Rejected') return 'red'
+			else if (approval_status === 'Pending') return 'orange'
 			else return 'green'
     },
     editItem (item) {
-      this.editedIndex = this.programmesData.indexOf(item)
+      this.editedIndex = this.programmesData.result.indexOf(item)
       this.editedItem = Object.assign({}, item)
       if(this.editedItem.image)
         this.image_url = this.editedItem.image.url;
@@ -348,7 +398,7 @@ export default {
 		},
     async reloadData () {
 			this.loading = true;
-			let deptId = this.$store.state.user.fullUser.department.id;
+			let deptId = this.$store.state.auth.user.department;
 			let userId = this.$store.state.auth.user.id;
 			let queryString = '';
 			
@@ -364,10 +414,6 @@ export default {
 		},
 		close () {
 			this.dialog = false
-			setTimeout(() => {
-				this.programmesData = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-			}, 300)
 		},
 
 		save () {
@@ -376,9 +422,10 @@ export default {
           this.editedItem.approval_status = 'Approved'
         else  
           this.editedItem.approval_status = 'Pending'
+        this.editedItem.user = this.editedItem.user.id;
+        this.editedItem.department = this.editedItem.department.id;
 				var payload = this.editedItem;
 				console.log(payload);
-				// var vm = this;
 			 	this.$store.dispatch('program/updateProgram', payload)
 					.then(resp => {
 						Swal.fire({
@@ -399,10 +446,7 @@ export default {
 							timer: 4500
             })
 					});
-			} else {
-				// this.program.push(this.editedItem)
-				console.log(this.programmesData.push(this.editedItem))
-			}
+			} 
 			this.close()
 		}
   }

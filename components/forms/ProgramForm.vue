@@ -7,9 +7,9 @@
       >
         <v-select
           v-model="program.user"
-          :items="staffs"
+          :items="dataFrom"
           item-value="id"
-          item-text="firstname"
+          item-text="fullname"
           filled
           label="Data from (Select Faculty)"
         ></v-select>
@@ -28,12 +28,15 @@
           ></v-select>
         </v-col>
         <v-col cols="8">
-          <v-text-field v-model="program.name"
+          <v-combobox v-model="program.name"
             :rules="[v => !!v || 'Item is required']"
+            :items="programNames"
+            item-text="name"
+            item-value="name"
             label="Program Name*"
             required
           >
-          </v-text-field>
+          </v-combobox>
         </v-col>
         </v-row>
         <v-row>
@@ -64,7 +67,7 @@
      <v-row>
         <v-col cols="4">
           <v-menu
-            v-model="from_date"
+            v-model="duration_from"
             :rules="[v => !!v || 'Item is required']"
             :close-on-content-click="false"
             transition="scale-transition"
@@ -83,7 +86,7 @@
         </v-col>
         <v-col cols="4">
           <v-menu
-            v-model="to_date"
+            v-model="duration_to"
             :rules="[v => !!v || 'Item is required']"
             transition="scale-transition"
             :close-on-content-click="false"
@@ -126,15 +129,14 @@
                 v-model="program.brief_report"
                 counter
                 label="Brief Report"
-                :value="value"
               ></v-textarea>
             </v-container>
           </v-col>
           <v-col cols="6" md="6" sm="12">
             <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
             <v-img
-              :src="`process.env.baseUrl${this.image_url}`"
-              lazy-src="https://picsum.photos/id/11/450/175"
+              :src="`${$axios.defaults.baseURL}${this.image_url}`"
+              lazy-src="/image_placeholder.png"
               aspect-ratio="1"
               class="grey lighten-2"
               max-width="100%"
@@ -170,7 +172,9 @@
 
 <script>
 import Swal from 'sweetalert2'
+import {mapState} from 'vuex'
 export default {
+  props: ['programNames', 'dataFrom'],
   data: () => ({
     duration_from: false,
 		duration_to: false,
@@ -216,7 +220,9 @@ export default {
 		colloborations: ['Departmental', 'Interdepartmental'],
 		approvals: ['Pending', "Rejected", 'Approved'],
   }),
+  
   methods: {
+
     reset () {
       this.$refs.form.reset();
       this.image_url = null;
@@ -227,10 +233,12 @@ export default {
 				this.program.department = this.$store.state.auth.user.department;
 				if (this.program.user == 0)
           this.program.user = this.$store.state.auth.user.id;
-        if (this.$store.state.auth.user.role.id==4)
+        if (this.$store.state.auth.user.userType==='DEPARTMENT')
           this.program.approval_status = 'Approved';
+        if (typeof this.program.name === 'object')
+          this.program.name = this.program.name.name
 				var payload = this.program;
-				// console.log(payload)
+				console.log(payload)
 			 	this.$store.dispatch('program/addProgram', payload)
 					.then(resp => {
 						Swal.fire({

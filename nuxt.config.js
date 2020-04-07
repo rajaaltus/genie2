@@ -1,5 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
-
+import colors from 'vuetify/es5/util/colors';
 export default {
   mode: 'spa',
   /*
@@ -48,8 +47,15 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    'nuxt-graphql-request'
   ],
+   
+  graphql: {
+    endpoint: 'http://site1.localhost/graphql',
+    AST: false,
+    options: {},
+  },
   auth: {
 		strategies: {
 			local: {
@@ -78,7 +84,7 @@ export default {
   */
 	axios: {
 		//  baseURL: 'https://api2.ourlao.com'
-		baseURL: 'http://localhost:1338'
+		baseURL: 'http://site1.localhost'
 		// baseURL: 'http://arms.nimhans.ac.in:18080/api'
 	},
 
