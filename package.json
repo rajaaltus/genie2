@@ -19,6 +19,7 @@
     "nuxt": "^2.0.0",
     "nuxt-graphql-request": "^1.0.1",
     "sweetalert2": "^9.7.2",
+    "minimist": ">=1.2.3",
     "vue-moment": "^4.1.0"
   },
   "devDependencies": {
