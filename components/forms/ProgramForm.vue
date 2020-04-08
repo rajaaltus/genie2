@@ -10,8 +10,10 @@
           :items="dataFrom"
           item-value="id"
           item-text="fullname"
-          filled
-          label="Data from (Select Faculty)"
+          outlined
+          label="Data collected From?"
+          placeholder="Select Faculty / Staff from the List"
+          color="success"
         ></v-select>
       </v-col>
     </v-row>
@@ -24,7 +26,8 @@
             v-model="program.type"
             :rules="[v => !!v || 'Item is required']"
             :items="programTypes"
-            label="Program Type*"
+            label="Program Type *"
+            color="success"
           ></v-select>
         </v-col>
         <v-col cols="8">
@@ -33,8 +36,8 @@
             :items="programNames"
             item-text="name"
             item-value="name"
-            label="Program Name*"
-            required
+            label="Program Name *"
+            color="success"
           >
           </v-combobox>
         </v-col>
@@ -45,7 +48,8 @@
             v-model="program.location"
             :rules="[v => !!v || 'Item is required']"
             :items="locations"
-            label="Location*"
+            label="Location *"
+            color="success"
           ></v-select>
         </v-col>
         <v-col cols="4">
@@ -53,14 +57,17 @@
             v-model="program.forum"
             :rules="[v => !!v || 'Item is required']"
             :items="programLevels"
-            label="Forum*"
+            label="Forum *"
+            color="success"
           ></v-select>
         </v-col>
         <v-col cols="4">
           <v-select
             v-model="program.colloborations"
+            :rules="[v => !!v || 'Item is required']"
             :items="colloborations"
-            label="Colloborations"
+            label="Colloborations *"
+            color="success"
           ></v-select>
         </v-col>
       </v-row>
@@ -79,6 +86,7 @@
                 v-model="program.from_date"
                 label="From Date"
                 v-on="on"
+                color="success"
               ></v-text-field>
             </template>
             <v-date-picker v-model="program.from_date" color="green lighten-1" @input="menu1 = false"></v-date-picker>
@@ -98,6 +106,7 @@
                 v-model="program.to_date"
                 label="To Date"
                 v-on="on"
+                color="success"
               ></v-text-field>
             </template>
             <v-date-picker v-model="program.to_date" color="green lighten-1" @input="menu2 = false"></v-date-picker>
@@ -107,8 +116,8 @@
           <v-text-field v-model="program.participants_count"
             :rules="[v => !!v || 'Item is required']"
             type="number"
-            label="Participants Count*"
-            required
+            label="Participants Count *"
+            color="success"
           >
           </v-text-field>
         </v-col>
@@ -119,20 +128,19 @@
             v-model="program.coordinators"
             label="Co-ordinators"
             :rules="[v => !!v || 'Item is required']"
+            color="success"
           ></v-text-field>
         </v-col> 
         </v-row>
         <v-row>
-          <v-col cols="6" md="6" sm="12">
-            <v-container fluid>
+          <v-col cols="12" md="12" sm="12">
               <v-textarea
                 v-model="program.brief_report"
                 counter
-                label="Brief Report"
+                label="Brief Report *"
               ></v-textarea>
-            </v-container>
           </v-col>
-          <v-col cols="6" md="6" sm="12">
+          <v-col cols="4" md="4" sm="12">
             <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
             <v-img
               :src="`${$axios.defaults.baseURL}${this.image_url}`"
@@ -160,10 +168,10 @@
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="programAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="programAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>

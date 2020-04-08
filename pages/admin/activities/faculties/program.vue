@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <YearDialog v-if="$store.state.selectedYear==0" />
-    <PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" /> 
+    <YearDialog v-if="$store.state.selectedYear==0"/>
+    <PageHeader :title="$metaInfo.title" :reportYears="reportYears" :selectedYear="$store.state.selectedYear" class="ml-0" /> 
     <v-row>
       <v-col cols="12" md="3" lg="3">
         <v-card class="mx-auto">
