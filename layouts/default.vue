@@ -2,7 +2,7 @@
   <v-app>
       <v-navigation-drawer
       v-model="drawer"
-      src="/dashboard_back.jpg"
+      src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
       permanent
       app
@@ -16,7 +16,21 @@
         <v-img  src="/logo.png" max-width="100%"></v-img>
       </v-list-item>
 
-       <v-img 
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-title class="pl-2">{{this.$store.state.auth.user.fullname}} <br> <span class="caption font-weight-light"> Head of Department </span></v-list-item-title>
+
+        <v-btn
+          icon
+          @click.stop="mini = !mini"
+        >
+        </v-btn>
+      </v-list-item>
+
+      <!-- <v-img 
         v-if="!mini" 
         :aspect-ratio="16/9" 
         :src="`${$axios.defaults.baseURL}${$store.state.user.avatarUrl}`"
@@ -28,7 +42,6 @@
           align="center"
           justify="center"
         >
-          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
         </v-row>
       </template>
         <v-row align="end" class="lightbox white--text pa-2 fill-height">
@@ -37,7 +50,7 @@
             <div class="body-1">{{this.$store.state.auth.user.email}}</div>
           </v-col>
         </v-row>
-        </v-img>
+        </v-img> 
       <v-list-item v-else class="px-2">
           <v-list-item-avatar v-if="$store.state.user.avatarUrl">
             <v-img 
@@ -67,7 +80,7 @@
               </v-list-item-content>
           </v-list-item>
       </v-list-item>
-
+-->
       <v-divider></v-divider>
      
       <v-list-item dense link to="/user_profile">
@@ -160,9 +173,9 @@
 
 
       <template v-slot:append>
-        <v-list-item  nav dense link @click="logout">
+        <v-list-item  nav dense>
           <v-list-item-icon>
-            <v-icon color="blue darken-2">mdi-contact-mail</v-icon>
+            <v-icon color="blue darken-2">mdi-email-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="menu-title">Contact Us</v-list-item-title>
@@ -177,9 +190,10 @@
       color="#f9f9f9"
     >
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <span class="font-weight-bold"> Epidemiology </span>
     </v-app-bar>
     <v-content>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-content>

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <PageHeader :title="$metaInfo.title" /> 
+    <PageHeader :title="$metaInfo.title" class="ml-0" />  
     <v-row>
       <v-col cols="12" md="3" lg="3">
         <v-card class="mx-auto">
