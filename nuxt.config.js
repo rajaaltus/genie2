@@ -34,6 +34,7 @@ export default {
   */
   plugins: [
     { src: '~/plugins/moment.js' },
+    { src : '~/plugins/vue-apexchart.js', ssr : false },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -124,7 +125,11 @@ export default {
   ** Build configuration
   */
   build: {
+    vendor : [
+      'vue-apexchart'
+    ],
     /*
+
     ** You can extend webpack config here
     */
     extend (config, ctx) {
