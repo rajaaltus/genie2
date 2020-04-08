@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list color="#f2f2f2">
     <v-list-item-group color="success">
       <v-list-item
         v-for="(item, i) in $store.state.activities"
