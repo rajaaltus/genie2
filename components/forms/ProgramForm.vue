@@ -161,27 +161,37 @@
               ></v-textarea>
           </v-col>
           <v-col cols="12" lg="4" md="12">
-            <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
-            <v-img
-              :src="`${$axios.defaults.baseURL}${this.image_url}`"
-              lazy-src="/image_placeholder.png"
-              aspect-ratio="1"
-              class="grey lighten-2"
-              max-width="100%"
-              max-height="175"
-            >
-            <v-btn small color="success" dark @click="$refs.image.click()">Upload Image</v-btn>
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
+            <!-- <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload"> -->
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-img
+                  :src="`${$axios.defaults.baseURL}${image_url}`"
+                  lazy-src="/image_placeholder.png"
+                  class="grey lighten-2"
+                  max-width="100%"
+                  max-height="175"
                 >
-                </v-row>
+                  <v-fade-transition>
+                    <v-overlay
+                      v-if="hover"
+                      absolute
+                      color="#036358"
+                    >
+                      <v-btn @click="$refs.image.click()">
+                        Upload Image
+                      </v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                </v-img>
               </template>
-            </v-img>
+            </v-hover>
+            <input ref="image"
+              type="file"
+              style="display:none;"
+              label="File input"
+              @change="handleFileUpload"
+            >
           </v-col>
-        
         </v-row>
     </v-form>
     </v-col>
@@ -251,9 +261,7 @@ export default {
 		colloborations: ['Departmental', 'Interdepartmental'],
 		approvals: ['Pending', "Rejected", 'Approved'],
   }),
-  
   methods: {
-
     reset () {
       this.$refs.form.reset();
       this.image_url = null;
@@ -280,7 +288,8 @@ export default {
 							timer: 1500
 						})
 						this.reset();
-						this.reloadData();
+            this.reloadData();
+            this.$store.dispatch('program/setProgramNames')
 					})
 					.catch(err => {
             Swal.fire({

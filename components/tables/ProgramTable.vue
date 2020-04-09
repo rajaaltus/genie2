@@ -342,7 +342,7 @@ export default {
         })
         this.image_url = uploadRes.data[0].url;
         this.editedItem.image = uploadRes.data[0].id;
-        Swal.fire('editing');
+        // Swal.fire('editing');
         
       }
       else {
@@ -350,14 +350,15 @@ export default {
         this.selectedFile = event.target.files[0];
         const data = new FormData()
         data.append('files', this.selectedFile);
+        data.append('ref', 'programmes');
         const uploadRes = await this.$axios({
           method: 'POST',
           url: '/upload',
           data
         })
         this.image_url = uploadRes.data[0].url;
-        this.editedItem.image = Object.assign({}, uploadRes.data[0]);
-        Swal.fire('Pudhusu');
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('Pudhusu');
         
       }
         

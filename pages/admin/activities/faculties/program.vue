@@ -100,7 +100,7 @@ export default {
       
     })
   },
-  mounted () {
+  async mounted () {
    this.reloadData();
   },
   methods: {
