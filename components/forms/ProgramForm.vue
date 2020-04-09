@@ -74,8 +74,8 @@
      <v-row>
         <v-col cols="4">
           <v-menu
+            ref="menu"
             v-model="duration_from"
-            :rules="[v => !!v || 'Item is required']"
             :close-on-content-click="false"
             transition="scale-transition"
             offset-y
@@ -84,32 +84,52 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="program.from_date"
-                label="From Date"
+                :return-value.sync="duration_from"
+                :rules="[v => !!v || 'Item is required']"
+                readonly
+                label="From Date *"
                 v-on="on"
-                color="success"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="program.from_date" color="green lighten-1" @input="menu1 = false"></v-date-picker>
+            <v-date-picker v-model="program.from_date" color="green lighten-1" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="duration_from = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.menu.save(duration_from)">
+                OK
+              </v-btn>
+            </v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="4">
           <v-menu
+            ref="menu1"
             v-model="duration_to"
-            :rules="[v => !!v || 'Item is required']"
-            transition="scale-transition"
             :close-on-content-click="false"
+            transition="scale-transition"
             offset-y
             min-width="290px"
           >
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="program.to_date"
-                label="To Date"
+                :rules="[v => !!v || 'Item is required']"
+                :return-value.sync="duration_to"
+                readonly
+                label="To Date *"
                 v-on="on"
-                color="success"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="program.to_date" color="green lighten-1" @input="menu2 = false"></v-date-picker>
+            <v-date-picker v-model="program.to_date" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="duration_to = false">
+                Cancel
+              </v-btn>
+              <v-btn text color="primary" @click="$refs.menu1.save(duration_to)">
+                OK
+              </v-btn>
+            </v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="4">
@@ -140,7 +160,7 @@
                 label="Brief Report *"
               ></v-textarea>
           </v-col>
-          <v-col cols="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="12">
             <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload">
             <v-img
               :src="`${$axios.defaults.baseURL}${this.image_url}`"
@@ -186,27 +206,30 @@ export default {
   data: () => ({
     duration_from: false,
 		duration_to: false,
+		editFrom: false,
+		editTo: false,
 		valid: true,
     program: 
 		{
       annual_year: 0,
-      type: "",
-      name: "",
-      location: "",
-      forum: "",
-      colloborations: "",
-      from_date: "",
-      to_date: "",
-      participants_count: 0,
-      coordinators: "",
-      brief_report: "",
-      deleted: false,
-      approval_status: "Pending",
-      approved_by: "",
-      department: 0,
-      user: 0,
-      rejected_reason: null,
-      image: 0
+			type: "",
+			name: "",
+			location: "",
+			forum: "",
+			colloborations: "",
+			from_date: "",
+			to_date: "",
+			participants_count: null,
+			coordinators: "",
+			brief_report: "",
+			deleted: false,
+			approval_status: "Pending",
+			approved_by: "",
+			approved_date: null,
+			rejected_reason: null,
+			image: null,
+			department: 0,
+			user: 0
     },
     selectedFile: null,
     image_url: null,
