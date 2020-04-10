@@ -231,46 +231,49 @@ export default {
     ],
     editedItem: {
 			annual_year: 0,
-      type: "",
-      name: "",
-      location: "",
-      forum: "",
-      colloborations: "",
-      from_date: "",
-      to_date: "",
-      participants_count: 0,
-      coordinators: "",
-      brief_report: "",
-      deleted: false,
-      approval_status: "Pending",
-      approved_by: "",
-      department: 0,
-      user: 0,
-      rejected_reason: null,
-      image: 0
+			type: "",
+			name: "",
+			location: "",
+			forum: "",
+			colloborations: "",
+			from_date: "",
+			to_date: "",
+			participants_count: 0,
+			coordinators: "",
+			brief_report: "",
+			deleted: false,
+			approval_status: "Pending",
+			approved_by: "",
+			approved_date: null,
+			rejected_reason: null,
+			image: null,
+			department: 0,
+			user: 0
     },
     image_url: '/image_placeholder.png',
     selectedFile: null,
     deletedItem: {
       annual_year: 0,
-      type: "",
-      name: "",
-      location: "",
-      forum: "",
-      colloborations: "",
-      from_date: "",
-      to_date: "",
-      participants_count: 0,
-      coordinators: "",
-      brief_report: "",
-      deleted: false,
-      approval_status: "Pending",
-      approved_by: "",
-      department: 0,
-      user: 0,
-      rejected_reason: null,
-      image: 0
+			type: "",
+			name: "",
+			location: "",
+			forum: "",
+			colloborations: "",
+			from_date: "",
+			to_date: "",
+			participants_count: 0,
+			coordinators: "",
+			brief_report: "",
+			deleted: false,
+			approval_status: "Pending",
+			approved_by: "",
+			approved_date: null,
+			rejected_reason: null,
+			image: null,
+			department: 0,
+			user: 0
     },
+    imageToDelete: null,
     editedIndex: -1,
     programTypes: [
 			'Conference',
@@ -325,19 +328,41 @@ export default {
   },
   methods: {
     async handleFileUpload (event) {
-      await this.$store.dispatch('deleteFile', {id: this.editedItem.image.id})
-      console.log(this.editedItem.image.id + ': deleted');
-			this.selectedFile = event.target.files[0];
-      // console.log(this.selectedFile);
-      const data = new FormData()
-      data.append('files', this.selectedFile);
-      const uploadRes = await this.$axios({
-        method: 'POST',
-        url: '/upload',
-        data
-      })
-      this.image_url = uploadRes.data[0].url;
-      this.editedItem.image = uploadRes.data[0].id;
+      console.log(this.image_url);
+      if (this.image_url!==undefined)
+      {
+        this.imageToDelete = this.editedItem.image.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData()
+        data.append('files', this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: 'POST',
+          url: '/upload',
+          data
+        })
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('editing');
+        
+      }
+      else {
+        this.editedItem.image= null;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData()
+        data.append('files', this.selectedFile);
+        data.append('ref', 'programmes');
+        const uploadRes = await this.$axios({
+          method: 'POST',
+          url: '/upload',
+          data
+        })
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('Pudhusu');
+        
+      }
+        
+      
 		},
     getColor (approval_status) {
 			if (approval_status === 'Rejected') return 'red'
@@ -347,9 +372,15 @@ export default {
     editItem (item) {
       this.editedIndex = this.programmesData.result.indexOf(item)
       this.editedItem = Object.assign({}, item)
-      if(this.editedItem.image)
-        this.image_url = this.editedItem.image.url;
+
       console.log(this.editedItem)
+      if(this.editedItem.image) {
+        this.image_url = this.editedItem.image.url;
+        console.log(this.image_url);
+      }
+      else
+        this.editedItem.image = 0;
+      console.log(this.editedItem.image)
       this.dialog = true
 		},
 
@@ -434,7 +465,12 @@ export default {
 							icon: 'success',
 							showConfirmButton: false,
 							timer: 1500
-						})
+            })
+            
+            if(this.imageToDelete) {
+              this.$store.dispatch('deleteFile', {id: this.imageToDelete});
+              this.imageToDelete = null;
+            }
 						this.reloadData();
 					})
 					.catch(err => {

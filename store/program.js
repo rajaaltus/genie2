@@ -24,7 +24,6 @@ export const mutations = {
 			state.programmesData.result = programmesData;
 			state.programmesData.error = {};
 		} else {
-			console.log('error'+programmesData);
 			state.programmesData.success = false;
 			state.programmesData.error = {
 				message: {
@@ -86,14 +85,12 @@ export const actions = {
 	async addProgram ({commit}, payload) {
 		await this.$axios.$post('/programmes', payload)
 			.then(response =>  {
-			// handle success
 				commit("SET_PROGRAMMESDATA", response);
-				
 			})
 			.catch((e) => {
 			// handle error
-				console.log(error);
-				commit("SET_PROGRAMMESDATA", error);
+			
+				// commit("SET_PROGRAMMESDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -104,17 +101,15 @@ export const actions = {
 	async updateProgram ({commit}, payload) {
 		await this.$axios.$put(`/programmes/${payload.id}`, payload)
 			.then(response =>  {
-			// handle success
-				// commit("SET_PROGRAMMESDATA", response);
+		
 			})
 			.catch((e) => {
-			// handle error
-				// commit("SET_PROGRAMMESDATA", error);
+	
 			})
 			.finally(function () {
-			// always executed
+		
 			});
-		// commit('SET_PROGRAMMESDATA', programmesData)
+	
 	},
 	async deleteProgram ({commit}, {id}) {
 		await this.$axios.$delete(`/programmes/${id}`)

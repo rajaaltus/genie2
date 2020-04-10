@@ -101,28 +101,6 @@ export const mutations = {
 	},
 	SET_STUDENT_ACTIVITIES (state, studentActivities) {
 		state.studentActivities = [	
-			// {
-			// 	id: 1,
-			// 	title: 'Programmes / Events',
-			// 	count: 12,
-			// 	icon: 'mdi-clipboard-list',
-			// 	path: '/admin/activities/faculties/program',
-			// },
-			// {
-			// 	id: 2,
-			// 	title: 'Department Visitors',
-			// 	count: 5,
-			// 	icon: 'mdi-certificate-outline',
-			// 	path: '/admin/activities/faculties/visitor',
-			// },
-			// {
-			// 	id: 3,
-			// 	title: 'Training Underwent',
-			// 	count: 8,
-			// 	icon: 'mdi-bike-fast',
-			// 	path: '/admin/activities/faculties/training',
-			// 	storeVar: 'vistor.visitorsData'
-			// },
 			{
 				id: 4,
 				title: 'Presentations / Posters',
@@ -137,20 +115,6 @@ export const mutations = {
 				icon: 'mdi-atom',
 				path: '/admin/activities/students/participation',
 			},
-			// {
-			// 	id: 6,
-			// 	title: 'Public Engagement',
-			// 	count: 2,
-			// 	icon: 'mdi-air-horn',
-			// 	path: '/admin/activities/students/public',
-			// },
-			// {
-			// 	id: 7,
-			// 	title: 'Research Activities',
-			// 	count: 7,
-			// 	icon: 'mdi-book-search',
-			// 	path: '/admin/activities/students/research',
-			// },
 			{
 				id: 8,
 				title: 'Publications',
@@ -165,20 +129,6 @@ export const mutations = {
 				icon: 'mdi-crown',
 				path: '/admin/activities/students/recognition',
 			},
-			// {
-			// 	id: 10,
-			// 	title: 'Patents',
-			// 	count: 7,
-			// 	icon: 'mdi-book-lock',
-			// 	path: '/admin/activities/students/patent',
-			// },
-			// {
-			// 	id: 11,
-			// 	title: 'Key Assignments',
-			// 	count: 20,
-			// 	icon: 'mdi-ship-wheel',
-			// 	path: '/admin/activities/faculties/assignment',
-			// }
 			{
 				id: 12,
 				title: 'Theses / Dissertions',
@@ -229,5 +179,6 @@ export const actions = {
 		})
 		.finally(function () {
 		});
-	}
+	},
+
 };

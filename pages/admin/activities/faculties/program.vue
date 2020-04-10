@@ -43,6 +43,7 @@ export default {
     ProgramTable
   },
   data: () => ({
+    staffs: [],
     reportYears: [
 			{
 				id: 2017,
@@ -60,8 +61,7 @@ export default {
 				id: 2020,
 				val: '2020-2021'
 			}
-    ],
-    staffs: []
+    ]
   }),
   async fetch({store}) {
     await store.dispatch('setActivities');
@@ -100,7 +100,7 @@ export default {
       
     })
   },
-  mounted () {
+  async mounted () {
    this.reloadData();
   },
   methods: {
