@@ -12,7 +12,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <OTServiceForm />
+      </v-col>
+    </v-row>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <OTServiceTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :otservicesData="$store.state.otservice.otservicesData" />
       </v-col>
     </v-row>
   </v-app>
@@ -21,15 +27,19 @@
 <script>
 import PageHeader from '@/components/PageHeader'
 import PatientCare from '@/components/PatienCare'
+import OTServiceForm from '@/components/forms/patient-care/OTServiceForm'
+import OTServiceTable from '@/components/tables/PatientCare/OTServiceTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities'
+      title: 'Patient Care Activities - OT & Other Services'
     }
   }, 
   components: {
     PageHeader,
-    PatientCare
+    PatientCare,
+    OTServiceForm,
+    OTServiceTable
   },
   data: () => ({
     reportYears: [

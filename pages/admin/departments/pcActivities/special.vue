@@ -12,7 +12,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <SpecialForm />
+      </v-col>
+    </v-row>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <SpecialTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :specialData="$store.state.special.specialData"/>
       </v-col>
     </v-row>
   </v-app>
@@ -21,15 +27,19 @@
 <script>
 import PageHeader from '@/components/PageHeader'
 import PatientCare from '@/components/PatienCare'
+import SpecialForm from '@/components/forms/patient-care/SpecialForm'
+import SpecialTable from '@/components/tables/PatientCare/SpecialTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities'
+      title: 'Patient Care Activities - Special'
     }
   }, 
   components: {
     PageHeader,
-    PatientCare
+    PatientCare,
+    SpecialForm,
+    SpecialTable
   },
   data: () => ({
     reportYears: [

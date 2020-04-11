@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <PageHeader
       :title="$metaInfo.title"
       :reportYears="reportYears"
@@ -12,24 +12,34 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <ClinicalForm />
       </v-col>
     </v-row>
-  </v-app>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <ClinicalTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :clinicalData="$store.state.clinical.clinicalData"/>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader'
 import PatientCare from '@/components/PatienCare'
+import ClinicalForm from  '@/components/forms/patient-care/ClinicalForm'
+import ClinicalTable from '@/components/tables/PatientCare/ClinicalTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities'
+      title: 'Patient Care Activities - Clinical'
     }
   }, 
   components: {
     PageHeader,
-    PatientCare
+    PatientCare,
+    ClinicalForm,
+    ClinicalTable
   },
   data: () => ({
     reportYears: [

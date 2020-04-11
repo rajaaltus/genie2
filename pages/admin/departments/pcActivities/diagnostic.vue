@@ -12,7 +12,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <DiagnosticForm />
+      </v-col>
+    </v-row>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <DiagnosticTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :diagnosticData="$store.state.diagnostic.diagnosticData"/>
       </v-col>
     </v-row>
   </v-app>
@@ -21,15 +27,19 @@
 <script>
 import PageHeader from '@/components/PageHeader'
 import PatientCare from '@/components/PatienCare'
+import DiagnosticForm from '@/components/forms/patient-care/DiagnosticForm'
+import DiagnosticTable from '@/components/tables/PatientCare/DiagnosticTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities'
+      title: 'Patient Care Activities - Diagnostics'
     }
   }, 
   components: {
     PageHeader,
-    PatientCare
+    PatientCare,
+    DiagnosticForm,
+    DiagnosticTable
   },
   data: () => ({
     reportYears: [

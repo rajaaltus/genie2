@@ -43,7 +43,7 @@ import PageHeader from '@/components/PageHeader'
 export default {
   head() {
     return {
-      title: 'HRD'
+      title: 'HRD - Trainings'
     }
   }, 
   components: {
