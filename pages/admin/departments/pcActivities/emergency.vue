@@ -12,7 +12,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <EmergencyForm />
+      </v-col>
+    </v-row>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <EmergencyTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :emergencyData="$store.state.emergency.emergencyData"/>
       </v-col>
     </v-row>
   </v-app>
@@ -21,15 +27,19 @@
 <script>
 import PageHeader from '@/components/PageHeader'
 import PatientCare from '@/components/PatienCare'
+import EmergencyForm from '@/components/forms/patient-care/EmergencyForm'
+import EmergencyTable from '@/components/tables/PatientCare/EmergencyTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities'
+      title: 'Patient Care Activities - Emergency'
     }
   }, 
   components: {
     PageHeader,
-    PatientCare
+    PatientCare,
+    EmergencyForm,
+    EmergencyTable
   },
   data: () => ({
     reportYears: [
