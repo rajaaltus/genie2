@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <YearDialog v-if="$store.state.selectedYear==0"/>
     <PageHeader
       :title="$metaInfo.title"
       :reportYears="reportYears"
@@ -31,7 +32,12 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <CoursesForm />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <CoursesTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :hrdCourses="$store.state.hrdCourse.hrdCourses"/>
       </v-col>
     </v-row>
   </v-app>
@@ -40,6 +46,9 @@
 <script>
 
 import PageHeader from '@/components/PageHeader'
+import YearDialog from '@/components/YearDialog'
+import CoursesForm from '@/components/forms/hrd/CoursesForm'
+import CoursesTable from '@/components/tables/hrd/CoursesTable'
 export default {
   head() {
     return {
@@ -47,7 +56,10 @@ export default {
     }
   }, 
   components: {
-    PageHeader
+    PageHeader,
+    YearDialog,
+    CoursesForm,
+    CoursesTable
   },
   data: () => ({
     reportYears: [
@@ -69,6 +81,7 @@ export default {
       }
     ],
     selectedYear: 0,
-  })
+  }),
+  
 } 
 </script>

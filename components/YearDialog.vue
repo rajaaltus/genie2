@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog v-model="Ydialog" persistent max-width="30%">
+    <v-dialog v-model="Ydialog" persistent max-width="500"> 
 			<v-card>
 				<v-card-title>
-					<span class="headline">Select Reporting Year</span>
+					<span class="text-center">Reporting Year Selection</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
@@ -15,8 +15,9 @@
 									:items="reportYears"
 									item-text="val"
 									item-value="id"
-									label="Reporing Year"
+									label="Select Reporting Year"
 									required
+									outlined
 									class="text-center"
 								></v-select>
 							</v-col>
