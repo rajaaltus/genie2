@@ -3,8 +3,9 @@
     <v-data-table
       :headers="headers"
       :items="hrdCourses"
-      sort-by="id"
+      sort-by="last_updated"
       sort-desc
+      dense
       class="elevation-1"
       :loading="loading"
       loading-text="Loading... Please wait"
@@ -181,11 +182,13 @@ export default {
     dialog: false,
     headers: [
       {
-        text: "Id",
+        text: "Last updated",
         align: "left",
-        value: "id"
+        value: "updated_at",
+        width: "500",
+        fixed: true
       },
-      { text: "Course", value: "course_name" },
+      { text: "Course", value: "course_name", width: "600", fixed: true },
       { text: "Candidate Name", value: "candidate_name" },
       { text: "Duration", value: "durations" },
       { text: "Thesis Title", value: "thesis_title" },
