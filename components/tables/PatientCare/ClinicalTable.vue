@@ -171,6 +171,11 @@
         <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
+      <template v-slot:no-data>
+         <v-btn color="primary" @click="reloadData">
+          Reload
+        </v-btn>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -240,15 +245,7 @@ export default {
   watch: {
 		dialog (val) {
 			val || this.close()
-		},
-  },
-  async fetch ({store}) {
-		let queryString = ''
-		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
-		await store.dispatch('clinical/setClinicalData', {qs: queryString})
-  },
-  async mounted () {
-    this.reloadData();
+    },
   },
   methods: {
     async reloadData () {

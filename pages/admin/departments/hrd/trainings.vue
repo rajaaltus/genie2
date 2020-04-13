@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <YearDialog v-if="$store.state.selectedYear==0"/>
     <PageHeader
       :title="$metaInfo.title"
       :reportYears="reportYears"
@@ -31,7 +32,12 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <TrainingsForm />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <TrainingsTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :hrdTrainings="$store.state.hrdCourse.hrdTrainings" />
       </v-col>
     </v-row>
   </v-app>
@@ -40,6 +46,9 @@
 <script>
 
 import PageHeader from '@/components/PageHeader'
+import YearDialog from '@/components/YearDialog'
+import TrainingsForm from '@/components/forms/hrd/TrainingsForm'
+import TrainingsTable from '@/components/tables/hrd/TrainingsTable'
 export default {
   head() {
     return {
@@ -47,7 +56,10 @@ export default {
     }
   }, 
   components: {
-    PageHeader
+    PageHeader,
+    YearDialog,
+    TrainingsForm,
+    TrainingsTable
   },
   data: () => ({
     reportYears: [
@@ -69,6 +81,11 @@ export default {
       }
     ],
     selectedYear: 0,
-  })
+  }),
+  async fetch ({store}) {
+		let queryString = ''
+		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+		await store.dispatch('hrdTraining/setHRDTrainings', {qs: queryString});
+	},
 } 
 </script>
