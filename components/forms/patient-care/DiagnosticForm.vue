@@ -97,6 +97,9 @@ export default {
 			this.getTests();
 		},
 	},
+	async mounted () {
+    this.reloadData();
+  },
   methods: {
     async addTest () {
 			if(typeof this.diagnostic.test_name != 'object' && this.diagnostic.test_name!=null) {
@@ -139,8 +142,6 @@ export default {
 		},
 		async getTests (lab_type) {
 			let queryString = '';
-			// this.diagnostic.test_name = '';
-			// this.reset();
 			this.diagnostic.lab_type = lab_type;
 			queryString = `department.id=${this.$store.state.auth.user.department}&lab_type=${lab_type}`;
 			await this.$store.dispatch('diagnostic/setTest', {qs: queryString})

@@ -99,6 +99,11 @@ export default {
 			deleted: false
 		},
   }),
+  computed: {
+		...mapState({
+			otservicesData: state => state.otservice.otservicesData,
+    }),
+  },
   methods: {
     getProcedures () {
 			var procedures = [];

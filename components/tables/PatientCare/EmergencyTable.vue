@@ -19,7 +19,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
-            v-model="selectedYear"
+            v-model="annualYear"
             :items="reportYears"
             item-text="val"
             item-value="id"
@@ -158,6 +158,7 @@ export default {
   data: () => ({
     valid: true,
     loading: false,
+    emergencyData: [],
     editedItem: 
 		{
 			annual_year: 0,
@@ -207,18 +208,17 @@ export default {
   },
   async fetch ({store}) {
 		let queryString = ''
-		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
 		await store.dispatch('emergency/setEmergencyData', {qs: queryString});
   },
   async mounted () {
-    this.selectedYear = this.$store.state.selectedYear;
     this.reloadData();
   },
   methods: {
     async reloadData () {
 			this.loading = true;
 			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
+			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
 			await this.$store.dispatch('emergency/setEmergencyData', {qs: queryString});
 			this.loading = false;
 		},

@@ -1,6 +1,6 @@
 
 export const state = () => ({
-	otservicesData: {}
+	otservicesData: []
 });
 
 export const mutations = {
