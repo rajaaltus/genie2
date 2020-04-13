@@ -1,5 +1,6 @@
 <template>
   <div>
+    <YearDialog v-if="$store.state.selectedYear==0"/>
     <PageHeader
       :title="$metaInfo.title"
       :reportYears="reportYears"
@@ -26,6 +27,7 @@
 
 <script>
 import PageHeader from '@/components/PageHeader'
+import YearDialog from '@/components/YearDialog'
 import PatientCare from '@/components/PatienCare'
 import ClinicalForm from  '@/components/forms/patient-care/ClinicalForm'
 import ClinicalTable from '@/components/tables/PatientCare/ClinicalTable'
@@ -37,6 +39,7 @@ export default {
   }, 
   components: {
     PageHeader,
+    YearDialog,
     PatientCare,
     ClinicalForm,
     ClinicalTable
@@ -61,6 +64,7 @@ export default {
       }
     ],
     selectedYear: 0,
-  })
+  }),
+  
 } 
 </script>

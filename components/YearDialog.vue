@@ -61,9 +61,14 @@ export default {
 		],
 		selectedYear: 0,
   }),
-  mounted () {
-    this.Ydialog = true;
-  },
+  watch: {
+		dialog (val) {
+			val || this.close()
+		},
+	},
+	mounted () {
+		this.Ydialog = true;
+	},
   methods: {
     async setReportingYear () {
 			this.Ydialog = false;
