@@ -97,9 +97,7 @@ export default {
 			this.getTests();
 		},
 	},
-	async mounted () {
-    this.reloadData();
-  },
+	
   methods: {
     async addTest () {
 			if(typeof this.diagnostic.test_name != 'object' && this.diagnostic.test_name!=null) {
@@ -148,7 +146,6 @@ export default {
 		},
 		async addDiagnostic () {
 			if (this.$refs.form.validate()) {
-				// this.diagnostic.pcDiagnosticServicesId = 3;
 				this.diagnostic.annual_year = this.$store.state.selectedYear;
 				this.diagnostic.department = this.$store.state.auth.user.department;
 				this.diagnostic.pc_diagnostic_test = this.diagnostic.test_name.id;
@@ -177,7 +174,7 @@ export default {
 		async reloadData () {
       this.loading = true;
 			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
+			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
       await this.$store.dispatch('diagnostic/setDiagnosticData', {qs: queryString});
       this.loading = false;
     },

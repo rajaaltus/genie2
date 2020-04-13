@@ -126,16 +126,13 @@ export default {
     },
     selectedYear: 0
   }),
-  async mounted() {
-    this.selectedYear = this.$store.state.selectedYear;
-  },
   methods: {
     reset () {
 			this.$refs.form.reset()
 		},
 		async addClinical () {
 			if (this.$refs.form.validate()) {
-				this.pcClinical.annual_year = this.selectedYear;
+				this.pcClinical.annual_year = this.$store.state.selectedYear;
 				this.pcClinical.department = this.$store.state.auth.user.department;
 				var payload = this.pcClinical;
 				// console.log(payload);
