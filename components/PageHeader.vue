@@ -1,12 +1,14 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
-      <v-col cols="12" md="8" sm="4" lg="8" class="mt-2 pb-0" style="padding:0;">
+      <v-col cols="12" md="8" sm="4" lg="8" class="mt-2 pb-0 px-0">
       <span class="theme-border"><h1 class="ml-3">{{ title }}</h1></span>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md="3" sm="4" lg="3" v-if="reportYears">
         <v-select
+          filled
+          color="green"
           v-model="selectedYear"
           :items="reportYears"
           item-text="val"

@@ -5,6 +5,7 @@
       :title="$metaInfo.title"
       :reportYears="reportYears"
       :selectedYear="$store.state.selectedYear"
+      class="ml-0 pb-0 pt-0"
     />
     <v-row>
       <v-col cols="12" md="3" lg="3">
@@ -16,7 +17,6 @@
         <ClinicalForm />
       </v-col>
     </v-row>
-    <hr color="lightGrey" class="my-4">
     <v-row>
       <v-col cols="12">
         <ClinicalTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :clinicalData="$store.state.clinical.clinicalData"/>
@@ -34,7 +34,7 @@ import ClinicalTable from '@/components/tables/PatientCare/ClinicalTable'
 export default {
   head() {
     return {
-      title: 'Patient Care Activities - Clinical'
+      title: 'Patient Care Activities'
     }
   }, 
   components: {

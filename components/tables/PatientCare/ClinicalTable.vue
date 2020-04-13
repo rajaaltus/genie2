@@ -13,10 +13,8 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
-          <v-toolbar-title
-            ><span class="frm-title">Clinical Services</span></v-toolbar-title
-          >
+        <v-toolbar color="#f2f2f2" flat class="d-flex justify pt-1">
+          <v-toolbar-title><span class="frm-title">Clinical Services</span></v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
             v-model="annualYear"
@@ -35,13 +33,13 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
+            <v-card flat>
               <v-toolbar dark color="#4da96b">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Clinical Services | Update Details</v-toolbar-title
+                  >Clinical Services</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -172,11 +170,6 @@
       <template v-slot:item.action="{ item }">
         <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
-        </v-btn>
       </template>
     </v-data-table>
   </div>
@@ -331,3 +324,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.frm-title
+{
+  border-left: 5px solid #f5943d;
+  padding: 3px 10px;
+}
+</style>

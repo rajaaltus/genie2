@@ -1,17 +1,18 @@
 <template>
   <div>
-    <v-row no-gutters>
-      <v-col cols="12" sm="6" md="8">
-        <h3><span class="frm-title">Clinical Services</span></h3>
-      </v-col>
-    </v-row>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
       <v-container>
+        <v-row no-gutters class="mb-2">
+          <v-col cols="12" sm="6" md="8">
+            <h2><span class="frm-title">Clinical Services</span></h2>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.screenings"
-              label="Screenings *"
+              label="Screenings"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -19,8 +20,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.registrations"
-              label="Registrations *"
+              label="Registrations"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -28,8 +30,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.followups"
-              label="Follow-ups *"
+              label="Follow-ups"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -37,8 +40,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.admissions"
-              label="Admissions *"
+              label="Admissions"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -46,8 +50,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.discharges"
-              label="Discharges *"
+              label="Discharges"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -55,8 +60,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.deaths"
-              label="Deaths *"
+              label="Deaths"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -64,8 +70,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.emergencies"
-              label="Emergencies *"
+              label="Emergencies"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -73,8 +80,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.internal_ref"
-              label="Referrals - Internal *"
+              label="Referrals - Internal"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
@@ -82,22 +90,22 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="pcClinical.external_ref"
-              label="Referrals - External *"
+              label="Referrals - External"
               type="number"
               :rules="[v => !!v || 'Enter Total No. of Patients / Cases']"
             >
             </v-text-field>
           </v-col>
         </v-row>
-        <span style="color:red; font-size:12px;">* Mandatory fields</span>
       </v-container>
         <v-row no-gutters>
           <v-spacer></v-spacer>
-          <v-btn medium color="#d74f4f" class="mr-2" dark @click="reset">
+          <v-btn small color="#d74f4f" class="mr-2" dark @click="reset">
             Reset
           </v-btn>
-          <v-btn medium color="#57a727" dark @click="addClinical">
+          <v-btn small color="#57a727" dark @click="addClinical">
             Submit
           </v-btn>
         </v-row>
@@ -167,3 +175,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.frm-title
+{
+  border-left: 5px solid #f5943d;
+  padding: 3px 10px;
+}
+</style>
