@@ -25,7 +25,7 @@ export default {
 				id: 1,
 				title: 'Clinical Servies',
 				count: 12,
-				icon: 'mdi-clipboard-list',
+				icon: 'mdi-hotel',
 				path: '/admin/departments/pcActivities/clinical',
 			},
 			{

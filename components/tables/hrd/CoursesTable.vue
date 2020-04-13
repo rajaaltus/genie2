@@ -5,11 +5,13 @@
       :items="hrdCourses"
       sort-by="last_updated"
       sort-desc
-      dense
       class="elevation-1"
       :loading="loading"
       loading-text="Loading... Please wait"
     >
+      <template v-slot:item.updated_at="{ item }">
+        {{ $moment(item.updated_at).fromNow() }}
+      </template>
       <template v-slot:top>
         <v-toolbar flat color="#ebebeb" class="d-flex justify pt-1">
           <v-toolbar-title
@@ -185,10 +187,8 @@ export default {
         text: "Last updated",
         align: "left",
         value: "updated_at",
-        width: "500",
-        fixed: true
       },
-      { text: "Course", value: "course_name", width: "600", fixed: true },
+      { text: "Course", value: "course_name", width: "600" },
       { text: "Candidate Name", value: "candidate_name" },
       { text: "Duration", value: "durations" },
       { text: "Thesis Title", value: "thesis_title" },

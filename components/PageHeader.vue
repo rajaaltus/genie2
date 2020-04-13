@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col cols="12" md="8" sm="4" lg="8" class="mt-2 pb-0" style="padding:0;">
       <span class="theme-border"><h1 class="ml-3">{{ title }}</h1></span>

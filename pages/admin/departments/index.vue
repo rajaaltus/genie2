@@ -1,13 +1,26 @@
 <template>
-  <div>
+  <v-container fluid>
     <YearDialog v-if="$store.state.selectedYear == 0" />
     <PageHeader
       :title="$metaInfo.title"
-      :reportYears="reportYears"
       :selectedYear="$store.state.selectedYear"
     />
     <v-row>
-      <v-container>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md="3" sm="4" lg="3">
+        <v-select
+          v-model="selectedYear"
+          :items="reportYears"
+          item-text="val"
+          item-value="id"
+          label="Reporting Year"
+          required
+          @input="changeReportingYear"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-6">
+      <v-col cols="12">
         <v-form ref="about" lazy-validation @submit.prevent>
           <p class="mb-3">
             <span
@@ -25,7 +38,9 @@
                 :config="editorConfig"
               ></ckeditor>
             </client-only>
-            <span v-if="departmentAbout.introduction!=''">Words: {{ departmentAbout.introduction.split(" ").length }}</span>
+            <span v-if="departmentAbout.introduction != ''"
+              >Words: {{ departmentAbout.introduction.split(" ").length }}</span
+            >
           </div>
           <div>
             <p class="mt-3">
@@ -42,7 +57,9 @@
                   :config="editorConfig"
                 ></ckeditor>
               </client-only>
-              <span v-if="departmentAbout.facilities!=''">Words: {{ departmentAbout.facilities.split(" ").length }}</span>
+              <span v-if="departmentAbout.facilities != ''"
+                >Words: {{ departmentAbout.facilities.split(" ").length }}</span
+              >
             </div>
           </div>
           <v-row>
@@ -52,98 +69,94 @@
             </v-btn>
           </v-row>
         </v-form>
-
-        <v-row class="mx-3 mb-4">
-          <span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
-        </v-row>
-
-        <v-row class="center my-2 mx-1" justify="space-between">
-          <v-img
-            src="https://picsum.photos/id/11/100/60"
-            lazy-src="https://picsum.photos/id/11/100/60"
-            aspect-ratio="1"
-            class="grey lighten-2"
-            max-width="500"
-            max-height="300"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
-          <v-img
-            src="https://picsum.photos/id/11/100/60"
-            lazy-src="https://picsum.photos/id/11/100/60"
-            aspect-ratio="1"
-            class="grey lighten-2"
-            max-width="500"
-            max-height="300"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
-          <v-img
-            src="https://picsum.photos/id/11/100/60"
-            lazy-src="https://picsum.photos/id/11/100/60"
-            aspect-ratio="1"
-            class="grey lighten-2"
-            max-width="500"
-            max-height="300"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-img>
-        </v-row>
-        <v-row class="center my-2 mx-1" justify="space-between">
-          <v-col cols="12" md="6" sm="4" lg="3">
-            <v-file-input
-              :rules="rules"
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Pick an avatar"
-              prepend-icon="mdi-camera"
-              label="Avatar"
-              v-model="chosenFile"
-            ></v-file-input>
-            <v-btn color="primary" right @click="onFileChange">Upload</v-btn>
-          </v-col>
-          <v-col cols="12" md="6" sm="4" lg="3">
-            <v-file-input
-              :rules="rules"
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Pick an avatar"
-              prepend-icon="mdi-camera"
-              label="Avatar"
-            ></v-file-input>
-          </v-col>
-          <v-col cols="12" md="6" sm="4" lg="3">
-            <v-file-input
-              :rules="rules"
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Pick an avatar"
-              prepend-icon="mdi-camera"
-              label="Avatar"
-            ></v-file-input>
-          </v-col>
-        </v-row>
-      </v-container>
+      </v-col>
     </v-row>
-  </div>
+
+    <v-row class="mb-4" no-gutters>
+      <span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
+    </v-row>
+
+    <v-row class="center my-2 mx-1" justify="space-between">
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url1}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
+          >
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image1.click()">
+                  Upload Image
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image1"
+        type="file"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload1"
+      />
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url2}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
+          >
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image2.click()">
+                  Upload Image
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image2"
+        type="file"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload2"
+      />
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url3}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
+          >
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image3.click()">
+                  Upload Image
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image3"
+        type="file"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload3"
+      />
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -172,7 +185,7 @@ export default {
     img_url3: null,
     Ydialog: false,
     editorConfig: {
-      height: "200px",
+      height: "200px"
     },
     selectedYear: 0,
     departmentAbout: {
@@ -185,6 +198,13 @@ export default {
       image_2: null,
       image_3: null
     },
+    profileImage: {
+      id: 0,
+      image_1: null,
+      image_2: null,
+      image_3: null
+    },
+    imageToDelete: null,
     editedItem: {
       annual_year: 0,
       department: 0,
@@ -195,7 +215,7 @@ export default {
       image_2: null,
       image_3: null
     },
-    file: "",
+    selectedFile: "",
     addDepartmentImage: {
       departmentProfileId: 0,
       imageCode: "",
@@ -229,6 +249,11 @@ export default {
     ],
     selectedYear: 0
   }),
+  watch: {
+    selectedYear(val) {
+      this.reload();
+    }
+  },
   computed: {
     ...mapState({
       newAbout: state => state.about.newAbout
@@ -239,6 +264,7 @@ export default {
         : null;
     }
   },
+
   async fetch({ store }) {
     let id = store.state.auth.user.id;
     await store.dispatch("user/setFullUser", { id: id }).catch(err => {
@@ -263,98 +289,111 @@ export default {
 
     if (this.newAbout.length > 0) {
       this.departmentAbout = Object.assign({}, this.newAbout[0]);
-      // if (this.$store.state.about.newAbout[0].image_1!==null)
-      // 	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
-      // else
-      // 	this.img_url1 = null;
+      if (this.$store.state.about.newAbout[0].image_1!==null)
+      	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+      else
+      	this.img_url1 = null;
 
-      // if (this.$store.state.about.newAbout[0].image_2!=null)
-      // 	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
-      // else
-      // 	this.img_url2 = null;
+      if (this.$store.state.about.newAbout[0].image_2!=null)
+      	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+      else
+      	this.img_url2 = null;
 
-      // if (this.$store.state.about.newAbout[0].image_3!=null)
-      // 	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
-      // else
-      // 	this.img_url3 = null;
+      if (this.$store.state.about.newAbout[0].image_3!=null)
+      	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+      else
+      	this.img_url3 = null;
     }
   },
 
   methods: {
-    // async handleFileUpload_1 (event) {
-    // 	this.selectedFile = event.target.files[0];
-    // 	const data = new FormData()
-    // 	data.append('files', this.selectedFile);
-    // 	const uploadRes = await this.$axios({
-    // 		method: 'POST',
-    // 		url: '/upload',
-    // 		data
-    // 	})
-    // 	this.img_url1 = uploadRes.data[0].url;
-    // 	this.departmentAbout.image_1 = uploadRes.data[0].id;
-    // 	var payload = Object.assign({}, {
-    // 		id: this.departmentAbout.id,
-    // 		image_1: uploadRes.data[0].id
-    // 	})
-    // 	// console.log(payload)
-    // 	await this.$store.dispatch('about/updateAbout', payload)
-    // 		.then(resp => {
-    // 			Swal.fire({
-    // 				title: 'Success',
-    // 				text: 'Image Uploded!',
-    // 				type: 'success',
-    // 				showConfirmButton: false,
-    // 				timer: 1500
-    // 			})
-    // 			this.reload();
-    // 		})
-    // 		.catch(err => {
-    // 			Swal.fire({
-    // 				title: 'Oops!',
-    // 				text: 'Check the image format',
-    // 				type: 'warning',
-    // 				showConfirmButton: false,
-    // 				timer: 3000
-    // 			})
-    // 		})
-    // },
-    // async handleFileUpload_2 (event) {
-    // 	this.selectedFile = event.target.files[0];
-    // 	const data = new FormData()
-    // 	data.append('files', this.selectedFile);
-    // 	const uploadRes = await this.$axios({
-    // 		method: 'POST',
-    // 		url: '/upload',
-    // 		data
-    // 	})
-    // 	this.img_url2 = uploadRes.data[0].url;
-    // 	this.departmentAbout.image_2 = uploadRes.data[0].id;
-    // 	var payload = Object.assign({}, {
-    // 		id: this.departmentAbout.id,
-    // 		image_2: uploadRes.data[0].id
-    // 	})
-    // 	// console.log(payload)
-    // 	await this.$store.dispatch('about/updateAbout', payload)
-    // 		.then(resp => {
-    // 			Swal.fire({
-    // 				title: 'Success',
-    // 				text: 'Image Uploded!',
-    // 				type: 'success',
-    // 				showConfirmButton: false,
-    // 				timer: 1500
-    // 			})
-    // 			this.reload();
-    // 		})
-    // 		.catch(err => {
-    // 			Swal.fire({
-    // 				title: 'Oops!',
-    // 				text: 'Check the image format',
-    // 				type: 'warning',
-    // 				showConfirmButton: false,
-    // 				timer: 3000
-    // 			})
-    // 		})
-    // },
+   async handleFileUpload1 (event) {
+      if (this.img_url1!==undefined)
+      {
+        this.imageToDelete = this.departmentAbout.image_1.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData()
+        data.append('files', this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: 'POST',
+          url: '/upload',
+          data
+        })
+        this.img_url1 = uploadRes.data[0].url;
+        this.departmentAbout.image_1 = uploadRes.data[0].id;
+        var payload = Object.assign({}, {
+          id: this.departmentAbout.id,
+          image_1: this.departmentAbout.image_1
+        })
+        Swal.fire('editing');
+        await this.$store.dispatch('about/updateAbout', payload)
+      .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if(this.imageToDelete) {
+              this.$store.dispatch('deleteFile', {id: this.imageToDelete});
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+        
+      }
+      else {
+        this.editedItem.image_1 = null;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData()
+        data.append('files', this.selectedFile);
+        // data.append('ref', 'programmes');
+        const uploadRes = await this.$axios({
+          method: 'POST',
+          url: '/upload',
+          data
+        })
+        this.img_url1 = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        Swal.fire('Pudhusu');
+      }
+      
+    },
+     async handleFileUpload2 (event) {
+      this.selectedFile = event.target.files[0];
+      const data = new FormData()
+      data.append('files', this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: 'POST',
+        url: '/upload',
+        data
+      })
+      this.img_url2 = uploadRes.data[0].url;
+      this.departmentAbout.image_2 = uploadRes.data[0].id;
+    },
+     async handleFileUpload3 (event) {
+      this.selectedFile = event.target.files[0];
+      const data = new FormData()
+      data.append('files', this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: 'POST',
+        url: '/upload',
+        data
+      })
+      this.img_url3 = uploadRes.data[0].url;
+      this.departmentAbout.image_3 = uploadRes.data[0].id;
+
+    },
     // async handleFileUpload_3 (event) {
     // 	this.selectedFile = event.target.files[0];
     // 	const data = new FormData()
@@ -404,7 +443,7 @@ export default {
             Swal.fire({
               title: "Success",
               text: "Department Profile Updated!",
-              type: "success",
+              icon: "success",
               showConfirmButton: false,
               timer: 1500
             });
@@ -414,7 +453,7 @@ export default {
             Swal.fire({
               title: "Oops!",
               text: "Exceeds Word limit, (should be less than 150 words.)",
-              type: "warning",
+              icon: "warning",
               showConfirmButton: false,
               timer: 3000
             });
@@ -467,20 +506,20 @@ export default {
       await this.$store.dispatch("about/setAboutData", { query: queryString });
       if (this.newAbout.length > 0) {
         this.departmentAbout = Object.assign({}, this.newAbout[0]);
-        // if (this.$store.state.about.newAbout[0].image_1!==null)
-        // 	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
-        // else
-        // 	this.img_url1 = null;
+        if (this.$store.state.about.newAbout[0].image_1!==null)
+        	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+        else
+        	this.img_url1 = null;
 
-        // if (this.$store.state.about.newAbout[0].image_2!=null)
-        // 	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
-        // else
-        // 	this.img_url2 = null;
+        if (this.$store.state.about.newAbout[0].image_2!=null)
+        	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+        else
+        	this.img_url2 = null;
 
-        // if (this.$store.state.about.newAbout[0].image_3!=null)
-        // 	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
-        // else
-        // 	this.img_url3 = null;
+        if (this.$store.state.about.newAbout[0].image_3!=null)
+        	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+        else
+        	this.img_url3 = null;
       } else {
         this.departmentAbout = Object.assign({}, this.editedItem);
       }
@@ -508,13 +547,7 @@ export default {
   height: 40px;
   vertical-align: center !important;
 }
-.uk-grid-grey {
-  margin-top: 0 !important;
-  background: none !important;
-  box-shadow: none !important;
-}
-.ck.ck-toolbar {
-  background: none !important;
-  border-radius: 0.4em 0.4em 0 0 !important;
+.ck.ck-editor__main > .ck-editor__editable {
+  height: 250px;
 }
 </style>
