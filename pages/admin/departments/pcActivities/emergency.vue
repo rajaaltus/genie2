@@ -64,6 +64,11 @@ export default {
       }
     ],
     selectedYear: 0,
-  })
+  }),
+  async fetch ({store}) {
+		let queryString = ''
+		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+		await store.dispatch('emergency/setEmergencyData', {qs: queryString});
+  },
 } 
 </script>

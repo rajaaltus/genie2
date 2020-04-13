@@ -127,8 +127,8 @@
         <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
+         <v-btn color="primary" @click="reloadData">
+          Reload
         </v-btn>
       </template>
     </v-data-table>
@@ -186,17 +186,9 @@ export default {
 		search (val) {
 			if (this.procedures.length > 0) return
 			this.getTests();
-		},
+    },
 	},
-
-	async fetch ({store}) {
-		let queryString = ''
-		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
-		await store.dispatch('diagnostic/setDiagnosticData', {qs: queryString});
-  },
-  async mounted () {
-    this.reloadData();
-  },
+	
   methods: {
     async addTest () {
 			if(typeof this.diagnostic.test_name != 'object' && this.diagnostic.test_name!=null) {

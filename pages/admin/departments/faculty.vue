@@ -1,16 +1,31 @@
 <template>
-  <v-app>
+  <div>
+    <YearDialog v-if="$store.state.selectedYear==0"/>
     <PageHeader
       :title="$metaInfo.title"
       :reportYears="reportYears"
       :selectedYear="$store.state.selectedYear"
     />
-  </v-app>
+    <v-row>
+      <v-col cols="12">
+        <FacultyForm />
+      </v-col>
+    </v-row>
+    <hr color="lightGrey" class="my-4">
+    <v-row>
+      <v-col cols="12">
+        <FacultyTable :reportYears="reportYears" :annualYear="$store.state.selectedYear" :facultyData="$store.state.clinical.facultyData"/>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
 
 import PageHeader from '@/components/PageHeader'
+import YearDialog from '@/components/YearDialog'
+import FacultyForm from '@/components/forms/FacultyForm'
+import FacultyTable from '@/components/tables/FacultyTable'
 export default {
   head() {
     return {
@@ -18,7 +33,10 @@ export default {
     }
   }, 
   components: {
-    PageHeader
+    PageHeader,
+    YearDialog,
+    FacultyForm,
+    FacultyTable
   },
   data: () => ({
     reportYears: [
@@ -40,6 +58,11 @@ export default {
       }
     ],
     selectedYear: 0,
-  })
+  }),
+  async fetch ({store}) {
+		let queryString = ''
+		queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+		await store.dispatch('faculty/setFacultyData', {qs: queryString})
+	},
 } 
 </script>

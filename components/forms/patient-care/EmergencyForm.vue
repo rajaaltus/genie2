@@ -92,9 +92,9 @@ export default {
       department: null
     },
   }),
-  async mounted () {
-    this.reloadData();
-  },
+  // async mounted () {
+  //   this.reloadData();
+  // },
   methods: {
     async addEmergency () {
 			if (this.$refs.form.validate()) {

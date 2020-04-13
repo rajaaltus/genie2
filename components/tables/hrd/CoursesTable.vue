@@ -113,8 +113,8 @@
         <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
+         <v-btn color="primary" @click="reloadData">
+          Reload
         </v-btn>
       </template>
     </v-data-table>
@@ -196,8 +196,10 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
+   
   },
+  
   computed: {
     ...mapState({
       hrdCourses: state => state.hrdCourse.hrdCourses.result
