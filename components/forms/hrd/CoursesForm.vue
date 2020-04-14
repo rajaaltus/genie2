@@ -1,45 +1,44 @@
 <template>
   <div>
-    <v-row no-gutters>
-      <v-col cols="12" sm="12" md="12">
-        <h2><span class="frm-title">Academic Courses</span></h2>
-      </v-col>
-    </v-row>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
       <v-container>
         <v-row>
           <v-col cols="4">
             <v-select
+              color="green"
               v-model="hrd.course_name"
               :rules="[v => !!v || 'Item is required']"
               :items="courses"
               item-text="text"
               item-value="val"
-              label="Select Course*"
+              label="Select Course"
             ></v-select>
           </v-col>
           <v-col v-if="hrd.course_name === 'Others'" cols="8">
             <v-text-field
+            color="green"
               v-model="hrd.other_name"
               :rules="[v => !!v || 'Item is required']"
-              label="Course Name*"
+              label="Course Name"
               required
             >
             </v-text-field>
           </v-col>
           <v-col cols="5">
             <v-text-field
+            color="green"
               v-model="hrd.candidate_name"
               :rules="[v => !!v || 'Item is required']"
-              label="Name of the Candidate*"
+              label="Name of the Candidate"
               required
             >
             </v-text-field>
           </v-col>
           <v-col cols="3">
             <v-text-field
+            color="green"
               v-model="hrd.durations"
-              label="Duration*(Years)"
+              label="Duration (No. ofYears)"
               :rules="[v => !!v || 'Item is required']"
               required
               type="number"
@@ -47,32 +46,35 @@
             </v-text-field>
           </v-col>
           <v-col cols="12">
-            <v-text-field
+            <v-textarea
+            color="green"
               v-model="hrd.thesis_title"
               label="Title of Thesis (if applicable)"
               required
             >
-            </v-text-field>
+            </v-textarea>
           </v-col>
           <v-col cols="12">
-            <v-text-field v-model="hrd.guides" label="Guides" required>
+            <v-text-field v-model="hrd.guides" label="Guides" :rules="[v => !!v || 'Item is required']">
             </v-text-field>
           </v-col>
           <v-col cols="6">
             <v-select
+            color="green"
               v-model="hrd.remarks_status"
               :items="remarks"
               label="Status"
+              :rules="[v => !!v || 'Item is required']"
             ></v-select>
           </v-col>
         </v-row>
       </v-container>
         <v-row no-gutters>
           <v-spacer></v-spacer>
-          <v-btn medium color="#d74f4f" dark class="mr-2" @click="reset">
+          <v-btn small color="#d74f4f" dark class="mr-2" @click="reset">
             Reset
           </v-btn>
-          <v-btn medium color="#57a727" dark @click="addHRDCourse">
+          <v-btn small color="#57a727" dark @click="addHRDCourse">
             Submit
           </v-btn>
         </v-row>

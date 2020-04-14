@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="hrdTrainings"
       sort-by="updated_at"
@@ -13,9 +14,16 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
-            ><span class="frm-title">Training Programmes</span></v-toolbar-title
+            ><span class="frm-title"
+              >People Trained at NIMHANS</span
+            ></v-toolbar-title
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
@@ -34,14 +42,12 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title
-                  >HRD - Trainings | Update Details</v-toolbar-title
-                >
+                <v-toolbar-title>People Trained at NIMHANS</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="close">
@@ -152,11 +158,15 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green"
+          >mdi-pencil-box</v-icon
+        >
+        <v-icon centre @click="deleteItem(item)" color="error"
+          >mdi-delete-circle</v-icon
+        >
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+        <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -165,138 +175,148 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Swal from 'sweetalert2'
+import { mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
   props: ["reportYears", "annualYear", "clincalData"],
   data: () => ({
     editFrom: false,
     editTo: false,
     loading: false,
-    editedItem: 
-		{
-			annual_year: 0,
-			training_name: "",
-			institutional_affiliation: "",
-			no_of_candidates: 0,
-			from_date: "",
-			to_date: "",
-			remarks_status: "",
-			brief_report: "",
-			deleted: false,
-			department: 0
-		},
-		deletedItem: 
-		{
-			annual_year: 0,
-			training_name: "",
-			institutional_affiliation: "",
-			no_of_candidates: 0,
-			from_date: "",
-			to_date: "",
-			remarks_status: "",
-			brief_report: "",
-			deleted: false,
-			department: 0
-		},
-    remarks: ['Completed', 'Awarded', 'Submitted', 'Ongoing', 'Joined'],
+    editedItem: {
+      annual_year: 0,
+      training_name: "",
+      institutional_affiliation: "",
+      no_of_candidates: 0,
+      from_date: "",
+      to_date: "",
+      remarks_status: "",
+      brief_report: "",
+      deleted: false,
+      department: 0
+    },
+    deletedItem: {
+      annual_year: 0,
+      training_name: "",
+      institutional_affiliation: "",
+      no_of_candidates: 0,
+      from_date: "",
+      to_date: "",
+      remarks_status: "",
+      brief_report: "",
+      deleted: false,
+      department: 0
+    },
+    remarks: ["Completed", "Awarded", "Submitted", "Ongoing", "Joined"],
     dialog: false,
     headers: [
-			{
-				text: 'Last updated',
-				align: 'left',
-				value: 'updated_at'
-			},
-			{ text: 'Training Name', value: 'training_name' },
-			{ text: 'Total Candidates', value: 'no_of_candidates' },
-			{ text: 'Institute', value: 'institutional_affiliation' },
-			{ text: 'From Date', value: 'from_date' },
-			{ text: 'To Date', value: 'to_date' },
-			{ text: 'Status', value: 'remarks_status' },
-			{ text: 'Actions', value: 'action', sortable: false },
-		],
+      {
+        text: "Last updated",
+        align: "left",
+        value: "updated_at"
+      },
+      { text: "Training Name", value: "training_name" },
+      { text: "Total Candidates", value: "no_of_candidates" },
+      { text: "Institute", value: "institutional_affiliation" },
+      { text: "From Date", value: "from_date" },
+      { text: "To Date", value: "to_date" },
+      { text: "Status", value: "remarks_status" },
+      { text: "Actions", value: "action", sortable: false }
+    ]
   }),
   computed: {
-		...mapState({
-			hrdTrainings: state => state.hrdTraining.hrdTrainings.result,
-		})
-	},
-	watch: {
-		dialog (val) {
-			val || this.close()
-    },
+    ...mapState({
+      hrdTrainings: state => state.hrdTraining.hrdTrainings.result
+    })
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
   },
   methods: {
-    async reloadData () {
-			this.loading = true;
-			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
-			await this.$store.dispatch('hrdTraining/setHRDTrainings', {qs: queryString});
-			this.loading = false;
-		},
-		editItem (item) {
-			this.editedIndex = this.hrdTrainings.indexOf(item)
-			this.editedItem = Object.assign({}, item)
-			this.dialog = true
-		},
-		deleteItem (item) {
-			 const index = this.hrdTrainings.indexOf(item)
-			 this.deletedItem = Object.assign({}, item)
-			this.deletedItem.deleted = true
-			var payload = this.deletedItem;
-			// console.log(payload);
-			var vm = this;
-			confirm('Are you sure you want to delete this item?') && 	this.$store.dispatch('hrdTraining/updateTraining', payload)
-				.then(resp => {
-					Swal.fire({
-						title: 'Success',
-						text: 'Deleted Successfully!',
-						icon: 'success',
-						showConfirmButton: false,
-						timer: 1500
-					})
-					this.reloadData();
-				})
-				.catch(err => {
-					this.snackbar = true
-					this.submitMessage = err
-				});
-		},
+    async reloadData() {
+      this.loading = true;
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
+      await this.$store.dispatch("hrdTraining/setHRDTrainings", {
+        qs: queryString
+      });
+      this.loading = false;
+    },
+    editItem(item) {
+      this.editedIndex = this.hrdTrainings.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      const index = this.hrdTrainings.indexOf(item);
+      this.deletedItem = Object.assign({}, item);
+      this.deletedItem.deleted = true;
+      var payload = this.deletedItem;
+      // console.log(payload);
+      var vm = this;
+      confirm("Are you sure you want to delete this item?") &&
+        this.$store
+          .dispatch("hrdTraining/updateTraining", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Deleted Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reloadData();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+    },
 
-		close () {
-			this.dialog = false
-			setTimeout(() => {
-				this.hrdTrainings = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-			}, 300)
-		},
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.hrdTrainings = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
 
-		save () {
-			if (this.editedIndex > -1) {
-				// Object.assign(this.program[this.editedIndex], this.editedItem)
-				var payload = this.editedItem;
-				console.log(payload);
-			 	this.$store.dispatch('hrdTraining/updateTraining', payload)
-					.then(resp => {
-						Swal.fire({
-							title: 'Success',
-							text: 'Updated Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reloadData();
-					})
-					.catch(err => {
-						this.snackbar = true
-						this.submitMessage = err
-					});
-			} else {
-				// this.program.push(this.editedItem)
-				console.log(this.hrdTrainings.push(this.editedItem))
-			}
-			this.close()
-		}
+    save() {
+      if (this.editedIndex > -1) {
+        // Object.assign(this.program[this.editedIndex], this.editedItem)
+        var payload = this.editedItem;
+        console.log(payload);
+        this.$store
+          .dispatch("hrdTraining/updateTraining", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Updated Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reloadData();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+      } else {
+        // this.program.push(this.editedItem)
+        console.log(this.hrdTrainings.push(this.editedItem));
+      }
+      this.close();
+    }
   }
-}
+};
 </script>
+
+<style scoped>
+.frm-title {
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

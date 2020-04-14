@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="hrdCourses"
       sort-by="id"
@@ -10,9 +11,14 @@
       loading-text="Loading... Please wait"
     >
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify pt-1">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
-            ><span class="frm-title">Academic Courses</span></v-toolbar-title
+            ><span class="frm-title">Regular Courses</span></v-toolbar-title
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
@@ -31,12 +37,12 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>HRD - Academic Courses</v-toolbar-title>
+                <v-toolbar-title>Regular Courses</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="close">
@@ -78,14 +84,14 @@
                     <v-col cols="12" md="12" lg="2">
                       <v-text-field
                         v-model="editedItem.durations"
-                        label="Duration"
+                        label="Duration (No. of Years)"
                         type="number"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="7">
                       <v-text-field
                         v-model="editedItem.thesis_title"
-                        label="Thesis Title"
+                        label="Thesis Title (If applicable)"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -109,11 +115,15 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green"
+          >mdi-pencil-box</v-icon
+        >
+        <v-icon centre @click="deleteItem(item)" color="error"
+          >mdi-delete-circle</v-icon
+        >
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+        <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -196,10 +206,9 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    },
-   
+    }
   },
-  
+
   computed: {
     ...mapState({
       hrdCourses: state => state.hrdCourse.hrdCourses.result
@@ -287,3 +296,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.frm-title {
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

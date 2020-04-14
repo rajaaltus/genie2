@@ -137,11 +137,12 @@
       </v-navigation-drawer>
     
     <v-app-bar
+      dense
       app
       color="#f9f9f9"
     >
-      <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <span class="font-weight-bold"> Epidemiology </span>
+    <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <span><h3>Epidemiology</h3></span>
     </v-app-bar>
     <v-content>
       <v-container fluid>
