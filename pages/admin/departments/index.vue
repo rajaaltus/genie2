@@ -72,11 +72,15 @@
       </v-col>
     </v-row>
 
-    <v-row class="mb-4" no-gutters>
+    <v-row class="mb-4" no-gutters v-if="departmentAbout.id">
       <span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
     </v-row>
 
-    <v-row class="center my-2 mx-1" justify="space-between">
+    <v-row
+      class="center my-2 mx-1"
+      justify="space-between"
+      v-if="departmentAbout.id"
+    >
       <v-hover>
         <template v-slot:default="{ hover }">
           <v-img
@@ -89,16 +93,33 @@
             <v-fade-transition>
               <v-overlay v-if="hover" absolute color="#036358">
                 <v-btn @click="$refs.image1.click()">
-                  Upload Image
+                  {{ img_url1 ? "Edit Image" : "Upload Image" }}
                 </v-btn>
               </v-overlay>
             </v-fade-transition>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
           </v-img>
         </template>
       </v-hover>
       <input
         ref="image1"
         type="file"
+        max-size="10485760"
         style="display:none;"
         label="File input"
         @change="handleFileUpload1"
@@ -115,7 +136,7 @@
             <v-fade-transition>
               <v-overlay v-if="hover" absolute color="#036358">
                 <v-btn @click="$refs.image2.click()">
-                  Upload Image
+                  {{ img_url2 ? "Edit Image" : "Upload Image" }}
                 </v-btn>
               </v-overlay>
             </v-fade-transition>
@@ -141,10 +162,18 @@
             <v-fade-transition>
               <v-overlay v-if="hover" absolute color="#036358">
                 <v-btn @click="$refs.image3.click()">
-                  Upload Image
+                  {{ img_url3 ? "Edit Image" : "Upload Image" }}
                 </v-btn>
               </v-overlay>
             </v-fade-transition>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
           </v-img>
         </template>
       </v-hover>
@@ -289,45 +318,37 @@ export default {
 
     if (this.newAbout.length > 0) {
       this.departmentAbout = Object.assign({}, this.newAbout[0]);
-      if (this.$store.state.about.newAbout[0].image_1!==null)
-      	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
-      else
-      	this.img_url1 = null;
+      if (this.$store.state.about.newAbout[0].image_1 !== null)
+        this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+      else this.img_url1 = null;
 
-      if (this.$store.state.about.newAbout[0].image_2!=null)
-      	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
-      else
-      	this.img_url2 = null;
+      if (this.$store.state.about.newAbout[0].image_2 != null)
+        this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+      else this.img_url2 = null;
 
-      if (this.$store.state.about.newAbout[0].image_3!=null)
-      	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
-      else
-      	this.img_url3 = null;
+      if (this.$store.state.about.newAbout[0].image_3 != null)
+        this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+      else this.img_url3 = null;
     }
   },
 
   methods: {
-   async handleFileUpload1 (event) {
-      if (this.img_url1!==undefined)
-      {
-        this.imageToDelete = this.departmentAbout.image_1.id;
+    async handleFileUpload1(event) {
+      if (this.img_url1 === null || this.img_url1 === undefined) {
         this.selectedFile = event.target.files[0];
-        const data = new FormData()
-        data.append('files', this.selectedFile);
+        const data = new FormData();
+        data.append("files", this.selectedFile);
         const uploadRes = await this.$axios({
-          method: 'POST',
-          url: '/upload',
+          method: "POST",
+          url: "/upload",
           data
-        })
+        });
         this.img_url1 = uploadRes.data[0].url;
         this.departmentAbout.image_1 = uploadRes.data[0].id;
-        var payload = Object.assign({}, {
-          id: this.departmentAbout.id,
-          image_1: this.departmentAbout.image_1
-        })
-        Swal.fire('editing');
-        await this.$store.dispatch('about/updateAbout', payload)
-      .then(resp => {
+        var payload = this.departmentAbout;
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
             Swal.fire({
               title: "Success",
               text: "Department Profile Updated!",
@@ -335,8 +356,8 @@ export default {
               showConfirmButton: false,
               timer: 1500
             });
-            if(this.imageToDelete) {
-              this.$store.dispatch('deleteFile', {id: this.imageToDelete});
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
               this.imageToDelete = null;
             }
             this.reload();
@@ -350,88 +371,220 @@ export default {
               timer: 3000
             });
           });
-        
-      }
-      else {
-        this.editedItem.image_1 = null;
+      } else {
+        this.imageToDelete = this.departmentAbout.image_1.id;
         this.selectedFile = event.target.files[0];
-        const data = new FormData()
-        data.append('files', this.selectedFile);
-        // data.append('ref', 'programmes');
+        const data = new FormData();
+        data.append("files", this.selectedFile);
         const uploadRes = await this.$axios({
-          method: 'POST',
-          url: '/upload',
+          method: "POST",
+          url: "/upload",
           data
-        })
+        });
         this.img_url1 = uploadRes.data[0].url;
-        this.editedItem.image = uploadRes.data[0].id;
-        Swal.fire('Pudhusu');
+        this.departmentAbout.image_1 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_1: this.departmentAbout.image_1
+          }
+        );
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
       }
-      
     },
-     async handleFileUpload2 (event) {
-      this.selectedFile = event.target.files[0];
-      const data = new FormData()
-      data.append('files', this.selectedFile);
-      const uploadRes = await this.$axios({
-        method: 'POST',
-        url: '/upload',
-        data
-      })
-      this.img_url2 = uploadRes.data[0].url;
-      this.departmentAbout.image_2 = uploadRes.data[0].id;
+    async handleFileUpload2(event) {
+      if (this.img_url2 === null || this.img_url2 === undefined) {
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url2 = uploadRes.data[0].url;
+        this.departmentAbout.image_2 = uploadRes.data[0].id;
+        var payload = this.departmentAbout;
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      } else {
+        this.imageToDelete = this.departmentAbout.image_2.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url2 = uploadRes.data[0].url;
+        this.departmentAbout.image_2 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_2: this.departmentAbout.image_2
+          }
+        );
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      }
     },
-     async handleFileUpload3 (event) {
-      this.selectedFile = event.target.files[0];
-      const data = new FormData()
-      data.append('files', this.selectedFile);
-      const uploadRes = await this.$axios({
-        method: 'POST',
-        url: '/upload',
-        data
-      })
-      this.img_url3 = uploadRes.data[0].url;
-      this.departmentAbout.image_3 = uploadRes.data[0].id;
-
+    async handleFileUpload3(event) {
+      if (this.img_url3 === null || this.img_url3 === undefined) {
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url3 = uploadRes.data[0].url;
+        this.departmentAbout.image_3 = uploadRes.data[0].id;
+        var payload = this.departmentAbout;
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      } else {
+        this.imageToDelete = this.departmentAbout.image_3.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url3 = uploadRes.data[0].url;
+        this.departmentAbout.image_3 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_3: this.departmentAbout.image_3
+          }
+        );
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      }
     },
-    // async handleFileUpload_3 (event) {
-    // 	this.selectedFile = event.target.files[0];
-    // 	const data = new FormData()
-    // 	data.append('files', this.selectedFile);
-    // 	const uploadRes = await this.$axios({
-    // 		method: 'POST',
-    // 		url: '/upload',
-    // 		data
-    // 	})
-    // 	this.img_url3 = uploadRes.data[0].url;
-    // 	this.departmentAbout.image_3 = uploadRes.data[0].id;
-    // 	var payload = Object.assign({}, {
-    // 		id: this.departmentAbout.id,
-    // 		image_3: uploadRes.data[0].id
-    // 	})
-    // 	// console.log(payload)
-    // 	await this.$store.dispatch('about/updateAbout', payload)
-    // 		.then(resp => {
-    // 			Swal.fire({
-    // 				title: 'Success',
-    // 				text: 'Image Uploded!',
-    // 				type: 'success',
-    // 				showConfirmButton: false,
-    // 				timer: 1500
-    // 			})
-    // 			this.reload();
-    // 		})
-    // 		.catch(err => {
-    // 			Swal.fire({
-    // 				title: 'Oops!',
-    // 				text: 'Check the image format',
-    // 				type: 'warning',
-    // 				showConfirmButton: false,
-    // 				timer: 3000
-    // 			})
-    // 		})
-
-    // },
     async addProfile() {
       if (this.newAbout.length > 0) {
         this.departmentAbout.department = this.$store.state.auth.user.department;
@@ -506,20 +659,17 @@ export default {
       await this.$store.dispatch("about/setAboutData", { query: queryString });
       if (this.newAbout.length > 0) {
         this.departmentAbout = Object.assign({}, this.newAbout[0]);
-        if (this.$store.state.about.newAbout[0].image_1!==null)
-        	this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
-        else
-        	this.img_url1 = null;
+        if (this.$store.state.about.newAbout[0].image_1 !== null)
+          this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+        else this.img_url1 = null;
 
-        if (this.$store.state.about.newAbout[0].image_2!=null)
-        	this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
-        else
-        	this.img_url2 = null;
+        if (this.$store.state.about.newAbout[0].image_2 != null)
+          this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+        else this.img_url2 = null;
 
-        if (this.$store.state.about.newAbout[0].image_3!=null)
-        	this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
-        else
-        	this.img_url3 = null;
+        if (this.$store.state.about.newAbout[0].image_3 != null)
+          this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+        else this.img_url3 = null;
       } else {
         this.departmentAbout = Object.assign({}, this.editedItem);
       }
