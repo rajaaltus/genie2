@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="specialData"
       sort-by="id"
@@ -13,7 +14,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1" style="border-radius:0;">
           <v-toolbar-title
             ><span class="frm-title"
               >Special Clinics / Services / Procedures</span
@@ -37,14 +38,13 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Special Clinics / Services / Procedures | Edit
-                  Form</v-toolbar-title
+                  >Special Clinics / Services / Procedures</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -68,7 +68,7 @@
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.service_name"
-                          label="Special Clinic / Service / Procedure Name *"
+                          label="Special Clinic / Service / Procedure Name"
                           :rules="[
                             v =>
                               !!v ||
@@ -79,14 +79,14 @@
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.description"
-                          label="Description *"
+                          label="Description"
                           :rules="[v => !!v || 'Enter a Brief Description']"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.followup_patients"
-                          label="Follow Up Patients *"
+                          label="Follow Up Patients"
                           :rules="[
                             v => !!v || 'Enter the Total No. of New Patients'
                           ]"
@@ -95,7 +95,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.referrals"
-                          label="Referrals *"
+                          label="Referrals"
                           :rules="[
                             v =>
                               !!v || 'Enter the Total No. of Follow-up Patients'
@@ -106,7 +106,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.new_patients"
-                          label="New Patients *"
+                          label="New Patients"
                           :rules="[
                             v => !!v || 'Enter the Total No. of Referrals'
                           ]"
@@ -121,11 +121,11 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green">mdi-pencil-box</v-icon>
+        <v-icon centre @click="deleteItem(item)" color="error">mdi-delete-circle</v-icon>
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+         <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -276,3 +276,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.frm-title
+{
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

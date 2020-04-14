@@ -6,7 +6,7 @@
           <v-container fluid class="fill-height">
             <v-row align="center" justify="center">
               <v-col cols="12" sm="8" md="4">
-                <v-card v-if="!registerForm" tile color="rgba(255,255,255,0.6)">
+                <v-card v-if="!registerForm" tile color="rgba(255,255,255,0.5)">
                   <v-toolbar flat tile color="rgba(255,255,255,0.1)">
                     <v-toolbar-title
                       ><img
@@ -300,7 +300,7 @@ export default {
 
 <style scoped>
 .backdrop {
-  background-image: url("/dashboard_back.jpg");
+  background-image: url("/bg-2.jpg");
   background-size: cover;
   background-position: center center;
   width: 100vw;

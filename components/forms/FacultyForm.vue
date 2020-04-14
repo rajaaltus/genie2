@@ -1,27 +1,24 @@
 <template>
   <div>
-    <v-row no-gutters>
-      <v-col cols="12" sm="6" md="8">
-        <h2><span class="frm-title">Retired Employees</span></h2>
-      </v-col>
-    </v-row>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col cols="3">
             <v-select
+              color="green"
               v-model="faculty.faculty_status"
               :rules="[v => !!v || 'Item is required']"
-              label="Status*"
+              label="Status"
               :items="facultyStatus"
             >
             </v-select>
           </v-col>
           <v-col cols="3">
             <v-text-field
+              color="green"
               v-model="faculty.faculty_name"
               :rules="[v => !!v || 'Item is required']"
-              label="Name of the Official*"
+              label="Name of the Official"
               required
             >
             </v-text-field>
@@ -29,9 +26,10 @@
 
           <v-col cols="3">
             <v-text-field
+              color="green"
               v-model="faculty.designation"
               :rules="[v => !!v || 'Item is required']"
-              label="Designation*"
+              label="Designation"
               required
             >
             </v-text-field>
@@ -47,11 +45,12 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  color="green"
                   v-model="faculty.leaving_date"
                   :rules="[v => !!v || 'Item is required']"
                   :return-value.sync="date1"
                   readonly
-                  label="To Date *"
+                  label="To Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -70,10 +69,10 @@
       </v-container>
       <v-row no-gutters>
         <v-spacer></v-spacer>
-        <v-btn medium color="#d74f4f" dark class="mr-2" @click="reset">
+        <v-btn small color="#d74f4f" dark class="mr-2" @click="reset">
           Reset
         </v-btn>
-        <v-btn medium color="#57a727" dark @click="addFaculty">
+        <v-btn small color="#57a727" dark @click="addFaculty">
           Add
         </v-btn>
       </v-row>

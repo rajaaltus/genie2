@@ -1,16 +1,16 @@
 <template>
-  <v-list color="#f2f2f2">
-    <v-list-item-group color="success">
+  <v-list flat color="#41704e" style="border-radius:0;">
+    <v-list-item-group color="#ffde00">
       <v-list-item
         v-for="(item, i) in $store.state.activities"
         :key="i"
         :to="item.path"
       >
-        <v-list-item-icon>
-          <v-icon v-text="item.icon"></v-icon>
+        <v-list-item-icon class="pl-2 mr-3">
+          <v-icon v-text="item.icon" class="disp-icon"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title v-text="item.title"></v-list-item-title>
+          <v-list-item-title v-text="item.title" class="disp"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>
@@ -19,7 +19,15 @@
 <style scoped>
 .disp
 {
+  color: #ffffff;
   font-size: 15px;
+  font-weight: normal;
+}
+
+.disp-icon
+{
+  color: #ffffff;
+  font-size: 24px;
   font-weight: normal;
 }
 </style>

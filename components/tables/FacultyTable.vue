@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="facultyData"
       sort-by="updated_at"
@@ -18,9 +19,16 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
-            ><span class="frm-title">Retired Employees</span></v-toolbar-title
+            ><span class="frm-title"
+              >Faculty and Staff served NIMHANS</span
+            ></v-toolbar-title
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
@@ -39,13 +47,13 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Faculty / Staff | Update Details</v-toolbar-title
+                  >Faculty and Staff served NIMHANS</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -80,28 +88,36 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="3">
-                      <v-menu
-                        v-model="editFrom"
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="editedItem.leaving_date"
-                            :rules="[v => !!v || 'Item is required']"
-                            label="Date of Leaving*"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editedItem.leaving_date"
-                          color="green lighten-1"
-                          @input="menu2 = false"
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
+            <v-menu
+              ref="menu1"
+              v-model="duration_to"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  color="green"
+                  v-model="editedItem.leaving_date"
+                  :rules="[v => !!v || 'Item is required']"
+                  :return-value.sync="date1"
+                  readonly
+                  label="To Date"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="editedItem.leaving_date" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="duration_to = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.menu1.save(date1)">
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -110,11 +126,15 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green"
+          >mdi-pencil-box</v-icon
+        >
+        <v-icon centre @click="deleteItem(item)" color="error"
+          >mdi-delete-circle</v-icon
+        >
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+        <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -123,135 +143,143 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Swal from 'sweetalert2'
+import { mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
-  props: ['reportYears', 'annualYear', 'facultyData'],
+  props: ["reportYears", "annualYear", "facultyData"],
   data: () => ({
     editFrom: false,
     loading: false,
-    facultyStatus: ['Superannuated', 'Retired', 'VRS'],
-		editedItem: 
-		{
-			annual_year: 0,
-			faculty_status: "",
-			faculty_name: "",
-			designation: "",
-			leaving_date: "",
-			deleted: false,
-			department: 0
-		},
-		deletedItem: 
-		{
-			annual_year: 0,
-			faculty_status: "",
-			faculty_name: "",
-			designation: "",
-			leaving_date: "",
-			deleted: false,
-			department: 0
+    facultyStatus: ["Superannuated", "Retired", "VRS"],
+    editedItem: {
+      annual_year: 0,
+      faculty_status: "",
+      faculty_name: "",
+      designation: "",
+      leaving_date: "",
+      deleted: false,
+      department: 0
+    },
+    deletedItem: {
+      annual_year: 0,
+      faculty_status: "",
+      faculty_name: "",
+      designation: "",
+      leaving_date: "",
+      deleted: false,
+      department: 0
     },
     dialog: false,
-		//Data table header
-		headers: [
-			{
-				text: 'Last updated',
-				align: 'left',
-				value: 'updated_at'
-			},
-			
-			{ text: 'Status', value: 'faculty_status' },
-			{ text: 'Name', value: 'faculty_name' },
-			{ text: 'Designation', value: 'designation'},
-			{ text: 'Leaving date', value: 'leaving_date'},
-			{ text: 'Actions', value: 'action', sortable: false },
-		],
+    //Data table header
+    headers: [
+      {
+        text: "Last updated",
+        align: "left",
+        value: "updated_at"
+      },
+
+      { text: "Status", value: "faculty_status" },
+      { text: "Name", value: "faculty_name" },
+      { text: "Designation", value: "designation" },
+      { text: "Leaving date", value: "leaving_date" },
+      { text: "Actions", value: "action", sortable: false }
+    ]
   }),
   computed: {
-		...mapState({
-			success: state => state.faculty.facultyData.status,
-			facultyData: state => state.faculty.facultyData.result,
-			errorData: state => state.faculty.facultyData.error,
-		}),
-	},
-	watch: {
-		dialog (val) {
-			val || this.close()
-    },
+    ...mapState({
+      success: state => state.faculty.facultyData.status,
+      facultyData: state => state.faculty.facultyData.result,
+      errorData: state => state.faculty.facultyData.error
+    })
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
   },
   methods: {
-    reloadData () {
+    reloadData() {
       this.loading = true;
-			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
-      this.$store.dispatch('faculty/setFacultyData', {qs: queryString});
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
+      this.$store.dispatch("faculty/setFacultyData", { qs: queryString });
       this.loading = false;
-		},
-		
-		editItem (item) {
-			this.editedIndex = this.facultyData.indexOf(item)
-			this.editedItem = Object.assign({}, item)
-			this.dialog = true
-		},
+    },
 
-		deleteItem (item) {
-			 const index = this.facultyData.indexOf(item)
-			 this.deletedItem = Object.assign({}, item)
-			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
-			this.deletedItem.deleted = true;
-			var payload = this.deletedItem;
-			console.log(payload);
-			confirm('Are you sure you want to delete this item?') && 	this.$store.dispatch('faculty/updateFaculty', payload)
-				.then(resp => {
-					Swal.fire({
-						title: 'Success',
-						text: 'Deleted Successfully!',
-						icon: 'success',
-						showConfirmButton: false,
-						timer: 1500
-					})
-					this.reloadData();
-				})
-				.catch(err => {
-					this.snackbar = true
-					this.submitMessage = err
-				});
-		},
+    editItem(item) {
+      this.editedIndex = this.facultyData.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
 
-		close () {
-			this.dialog = false
-			setTimeout(() => {
-				this.facultyData = Object.assign({}, this.defaultItem)
-				this.editedIndex = -1
-			}, 300)
-		},
+    deleteItem(item) {
+      const index = this.facultyData.indexOf(item);
+      this.deletedItem = Object.assign({}, item);
+      // confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
+      this.deletedItem.deleted = true;
+      var payload = this.deletedItem;
+      console.log(payload);
+      confirm("Are you sure you want to delete this item?") &&
+        this.$store
+          .dispatch("faculty/updateFaculty", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Deleted Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reloadData();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+    },
 
-		save () {
-			if (this.editedIndex > -1) {
-				// Object.assign(this.program[this.editedIndex], this.editedItem)
-				var payload = this.editedItem;
-				console.log(payload);
-			 	this.$store.dispatch('faculty/updateFaculty', payload)
-					.then(resp => {
-						Swal.fire({
-							title: 'Success',
-							text: 'Updated Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reloadData();
-					})
-					.catch(err => {
-						this.snackbar = true
-						this.submitMessage = err
-					});
-			} else {
-				// this.program.push(this.editedItem)
-				console.log(this.facultyData.push(this.editedItem))
-			}
-			this.close()
-		}
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.facultyData = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        // Object.assign(this.program[this.editedIndex], this.editedItem)
+        var payload = this.editedItem;
+        console.log(payload);
+        this.$store
+          .dispatch("faculty/updateFaculty", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Updated Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reloadData();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+      } else {
+        // this.program.push(this.editedItem)
+        console.log(this.facultyData.push(this.editedItem));
+      }
+      this.close();
+    }
   }
-}
+};
 </script>
+
+<style scoped>
+.frm-title {
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>
