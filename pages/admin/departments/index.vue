@@ -1,185 +1,198 @@
 <template>
-  <v-app>
-    <!-- Year POPUP DIALOG -->
-    <v-dialog v-model="Ydialog" persistent max-width="30%">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Select Reporting Year</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-spacer></v-spacer>
-              <v-col cols="12">
-                <v-select
-                  v-model="selectedYear"
-                  :items="reportYears"
-                  item-text="val"
-                  item-value="id"
-                  label="Reporing Year"
-                  required
-                  class="text-center"
-                ></v-select>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue" text @click="Ydialog = false">
-            Close
-          </v-btn>
-          <v-btn color="blue" text @click="setReportingYear">
-            Set
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- Year Dialog ends here -->
+  <v-container fluid>
+    <YearDialog v-if="$store.state.selectedYear == 0" />
+    <PageHeader
+      :title="$metaInfo.title"
+      :selectedYear="$store.state.selectedYear"
+    />
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md="3" sm="4" lg="3">
+        <v-select
+          v-model="selectedYear"
+          :items="reportYears"
+          item-text="val"
+          item-value="id"
+          label="Reporting Year"
+          required
+          @input="changeReportingYear"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-6">
+      <v-col cols="12">
+        <v-form ref="about" lazy-validation @submit.prevent>
+          <p class="mb-3">
+            <span
+              >A. Introduction: Specifically indicate the recognition /
+              contribution of the Department during the year to policies,
+              planning and programmes at State / National and International
+              levels.</span
+            >
+          </p>
+          <div>
+            <client-only>
+              <ckeditor
+                v-model="departmentAbout.introduction"
+                :editor="editor"
+                :config="editorConfig"
+              ></ckeditor>
+            </client-only>
+            <span v-if="departmentAbout.introduction != ''"
+              >Words: {{ departmentAbout.introduction.split(" ").length }}</span
+            >
+          </div>
+          <div>
+            <p class="mt-3">
+              <span
+                >B. New facilities developed, new initiatives taken up by the
+                Department(s) within NIMHANS during the year.</span
+              >
+            </p>
+            <div>
+              <client-only>
+                <ckeditor
+                  v-model="departmentAbout.facilities"
+                  :editor="editor"
+                  :config="editorConfig"
+                ></ckeditor>
+              </client-only>
+              <span v-if="departmentAbout.facilities != ''"
+                >Words: {{ departmentAbout.facilities.split(" ").length }}</span
+              >
+            </div>
+          </div>
+          <v-row>
+            <v-spacer></v-spacer>
+            <v-btn @click="addProfile" color="success" class="ma-3">
+              Submit
+            </v-btn>
+          </v-row>
+        </v-form>
+      </v-col>
+    </v-row>
 
-    <v-container>
-      <PageHeader
-        :title="$metaInfo.title"
-        :reportYears="reportYears"
-        :selectedYear="$store.state.selectedYear"
-      />
+    <v-row class="mb-4" no-gutters v-if="departmentAbout.id">
+      <span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
+    </v-row>
 
-      <p class="mb-3">
-        <span
-          >A. Introduction: Specifically indicate the recognition / contribution
-          of the Department during the year to policies, planning and programmes
-          at State / National and International levels.</span
-        >
-      </p>
-      <div>
-        <client-only>
-          <ckeditor
-            v-model="departmentAbout.introduction"
-            :editor="editor"
-            :config="editorConfig"
-          ></ckeditor>
-        </client-only>
-      </div>
-      <div>
-        <p class="mt-3">
-          <span
-            >B. New facilities developed, new initiatives taken up by the
-            Department(s) within NIMHANS during the year.</span
+    <v-row
+      class="center my-2 mx-1"
+      justify="space-between"
+      v-if="departmentAbout.id"
+    >
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url1}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
           >
-        </p>
-        <div>
-          <client-only>
-            <ckeditor
-              v-model="departmentAbout.facilities"
-              :editor="editor"
-              :config="editorConfig"
-            ></ckeditor>
-          </client-only>
-        </div>
-      </div>
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-btn @click="addProfile" color="success" class="ma-3">
-          Submit
-        </v-btn>
-      </v-row>
-    </v-container>
-    <v-container>
-      <v-row class="mx-3 mb-4">
-        <span class="theme-border"><h1 class="ml-3">Related Images</h1></span>
-      </v-row>
-
-      <v-row class="center my-2 mx-1" justify="space-between">
-        <v-img
-          src="https://picsum.photos/id/11/100/60"
-          lazy-src="https://picsum.photos/id/11/100/60"
-          aspect-ratio="1"
-          class="grey lighten-2"
-          max-width="500"
-          max-height="300"
-        >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" justify="center">
-              <v-progress-circular
-                indeterminate
-                color="grey lighten-5"
-              ></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
-        <v-img
-          src="https://picsum.photos/id/11/100/60"
-          lazy-src="https://picsum.photos/id/11/100/60"
-          aspect-ratio="1"
-          class="grey lighten-2"
-          max-width="500"
-          max-height="300"
-        >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" justify="center">
-              <v-progress-circular
-                indeterminate
-                color="grey lighten-5"
-              ></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
-        <v-img
-          src="https://picsum.photos/id/11/100/60"
-          lazy-src="https://picsum.photos/id/11/100/60"
-          aspect-ratio="1"
-          class="grey lighten-2"
-          max-width="500"
-          max-height="300"
-        >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" justify="center">
-              <v-progress-circular
-                indeterminate
-                color="grey lighten-5"
-              ></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
-      </v-row>
-      <v-row class="center my-2 mx-1" justify="space-between">
-        <v-col cols="12" md="6" sm="4" lg="3">
-          <v-file-input
-            :rules="rules"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Pick an avatar"
-            prepend-icon="mdi-camera"
-            label="Avatar"
-            v-model="chosenFile"
-          ></v-file-input>
-          <v-btn color="primary" right @click="onFileChange">Upload</v-btn>
-        </v-col>
-        <v-col cols="12" md="6" sm="4" lg="3">
-          <v-file-input
-            :rules="rules"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Pick an avatar"
-            prepend-icon="mdi-camera"
-            label="Avatar"
-          ></v-file-input>
-        </v-col>
-        <v-col cols="12" md="6" sm="4" lg="3">
-          <v-file-input
-            :rules="rules"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Pick an avatar"
-            prepend-icon="mdi-camera"
-            label="Avatar"
-          ></v-file-input>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image1.click()">
+                  {{ img_url1 ? "Edit Image" : "Upload Image" }}
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image1"
+        type="file"
+        max-size="10485760"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload1"
+      />
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url2}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
+          >
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image2.click()">
+                  {{ img_url2 ? "Edit Image" : "Upload Image" }}
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image2"
+        type="file"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload2"
+      />
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <v-img
+            :src="`${$axios.defaults.baseURL}${img_url3}`"
+            lazy-src="/image_placeholder.png"
+            class="grey lighten-2"
+            max-width="30%"
+            max-height="300"
+          >
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#036358">
+                <v-btn @click="$refs.image3.click()">
+                  {{ img_url3 ? "Edit Image" : "Upload Image" }}
+                </v-btn>
+              </v-overlay>
+            </v-fade-transition>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </template>
+      </v-hover>
+      <input
+        ref="image3"
+        type="file"
+        style="display:none;"
+        label="File input"
+        @change="handleFileUpload3"
+      />
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
 import PageHeader from "@/components/PageHeader";
+import YearDialog from "@/components/YearDialog";
+
+import { mapState } from "vuex";
 import Swal from "sweetalert2";
 if (process.client) {
   require("~/plugins/ckeditor");
@@ -187,43 +200,51 @@ if (process.client) {
 export default {
   head() {
     return {
-      title: "About the Department"
+      title: "Department Profile"
     };
   },
   components: {
-    PageHeader
+    PageHeader,
+    YearDialog
   },
   data: () => ({
-    rules: [
-      value =>
-        !value ||
-        value.size < 2000000 ||
-        "Avatar size should be less than 2 MB!"
-    ],
+    overlay: false,
+    img_url1: null,
+    img_url2: null,
+    img_url3: null,
     Ydialog: false,
-    editorConfig: { height: "400px" },
+    editorConfig: {
+      height: "200px"
+    },
     selectedYear: 0,
-    chosenFile: null,
     departmentAbout: {
       annual_year: 0,
-      department_id: 0,
-      id: 0,
-      status: "published",
+      department: 0,
+      deleted: false,
       introduction: "",
       facilities: "",
-      image_1: 0,
-      image_2: 0,
-      image_3: 0
+      image_1: null,
+      image_2: null,
+      image_3: null
     },
+    profileImage: {
+      id: 0,
+      image_1: null,
+      image_2: null,
+      image_3: null
+    },
+    imageToDelete: null,
     editedItem: {
       annual_year: 0,
-      department_id: 0,
-      id: 0,
-      status: "published",
+      department: 0,
+      deleted: false,
       introduction: "",
-      facilities: ""
+      facilities: "",
+      image_1: null,
+      image_2: null,
+      image_3: null
     },
-    file: "",
+    selectedFile: "",
     addDepartmentImage: {
       departmentProfileId: 0,
       imageCode: "",
@@ -255,207 +276,413 @@ export default {
         val: "2020-2021"
       }
     ],
-    selectedYear: 0,
-    aboutImages: [],
-    user_id: 0,
-    user_department_id: 0
+    selectedYear: 0
   }),
+  watch: {
+    selectedYear(val) {
+      this.reload();
+    }
+  },
   computed: {
-    // ...mapState("depabout", ["aboutData", "deptImages", "deptImageContents", "addedImageId", "departmentProfileId"]),
-    // ...mapState({
-    // 	aboutData: state => state.depabout.aboutData
-    // }),
+    ...mapState({
+      newAbout: state => state.about.newAbout
+    }),
     editor() {
       return process.client
         ? require("@ckeditor/ckeditor5-build-classic")
         : null;
-    },
-    // // eslint-disable-next-line vue/return-in-computed-property
-    // introductionText () {
-    // 	return this.aboutData.result.introduction;
-    // },
-    // // eslint-disable-next-line vue/return-in-computed-property
-    // facilitiesText () {
-    // 	return this.aboutData.result.facilities;
-    // },
-    // deptId () {
-    // 	return this.aboutData.result.departmentId;
-    // },
-    // deptProfileId () {
-    // 	return this.departmentProfileId;
-    // },
-    uniqueID() {
-      let id = "";
-      const possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
-      const _length = 8;
-      for (let i = 0; i < _length; i++) {
-        id += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-      return id;
     }
   },
-  async fetch({ store }) {
-    let id = 1;
-    console.log(id);
-    // await store.dispatch('user/setUserProfile', {id: id})
-    // 	.catch(err => {
-    // 		this.snackbar = true
-    // 		this.submitMessage = err
-    // 	});
-    // let deptId = store.state.user.userProfile.result.departmentId;
-    // let userId = store.state.user.userProfile.result.userId;
-    // this.selectedYear = store.state.selectedYear;
-    let queryString = "";
-    //console.log(deptId);
 
-    queryString = `filter[department_id]=${id}`;
-    console.log(queryString);
-    // await store.dispatch('depabout/getDeptProfileData', {query: queryString});
-    // queryString = `departmentProfileId.equals=${deptId}`
-    // await store.dispatch('depabout/getAllDepartmentImages', {query: queryString});
+  async fetch({ store }) {
+    let id = store.state.auth.user.id;
+    await store.dispatch("user/setFullUser", { id: id }).catch(err => {
+      this.snackbar = true;
+      this.submitMessage = err;
+    });
+    if (store.state.selectedYear == 0) this.Ydialog = true;
+    else this.selectedYear = store.state.selectedYear;
+    let queryString = "";
+    queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.selectedYear}`;
+    await store.dispatch("about/setAboutData", { query: queryString });
   },
   mounted() {
-    if (this.$store.state.selectedYear == 0) this.Ydialog = true;
-    else this.selectedYear = this.$store.state.selectedYear;
-    console.log(this.selectedYear);
+    if (this.$store.state.selectedYear == 0) {
+      this.Ydialog = true;
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.$store.state.selectedYear}`;
+      this.$store.dispatch("about/setAboutData", { query: queryString });
+    } else {
+      this.selectedYear = this.$store.state.selectedYear;
+    }
 
-    if (this.$store.state.auth.loggedIn)
-      this.user_id = this.$store.state.auth.user.id;
-    //console.log(this.user_id);
-    // console.log(this.$store.state.depabout.aboutData.result);
-    // this.departmentAbout = Object.assign({}, this.$store.state.depabout.aboutData.result[0]);
+    if (this.newAbout.length > 0) {
+      this.departmentAbout = Object.assign({}, this.newAbout[0]);
+      if (this.$store.state.about.newAbout[0].image_1 !== null)
+        this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+      else this.img_url1 = null;
+
+      if (this.$store.state.about.newAbout[0].image_2 != null)
+        this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+      else this.img_url2 = null;
+
+      if (this.$store.state.about.newAbout[0].image_3 != null)
+        this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+      else this.img_url3 = null;
+    }
   },
+
   methods: {
-    async addProfile() {
-      if (this.aboutData.success) {
-        this.departmentAbout.id = this.$store.state.depabout.aboutData.result[0].id;
+    async handleFileUpload1(event) {
+      if (this.img_url1 === null || this.img_url1 === undefined) {
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url1 = uploadRes.data[0].url;
+        this.departmentAbout.image_1 = uploadRes.data[0].id;
         var payload = this.departmentAbout;
-        // console.log(payload);
         await this.$store
-          .dispatch("depabout/updateAbout", payload)
+          .dispatch("about/updateAbout", payload)
           .then(resp => {
             Swal.fire({
               title: "Success",
-              text: "Department Profile Added!",
-              type: "success",
+              text: "Department Profile Updated!",
+              icon: "success",
               showConfirmButton: false,
               timer: 1500
             });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
             this.reload();
           })
           .catch(err => {
-            console.log(err);
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
           });
       } else {
-        this.departmentAbout.id = null;
-        this.departmentAbout.annualYear = this.selectedYear;
-        this.departmentAbout.departmentId = this.$store.state.user.userProfile.result.departmentId;
-        var payload = this.departmentAbout;
-        // console.log(payload);
+        this.imageToDelete = this.departmentAbout.image_1.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url1 = uploadRes.data[0].url;
+        this.departmentAbout.image_1 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_1: this.departmentAbout.image_1
+          }
+        );
         await this.$store
-          .dispatch("depabout/addProfile", payload)
+          .dispatch("about/updateAbout", payload)
           .then(resp => {
             Swal.fire({
               title: "Success",
-              text: "Profile Added!",
-              type: "success",
+              text: "Department Profile Updated!",
+              icon: "success",
               showConfirmButton: false,
               timer: 1500
             });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
             this.reload();
           })
           .catch(err => {
-            console.log(err);
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
           });
       }
     },
-    reload() {
-      let deptId = this.$store.state.user.userProfile.result.departmentId;
+    async handleFileUpload2(event) {
+      if (this.img_url2 === null || this.img_url2 === undefined) {
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url2 = uploadRes.data[0].url;
+        this.departmentAbout.image_2 = uploadRes.data[0].id;
+        var payload = this.departmentAbout;
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      } else {
+        this.imageToDelete = this.departmentAbout.image_2.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url2 = uploadRes.data[0].url;
+        this.departmentAbout.image_2 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_2: this.departmentAbout.image_2
+          }
+        );
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      }
+    },
+    async handleFileUpload3(event) {
+      if (this.img_url3 === null || this.img_url3 === undefined) {
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url3 = uploadRes.data[0].url;
+        this.departmentAbout.image_3 = uploadRes.data[0].id;
+        var payload = this.departmentAbout;
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      } else {
+        this.imageToDelete = this.departmentAbout.image_3.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.img_url3 = uploadRes.data[0].url;
+        this.departmentAbout.image_3 = uploadRes.data[0].id;
+        var payload = Object.assign(
+          {},
+          {
+            id: this.departmentAbout.id,
+            image_3: this.departmentAbout.image_3
+          }
+        );
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      }
+    },
+    async addProfile() {
+      if (this.newAbout.length > 0) {
+        this.departmentAbout.department = this.$store.state.auth.user.department;
+        var payload = this.departmentAbout;
+        //  console.log(payload);
+        await this.$store
+          .dispatch("about/updateAbout", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Department Profile Updated!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reload();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Oops!",
+              text: "Exceeds Word limit, (should be less than 150 words.)",
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 3000
+            });
+          });
+      } else {
+        this.departmentAbout.annual_year = this.selectedYear;
+        this.departmentAbout.department = this.$store.state.auth.user.department;
+        if (
+          this.departmentAbout.introduction != "" &&
+          this.departmentAbout.facilities != ""
+        ) {
+          var payload = this.departmentAbout;
+          // console.log(payload);
+          await this.$store
+            .dispatch("about/addProfile", payload)
+            .then(resp => {
+              Swal.fire({
+                title: "Success",
+                text: "Profile Added!",
+                type: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              this.reload();
+            })
+            .catch(err => {
+              Swal.fire({
+                title: "Oops!",
+                text: "Exceeds Word limit, (should be less than 150 words.)",
+                type: "warning",
+                showConfirmButton: false,
+                timer: 3000
+              });
+            });
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            text: "Please enter data before submit",
+            type: "warning",
+            showConfirmButton: false,
+            timer: 3000
+          });
+        }
+      }
+    },
+    async reload() {
+      this.$nuxt.$loading.start();
       let queryString = "";
-      queryString = `departmentId.equals=${deptId}`;
-      this.$store.dispatch("depabout/setAboutData", { query: queryString });
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.selectedYear}`;
+      await this.$store.dispatch("about/setAboutData", { query: queryString });
+      if (this.newAbout.length > 0) {
+        this.departmentAbout = Object.assign({}, this.newAbout[0]);
+        if (this.$store.state.about.newAbout[0].image_1 !== null)
+          this.img_url1 = this.$store.state.about.newAbout[0].image_1.url;
+        else this.img_url1 = null;
+
+        if (this.$store.state.about.newAbout[0].image_2 != null)
+          this.img_url2 = this.$store.state.about.newAbout[0].image_2.url;
+        else this.img_url2 = null;
+
+        if (this.$store.state.about.newAbout[0].image_3 != null)
+          this.img_url3 = this.$store.state.about.newAbout[0].image_3.url;
+        else this.img_url3 = null;
+      } else {
+        this.departmentAbout = Object.assign({}, this.editedItem);
+      }
+      this.$nuxt.$loading.finish();
     },
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
+      await this.reload();
     },
     async setReportingYear() {
       this.Ydialog = false;
       await this.$store.dispatch("setReportingYear", this.selectedYear);
-      console.log(this.selectedYear);
-    },
-    handleFileUpload() {
-      this.file = this.$refs.file.files[0];
-    },
-    onFileChange() {
-      let formData = new FormData();
-      if (this.chosenFile) {
-        //console.log(this.chosenFile.name);
-        formData.append("file", this.chosenFile);
-        //console.log(formData);
-        var query = {
-          deptProfileId: 1,
-          data: formData
-        };
-        console.log(query);
-        this.$store.dispatch("depabout/addDeptProfileImage", query);
-      }
-    },
-    async submitFile() {
-      var fileName = this.file.name;
-      var imageCode = this.uniqueID;
-      var status = "VALID";
-      var imageContentType = "";
-      var blob = this.file;
-      //console.log(this.deptProfileId);
-      imageContentType = blob.type;
-      var dpId = 0;
-      dpId = this.deptProfileId;
-      //console.log(dpId);
-
-      this.addDepartmentImage.departmentProfileId = dpId;
-      this.addDepartmentImage.imageCode = imageCode;
-      this.addDepartmentImage.name = fileName;
-      this.addDepartmentImage.path = fileName;
-      var payload = this.addDepartmentImage;
-      var imageData = null;
-      var array = null;
-      var binaryString = null;
-      var fileByteArray = [];
-
-      var reader = new FileReader();
-      reader.readAsArrayBuffer(this.file);
-      reader.onloadend = function(evt) {
-        if (evt.target.readyState == FileReader.DONE) {
-          var arrayBuffer = evt.target.result,
-            array = new Uint8Array(arrayBuffer);
-          for (var i = 0; i < array.length; i++) {
-            fileByteArray.push(array[i]);
-          }
-        }
-      };
-
-      //console.log(fileByteArray);
-      if (fileByteArray) {
-        console.log(payload);
-        await this.$store.dispatch("depabout/addDeptImage", payload);
-
-        this.addImageContent.data = fileByteArray;
-        this.addImageContent.dataContentType = imageContentType;
-        this.addImageContent.departmentImageId = this.$store.state.depabout.addedImageId;
-        payload = this.addImageContent;
-        console.log(payload);
-
-        await this.$store
-          .dispatch("depabout/addDeptImageContent", payload)
-          .then(resp => {
-            console.log(resp);
-            console.log(resp.id);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
+      this.reload();
     }
   }
 };
@@ -470,12 +697,7 @@ export default {
   height: 40px;
   vertical-align: center !important;
 }
-
-.ck.ck-toolbar {
-  background: none !important;
-  border-radius: 0.4em 0.4em 0 0 !important;
-}
 .ck.ck-editor__main > .ck-editor__editable {
-  min-height: 350px;
+  height: 250px;
 }
 </style>

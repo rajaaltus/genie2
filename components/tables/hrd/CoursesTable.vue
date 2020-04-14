@@ -4,12 +4,15 @@
       style="border-radius:0;"
       :headers="headers"
       :items="hrdCourses"
-      sort-by="id"
+      sort-by="last_updated"
       sort-desc
       class="elevation-1"
       :loading="loading"
       loading-text="Loading... Please wait"
     >
+      <template v-slot:item.updated_at="{ item }">
+        {{ $moment(item.updated_at).fromNow() }}
+      </template>
       <template v-slot:top>
         <v-toolbar
           flat
@@ -191,11 +194,11 @@ export default {
     dialog: false,
     headers: [
       {
-        text: "Id",
+        text: "Last updated",
         align: "left",
-        value: "id"
+        value: "updated_at",
       },
-      { text: "Course", value: "course_name" },
+      { text: "Course", value: "course_name", width: "600" },
       { text: "Candidate Name", value: "candidate_name" },
       { text: "Duration", value: "durations" },
       { text: "Thesis Title", value: "thesis_title" },
