@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="clinicalData"
       sort-by="updated_at"
@@ -13,7 +14,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar color="#f2f2f2" flat class="d-flex justify pt-1">
+        <v-toolbar color="#f2f2f2" flat class="d-flex justify pt-1" style="border-radius:0;">
           <v-toolbar-title><span class="frm-title">Clinical Services</span></v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
@@ -34,12 +35,11 @@
             transition="dialog-bottom-transition"
           >
             <v-card flat>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title
-                  >Clinical Services</v-toolbar-title
+                <v-toolbar-title>Clinical Services</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -168,11 +168,11 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green">mdi-pencil-box</v-icon>
+        <v-icon centre @click="deleteItem(item)" color="error">mdi-delete-circle</v-icon>
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+         <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -224,8 +224,8 @@ export default {
           align: 'left',
           value: 'updated_at'
       },
-      { text: 'Screenings', value: 'screenings'},
-      { text: 'Registration', value: 'registrations' },
+      { text: 'Screenings', value: 'screenings' },
+      { text: 'Registration', value: 'registrations'},
       { text: 'Follow-ups', value: 'followups' },
       { text: 'Admissions', value: 'admissions'},
       { text: 'Discharges', value: 'discharges'},
@@ -233,7 +233,7 @@ export default {
       { text: 'Emergencies', value: 'emergencies'},
       { text: 'Internal Ref', value: 'internal_ref'},
       { text: 'External Ref', value: 'external_ref'},
-      { text: 'Actions', value: 'action', sortable: false },
+      { text: 'Actions', value: 'action', sortable: false},
     ],
     dialog: false,
   }),
@@ -325,7 +325,7 @@ export default {
 <style scoped>
 .frm-title
 {
-  border-left: 5px solid #f5943d;
+  border-left: 5px solid #e16949;
   padding: 3px 10px;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="emergencyData"
       sort-by="updated_at"
@@ -13,7 +14,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1" style="border-radius:0;">
           <v-toolbar-title
             ><span class="frm-title">Emergency Services</span></v-toolbar-title
           >
@@ -35,13 +36,13 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Emergency Services | Edit Form</v-toolbar-title
+                  >Emergency Services</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -66,7 +67,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.registrations"
-                          label="Registrations *"
+                          label="Registrations"
                           required
                           type="number"
                           :rules="[
@@ -79,7 +80,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.admissions"
-                          label="Admissions *"
+                          label="Admissions"
                           required
                           type="number"
                           :rules="[
@@ -92,7 +93,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.deaths"
-                          label="Deaths *"
+                          label="Deaths"
                           required
                           type="number"
                           :rules="[
@@ -106,7 +107,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.internal_ref"
-                          label="Referrals - Internal *"
+                          label="Referrals - Internal"
                           required
                           type="number"
                           :rules="[
@@ -119,7 +120,7 @@
                       <v-col cols="4">
                         <v-text-field
                           v-model="editedItem.external_ref"
-                          label="Referrals - External *"
+                          label="Referrals - External"
                           required
                           type="number"
                           :rules="[
@@ -138,11 +139,11 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green">mdi-pencil-box</v-icon>
+        <v-icon centre @click="deleteItem(item)" color="error">mdi-delete-circle</v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="reloadData">
+        <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -281,3 +282,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.frm-title
+{
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

@@ -2,11 +2,6 @@
   <div>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
       <v-container>
-        <v-row no-gutters class="mb-2">
-          <v-col cols="12" sm="6" md="8">
-            <h2><span class="frm-title">Clinical Services</span></h2>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col cols="4">
             <v-text-field

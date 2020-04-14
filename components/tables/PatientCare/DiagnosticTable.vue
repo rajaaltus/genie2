@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="diagnosticData"
       sort-by="updated_at"
@@ -13,7 +14,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1" style="border-radius:0;"> 
           <v-toolbar-title
             ><span class="frm-title">Diagnostic Services</span></v-toolbar-title
           >
@@ -35,13 +36,13 @@
             hide-overlay
             transition="dialog-bottom-transition"
           >
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Diagnostic Services | Update Details</v-toolbar-title
+                  >Diagnostic Services</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -65,7 +66,7 @@
                       <v-col cols="4">
                         <v-select
                           v-model="editedItem.lab_type"
-                          label="Lab Service Type *"
+                          label="Lab Service Type"
                           :rules="[v => !!v || 'Select the Lab Service Type']"
                           :items="serviceType"
                           :value="editedItem.lab_type"
@@ -77,7 +78,7 @@
                         <v-combobox
                           v-model="editedItem.pc_diagnostic_test"
                           :rules="[v => !!v || 'Enter the Test Name']"
-                          label="Test Name *"
+                          label="Test Name"
                           required
                           :items="$store.state.diagnostic.testData"
                           item-text="test_name"
@@ -106,15 +107,13 @@
                             v =>
                               !!v || 'Enter the Total No. of Samples Analysed'
                           ]"
-                          label="Samples Analyzed *"
+                          label="Samples Analyzed"
                           required
                         >
                         </v-text-field>
                       </v-col>
                     </v-row>
-                    <span style="color:red; font-size:12px;"
-                      >* Mandatory fields</span
-                    >
+                    
                   </v-container>
                 </v-form>
               </v-card-text>
@@ -123,11 +122,11 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green">mdi-pencil-box</v-icon>
+        <v-icon centre @click="deleteItem(item)" color="error">mdi-delete-circle</v-icon>
       </template>
       <template v-slot:no-data>
-         <v-btn color="primary" @click="reloadData">
+         <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>
@@ -308,3 +307,12 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+.frm-title
+{
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

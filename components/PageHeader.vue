@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12" md="8" sm="4" lg="8" class="mt-2 pb-0 px-0">
+      <v-col cols="12" md="9" sm="4" lg="9" class="mt-2 pb-0 px-0">
       <span class="theme-border"><h1 class="ml-3">{{ title }}</h1></span>
       </v-col>
       <v-spacer></v-spacer>
@@ -37,7 +37,8 @@ export default {
 
 <style>
 .theme-border {
-  border-left: 5px #29ac3c solid;
+  padding: 5px 10px;
+  border-left: 5px #e16949 solid;
   float: left;
   margin-left: 0;
 }

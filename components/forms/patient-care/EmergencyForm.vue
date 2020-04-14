@@ -1,18 +1,13 @@
 <template>
   <div>
-    <v-row no-gutters>
-      <v-col cols="12" sm="6" md="8">
-        <h3><span class="frm-title">Emergency Services</span></h3>
-      </v-col>
-      <v-col cols="6" md="4"> </v-col>
-    </v-row>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
       <v-container>
         <v-row>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="emergency.registrations"
-              label="Registrations *"
+              label="Registrations"
               required
               type="number"
               :rules="[v => !!v || 'Enter the Total No. of Patients / Cases']"
@@ -21,8 +16,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="emergency.admissions"
-              label="Admissions *"
+              label="Admissions"
               required
               type="number"
               :rules="[v => !!v || 'Enter the Total No. of Patients / Cases']"
@@ -31,8 +27,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="emergency.deaths"
-              label="Deaths *"
+              label="Deaths"
               required
               type="number"
               :rules="[v => !!v || 'Enter the Total No. of Patients / Cases']"
@@ -42,8 +39,9 @@
 
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="emergency.internal_ref"
-              label="Referrals - Internal *"
+              label="Referrals - Internal"
               required
               type="number"
               :rules="[v => !!v || 'Enter the Total No. of Patients / Cases']"
@@ -52,8 +50,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+              color="green"
               v-model="emergency.external_ref"
-              label="Referrals - External *"
+              label="Referrals - External"
               required
               type="number"
               :rules="[v => !!v || 'Enter the Total No. of Patients / Cases']"
@@ -61,14 +60,13 @@
             </v-text-field>
           </v-col>
         </v-row>
-        <span style="color:red; font-size:12px;">* Mandatory fields</span>
       </v-container>
       <v-row no-gutters>
         <v-spacer></v-spacer>
-        <v-btn medium color="#d74f4f" class="mr-2" dark @click="reset">
+        <v-btn small color="#d74f4f" class="mr-2" dark @click="reset">
           Reset
         </v-btn>
-        <v-btn medium color="#57a727" dark @click="addEmergency">
+        <v-btn small color="#57a727" dark @click="addEmergency">
           Submit
         </v-btn>
       </v-row>

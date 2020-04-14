@@ -1,36 +1,32 @@
 <template>
   <div>
-    <v-row no-gutters>
-      <v-col cols="12" sm="12" md="12">
-        <h3><span class="frm-title">Training Programmes</span></h3>
-      </v-col>
-    </v-row>
     <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
       <v-container>
         <v-row>
           <v-col cols="12">
             <v-text-field
+              color="green"
               v-model="trainings.training_name"
               :rules="[v => !!v || 'Item is required']"
               label="Course / Training"
-              required
             >
             </v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field
+              color="green"
               v-model="trainings.institutional_affiliation"
               label="Institute Affiliation"
-              required
+              :rules="[v => !!v || 'Item is required']"
             >
             </v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field
+              color="green"
               v-model="trainings.no_of_candidates"
               :rules="[v => !!v || 'Item is required']"
               label="Number of Candidates"
-              required
               type="number"
             >
             </v-text-field>
@@ -47,11 +43,12 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  color="green"
                   v-model="trainings.from_date"
                   :return-value.sync="date"
                   :rules="[v => !!v || 'Item is required']"
                   readonly
-                  label="From Date *"
+                  label="From Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -82,11 +79,12 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  color="green"
                   v-model="trainings.to_date"
                   :rules="[v => !!v || 'Item is required']"
                   :return-value.sync="date1"
                   readonly
-                  label="To Date *"
+                  label="To Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -103,6 +101,7 @@
           </v-col>
           <v-col cols="4">
             <v-select
+              color="green"
               v-model="trainings.remarks_status"
               :rules="[v => !!v || 'Item is required']"
               :items="remarks"
@@ -113,6 +112,7 @@
         <v-row>
           <v-container fluid>
             <v-textarea
+              color="green"
               v-model="trainings.brief_report"
               label="Brief Report"
             ></v-textarea>
@@ -121,10 +121,10 @@
       </v-container>
       <v-row no-gutters>
         <v-spacer></v-spacer>
-        <v-btn medium color="#d74f4f" dark class="mr-2" @click="reset">
+        <v-btn small color="#d74f4f" dark class="mr-2" @click="reset">
           Reset
         </v-btn>
-        <v-btn medium color="#57a727" dark @click="addTraining">
+        <v-btn small color="#57a727" dark @click="addTraining">
           Submit
         </v-btn>
       </v-row>
@@ -133,62 +133,64 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 export default {
   data: () => ({
     duration_from: false,
     duration_to: false,
     valid: false,
-    trainings: 
-		{
-			annual_year: 0,
-			training_name: "",
-			institutional_affiliation: "",
-			no_of_candidates: null,
-			from_date: "",
-			to_date: "",
-			remarks_status: "",
-			brief_report: "",
-			deleted: false,
-			department: 0
+    trainings: {
+      annual_year: 0,
+      training_name: "",
+      institutional_affiliation: "",
+      no_of_candidates: null,
+      from_date: "",
+      to_date: "",
+      remarks_status: "",
+      brief_report: "",
+      deleted: false,
+      department: 0
     },
-    remarks: ['Completed', 'Awarded', 'Submitted', 'Ongoing', 'Joined'],
+    remarks: ["Completed", "Awarded", "Submitted", "Ongoing", "Joined"]
   }),
   methods: {
-    async addTraining () {
-			if (this.$refs.form.validate()) {
-				this.trainings.annual_year = this.$store.state.selectedYear;
-				this.trainings.department = this.$store.state.auth.user.department;
-				var payload = this.trainings;
-				// console.log(payload);
-			 this.$store.dispatch('hrdTraining/addTraining', payload)
-					.then(resp => {
-						Swal.fire({
-							title: 'Success',
-							text: 'Added Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reset();
-						this.reloadData();
-					})
-					.catch(err => {
-						this.snackbar = true
-						this.submitMessage = err
-					});
-			}
-		},
-		async reloadData () {
-			this.loading = true;
-			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
-			await this.$store.dispatch('hrdTraining/setHRDTrainings', {qs: queryString});
-			this.loading = false;
+    async addTraining() {
+      if (this.$refs.form.validate()) {
+        this.trainings.annual_year = this.$store.state.selectedYear;
+        this.trainings.department = this.$store.state.auth.user.department;
+        var payload = this.trainings;
+        // console.log(payload);
+        this.$store
+          .dispatch("hrdTraining/addTraining", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Added Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reset();
+            this.reloadData();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+      }
     },
-    reset () {
-			this.$refs.form.reset()
-		},
+    async reloadData() {
+      this.loading = true;
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
+      await this.$store.dispatch("hrdTraining/setHRDTrainings", {
+        qs: queryString
+      });
+      this.loading = false;
+    },
+    reset() {
+      this.$refs.form.reset();
+    }
   }
-}
+};
 </script>
