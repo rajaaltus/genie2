@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="visitorsData"
       sort-by="id"
@@ -16,12 +17,12 @@
       </template>
       <template v-slot:top>
         <v-toolbar flat color="#ebebeb" class="d-flex justify">
-          <v-toolbar-title><span class="frm-title">Visitors to the Department</span></v-toolbar-title>
-          <v-divider
-            class="mx-4"
-            inset
-            vertical
-          ></v-divider>
+          <v-toolbar-title
+            ><span class="frm-title"
+              >Visitors to the Department</span
+            ></v-toolbar-title
+          >
+          <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
             v-model="annualYear"
             :items="reportYears"
@@ -33,13 +34,20 @@
             @change="reloadData()"
           ></v-select>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+          <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Visitor to the Department | Update Details</v-toolbar-title>
+                <v-toolbar-title
+                  >Visitor to the Department | Update Details</v-toolbar-title
+                >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="close">
@@ -51,17 +59,14 @@
                 </v-toolbar-items>
               </v-toolbar>
               <v-card-title>
-                <v-divider
-                  class="mx-4"
-                  inset
-                  vertical
-                ></v-divider>
+                <v-divider class="mx-4" inset vertical></v-divider>
               </v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
                     <v-col cols="4">
-                      <v-text-field v-model="editedItem.name"
+                      <v-text-field
+                        v-model="editedItem.name"
                         label="Visitor Name"
                         :rules="[v => !!v || 'Item is required']"
                         required
@@ -69,7 +74,8 @@
                       </v-text-field>
                     </v-col>
                     <v-col cols="4">
-                      <v-text-field v-model="editedItem.designation"
+                      <v-text-field
+                        v-model="editedItem.designation"
                         label="Designation"
                         :rules="[v => !!v || 'Item is required']"
                         required
@@ -77,7 +83,8 @@
                       </v-text-field>
                     </v-col>
                     <v-col cols="4">
-                      <v-text-field v-model="editedItem.institutionAffiliation"
+                      <v-text-field
+                        v-model="editedItem.institutionAffiliation"
                         label="Institute Affiliation"
                         :rules="[v => !!v || 'Item is required']"
                         required
@@ -87,7 +94,8 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field v-model="editedItem.lectureTitle"
+                      <v-text-field
+                        v-model="editedItem.lectureTitle"
                         label="Lecture Title"
                         :rules="[v => !!v || 'Item is required']"
                         required
@@ -130,12 +138,16 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green"
+          >mdi-pencil-box</v-icon
+        >
+        <v-icon centre @click="deleteItem(item)" color="error"
+          >mdi-delete-circle</v-icon
+        >
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
+        <v-btn color="green">
+          Reload
         </v-btn>
       </template>
     </v-data-table>
@@ -143,84 +155,88 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  props: ['reportYears'],
+  props: ["reportYears"],
   data: () => ({
     loading: false,
     reportYears: [
-			{
-				id: 2017,
-				val: '2017-2018',
-			},
-			{
-				id: 2018,
-				val: '2018-2019'
-			},
-			{
-				id: 2019,
-				val: '2019-2020'
-			},
-			{
-				id: 2020,
-				val: '2020-2021'
-			}
+      {
+        id: 2017,
+        val: "2017-2018"
+      },
+      {
+        id: 2018,
+        val: "2018-2019"
+      },
+      {
+        id: 2019,
+        val: "2019-2020"
+      },
+      {
+        id: 2020,
+        val: "2020-2021"
+      }
     ],
     dialog: false,
-		//Data table header
-		headers: [
-			{
-				text: 'Id',
-				align: 'left',
-				value: 'id',
-			},
-			{
-				text: 'Name',
-				align: 'left',
-				value: 'name',
-			},
-			{ text: 'Designation', value: 'designation' },
-			{ text: 'institutionAffiliation', value: 'institutional_affiliation' },
-			{ text: 'From', value: 'from_date' },
-			{ text: 'To', value: 'to_date' },
-			{ text: 'Title', value: 'title' },
-			{ text: 'Approval Status', value: 'approval_status' },
-			{ text: 'Actions', value: 'action', sortable: false },
+    //Data table header
+    headers: [
+      {
+        text: "Id",
+        align: "left",
+        value: "id"
+      },
+      {
+        text: "Name",
+        align: "left",
+        value: "name"
+      },
+      { text: "Designation", value: "designation" },
+      { text: "institutionAffiliation", value: "institutional_affiliation" },
+      { text: "From", value: "from_date" },
+      { text: "To", value: "to_date" },
+      { text: "Title", value: "title" },
+      { text: "Approval Status", value: "approval_status" },
+      { text: "Actions", value: "action", sortable: false }
     ],
     editedItem: {
-			annual_year: 0,
-			approval_status: "PENDING",
-			approved_by: "",
-			approved_date: "",
-			brief_report: "",
-			department: 0,
-			designation: "",
-			from_date: new Date().toISOString().substr(0, 10),
-			institutional_affiliation: "",
-			title: "",
-			name: "",
-			rejected_reason: "",
-			deleted: false,
-			to_date: new Date().toISOString().substr(0, 10),
-			user: 0
-    },
+      annual_year: 0,
+      approval_status: "PENDING",
+      approved_by: "",
+      approved_date: "",
+      brief_report: "",
+      department: 0,
+      designation: "",
+      from_date: new Date().toISOString().substr(0, 10),
+      institutional_affiliation: "",
+      title: "",
+      name: "",
+      rejected_reason: "",
+      deleted: false,
+      to_date: new Date().toISOString().substr(0, 10),
+      user: 0
+    }
   }),
   computed: {
-		...mapState({
-			visitorsData: state => state.visitor.visitorsData.result,
-			staffs: state => state.staffs
+    ...mapState({
+      visitorsData: state => state.visitor.visitorsData.result,
+      staffs: state => state.staffs
     })
   },
-  async fetch({store}) {
-
-  },
+  async fetch({ store }) {},
   methods: {
-    getColor (approvalStatus) {
-			if (approvalStatus === 'REJECTED') return 'red'
-			else if (approvalStatus === 'PENDING') return 'orange'
-			else return 'green'
-		},
+    getColor(approvalStatus) {
+      if (approvalStatus === "REJECTED") return "red";
+      else if (approvalStatus === "PENDING") return "orange";
+      else return "green";
+    }
   }
-
-}
+};
 </script>
+
+<style scoped>
+.frm-title {
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

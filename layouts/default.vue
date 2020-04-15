@@ -5,6 +5,8 @@
       src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
       permanent
+      stateless
+      floating
       app
       dark
       >
@@ -30,57 +32,6 @@
         </v-btn>
       </v-list-item>
 
-      <!-- <v-img 
-        v-if="!mini" 
-        :aspect-ratio="16/9" 
-        :src="`${$axios.defaults.baseURL}${$store.state.user.avatarUrl}`"
-        lazy-src="/avatar-big.webp"
-       >
-       <template v-slot:placeholder>
-        <v-row
-          class="fill-height ma-0"
-          align="center"
-          justify="center"
-        >
-        </v-row>
-      </template>
-        <v-row align="end" class="lightbox white--text pa-2 fill-height">
-          <v-col>
-            <div class="subheading">{{this.$store.state.auth.user.username}}</div>
-            <div class="body-1">{{this.$store.state.auth.user.email}}</div>
-          </v-col>
-        </v-row>
-        </v-img> 
-      <v-list-item v-else class="px-2">
-          <v-list-item-avatar v-if="$store.state.user.avatarUrl">
-            <v-img 
-            :src="`${$axios.defaults.baseURL}${$store.state.user.avatarUrl}`"
-            lazy-src="/avatar-default-icon.png"
-            >
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-              </v-row>
-            </template>
-            </v-img>
-          </v-list-item-avatar>
-          <v-list-item-avatar v-else>
-            <v-icon dark>mdi-account-circle</v-icon>
-          </v-list-item-avatar>
-          
-          <v-list-item link style="padding:0 0 0 7px;">
-              <v-list-item-content>
-                <v-list-item-title class="name-title">{{this.$store.state.auth.user.username}}</v-list-item-title>
-                <v-list-item-subtitle class="name-subtitle">{{this.$store.state.auth.user.email}}</v-list-item-subtitle>
-                
-              </v-list-item-content>
-          </v-list-item>
-      </v-list-item>
--->
       <v-divider></v-divider>
      
       <v-list-item dense link to="/user_profile">
@@ -186,11 +137,12 @@
       </v-navigation-drawer>
     
     <v-app-bar
+      dense
       app
       color="#f9f9f9"
     >
-      <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <span class="font-weight-bold"> Epidemiology </span>
+    <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <span><h3>Epidemiology</h3></span>
     </v-app-bar>
     <v-content>
       <v-container fluid>

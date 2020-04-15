@@ -1,7 +1,7 @@
 
 export const state = () => ({
 	
-	emergencyData: {},
+	emergencyData: [],
 	
 });
 
@@ -22,7 +22,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_EMERGENCY_DATA", error);
+				// commit("SET_EMERGENCY_DATA", error);
 			})
 			.finally(function () {
 			// always executed

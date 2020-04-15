@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      style="border-radius:0;"
       :headers="headers"
       :items="programmesData.result"
       sort-by="updated_at"
@@ -18,14 +19,18 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
-          <v-toolbar-title><span class="frm-title">Programmes / Events</span></v-toolbar-title>
-          <v-divider
-            class="mx-4"
-            inset
-            vertical
-          ></v-divider>
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
+          <v-toolbar-title
+            ><span class="frm-title">Programmes / Events</span></v-toolbar-title
+          >
+          <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -36,9 +41,14 @@
             @change="reloadData()"
           ></v-select>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card>
-              <v-toolbar dark color="#4da96b">
+          <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <v-card flat>
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -67,7 +77,8 @@
                       </v-col>
                     </template>
                     <v-col cols="8">
-                      <v-text-field v-model="editedItem.name"
+                      <v-text-field
+                        v-model="editedItem.name"
                         :rules="[v => !!v || 'Item is required']"
                         label="Program Name*"
                         required
@@ -87,7 +98,7 @@
                         v-model="editedItem.forum"
                         :rules="[v => !!v || 'Item is required']"
                         :items="programLevels"
-                        label="Forum*"
+                        label="Forum"
                       ></v-select>
                     </v-col>
                     <v-col cols="4">
@@ -116,7 +127,8 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                      <v-text-field v-model="editedItem.participants_count"
+                      <v-text-field
+                        v-model="editedItem.participants_count"
                         :rules="[v => !!v || 'Item is required']"
                         type="number"
                         label="Participants Count*"
@@ -131,8 +143,8 @@
                         v-model="editedItem.coordinators"
                         label="Select Multiple Co-ordinators Press <TAB> key to end selection"
                       ></v-text-field>
-                    </v-col> 
-                    
+                    </v-col>
+
                     <v-container fluid>
                       <v-textarea
                         v-model="editedItem.brief_report"
@@ -144,43 +156,43 @@
                   <v-row>
                     <v-hover>
                       <template v-slot:default="{ hover }">
-                          <v-img
-                            :src="`${$axios.defaults.baseURL}${image_url}`"
-                            lazy-src="/image_placeholder.png"
-                            aspect-ratio="1"
-                            class="grey lighten-2"
-                            max-width="100%"
-                            max-height="400"
-                          >
-                            <template v-slot:placeholder>
-                              <v-row
-                                class="fill-height ma-0"
-                                align="center"
-                                justify="center"
-                              >
-                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                              </v-row>
-                            </template>
-                            <v-fade-transition>
-                              <v-overlay
-                                v-if="hover"
-                                absolute
-                                color="#036358"
-                              >
-                                <v-btn @click="$refs.image.click()">
-                                  {{ image_url ? 'Edit Image' : 'Upload Image' }}
-                                </v-btn>
-                              </v-overlay>
-                            </v-fade-transition>
-                          </v-img>
-                        </template>
-                      </v-hover>
-                      <input ref="image"
-                        type="file"
-                        style="display:none;"
-                        label="File input"
-                        @change="handleFileUpload"
-							        >
+                        <v-img
+                          :src="`${$axios.defaults.baseURL}${image_url}`"
+                          lazy-src="/image_placeholder.png"
+                          aspect-ratio="1"
+                          class="grey lighten-2"
+                          max-width="100%"
+                          max-height="400"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                          <v-fade-transition>
+                            <v-overlay v-if="hover" absolute color="#036358">
+                              <v-btn @click="$refs.image.click()">
+                                {{ image_url ? "Edit Image" : "Upload Image" }}
+                              </v-btn>
+                            </v-overlay>
+                          </v-fade-transition>
+                        </v-img>
+                      </template>
+                    </v-hover>
+                    <input
+                      ref="image"
+                      type="file"
+                      style="display:none;"
+                      label="File input"
+                      @change="handleFileUpload"
+                    />
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -189,12 +201,16 @@
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon right @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon right @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon centre @click="editItem(item)" color="green"
+          >mdi-pencil-box</v-icon
+        >
+        <v-icon centre @click="deleteItem(item)" color="error"
+          >mdi-delete-circle</v-icon
+        >
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
+        <v-btn color="green">
+          Reload
         </v-btn>
       </template>
     </v-data-table>
@@ -202,35 +218,35 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Swal from 'sweetalert2'
+import { mapState } from "vuex";
+import Swal from "sweetalert2";
 export default {
-  props: ['reportYears', 'annualYear', 'programmesData'],
+  props: ["reportYears", "annualYear", "programmesData"],
   data: () => ({
     loading: false,
     dialog: false,
     headers: [
-			{
-				text: 'Updated at',
-				align: 'left',
-				value: 'updated_at',
-			},
-			{ text: 'Program Type', value: 'type' },
-			{
-				text: 'Name',
-				align: 'left',
-				sortable: false,
-				value: 'name',
-			},
-			{ text: 'Location', value: 'location' },
-			{ text: 'Duration From - To', value: 'from_date' },
-			{ text: 'Duration To', value: 'to_date' },
-			{ text: 'No of Participants', value: 'participants_count' },
-			{ text: 'Approval Status', value: 'approval_status' },
-			{ text: 'Actions', value: 'action', sortable: false },
+      {
+        text: "Updated at",
+        align: "left",
+        value: "updated_at"
+      },
+      { text: "Program Type", value: "type" },
+      {
+        text: "Name",
+        align: "left",
+        sortable: false,
+        value: "name"
+      },
+      { text: "Location", value: "location" },
+      { text: "Duration From - To", value: "from_date" },
+      { text: "Duration To", value: "to_date" },
+      { text: "No of Participants", value: "participants_count" },
+      { text: "Approval Status", value: "approval_status" },
+      { text: "Actions", value: "action", sortable: false }
     ],
     editedItem: {
-			annual_year: 0,
+      annual_year: 0,
       type: "",
       name: "",
       location: "",
@@ -244,12 +260,13 @@ export default {
       deleted: false,
       approval_status: "Pending",
       approved_by: "",
-      department: 0,
-      user: 0,
+      approved_date: null,
       rejected_reason: null,
-      image: 0
+      image: null,
+      department: 0,
+      user: 0
     },
-    image_url: '/image_placeholder.png',
+    image_url: "/image_placeholder.png",
     selectedFile: null,
     deletedItem: {
       annual_year: 0,
@@ -266,190 +283,228 @@ export default {
       deleted: false,
       approval_status: "Pending",
       approved_by: "",
-      department: 0,
-      user: 0,
+      approved_date: null,
       rejected_reason: null,
-      image: 0
+      image: null,
+      department: 0,
+      user: 0
     },
+    imageToDelete: null,
     editedIndex: -1,
     programTypes: [
-			'Conference',
-			'Workshop',
-			'Seminar',
-			'Symposium',
-			'Scientific'
-		],
-		programLevels: [
-			'International',
-			'National',
-			'Regional',
-			'State',
-			'Local'
-		],
-		locations: ['NIMHANS', 'OUTSIDE_NIMHANS'],
-		colloborations: ['Departmental', 'Interdepartmental'],
-		approvals: ['Pending', "Rejected", 'Approved'],
+      "Conference",
+      "Workshop",
+      "Seminar",
+      "Symposium",
+      "Scientific"
+    ],
+    programLevels: ["International", "National", "Regional", "State", "Local"],
+    locations: ["NIMHANS", "OUTSIDE_NIMHANS"],
+    colloborations: ["Departmental", "Interdepartmental"],
+    approvals: ["Pending", "Rejected", "Approved"]
   }),
   computed: {
     // ...mapState({
     //   programmesData: state => state.program.programmesData.result,
     //   staffs: state => state.staffs
     // })
-    ...mapState(['program/programmesData', 'staffs'])
-    
+    ...mapState(["program/programmesData", "staffs"])
   },
   watch: {
-		dialog (val) {
-      val || this.close()
-		},
-  },
-  async fetch ({store}) {
-    //Filter Query Fetch
-	
-    let userId = store.state.auth.user.id
-    let deptId = store.state.user.fullUser.department.id;
-		let queryString = '';
-		console.log('Userid:'+userId+',deptId:'+deptId+',QS:'+queryString );
-		if (store.state.auth.user.userType==='FACULTY' || store.state.auth.user.userType==='STUDENT') {
-			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true`;
-			// console.log(queryString);
-			await store.dispatch('program/setProgrammesData', {qs: queryString})
-		}
-		else {
-			queryString = `department.id=${deptId}&deleted_ne=true`;
-			await store.dispatch('program/setProgrammesData', {qs: queryString})
+    dialog(val) {
+      val || this.close();
     }
   },
-  async mounted () {
+  async fetch({ store }) {
+    //Filter Query Fetch
+
+    let userId = store.state.auth.user.id;
+    let deptId = store.state.user.fullUser.department.id;
+    let queryString = "";
+    console.log(
+      "Userid:" + userId + ",deptId:" + deptId + ",QS:" + queryString
+    );
+    if (
+      store.state.auth.user.userType === "FACULTY" ||
+      store.state.auth.user.userType === "STUDENT"
+    ) {
+      queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true`;
+      // console.log(queryString);
+      await store.dispatch("program/setProgrammesData", { qs: queryString });
+    } else {
+      queryString = `department.id=${deptId}&deleted_ne=true`;
+      await store.dispatch("program/setProgrammesData", { qs: queryString });
+    }
+  },
+  async mounted() {
     this.reloadData();
   },
   methods: {
-    async handleFileUpload (event) {
-      await this.$store.dispatch('deleteFile', {id: this.editedItem.image.id})
-      console.log(this.editedItem.image.id + ': deleted');
-			this.selectedFile = event.target.files[0];
-      // console.log(this.selectedFile);
-      const data = new FormData()
-      data.append('files', this.selectedFile);
-      const uploadRes = await this.$axios({
-        method: 'POST',
-        url: '/upload',
-        data
-      })
-      this.image_url = uploadRes.data[0].url;
-      this.editedItem.image = uploadRes.data[0].id;
-		},
-    getColor (approval_status) {
-			if (approval_status === 'Rejected') return 'red'
-			else if (approval_status === 'Pending') return 'orange'
-			else return 'green'
+    async handleFileUpload(event) {
+      console.log(this.image_url);
+      if (this.image_url !== undefined) {
+        this.imageToDelete = this.editedItem.image.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('editing');
+      } else {
+        this.editedItem.image = null;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        data.append("ref", "programmes");
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('Pudhusu');
+      }
     },
-    editItem (item) {
-      this.editedIndex = this.programmesData.result.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      if(this.editedItem.image)
-        this.image_url = this.editedItem.image.url;
-      console.log(this.editedItem)
-      this.dialog = true
-		},
+    getColor(approval_status) {
+      if (approval_status === "Rejected") return "red";
+      else if (approval_status === "Pending") return "orange";
+      else return "green";
+    },
+    editItem(item) {
+      this.editedIndex = this.programmesData.result.indexOf(item);
+      this.editedItem = Object.assign({}, item);
 
-		deleteItem (item) {
-      this.deletedItem = Object.assign({}, {
-        id: item.id,
-        deleted: item.deleted
-      });
-			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
-			this.deletedItem.deleted = true
-			var payload = this.deletedItem;
-			console.log(payload);
+      console.log(this.editedItem);
+      if (this.editedItem.image) {
+        this.image_url = this.editedItem.image.url;
+        console.log(this.image_url);
+      } else this.editedItem.image = 0;
+      console.log(this.editedItem.image);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.deletedItem = Object.assign(
+        {},
+        {
+          id: item.id,
+          deleted: item.deleted
+        }
+      );
+      // confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
+      this.deletedItem.deleted = true;
+      var payload = this.deletedItem;
+      console.log(payload);
       var vm = this;
       Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then(result => {
         if (result.value) {
           this.loading = true;
-          this.$store.dispatch('program/updateProgram', payload)
-				.then(resp => {
-          this.loading = false;
-					Swal.fire({
-						title: 'Success',
-						text: 'Deleted Successfully!',
-						icon: 'success',
-						showConfirmButton: false,
-						timer: 1500
-					})
-					  this.reloadData();
-          })
-          Swal.fire({
-              title: 'Something Wrong!',
-              text: err,
-              icon: 'warning',
+          this.$store.dispatch("program/updateProgram", payload).then(resp => {
+            this.loading = false;
+            Swal.fire({
+              title: "Success",
+              text: "Deleted Successfully!",
+              icon: "success",
               showConfirmButton: false,
-							timer: 4500
-          })
+              timer: 1500
+            });
+            this.reloadData();
+          });
+          Swal.fire({
+            title: "Something Wrong!",
+            text: err,
+            icon: "warning",
+            showConfirmButton: false,
+            timer: 4500
+          });
         }
-      })
-		},
-    async reloadData () {
-			this.loading = true;
-			let deptId = this.$store.state.auth.user.department;
-			let userId = this.$store.state.auth.user.id;
-			let queryString = '';
-			
-			if (this.$store.state.auth.user.userType==='Faculty' || this.$store.state.auth.user.userType==='Student') {
-			 queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.annualYear}`;
-			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
-			}
-			else {
-				queryString = `department.id=${deptId}&annual_year=${this.annualYear}&deleted_ne=true`;
-			 await this.$store.dispatch('program/setProgrammesData', {qs: queryString})
-			}
-			this.loading = false;
-		},
-		close () {
-			this.dialog = false
-		},
+      });
+    },
+    async reloadData() {
+      this.loading = true;
+      let deptId = this.$store.state.auth.user.department;
+      let userId = this.$store.state.auth.user.id;
+      let queryString = "";
 
-		save () {
-			if (this.editedIndex > -1) {
-				if(this.$auth.user.userType==='DEPARTMENT')
-          this.editedItem.approval_status = 'Approved'
-        else  
-          this.editedItem.approval_status = 'Pending'
+      if (
+        this.$store.state.auth.user.userType === "Faculty" ||
+        this.$store.state.auth.user.userType === "Student"
+      ) {
+        queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.annualYear}`;
+        await this.$store.dispatch("program/setProgrammesData", {
+          qs: queryString
+        });
+      } else {
+        queryString = `department.id=${deptId}&annual_year=${this.annualYear}&deleted_ne=true`;
+        await this.$store.dispatch("program/setProgrammesData", {
+          qs: queryString
+        });
+      }
+      this.loading = false;
+    },
+    close() {
+      this.dialog = false;
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        if (this.$auth.user.userType === "DEPARTMENT")
+          this.editedItem.approval_status = "Approved";
+        else this.editedItem.approval_status = "Pending";
         this.editedItem.user = this.editedItem.user.id;
         this.editedItem.department = this.editedItem.department.id;
-				var payload = this.editedItem;
-				console.log(payload);
-			 	this.$store.dispatch('program/updateProgram', payload)
-					.then(resp => {
-						Swal.fire({
-							title: 'Success',
-							text: 'Updated Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reloadData();
-					})
-					.catch(err => {
-						Swal.fire({
-              title: 'Something Wrong!',
-              text: err,
-              icon: 'warning',
+        var payload = this.editedItem;
+        console.log(payload);
+        this.$store
+          .dispatch("program/updateProgram", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Updated Successfully!",
+              icon: "success",
               showConfirmButton: false,
-							timer: 4500
-            })
-					});
-			} 
-			this.close()
-		}
+              timer: 1500
+            });
+
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+            this.reloadData();
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Something Wrong!",
+              text: err,
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 4500
+            });
+          });
+      }
+      this.close();
+    }
   }
-  
-}
+};
 </script>
+
+<style scoped>
+.frm-title {
+  border-left: 5px solid #e16949;
+  padding: 3px 10px;
+}
+</style>

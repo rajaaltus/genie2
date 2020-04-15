@@ -1,10 +1,14 @@
 
 export const state = () => ({
-	diagnosticData: {},
+	diagnosticData: [],
 	testData: []
 });
 
-
+export const getters = {
+	testData () {
+		return state.testData;
+	}
+};
 
 export const mutations = {
 	
@@ -33,7 +37,21 @@ export const actions = {
 				// always executed
 			});
 	},
-
+	async addTest ({commit}, payload) {
+		await this.$axios.$post('/pc-diagnostic-tests', payload) 
+			.then(response =>  {
+			// handle success
+				commit("SET_TEST", response);
+			})
+			.catch((e) => {
+				// handle error
+				// commit("SET_TEST", error);
+			})
+			.finally(function () {
+				// always executed
+			});
+		
+	},
 	async setTest ({commit}, {qs}) {
 		await this.$axios.$get(`/pc-diagnostic-tests?${qs}`)
 			.then(response =>  {
