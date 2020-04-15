@@ -1,6 +1,6 @@
 <template>
   <v-app>
-      <v-navigation-drawer
+    <v-navigation-drawer
       v-model="drawer"
       src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
@@ -9,13 +9,12 @@
       floating
       app
       dark
-      >
-
+    >
       <v-list-item v-if="!mini" class="px-3 py-3">
-          <v-img  src="/logo.png" max-width="35%"></v-img>
+        <v-img src="/logo.png" max-width="35%"></v-img>
       </v-list-item>
-      <v-list-item  v-else class="px-2 py-6">
-        <v-img  src="/logo.png" max-width="100%"></v-img>
+      <v-list-item v-else class="px-2 py-6">
+        <v-img src="/logo.png" max-width="100%"></v-img>
       </v-list-item>
 
       <v-list-item class="px-2">
@@ -23,42 +22,43 @@
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title class="pl-2">{{this.$store.state.auth.user.fullname}} <br> <span class="caption font-weight-light"> Head of Department </span></v-list-item-title>
-
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
+        <v-list-item-title class="pl-2"
+          >{{ this.$store.state.auth.user.fullname }} <br />
+          <span class="caption font-weight-light">
+            Head of Department
+          </span></v-list-item-title
         >
-        </v-btn>
+
+        <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
       </v-list-item>
 
       <v-divider></v-divider>
-     
+
       <v-list-item dense link to="/user_profile">
-          <v-list-item-icon>
-            <v-icon color="green darken-1">mdi-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="menu-title">My Profile</v-list-item-title>
-          </v-list-item-content>
+        <v-list-item-icon>
+          <v-icon color="green darken-1">mdi-account</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="menu-title">My Profile</v-list-item-title>
+        </v-list-item-content>
       </v-list-item>
 
       <v-list-item dense link to="/settings">
-         <v-list-item-icon>
-            <v-icon color="orange">mdi-cogs</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="menu-title">Settings</v-list-item-title>
-          </v-list-item-content>
+        <v-list-item-icon>
+          <v-icon color="orange">mdi-cogs</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="menu-title">Settings</v-list-item-title>
+        </v-list-item-content>
       </v-list-item>
 
-      <v-list-item  nav dense link @click="logout">
-          <v-list-item-icon>
-            <v-icon color="red darken-2">mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="menu-title">Logout</v-list-item-title>
-          </v-list-item-content>
+      <v-list-item nav dense link @click="logout">
+        <v-list-item-icon>
+          <v-icon color="red darken-2">mdi-logout</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="menu-title">Logout</v-list-item-title>
+        </v-list-item-content>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -122,9 +122,8 @@
         </template>
       </v-list>
 
-
       <template v-slot:append>
-        <v-list-item  nav dense>
+        <v-list-item nav dense>
           <v-list-item-icon>
             <v-icon color="blue darken-2">mdi-email-outline</v-icon>
           </v-list-item-icon>
@@ -133,16 +132,11 @@
           </v-list-item-content>
         </v-list-item>
       </template>
-
-      </v-navigation-drawer>
-    
-    <v-app-bar
-      dense
-      app
-      color="#f9f9f9"
-    >
-    <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <span><h3>Epidemiology</h3></span>
+    </v-navigation-drawer>
+    <v-app-bar flat dense app color="#fff">
+      <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <v-spacer></v-spacer>
+      {{ $store.state.selectedYear }} - {{ $store.state.selectedYear+1 }} 
     </v-app-bar>
     <v-content>
       <v-container fluid>
@@ -153,107 +147,103 @@
 </template>
 
 <script>
-import PageHeader from '@/components/PageHeader'
+import PageHeader from "@/components/PageHeader";
 export default {
-  head () {
-		return {
-			'title': 'ARMS Admin - ' + this.$route.name
-		}
+  head() {
+    return {
+      title: "ARMS Admin - " + this.$route.name
+    };
   },
   components: {
     PageHeader
   },
-  data () {
+  data() {
     return {
       drawer: true,
-        items: [
-          { title: 'Home', icon: 'mdi-home', to: '/admin' },
-          { 
-            title: 'Department', 
-            icon: 'mdi-hospital-building',
-            children: [
-              {
-                title: 'About',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/departments'
-              },
-              {
-                title: 'Patient Care Activities',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/departments/pcActivities'
-              },
-              {
-                title: 'HRD',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/departments/hrd'
-              },
-              {
-                title: 'Faculty / Staff',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/departments/faculty'
-              }
-            ]  
-          },
-          { 
-            title: 'Activities & Resources', 
-            icon: 'mdi-library', 
-            children: [
-              {
-                title: 'Faculty / Staff',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/activities/faculties'
-              },
-              {
-                title: 'Students',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/activities/students'
-              },
-            ]
-          },
-          { title: 'Approval Status', icon: 'mdi-cards', to: '/admin/approvals' },
-          { title: 'Reports', icon: 'mdi-chart-bar', to: '/admin/reports' },
-        ],
-        itemsFaculty: [
-          { title: 'Home', icon: 'mdi-home', to: '/admin' },
-          { 
-            title: 'Activities & Resources', 
-            icon: 'mdi-library', 
-            children: [
-              {
-                title: 'Faculty / Staff',
-                icon: 'mdi-chevron-double-right',
-                to: '/admin/activities/faculties'
-              }
-            ]
-          },
-          { title: 'Approval Status', icon: 'mdi-cards', to: '/admin/approvals' },
-          { title: 'Reports', icon: 'mdi-chart-bar', to: '/admin/reports' },
-        ],
-        mini: true,
-    }
+      items: [
+        { title: "Home", icon: "mdi-home", to: "/admin" },
+        {
+          title: "Department",
+          icon: "mdi-hospital-building",
+          children: [
+            {
+              title: "About",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/departments"
+            },
+            {
+              title: "Patient Care Activities",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/departments/pcActivities"
+            },
+            {
+              title: "HRD",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/departments/hrd"
+            },
+            {
+              title: "Faculty / Staff",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/departments/faculty"
+            }
+          ]
+        },
+        {
+          title: "Activities & Resources",
+          icon: "mdi-library",
+          children: [
+            {
+              title: "Faculty / Staff",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/activities/faculties"
+            },
+            {
+              title: "Students",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/activities/students"
+            }
+          ]
+        },
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
+        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+      ],
+      itemsFaculty: [
+        { title: "Home", icon: "mdi-home", to: "/admin" },
+        {
+          title: "Activities & Resources",
+          icon: "mdi-library",
+          children: [
+            {
+              title: "Faculty / Staff",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/activities/faculties"
+            }
+          ]
+        },
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
+        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+      ],
+      mini: true
+    };
   },
   methods: {
     logout() {
-      return this.$auth.logout()
+      return this.$auth.logout();
     }
   }
-}
+};
 </script>
 
 <style scoped>
-
-.menu-title
-{
+.menu-title {
   font-size: 14px;
   font-weight: normal;
   color: #f5f5f5;
 }
-.name-title
-{
+.name-title {
   font-size: 14px;
 }
-.name-subtitle
-{
+.name-subtitle {
   font-size: 12px;
 }
 

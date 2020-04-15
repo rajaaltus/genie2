@@ -2,7 +2,9 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12" md="9" sm="4" lg="9" class="mt-2 pb-0 px-0">
-      <span class="theme-border"><h1 class="ml-3">{{ title }}</h1></span>
+        <span class="theme-border"
+          ><h1 class="ml-3">{{ title }}</h1></span
+        >
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md="3" sm="4" lg="3" v-if="reportYears">
@@ -23,19 +25,18 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
-  props: ['title', 'reportYears'],
+  props: ["title", "reportYears"],
   computed: {
-    ...mapState(['selectedYear'])
+    ...mapState(["selectedYear"])
   },
   methods: {
-    async changeReportingYear () {
-			await this.$store.dispatch('setReportingYear', this.selectedYear)
-		}
+    async changeReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    }
   }
-}
-
+};
 </script>
 
 <style>
@@ -45,5 +46,4 @@ export default {
   float: left;
   margin-left: 0;
 }
-
 </style>
