@@ -64,8 +64,6 @@
               <v-col cols="12">
                 <CoursesTable
                   :reportYears="reportYears"
-                  :annualYear="$store.state.selectedYear"
-                  :hrdCourses="$store.state.hrdCourse.hrdCourses"
                 />
               </v-col>
             </v-row>

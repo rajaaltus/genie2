@@ -137,10 +137,11 @@
 import { mapState } from 'vuex';
 import Swal from 'sweetalert2'
 export default {
-  props: ['reportYears', 'annualYear', 'SpecialData'],
+  props: ['reportYears'],
   data: () => ({
     valid: true,
     loading: false,
+    annualYear: 0,
     editedItem: 
 		{
 			annual_year: 0,
@@ -184,7 +185,10 @@ export default {
 		...mapState({
 			specialData: state => state.special.specialData,
 		}),
-	},
+  },
+  mounted () {
+    this.annualYear = this.$store.state.selectedYear;
+  },
 	watch: {
 		dialog (val) {
 			val || this.close()
@@ -213,11 +217,9 @@ export default {
 			 const index = this.specialData.indexOf(item)
 			 this.deletedItem = Object.assign({}, item)
 			// confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
-			this.deletedItem.annualYear = this.deletedItem.annualYear;
-			this.deletedItem.id = this.deletedItem.id;
-			this.deletedItem.status = 'DELETED'
+			this.deletedItem.deleted = true;
 			var payload = this.deletedItem;
-			console.log(payload);
+			// console.log(payload);
 			var vm = this;
 			confirm('Are you sure you want to delete this item?') && 	this.$store.dispatch('special/updateSpecial', payload)
 				.then(resp => {

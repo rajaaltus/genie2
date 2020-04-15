@@ -163,10 +163,11 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears", "annualYear", "otservicesData"],
+  props: ["reportYears"],
   data: () => ({
     valid: true,
     loading: false,
+    annualYear: 0,
     isLoading: false,
     procedures: [],
     search: "",
@@ -206,6 +207,9 @@ export default {
     ...mapState({
       otservicesData: state => state.otservice.otservicesData
     })
+  },
+  mounted () {
+    this.annualYear = this.$store.state.selectedYear;
   },
   watch: {
     dialog(val) {

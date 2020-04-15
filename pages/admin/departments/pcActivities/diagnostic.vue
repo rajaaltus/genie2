@@ -41,8 +41,6 @@
               <v-col cols="12">
                 <DiagnosticTable
                   :reportYears="reportYears"
-                  :annualYear="$store.state.selectedYear"
-                  :diagnosticData="$store.state.diagnostic.diagnosticData"
                 />
               </v-col>
             </v-row>

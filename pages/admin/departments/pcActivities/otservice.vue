@@ -41,8 +41,6 @@
               <v-col cols="12">
                 <OTServiceTable
                   :reportYears="reportYears"
-                  :annualYear="$store.state.selectedYear"
-                  :otservicesData="$store.state.otservice.otservicesData"
                 />
               </v-col>
             </v-row>

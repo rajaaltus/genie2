@@ -136,10 +136,12 @@
 
 <script>
 import { mapState } from "vuex";
+import Swal from 'sweetalert2'
 export default {
-  props: ["reportYears", "annualYear", "clincalData"],
+  props: ["reportYears"],
   data: () => ({
     loading: false,
+    annualYear: 0,
     editedItem: {
       annual_year: 0,
       course_name: "",
@@ -198,7 +200,7 @@ export default {
         align: "left",
         value: "updated_at",
       },
-      { text: "Course", value: "course_name", width: "600" },
+      { text: "Course", value: "course_name"},
       { text: "Candidate Name", value: "candidate_name" },
       { text: "Duration", value: "durations" },
       { text: "Thesis Title", value: "thesis_title" },
@@ -211,18 +213,20 @@ export default {
       val || this.close();
     }
   },
-
   computed: {
     ...mapState({
       hrdCourses: state => state.hrdCourse.hrdCourses.result
     })
   },
+  mounted() {
+    this.annualYear = this.$store.state.selectedYear;
+  },
   methods: {
-    reloadData() {
+    async reloadData() {
       this.loading = true;
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
-      this.$store.dispatch("hrdCourse/setHRDCourses", { qs: queryString });
+      await this.$store.dispatch("hrdCourse/setHRDCourses", { qs: queryString });
       this.loading = false;
     },
     reset() {

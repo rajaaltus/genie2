@@ -178,7 +178,7 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears", "annualYear", "clincalData"],
+  props: ["reportYears"],
   data: () => ({
     editFrom: false,
     editTo: false,
@@ -233,6 +233,9 @@ export default {
     dialog(val) {
       val || this.close();
     }
+  },
+  mounted() {
+    this.annualYear = this.$store.state.selectedYear;
   },
   methods: {
     async reloadData() {

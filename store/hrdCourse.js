@@ -18,7 +18,6 @@ export const mutations = {
 			state.hrdCourses.result = hrdCourses;
 			state.hrdCourses.error = {};
 		} else {
-			console.log('error'+hrdCourses);
 			state.hrdCourses.success = false;
 			state.hrdCourses.error = {
 				message: {
@@ -67,11 +66,11 @@ export const actions = {
 		await this.$axios.$put(`/hrd-courses/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
-				commit("SET_HRD_COURSES", response);
+				// commit("SET_HRD_COURSES", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_HRD_COURSES", error);
+				// commit("SET_HRD_COURSES", error);
 			})
 			.finally(function () {
 			// always executed

@@ -36,8 +36,6 @@
               <v-col cols="12">
                 <FacultyTable
                   :reportYears="reportYears"
-                  :annualYear="$store.state.selectedYear"
-                  :facultyData="$store.state.clinical.facultyData"
                 />
               </v-col>
             </v-row>
