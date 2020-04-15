@@ -3,7 +3,7 @@
     <v-data-table
       style="border-radius:0;"
       :headers="headers"
-      :items="programmesData.result"
+      :items="programmesData"
       sort-by="updated_at"
       sort-desc
       class="elevation-1"
@@ -221,10 +221,11 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears", "annualYear", "programmesData"],
+  props: ["reportYears"],
   data: () => ({
     loading: false,
     dialog: false,
+    annualYear: 0,
     headers: [
       {
         text: "Updated at",
@@ -304,11 +305,10 @@ export default {
     approvals: ["Pending", "Rejected", "Approved"]
   }),
   computed: {
-    // ...mapState({
-    //   programmesData: state => state.program.programmesData.result,
-    //   staffs: state => state.staffs
-    // })
-    ...mapState(["program/programmesData", "staffs"])
+    ...mapState({
+      programmesData: state => state.program.programmesData.result,
+      staffs: state => state.staffs
+    })
   },
   watch: {
     dialog(val) {
@@ -336,8 +336,10 @@ export default {
       await store.dispatch("program/setProgrammesData", { qs: queryString });
     }
   },
-  async mounted() {
+  mounted() {
+    this.annualYear = this.$store.state.selectedYear;
     this.reloadData();
+    
   },
   methods: {
     async handleFileUpload(event) {
@@ -377,15 +379,11 @@ export default {
       else return "green";
     },
     editItem(item) {
-      this.editedIndex = this.programmesData.result.indexOf(item);
+      this.editedIndex = this.programmesData.indexOf(item);
       this.editedItem = Object.assign({}, item);
-
-      console.log(this.editedItem);
       if (this.editedItem.image) {
         this.image_url = this.editedItem.image.url;
-        console.log(this.image_url);
       } else this.editedItem.image = 0;
-      console.log(this.editedItem.image);
       this.dialog = true;
     },
 

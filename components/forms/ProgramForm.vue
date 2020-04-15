@@ -173,13 +173,13 @@
                 label="Brief Report "
               ></v-textarea>
             </v-col>
-            
+
             <v-col cols="12" lg="4" md="12">
               <h3><span class="frm-title">Upload Images (If any)</span></h3>
               <!-- <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload"> -->
               <v-hover>
                 <template v-slot:default="{ hover }">
-                  <v-img 
+                  <v-img
                     :src="`${$axios.defaults.baseURL}${image_url}`"
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
@@ -206,6 +206,7 @@
             </v-col>
           </v-row>
         </v-form>
+        <!-- <pre>{{ program | json }} {{ user }}</pre> -->
       </v-col>
     </v-row>
     <v-row>
@@ -225,51 +226,62 @@ import Swal from "sweetalert2";
 import { mapState } from "vuex";
 export default {
   props: ["programNames", "dataFrom"],
-  data: () => ({
-    duration_from: false,
-    duration_to: false,
-    editFrom: false,
-    editTo: false,
-    valid: true,
-    program: {
-      annual_year: 0,
-      type: "",
-      name: "",
-      location: "",
-      forum: "",
-      colloborations: "",
-      from_date: "",
-      to_date: "",
-      participants_count: null,
-      coordinators: "",
-      brief_report: "",
-      deleted: false,
-      approval_status: "Pending",
-      approved_by: "",
-      approved_date: null,
-      rejected_reason: null,
-      image: null,
-      department: 0,
-      user: 0
-    },
-    selectedFile: null,
-    image_url: null,
-    programTypes: [
-      "Conference",
-      "Workshop",
-      "Seminar",
-      "Symposium",
-      "Scientific"
-    ],
-    programLevels: ["International", "National", "Regional", "State", "Local"],
-    locations: ["NIMHANS", "OUTSIDE_NIMHANS"],
-    colloborations: ["Departmental", "Interdepartmental"],
-    approvals: ["Pending", "Rejected", "Approved"]
-  }),
+  data() {
+    return {
+      duration_from: false,
+      duration_to: false,
+      editFrom: false,
+      editTo: false,
+      valid: true,
+      program: {
+        annual_year: 0,
+        type: "",
+        name: "",
+        location: "",
+        forum: "",
+        colloborations: "",
+        from_date: "",
+        to_date: "",
+        participants_count: null,
+        coordinators: "",
+        brief_report: "",
+        deleted: false,
+        approval_status: "Pending",
+        approved_by: "",
+        approved_date: null,
+        rejected_reason: null,
+        image: null,
+        department: 0,
+        user: 0
+      },
+      selectedFile: null,
+      image_url: null,
+      programTypes: [
+        "Conference",
+        "Workshop",
+        "Seminar",
+        "Symposium",
+        "Scientific"
+      ],
+      programLevels: [
+        "International",
+        "National",
+        "Regional",
+        "State",
+        "Local"
+      ],
+      locations: ["NIMHANS", "OUTSIDE_NIMHANS"],
+      colloborations: ["Departmental", "Interdepartmental"],
+      approvals: ["Pending", "Rejected", "Approved"]
+    };
+  },
   methods: {
     reset() {
       this.$refs.form.reset();
       this.image_url = null;
+    },
+    setUser(user) {
+      this.program.user = user;
     },
     async programAdd() {
       if (this.$refs.form.validate()) {
@@ -348,8 +360,7 @@ export default {
 </script>
 
 <style scoped>
-.frm-title
-{
+.frm-title {
   border-left: 5px solid #e16949;
   padding: 3px 10px;
 }

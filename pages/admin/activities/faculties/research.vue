@@ -82,11 +82,11 @@ export default {
     selectedYear: 0,
   }),
   async fetch({store}) {
-    await store.dispatch('setActivities');
-    if(store.state.user.fullUser){
-      let userId = store.state.auth.user.id;
-      await store.dispatch('user/setFullUser', {id: userId})
-    }
+    // await store.dispatch('setActivities');
+    // if(store.state.user.fullUser){
+    //   let userId = store.state.auth.user.id;
+    //   await store.dispatch('user/setFullUser', {id: userId})
+    // }
   },
   methods: {
     async changeReportingYear () {

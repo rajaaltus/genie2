@@ -2,7 +2,7 @@
   <v-list flat color="#41704e" style="border-radius:0;">
     <v-list-item-group color="#ffde00">
       <v-list-item
-        v-for="(item, i) in $store.state.activities"
+        v-for="(item, i) in activities"
         :key="i"
         :to="item.path"
       >
@@ -16,6 +16,18 @@
     </v-list-item-group>
   </v-list>
 </template>
+<script>
+import {mapGetters} from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['activities'])
+  },
+  async mounted() {
+    // if (this.$store.state.activities === [])
+    //   await this.$store.dispatch('setActivities')
+  }
+}
+</script>
 <style scoped>
 .disp
 {

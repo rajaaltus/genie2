@@ -23,9 +23,12 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
-  props: ['title', 'reportYears', 'selectedYear'],
-  
+  props: ['title', 'reportYears'],
+  computed: {
+    ...mapState(['selectedYear'])
+  },
   methods: {
     async changeReportingYear () {
 			await this.$store.dispatch('setReportingYear', this.selectedYear)
