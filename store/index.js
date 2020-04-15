@@ -6,7 +6,11 @@ export const state = () => ({
 	students: [],
 	staffs: [],
 });
-
+export const getters = {
+	activities(state) {
+		return state.activities;
+	}
+};
 export const mutations = {
 	SET_STUDENTS (state, students) {
 		state.students = students;

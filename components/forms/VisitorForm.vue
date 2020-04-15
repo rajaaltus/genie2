@@ -3,13 +3,14 @@
     <v-row no-gutters>
       <v-col cols="12" md="12">
         <v-select
-        color="green"
-          v-model="visitor.userProfileId"
-          :items="staffs"
+          v-model="visitor.user"
+          :items="dataFrom"
           item-value="id"
-          item-text="firstname"
-          filled
-          label="Data from (Select Faculty)"
+          item-text="fullname"
+          outlined
+          label="Data collected From?"
+          placeholder="Select Faculty / Staff from the List"
+          color="success"
           :rules="[v => !!v || 'Item is required']"
         ></v-select>
       </v-col>
@@ -21,7 +22,7 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                 color="green"
+                  color="green"
                   v-model="visitor.name"
                   label="Visitor Name"
                   :rules="[v => !!v || 'Item is required']"
@@ -30,7 +31,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                 color="green"
+                  color="green"
                   v-model="visitor.designation"
                   label="Designation"
                   :rules="[v => !!v || 'Item is required']"
@@ -39,7 +40,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                color="green"
+                  color="green"
                   v-model="visitor.institutionAffiliation"
                   label="Institute Affiliation"
                   :rules="[v => !!v || 'Item is required']"
@@ -50,7 +51,7 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                color="green"
+                  color="green"
                   v-model="visitor.lectureTitle"
                   label="Lecture Title"
                   :rules="[v => !!v || 'Item is required']"
@@ -70,7 +71,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                    color="green"
+                      color="green"
                       v-model="visitor.fromDate"
                       label="From Date"
                       v-on="on"
@@ -94,7 +95,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                    color="green"
+                      color="green"
                       v-model="visitor.toDate"
                       label="To Date"
                       v-on="on"
@@ -136,28 +137,31 @@
 
 <script>
 export default {
-  data: () => ({
-    duration_from: false,
-    duration_to: false,
-    valid: true,
-    visitor: {
-      annualYear: 0,
-      approvalStatus: "PENDING",
-      approvedBy: "",
-      approvedDate: "",
-      briefReport: "",
-      departmentId: 0,
-      designation: "",
-      fromDate: new Date().toISOString().substr(0, 10),
-      institutionAffiliation: "",
-      lectureTitle: "",
-      name: "",
-      rejectedReason: "",
-      status: "VALID",
-      toDate: new Date().toISOString().substr(0, 10),
-      userProfileId: 0
-    },
-    approvals: ["PENDING", "REJECTED", "APPROVED"]
-  })
+  props: ["dataFrom"],
+  data() {
+    return {
+      duration_from: false,
+      duration_to: false,
+      valid: true,
+      visitor: {
+        annual_year: 0,
+        name: "",
+        designation: "",
+        institutional_affiliation: "",
+        title: "",
+        from_date: "",
+        to_date: "",
+        brief_report: "",
+        approval_status: "",
+        approved_by: "",
+        approved_date: null,
+        deleted: false,
+        department: 0,
+        user: 0,
+        rejected_reason: null
+      },
+      approvals: ["Pending", "Rejected", "Approved"]
+    };
+  }
 };
 </script>
