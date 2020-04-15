@@ -146,7 +146,7 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears", "annualYear", "facultyData"],
+  props: ["reportYears"],
   data: () => ({
     editFrom: false,
     loading: false,
@@ -187,15 +187,16 @@ export default {
   }),
   computed: {
     ...mapState({
-      success: state => state.faculty.facultyData.status,
       facultyData: state => state.faculty.facultyData.result,
-      errorData: state => state.faculty.facultyData.error
     })
   },
   watch: {
     dialog(val) {
       val || this.close();
     }
+  },
+  mounted () {
+    this.annualYear = this.$store.state.selectedYear;
   },
   methods: {
     reloadData() {

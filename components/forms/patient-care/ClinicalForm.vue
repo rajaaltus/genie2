@@ -160,7 +160,7 @@ export default {
 		async reloadData () {
 			this.loading = true;
 			let queryString = ''
-			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
+			queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
 			await this.$store.dispatch('clinical/setClinicalData', {qs: queryString})
 			this.loading = false;
 		},

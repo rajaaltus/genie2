@@ -138,10 +138,11 @@
 import { mapState } from 'vuex';
 import Swal from 'sweetalert2'
 export default {
-  props: ['reportYears', 'annualYear', 'diagnosticData'],
+  props: ['reportYears'],
   data: () => ({
     loading: false,
     valid: true,
+    annualYear: 0,
     editedItem: 
 		{
 			annual_year: 0,
@@ -159,6 +160,7 @@ export default {
 			department: 0,
 			pc_diagnostic_test: 0
     },
+    serviceType: ["Routine_Test", "Special_Test"],
     dialog: false,
     search: null,
     headers: [
@@ -177,7 +179,10 @@ export default {
 		...mapState({
 			diagnosticData: state => state.diagnostic.diagnosticData
 		}),
-	},
+  },
+  mounted () {
+    this.annualYear = this.$store.state.selectedYear;
+  },
 	watch: {
 		dialog (val) {
 			val || this.close()
@@ -226,7 +231,7 @@ export default {
 			let queryString = '';
 			// this.diagnostic.test_name = '';
 			// this.reset();
-			this.diagnostic.lab_type = lab_type;
+			this.editedItem.lab_type = lab_type;
 			queryString = `department.id=${this.$store.state.auth.user.department}&lab_type=${lab_type}`;
 			await this.$store.dispatch('diagnostic/setTest', {qs: queryString})
     },
@@ -240,7 +245,8 @@ export default {
     editItem (item) {
 			this.editedIndex = this.diagnosticData.indexOf(item)
 			this.editedItem = Object.assign({}, item)
-			this.dialog = true
+      this.dialog = true
+      console.log(this.editedItem);
 		},
 
 		deleteItem (item) {

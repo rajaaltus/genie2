@@ -155,11 +155,11 @@
 import { mapState } from 'vuex';
 import Swal from 'sweetalert2'
 export default {
-  props: ['reportYears', 'annualYear', 'emergencyData'],
+  props: ['reportYears'],
   data: () => ({
     valid: true,
     loading: false,
-    emergencyData: [],
+    annualYear: 0,
     editedItem: 
 		{
 			annual_year: 0,
@@ -197,10 +197,13 @@ export default {
     ],
     dialog: false
   }),
-   computed: {
+  computed: {
     ...mapState({
-      emergencyData: state =>  state.emergency.emergencyData
+      emergencyData: state => state.emergency.emergencyData
     })
+  },
+  mounted () {
+    this.annualYear = this.$store.state.selectedYear;
   },
   watch: {
 		dialog (val) {

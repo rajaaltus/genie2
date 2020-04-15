@@ -41,8 +41,6 @@
               <v-col cols="12">
                 <SpecialTable
                   :reportYears="reportYears"
-                  :annualYear="$store.state.selectedYear"
-                  :specialData="$store.state.special.specialData"
                 />
               </v-col>
             </v-row>
