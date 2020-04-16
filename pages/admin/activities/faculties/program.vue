@@ -31,6 +31,7 @@
                   :programNames="$store.state.program.programNames"
                   :dataFrom="staffs"
                 />
+                
               </v-col>
             </v-row>
           </v-card-text>
@@ -101,7 +102,7 @@ export default {
   async fetch({ store }) {
     // await store.dispatch("setActivities");
     let qs = "";
-    qs = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
+    qs = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
     await store.dispatch("setStaffs", { qs: qs });
   },
   methods: {
