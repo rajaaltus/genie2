@@ -15,7 +15,7 @@
         ></v-select>
       </v-col>
       <v-col cols="1" lg="1" sm="1">
-        <AddUser />
+        <AddUser @new-user="getLatestUsers()" />
       </v-col>
     </v-row>
     <v-row>
@@ -235,6 +235,7 @@ export default {
   },
   data() {
     return {
+      dataFrom: [],
       duration_from: false,
       duration_to: false,
       editFrom: false,
@@ -282,7 +283,15 @@ export default {
       approvals: ["Pending", "Rejected", "Approved"]
     };
   },
+  
   methods: {
+    getLatestUsers() {
+      console.log('recieving....');
+      let queryString = ''
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+        this.$store.dispatch('setStaffs', {qs: queryString})
+         this.dataFrom = this.$store.state.staffs;
+    },
     reset() {
       this.$refs.form.reset();
       this.image_url = null;

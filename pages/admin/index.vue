@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-conatainer>
     <YearDialog
       :reportYears="reportYears"
       v-if="$store.state.selectedYear == 0"
@@ -16,8 +17,8 @@
 
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="px-0 py-1">
-            <v-row>
+          <v-card-text class="px-0 py-2">
+            <v-row class="pr-4">
               <v-col cols="12" lg="3">
                 <v-select
                   :items="reportYears"
@@ -25,25 +26,24 @@
                   item-text="val"
                   label="Reporting Year"
                   color="success"
+                  outlined
                 ></v-select>
               </v-col>
 
               <v-col cols="11" lg="3">
                 <v-autocomplete
-                  v-model="friends"
-                  :disabled="isUpdating"
                   :items="people"
                   color="blue-grey lighten-2"
                   label="Faculty / Staff / Student"
                   item-text="name"
                   item-value="name"
+                  outlined
                 >
                   <template v-slot:selection="data">
                     <v-chip
                       v-bind="data.attrs"
                       :input-value="data.selected"
                       @click="data.select"
-                      
                     >
                       <v-avatar left>
                         <v-img :src="data.item.avatar"></v-img>
@@ -84,7 +84,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -100,7 +100,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -116,7 +116,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -132,7 +132,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -148,7 +148,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -164,7 +164,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="6">
+              <v-col cols="12" lg="6">
                 <v-alert
                   tile
                   elevation="1"
@@ -180,64 +180,87 @@
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn class="ml-12" tile x-small color="green darken-3" v-on="on">125</v-btn>
+                      <v-btn
+                        class="ml-12"
+                        tile
+                        x-small
+                        color="green darken-3"
+                        v-on="on"
+                        >125</v-btn
+                      >
                     </template>
                     <span>Journal Articles</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green darken-2" v-on="on">117</v-btn>
+                      <v-btn tile x-small color="green darken-2" v-on="on"
+                        >117</v-btn
+                      >
                     </template>
-                    <span>Articles for Professionals in Souvenirs, Newsletters, etc..</span>
+                    <span
+                      >Articles for Professionals in Souvenirs, Newsletters,
+                      etc..</span
+                    >
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green darken-1" v-on="on">26</v-btn>
+                      <v-btn tile x-small color="green darken-1" v-on="on"
+                        >26</v-btn
+                      >
                     </template>
                     <span>Books</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green lighten-1" v-on="on">85</v-btn>
+                      <v-btn tile x-small color="green lighten-1" v-on="on"
+                        >85</v-btn
+                      >
                     </template>
                     <span>Book Chapters</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green lighten-2" v-on="on">216</v-btn>
+                      <v-btn tile x-small color="green lighten-2" v-on="on"
+                        >216</v-btn
+                      >
                     </template>
                     <span>Monographs</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green lighten-3" v-on="on">47</v-btn>
+                      <v-btn tile x-small color="green lighten-3" v-on="on"
+                        >47</v-btn
+                      >
                     </template>
                     <span>Manuals</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green lighten-4" v-on="on">112</v-btn>
+                      <v-btn tile x-small color="green lighten-4" v-on="on"
+                        >112</v-btn
+                      >
                     </template>
                     <span>Reports</span>
                   </v-tooltip>
 
                   <v-tooltip top color="black">
                     <template v-slot:activator="{ on }">
-                      <v-btn tile x-small color="green lighten-5" v-on="on">8</v-btn>
+                      <v-btn tile x-small color="green lighten-5" v-on="on"
+                        >8</v-btn
+                      >
                     </template>
                     <span>Articles for General Public / IEC Materials</span>
                   </v-tooltip>
-
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -253,7 +276,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -269,7 +292,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -285,7 +308,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -301,7 +324,7 @@
                 </v-alert>
               </v-col>
 
-              <v-col cols="3">
+              <v-col cols="12" lg="3">
                 <v-alert
                   tile
                   elevation="1"
@@ -317,9 +340,9 @@
                 </v-alert>
               </v-col>
             </v-row>
-
+            
             <v-row>
-              <v-col cols="6">
+              <v-col cols="12" lg="6">
                 <v-card class="mx-auto">
                   <v-list-item>
                     <v-list-item-content>
@@ -341,7 +364,7 @@
                   </div>
                 </v-card>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12" lg="6">
                 <v-card class="mx-auto">
                   <v-list-item>
                     <v-list-item-content>
@@ -412,6 +435,7 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
+    </v-conatainer>
   </div>
 </template>
 
@@ -430,50 +454,45 @@ export default {
   },
   data() {
     const srcs = {
-        1: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-        2: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-        3: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-        4: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-        5: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-      }
+      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
+    };
     return {
-    reportYears: [
-      {
-        id: 2017,
-        val: "2017-2018"
-      },
-      {
-        id: 2018,
-        val: "2018-2019"
-      },
-      {
-        id: 2019,
-        val: "2019-2020"
-      },
-      {
-        id: 2020,
-        val: "2020-2021"
-      }
-    ],
-    isUpdating: false,
-    friends: ['Sandra Adams', 'Britta Holt'],
-    people: [
-          { header: 'Faculty' },
-          { name: 'Sandra Adams', group: 'Faculty', avatar: srcs[1] },
-          { name: 'Ali Connors', group: 'Faculty', avatar: srcs[2] },
-          { name: 'Trevor Hansen', group: 'Faculty', avatar: srcs[3] },
-          { name: 'Tucker Smith', group: 'Faculty', avatar: srcs[2] },
-          { divider: true },
-          { header: 'Student' },
-          { name: 'Britta Holt', group: 'Student', avatar: srcs[4] },
-          { name: 'Jane Smith ', group: 'Student', avatar: srcs[5] },
-          { name: 'John Smith', group: 'Student', avatar: srcs[1] },
-          { name: 'Sandra Williams', group: 'Student', avatar: srcs[3] },
-        ],
-    }
-  },
-  data: () => ({
-    options: {
+      reportYears: [
+        {
+          id: 2017,
+          val: "2017-2018"
+        },
+        {
+          id: 2018,
+          val: "2018-2019"
+        },
+        {
+          id: 2019,
+          val: "2019-2020"
+        },
+        {
+          id: 2020,
+          val: "2020-2021"
+        }
+      ],
+      people: [
+        { header: "Faculty" },
+        { name: "Sandra Adams", group: "Faculty", avatar: srcs[1] },
+        { name: "Ali Connors", group: "Faculty", avatar: srcs[2] },
+        { name: "Trevor Hansen", group: "Faculty", avatar: srcs[3] },
+        { name: "Tucker Smith", group: "Faculty", avatar: srcs[2] },
+        { divider: true },
+        { header: "Student" },
+        { name: "Britta Holt", group: "Student", avatar: srcs[4] },
+        { name: "Jane Smith ", group: "Student", avatar: srcs[5] },
+        { name: "John Smith", group: "Student", avatar: srcs[1] },
+        { name: "Sandra Williams", group: "Student", avatar: srcs[3] }
+      ],
+      options: {
       chart: {
         id: "vuechart-example"
       },
@@ -491,25 +510,26 @@ export default {
       }
     ],
     donutSeries: [20, 20, 20, 20, 20]
-  }),
+    };
+  },
   async fetch({ store }) {
     let userId = store.state.auth.user.id;
     await store.dispatch("user/setFullUser", { id: userId });
   },
-   watch: {
-      isUpdating (val) {
-        if (val) {
-          setTimeout(() => (this.isUpdating = false), 3000)
-        }
-      },
-    },
+  watch: {
+    isUpdating(val) {
+      if (val) {
+        setTimeout(() => (this.isUpdating = false), 3000);
+      }
+    }
+  },
 
-    methods: {
-      remove (item) {
-        const index = this.friends.indexOf(item.name)
-        if (index >= 0) this.friends.splice(index, 1)
-      },
-    },
+  methods: {
+    remove(item) {
+      const index = this.friends.indexOf(item.name);
+      if (index >= 0) this.friends.splice(index, 1);
+    }
+  }
 };
 </script>
 

@@ -36,6 +36,7 @@ export default {
   plugins: [
     { src: '~/plugins/moment.js' },
     { src : '~/plugins/vue-apexchart.js', ssr : false },
+    { src : '~/plugins/highcharts-vue.js' },
   ],
   /*
   ** Nuxt.js dev-modules
