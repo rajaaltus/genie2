@@ -84,130 +84,242 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Programmes &amp; Events
-                  </v-card-title>
-                  <v-card-subtitle>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="blue lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Programmes / Events</h2>
+                  <span class="display-2 font-weight-bold">
                     302
-                  </v-card-subtitle>
-                </v-card>
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Department Visitors
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="orange lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Department Visitors</h2>
+                  <span class="display-2 font-weight-bold">
+                    125
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Training Underwent
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="green lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Training Underwent</h2>
+                  <span class="display-2 font-weight-bold">
+                    256
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Presentations/Posters
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="red lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Presentations / Posters</h2>
+                  <span class="display-2 font-weight-bold">
+                    518
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Participations
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="pink lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Participations</h2>
+                  <span class="display-2 font-weight-bold">
+                    1369
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Public Engagement
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="6">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="light-green lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Publications</h2>
+                  <span class="display-2 font-weight-bold">
+                    845
+                  </span>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="ml-12" tile x-small color="green darken-3" v-on="on">125</v-btn>
+                    </template>
+                    <span>Journal Articles</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green darken-2" v-on="on">117</v-btn>
+                    </template>
+                    <span>Articles for Professionals in Souvenirs, Newsletters, etc..</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green darken-1" v-on="on">26</v-btn>
+                    </template>
+                    <span>Books</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green lighten-1" v-on="on">85</v-btn>
+                    </template>
+                    <span>Book Chapters</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green lighten-2" v-on="on">216</v-btn>
+                    </template>
+                    <span>Monographs</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green lighten-3" v-on="on">47</v-btn>
+                    </template>
+                    <span>Manuals</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green lighten-4" v-on="on">112</v-btn>
+                    </template>
+                    <span>Reports</span>
+                  </v-tooltip>
+
+                  <v-tooltip top color="black">
+                    <template v-slot:activator="{ on }">
+                      <v-btn tile x-small color="green lighten-5" v-on="on">8</v-btn>
+                    </template>
+                    <span>Articles for General Public / IEC Materials</span>
+                  </v-tooltip>
+
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Research Activities
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="deep-purple lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Public Engagement</h2>
+                  <span class="display-2 font-weight-bold">
+                    85
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Publications
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="teal lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Research Activities</h2>
+                  <span class="display-2 font-weight-bold">
+                    331
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Recognitions
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="purple lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Recognitions</h2>
+                  <span class="display-2 font-weight-bold">
+                    42
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Patents
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="lime lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Patents</h2>
+                  <span class="display-2 font-weight-bold">
+                    8
+                  </span>
+                </v-alert>
               </v-col>
 
-              <v-col cols="12" lg="3" sm="6">
-                <v-card tile>
-                  <v-card-title>
-                    Key Assignments
-                  </v-card-title>
-                  <v-card-subtitle>
-                    302
-                  </v-card-subtitle>
-                </v-card>
+              <v-col cols="3">
+                <v-alert
+                  tile
+                  elevation="1"
+                  border="left"
+                  color="amber lighten-1"
+                  colored-border
+                  icon="mdi-twitter"
+                >
+                  <h2 class="font-weight-bold">Key Assignments</h2>
+                  <span class="display-2 font-weight-bold">
+                    25
+                  </span>
+                </v-alert>
               </v-col>
             </v-row>
 
             <v-row>
-              <v-col cols="12" lg="4">
+              <v-col cols="6">
                 <v-card class="mx-auto">
                   <v-list-item>
                     <v-list-item-content>
@@ -217,13 +329,19 @@
                     </v-list-item-content>
                   </v-list-item>
 
-                  <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
-                    height="194"
-                  ></v-img>
+                  <div id="vuechart-example">
+                    <client-only>
+                      <apexchart
+                        width="100%"
+                        type="bar"
+                        :options="options"
+                        :series="series"
+                      ></apexchart>
+                    </client-only>
+                  </div>
                 </v-card>
               </v-col>
-              <v-col cols="12" lg="8">
+              <v-col cols="6">
                 <v-card class="mx-auto">
                   <v-list-item>
                     <v-list-item-content>
@@ -233,10 +351,14 @@
                     </v-list-item-content>
                   </v-list-item>
 
-                  <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
-                    height="194"
-                  ></v-img>
+                  <div>
+                    <apexchart
+                      width="100%"
+                      type="line"
+                      :options="options"
+                      :series="series"
+                    ></apexchart>
+                  </div>
                 </v-card>
               </v-col>
             </v-row>
@@ -350,6 +472,26 @@ export default {
         ],
     }
   },
+  data: () => ({
+    options: {
+      chart: {
+        id: "vuechart-example"
+      },
+      theme: {
+        palette: "palette3"
+      },
+      xaxis: {
+        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+      }
+    },
+    series: [
+      {
+        name: "Publications",
+        data: [60, 10, 35, 50, 12, 60, 70, 91]
+      }
+    ],
+    donutSeries: [20, 20, 20, 20, 20]
+  }),
   async fetch({ store }) {
     let userId = store.state.auth.user.id;
     await store.dispatch("user/setFullUser", { id: userId });
@@ -387,5 +529,9 @@ export default {
   color: #ffffff;
   font-size: 24px;
   font-weight: normal;
+}
+
+.dboard {
+  color: #ffffff;
 }
 </style>

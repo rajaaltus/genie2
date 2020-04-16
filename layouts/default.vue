@@ -136,7 +136,10 @@
     <v-app-bar flat dense app color="#fff">
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
       <v-spacer></v-spacer>
-      {{ $store.state.selectedYear }} - {{ $store.state.selectedYear+1 }} 
+      <h2>Reporting Year</h2>
+      <span class="yellow darken-1 ml-3 px-2 display-1 font-weight-bold">
+        {{ $store.state.selectedYear }} - {{ $store.state.selectedYear + 1 }}
+      </span>
     </v-app-bar>
     <v-content>
       <v-container fluid>
