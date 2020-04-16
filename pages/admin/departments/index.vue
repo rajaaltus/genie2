@@ -1,21 +1,21 @@
 <template>
   <v-container fluid>
     <YearDialog v-if="$store.state.selectedYear == 0" />
-    <PageHeader
-      :title="$metaInfo.title"
-      :selectedYear="$store.state.selectedYear"
-    />
-    <v-row>
-      <v-spacer></v-spacer>
-      <v-col cols="12" md="3" sm="4" lg="3">
+    <v-row class="my-0">
+      <v-col cols="12" lg="9" class="pb-0 px-4">
+      	<span class="theme-border"><h1 class="ml-3">{{ $metaInfo.title }}</h1></span>
+      </v-col>
+      <v-col cols="12" lg="3" v-if="reportYears">
         <v-select
-          v-model="selectedYear"
+          filled
+          color="green"
+          v-model="annualYear"
           :items="reportYears"
           item-text="val"
           item-value="id"
           label="Reporting Year"
           required
-          @input="changeReportingYear"
+          @input="reload"
         ></v-select>
       </v-col>
     </v-row>
@@ -307,14 +307,8 @@ export default {
     await store.dispatch("about/setAboutData", { query: queryString });
   },
   mounted() {
-    if (this.$store.state.selectedYear == 0) {
-      this.Ydialog = true;
-      let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.$store.state.selectedYear}`;
-      this.$store.dispatch("about/setAboutData", { query: queryString });
-    } else {
-      this.selectedYear = this.$store.state.selectedYear;
-    }
+      this.annualYear = this.$store.state.selectedYear;
+    
 
     if (this.newAbout.length > 0) {
       this.departmentAbout = Object.assign({}, this.newAbout[0]);
@@ -655,7 +649,7 @@ export default {
     async reload() {
       this.$nuxt.$loading.start();
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.selectedYear}`;
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.annualYear}`;
       await this.$store.dispatch("about/setAboutData", { query: queryString });
       if (this.newAbout.length > 0) {
         this.departmentAbout = Object.assign({}, this.newAbout[0]);
@@ -676,12 +670,12 @@ export default {
       this.$nuxt.$loading.finish();
     },
     async changeReportingYear() {
-      await this.$store.dispatch("setReportingYear", this.selectedYear);
+      await this.$store.dispatch("setReportingYear", this.annualYear);
       await this.reload();
     },
     async setReportingYear() {
       this.Ydialog = false;
-      await this.$store.dispatch("setReportingYear", this.selectedYear);
+      await this.$store.dispatch("setReportingYear", this.annualYear);
       this.reload();
     }
   }

@@ -87,6 +87,34 @@ export const mutations = {
 
 
 export const actions = {
+	async addUser ({commit}, payload) {
+		await this.$axios.$post('/users', payload)
+		.then(response =>  {
+			// handle success
+				return true;
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_USERPROFILE", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
+	async deleteUser ({commit}, {id}) {
+		await this.$axios.$delete(`/users/${id}`)
+		.then(response =>  {
+			// handle success
+				return true;
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_USERPROFILE", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
 	async addProfile ({commit}, payload) {
 		await this.$axios.$post('/user-profiles', payload)
 			.then(response =>  {

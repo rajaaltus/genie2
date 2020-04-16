@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col cols="12" md="12">
+      <v-col cols="11" lg="11">
         <v-select
           v-model="program.user"
           :items="dataFrom"
@@ -13,6 +13,9 @@
           color="success"
           :rules="[v => !!v || 'Item is required']"
         ></v-select>
+      </v-col>
+      <v-col cols="1" lg="1" sm="1">
+        <AddUser @new-user="getLatestUsers()" />
       </v-col>
     </v-row>
     <v-row>
@@ -224,10 +227,15 @@
 <script>
 import Swal from "sweetalert2";
 import { mapState } from "vuex";
+import AddUser from '@/components/forms/AddUser'
 export default {
   props: ["programNames", "dataFrom"],
+  components: {
+    AddUser
+  },
   data() {
     return {
+      dataFrom: [],
       duration_from: false,
       duration_to: false,
       editFrom: false,
@@ -275,7 +283,15 @@ export default {
       approvals: ["Pending", "Rejected", "Approved"]
     };
   },
+  
   methods: {
+    getLatestUsers() {
+      console.log('recieving....');
+      let queryString = ''
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+        this.$store.dispatch('setStaffs', {qs: queryString})
+         this.dataFrom = this.$store.state.staffs;
+    },
     reset() {
       this.$refs.form.reset();
       this.image_url = null;
