@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col cols="12" md="12">
+      <v-col cols="11" lg="11">
         <v-select
           v-model="program.user"
           :items="dataFrom"
@@ -13,6 +13,9 @@
           color="success"
           :rules="[v => !!v || 'Item is required']"
         ></v-select>
+      </v-col>
+      <v-col cols="1" lg="1" sm="1">
+        <AddUser />
       </v-col>
     </v-row>
     <v-row>
@@ -224,8 +227,12 @@
 <script>
 import Swal from "sweetalert2";
 import { mapState } from "vuex";
+import AddUser from '@/components/forms/AddUser'
 export default {
   props: ["programNames", "dataFrom"],
+  components: {
+    AddUser
+  },
   data() {
     return {
       duration_from: false,
