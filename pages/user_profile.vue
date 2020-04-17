@@ -28,10 +28,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn x-small color="green darken-3" class="mr-3 white--text">
-              Edit
-            </v-btn>
-            <v-switch color="green darken-3" label="Public Access"></v-switch>
+            <v-switch color="green darken-3" label="Public Access" class="pl-2"></v-switch>
           </v-card-actions>
         </v-card>
 
@@ -120,6 +117,26 @@
             <span>Articles for General Public / IEC Materials</span>
           </v-tooltip>
         </v-alert>
+
+        <v-card tile class="mx-auto my-card">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="headline"
+                >Expertise Info</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-img src="/wordcloud.jpg" height="auto"></v-img>
+
+          <v-card-actions>
+            <v-layout align-end justify-end>
+              <v-btn color="red lighten-1" fab x-small dark>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
       </v-col>
 
       <v-col cols="12" md="9" lg="9">
@@ -136,6 +153,12 @@
             <span class="mdi mdi-account-settings cust-icon"></span>
             Settings
           </v-tab>
+          <v-layout align-end justify-end class="pr-4 mb-4">
+            <v-btn color="red lighten-1" x-small dark>
+              <v-icon small class="px-1">mdi-file-pdf</v-icon>
+              Download CV
+            </v-btn>
+          </v-layout>
 
           <v-tab-item class="pt-1">
             <!-- Qualification-->
@@ -208,14 +231,86 @@
             <!-- Experiance End -->
 
             <v-expansion-panels accordion multiple>
-              <v-expansion-panel v-for="(item, i) in 5" :key="i">
+              <v-expansion-panel>
                 <v-expansion-panel-header>
                   <h2 class="font-weight-bold">
                     <v-icon
                       color="green darken-3"
                       class="mdi mdi-email-outline mr-3"
                     ></v-icon
-                    >Qualifications
+                    >Awards &amp; Honors
+                  </h2>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h2 class="font-weight-bold">
+                    <v-icon
+                      color="green darken-3"
+                      class="mdi mdi-email-outline mr-3"
+                    ></v-icon
+                    >Presentations / Posters
+                  </h2>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h2 class="font-weight-bold">
+                    <v-icon
+                      color="green darken-3"
+                      class="mdi mdi-email-outline mr-3"
+                    ></v-icon
+                    >Participations
+                  </h2>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h2 class="font-weight-bold">
+                    <v-icon
+                      color="green darken-3"
+                      class="mdi mdi-email-outline mr-3"
+                    ></v-icon
+                    >Research Activities
+                  </h2>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  <h2 class="font-weight-bold">
+                    <v-icon
+                      color="green darken-3"
+                      class="mdi mdi-email-outline mr-3"
+                    ></v-icon
+                    >Patents
                   </h2>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
@@ -229,8 +324,154 @@
           </v-tab-item>
 
           <v-tab-item>
-            <v-card flat>
-              <v-card-text class="px-0 py-1"> </v-card-text>
+            <v-card flat style="border:1px solid #f5f5f5;">
+              <v-card-text class="px-3 py-4">
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <h2>Personal Details</h2>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        color="green"
+                        label="Full Name"
+                        :rules="[v => !!v || 'Full Name is Required']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        label="Designation"
+                        :rules="[v => !!v || 'Designation is Required']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        label="Employee ID"
+                        :rules="[v => !!v || 'Employee ID is Required']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        label="Batch (Years)"
+                        :rules="[v => !!v || 'Batch is Required']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="date"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            color="green"
+                            label="Date of Birth"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker no-title scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="menu = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(date)"
+                          >
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        type="number"
+                        label="Age"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-select
+                        color="green"
+                        :items="genders"
+                        label="Gender"
+                        required
+                      >
+                      </v-select>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        label="Mobile No"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
+                      <v-text-field
+                        color="green"
+                        label="Office No"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        color="green"
+                        :rules="[v => !!v || 'Email ID is Required']"
+                        label="Email ID"
+                        placeholder="Also your Primary Login ID"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-file-input
+                        color="green"
+                        :rules="rules"
+                        accept="image/png, image/jpeg, image/bmp"
+                        prepend-icon="mdi-camera"
+                        label="Profile Avatar"
+                      ></v-file-input>
+                    </v-col>
+                  </v-row>
+                  <v-layout align-end justify-end>
+                    <v-btn color="green darken-1" small dark>
+                      <v-icon small class="pr-2">mdi-content-save</v-icon>
+                      Save
+                    </v-btn>
+                  </v-layout>
+                </v-form>
+
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <h2>Password Change</h2>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        color="green"
+                        label="New Password"
+                        type="password"
+                        :rules="[v => !!v || 'New Password is Required']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        color="green"
+                        label="Confirm the New Password"
+                        type="password"
+                        :rules="[v => !!v || 'Confirmation is Required']"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-layout align-end justify-end>
+                    <v-btn color="green darken-1" small dark>
+                      <v-icon small class="pr-2">mdi-key-change</v-icon>
+                      Update Password
+                    </v-btn>
+                  </v-layout>
+                </v-form>
+              </v-card-text>
             </v-card>
           </v-tab-item>
         </v-tabs>

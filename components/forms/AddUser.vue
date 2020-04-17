@@ -1,62 +1,82 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog" persistent max-width="50%">
       <template v-slot:activator="{ on }">
-        <v-btn color="warning" fab dark v-on="on">
+        <v-btn small color="warning" fab dark v-on="on" class="mt-2">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Create new user</span>
+          <span class="headline">Create New Account</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-select
-                  v-model="newUser.userType"
-                  label="Full name *"
-                  required
-                  outlined
-                  :items="userTypes"
-                  prepend-inner-icon="mdi-account-question"
-                ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="newUser.fullname"
-                  label="Full name *"
-                  outlined
-                  hint="Ex: Mr. Mighty Joe"
-                  :rules="[v => !!v || 'Please enter user\'s full name']"
-                  prepend-inner-icon="mdi-account-settings"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="newUser.email"
-                  label="Email Address *"
-                  required
-                  hint="Primary login id"
-                  outlined
-                  :rules="[
-                    v => !!v || 'Please enter email',
-                    v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-                  ]"
-                  prepend-inner-icon="email"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*Both are required fields</small>
+          <v-row>
+            <v-col cols="4">
+              <v-select
+                color="green"
+                v-model="newUser.userType"
+                label="User Type"
+                required
+                outlined
+                :items="userTypes"
+                prepend-inner-icon="mdi-account-question"
+              ></v-select>
+            </v-col>
+            <v-col cols="8">
+              <v-text-field
+                color="green"
+                v-model="newUser.fullname"
+                label="Full Name"
+                outlined
+                hint="Ex: Mr. Mighty Joe"
+                :rules="[v => !!v || 'Please Enter User\'s Full Name']"
+                prepend-inner-icon="mdi-account-settings"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                color="green"
+                v-model="newUser.email"
+                label="Email ID"
+                required
+                hint="Also your primary Login ID"
+                outlined
+                :rules="[
+                  v => !!v || 'Please enter email',
+                  v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+                ]"
+                prepend-inner-icon="email"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+                  <v-text-field
+                    color="green"
+                    :rules="[v => !!v || 'Password is Required']"
+                    label="Password"
+                    type="password"
+                    value="user@2020"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                  <v-switch
+                    color="red darken-3"
+                    label="Approved"
+                    input-value="true"
+                    class="pl-2"
+                  ></v-switch>
+                </v-col>
+          </v-row>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="pr-5">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
-            >Reset</v-btn
+          <v-btn color="green darken-1" small dark @click="dialog = false"
+            >Close</v-btn
           >
-          <v-btn color="blue darken-1" text @click="addUser">Create</v-btn>
+          <v-btn color="green darken-1" small dark @click="addUser"
+            ><v-icon small class="pr-2">mdi-account-plus</v-icon>Create
+            Account</v-btn
+          >
         </v-card-actions>
 
         <!-- <pre>{{ newUser }}</pre> -->
@@ -113,8 +133,8 @@ export default {
             timer: 1500
           });
           this.dialog = false;
-          this.$emit('new-user');
-          console.log('emitting....')
+          this.$emit("new-user");
+          console.log("emitting....");
         })
         .catch(e => {});
     }
