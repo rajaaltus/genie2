@@ -13,11 +13,11 @@
       <v-tab-item>
         <v-card tile>
           <v-card-text>
-            <YearDialog v-if="$store.state.selectedYear == 0" />
+            <!-- <YearDialog v-if="$store.state.selectedYear == 0" /> -->
             <PageHeader
               :title="$metaInfo.title"
               :reportYears="reportYears"
-              :selectedYear="$store.state.selectedYear"
+              @set-year="setReportingYear"
               class="ml-0 pb-0 pt-0"
             />
             <v-row>
@@ -92,7 +92,7 @@ export default {
         id: 2020,
         val: "2020-2021"
       }
-    ]
+    ],
   }),
   computed: {
     ...mapState({
@@ -100,15 +100,19 @@ export default {
     })
   },
   async fetch({ store }) {
-    // await store.dispatch("setActivities");
+    await store.dispatch("setActivities");
     let qs = "";
     qs = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
     await store.dispatch("setStaffs", { qs: qs });
   },
+
   methods: {
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
-    }
+    },
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
   }
 };
 </script>

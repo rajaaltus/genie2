@@ -95,7 +95,7 @@ export default {
     })
   },
   async fetch() {
-    // await this.$store.dispatch('setActivities')
+    await this.$store.dispatch('setActivities')
   },
   methods: {
     async changeReportingYear() {
