@@ -115,7 +115,7 @@ export default {
     AddUser
   },
   data: () => ({
-    lloading: false,
+    loading: false,
     date: false,
     valid: true,
     recognition: {

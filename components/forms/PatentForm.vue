@@ -144,6 +144,8 @@ export default {
       user: 0,
       image: null
     },
+    selectedFile: null,
+    image_url: null,
     patentStatus: [
       { text: "Yes", value: 1 },
       { text: "No", value: 0 }

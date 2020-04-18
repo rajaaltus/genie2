@@ -143,6 +143,8 @@ export default {
       image: null,
       user: 0
     },
+    selectedFile: null,
+    image_url: null,
     classifications: ["International", "National", "NotApplicable", "Others"]
   }),
   methods: {
