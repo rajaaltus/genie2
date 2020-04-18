@@ -4,7 +4,7 @@ export const state = () => ({
 	strategy: "local",
 	user: false,
 	fullUser: {},
-	userProfile: {},
+	userProfile: [],
 	departments: {
 		success: false,
 		result: [],
@@ -216,7 +216,7 @@ export const actions = {
 			})
 			.finally(function () {
 			// always executed
-				console.log('finally');
+				// console.log('finally');
 			});
 	}
 };
