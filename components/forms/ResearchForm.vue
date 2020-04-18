@@ -1,116 +1,159 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col cols="12"
-        sm="12"
-        md="12"
-      >
-      </v-col>
-      <v-col cols="12" md="12">
+      <v-col cols="11" lg="11">
         <v-select
-          v-model="research.userProfileId"
-          :items="staffs"
+          v-model="research.user"
+          :items="dataFrom"
           item-value="id"
-          item-text="firstname"
-          filled
-          label="Data from (Select Faculty)"
+          item-text="fullname"
+          outlined
+          label="Data collected From?"
+          placeholder="Select Faculty / Staff from the List"
+          color="success"
+          :rules="[v => !!v || 'Item is required']"
         ></v-select>
+      </v-col>
+      <v-col cols="1" lg="1" sm="1">
+        <AddUser @new-user="getLatestUsers()" />
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field v-model="research.projectName"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Project Name / Title*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-model="research.investigatorType"
-                  :rules="[v => !!v || 'Item is required']"
-                  :items="investigatorTypes"
-                  label="Investigator Type*"
-                ></v-select>
-              </v-col>
-              <v-col cols="8">
-                <v-text-field
-                  v-model="research.investigatorName"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Name of the Investigator(s)*"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="research.projectTotalDuration"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Total Duration (in Months)"
-                  required
-                  type="number"
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-model="research.fundingSource"
-                  :rules="[v => !!v || 'Item is required']"
-                  :items="fundingSource"
-                  label="Source of Funding*"
-                ></v-select>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="research.fundingAgency"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Funding Agency*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="research.currentYearFunding"
-                  label="Total Fund (in Lakhs)*"
-                  required
-                  type="number"
-                >
-                </v-text-field>
-              </v-col>
-              
-              <v-col cols="4">
-                <v-text-field v-model="research.fundingForReviewPeriod"
-                  label="Funding during the Review Period / Year in lakhs *"
-                  required
-                  type="number"
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-model="research.researchStatus"
-                  :items="researchStatus"
-                  label="Research Status"
-                ></v-select>
-              </v-col>
-              <!-- <v-col cols="4">
-                <v-select
-                  v-model="research.studentProject"
-                  :items="studentProject"
-                  label="Student Project?"
-                ></v-select>
-              </v-col> -->
-              <v-col cols="12">
-                <v-textarea
-                  v-model="research.researchAbstract"
-                  counter
-                  label="Report / Abstract*"
-                  :value="value"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="research.faculty_name"
+                :rules="[v => !!v || 'Item is required']"
+                label="Faculty Name(s) *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="research.title"
+                :rules="[v => !!v || 'Item is required']"
+                label="Project Name / Title *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-select
+                v-model="research.investigator_type"
+                :rules="[v => !!v || 'Item is required']"
+                :items="investigatorTypes"
+                label="Investigator Type  *"
+              ></v-select>
+            </v-col>
+            <v-col cols="8">
+              <v-text-field
+                v-model="research.investigator_name"
+                :rules="[v => !!v || 'Item is required']"
+                label="Name of the Investigator(s) *"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="research.total_durations"
+                :rules="[v => !!v || 'Item is required']"
+                label="Total Duration (in Months) *"
+                required
+                type="number"
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="4">
+              <v-select
+                v-model="research.funding_source"
+                :rules="[v => !!v || 'Item is required']"
+                :items="fundingSource"
+                label="Source of Funding *"
+              ></v-select>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="research.funding_agency"
+                :rules="[v => !!v || 'Item is required']"
+                label="Funding Agency *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="research.total_funds"
+                :rules="[v => !!v || 'Item is required']"
+                label="Total Fund (in Lakhs) *"
+                required
+                type="number"
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="4">
+              <v-text-field
+                v-model="research.funding_on_review_period"
+                :rules="[v => !!v || 'Item is required']"
+                label="Funding during the Review Period / Year in lakhs *"
+                required
+                type="number"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-select
+                v-model="research.research_status"
+                :items="researchStatus"
+                :rules="[v => !!v || 'Item is required']"
+                label="Research Status *"
+              ></v-select>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                v-model="research.research_abstract"
+                :rules="[v => !!v || 'Item is required']"
+                counter
+                label="Report / Abstract *"
+                :value="value"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+          <span style="color:red; font-size:12px;">* Mandatory fields</span>
+          <v-row>
+            <v-col cols="12" lg="4">
+              <h3><span class="frm-title">Upload Images (If any)</span></h3>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-img
+                    :src="`${$axios.defaults.baseURL}${image_url}`"
+                    lazy-src="/image_placeholder.png"
+                    class="mt-3"
+                    max-width="100%"
+                    max-height="175"
+                  >
+                    <v-fade-transition>
+                      <v-overlay v-if="hover" absolute color="#00564c">
+                        <v-btn @click="$refs.image.click()">
+                          Upload Image
+                        </v-btn>
+                      </v-overlay>
+                    </v-fade-transition>
+                  </v-img>
+                </template>
+              </v-hover>
+              <input
+                ref="image"
+                type="file"
+                style="display:none;"
+                label="File input"
+                @change="handleFileUpload"
+              />
+            </v-col>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
@@ -119,7 +162,7 @@
       <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="programAdd" class="mr-4">
+      <v-btn medium color="#57a727" dark @click="researchAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -127,38 +170,104 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+import { mapState } from "vuex";
+import AddUser from "@/components/forms/AddUser";
 export default {
+  props: ["dataFrom"],
+  components: {
+    AddUser
+  },
   data: () => ({
-		lloading: false,
-		date: false,
-		valid: true,
-    research: 
-		{
-			annualYear: 0,
-			approvalStatus: "PENDING",
-			approvedBy: "",
-			approvedDate: "",
-			currentYearFunding: 0,
-			departmentId: 0,
-			fundingAgency: "",
-			fundingForReviewPeriod: 0,
-			fundingSource: "",
-			investigatorName: "",
-			investigatorType: "",
-			projectName: "",
-			projectTotalDuration: 0,
-			rejectedReason: "",
-			researchAbstract: "",
-			researchStatus: "",
-			status: "VALID",
-			studentProject: false,
-			userProfileId: 0
+    loading: false,
+    date: false,
+    valid: true,
+    research: {
+      annual_year: 0,
+      title: "",
+      investigator_type: "",
+      faculty_name: "",
+      investigator_name: "",
+      total_durations: 0,
+      funding_source: "",
+      funding_agency: "",
+      total_funds: 0,
+      funding_on_review_period: 0,
+      research_status: "",
+      research_abstract: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      image: null,
+      user: 0
+    },
+    fundingSource: ["Intramural", "Extramural", "Non_Funded"],
+    investigatorTypes: ["Principal_Investigator", "CoInvestigator"],
+    researchStatus: ["Completed", "Ongoing", "New"],
+    studentProject: [true, false],
+    selectedFile: null,
+    image_url: null
+  }),
+  methods: {
+    getLatestUsers() {
+      console.log("recieving....");
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+      this.$store.dispatch("setStaffs", { qs: queryString });
+      this.dataFrom = this.$store.state.staffs;
+    },
+    reset() {
+      this.$refs.form.reset();
+      this.image_url = null;
+    },
+    async researchAdd () {
+			if (this.$refs.form.validate()) {
+				this.research.annual_year = this.$store.state.selectedYear;
+				if (this.research.user == 0)
+					this.research.user = this.$store.state.auth.user;
+				if(this.$store.state.auth.user.userType==='DEPARTMENT') {
+					var today = new Date();
+          this.research.approved_date = this.$moment(today).format();
+          this.research.approval_status = 'Approved';
+				}	
+				this.research.department = this.$store.state.auth.user.department;
+				var payload = this.research;
+				// console.log(payload);
+				// var vm = this;
+			 this.$store.dispatch('research/researchAdd', payload)
+					.then(resp => {
+						Swal.fire({
+							
+							title: 'Success',
+							text: 'Added Successfully!',
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500
+						})
+						this.reset();
+						this.reloadData();
+					})
+					.catch(err => {
+						this.snackbar = true
+						this.submitMessage = err
+					});
+			}
 		},
-    fundingSource: ['INTRAMURAL', 'EXTRAMURAL', 'NON_FUNDED'],
-		investigatorTypes: ['PRICIPAL_INVESTIGATORS', 'CO_INVESTIGATORS'],
-		researchStatus: ['COMPLETED', 'ONGOING', "NEW"],
-		approvals: ['PENDING', "REJECTED", 'APPROVED'],
-		studentProject: [true, false],
-  })
-}
+    async handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData();
+      data.append("files", this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: "POST",
+        url: "/upload",
+        data
+      });
+      this.image_url = uploadRes.data[0].url;
+      this.research.image = uploadRes.data[0].id;
+    }
+  }
+};
 </script>

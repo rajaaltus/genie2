@@ -1,73 +1,95 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col cols="12"
-        sm="12"
-        md="12"
-      >
-      </v-col>
-      <v-col cols="12" md="12">
+      <v-col cols="11" lg="11">
         <v-select
-          v-model="recognition.userProfileId"
-          :items="staffs"
+          v-model="recognition.user"
+          :items="dataFrom"
           item-value="id"
-          item-text="firstname"
-          filled
-          label="Data from (Select Faculty)"
+          item-text="fullname"
+          outlined
+          label="Data collected From?"
+          placeholder="Select Faculty / Staff from the List"
+          color="success"
+          :rules="[v => !!v || 'Item is required']"
         ></v-select>
+      </v-col>
+      <v-col cols="1" lg="1" sm="1">
+        <AddUser @new-user="getLatestUsers()" />
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field v-model="recognition.awardTitle"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Award / Honour Title*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="recognition.organization"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Organization*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-            
-              <v-col cols="4">
-                <v-menu
-                  v-model="date"
-                  :close-on-content-click="true"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="recognition.date"
-                      :rules="[v => !!v || 'Item is required']"
-                      label="Date*"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker v-model="recognition.date" color="green lighten-1" @input="menu1 = false"></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="recognition.place"
-                  label="Place"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="recognition.faculty_name"
+                :rules="[v => !!v || 'Item is required']"
+                label="Faculty Name(s) *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="recognition.award_title"
+                :rules="[v => !!v || 'Item is required']"
+                label="Award / Honour Title *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="recognition.organization"
+                :rules="[v => !!v || 'Item is required']"
+                label="Organization *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="4">
+              <v-menu
+                ref="menu"
+                v-model="date"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="recognition.date"
+                    :return-value.sync="date"
+                    :rules="[v => !!v || 'Item is required']"
+                    readonly
+                    label="Date *"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="recognition.date" no-title scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text @click="date = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text @click="$refs.menu.save(date)">
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="recognition.place"
+                :rules="[v => !!v || 'Item is required']"
+                label="Place *"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <span style="color:red; font-size:12px;">* Mandatory fields</span>
         </v-form>
       </v-col>
     </v-row>
@@ -76,7 +98,7 @@
       <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="programAdd" class="mr-4">
+      <v-btn medium color="#57a727" dark @click="recognitionAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -84,27 +106,92 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+import { mapState } from "vuex";
+import AddUser from "@/components/forms/AddUser";
 export default {
+  props: ["dataFrom"],
+  components: {
+    AddUser
+  },
   data: () => ({
-		lloading: false,
-		date: false,
-		valid: true,
-    recognition: 
-		{
-			annualYear: 0,
-			approvalStatus: "PENDING",
-			approvedBy: "",
-			approvedDate: "",
-			awardTitle: "",
-			date: new Date().toISOString().substr(0, 10),
-			departmentId: 0,
-			organization: "",
-			place: "",
-			rejectedReason: "",
-			status: "VALID",
-			userProfileId: 0
-		},
-		approvals: ['PENDING', "REJECTED", 'APPROVED'],
-  })
-}
+    lloading: false,
+    date: false,
+    valid: true,
+    recognition: {
+      annual_year: 0,
+      award_title: "",
+      faculty_name: "",
+      organization: "",
+      date: "",
+      place: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      user: 0,
+      image_1: null,
+      image_2: null,
+      image_3: null
+    }
+  }),
+  methods: {
+    getLatestUsers() {
+      console.log("recieving....");
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+      this.$store.dispatch("setStaffs", { qs: queryString });
+      this.dataFrom = this.$store.state.staffs;
+    },
+    reset() {
+      this.$refs.form.reset();
+      this.image_url = null;
+    },
+    async recognitionAdd() {
+      if (this.$refs.form.validate()) {
+        this.recognition.annual_year = this.$store.state.selectedYear;
+        if (this.recognition.user == 0)
+          this.recognition.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.userType === "DEPARTMENT") {
+          var today = new Date();
+          this.recognition.approved_date = this.$moment(today).format();
+        }
+        this.recognition.department = this.$store.state.auth.user.department;
+        var payload = this.recognition;
+        // console.log(payload);
+        var vm = this;
+        this.$store
+          .dispatch("recognition/recognitionAdd", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Added Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.reset();
+          })
+          .catch(err => {
+            this.snackbar = true;
+            this.submitMessage = err;
+          });
+      }
+    },
+    async handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData();
+      data.append("files", this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: "POST",
+        url: "/upload",
+        data
+      });
+      this.image_url = uploadRes.data[0].url;
+      this.recognition.image = uploadRes.data[0].id;
+    }
+  }
+};
 </script>
