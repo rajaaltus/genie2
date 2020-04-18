@@ -1,102 +1,156 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col cols="12"
-        sm="12"
-        md="12"
-      >
-      </v-col>
-      <v-col cols="12" md="12">
+      <v-col cols="11" lg="11">
         <v-select
-          v-model="publicEngagement.userProfileId"
-          :items="staffs"
+          v-model="publicEngagement.user"
+          :items="dataFrom"
           item-value="id"
-          item-text="firstname"
-          filled
-          label="Data from (Select Faculty)"
+          item-text="fullname"
+          outlined
+          label="Data collected From?"
+          placeholder="Select Faculty / Staff from the List"
+          color="success"
+          :rules="[v => !!v || 'Item is required']"
         ></v-select>
+      </v-col>
+      <v-col cols="1" lg="1" sm="1">
+        <AddUser @new-user="getLatestUsers()" />
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-          <v-container>
-            <v-row>
-              <v-col cols="4">
-                <v-select
-                  v-model="publicEngagement.activityType"
-                  :rules="[v => !!v || 'Item is required']"
-                  :items="activityTypes"
-                  label="Type of Activity*"
-                ></v-select>
-              </v-col>
-              <v-col v-if="publicEngagement.activityType==='OTHERS'" cols="4">
-                <v-text-field v-model="publicEngagement.activityName"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Activity Name"
-                  required
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="publicEngagement.faculty_name"
+                :rules="[v => !!v || 'Item is required']"
+                label="Faculty Name(s) *"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-select
+                v-model="publicEngagement.type"
+                :rules="[v => !!v || 'Item is required']"
+                :items="activityTypes"
+                label="Type of Activity *"
+              ></v-select>
+            </v-col>
+            <v-col v-if="publicEngagement.type === 'Others'" cols="6">
+              <v-text-field
+                v-model="publicEngagement.program_name"
+                :rules="[v => !!v || 'Item is required']"
+                label="Activity Name *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field
+                v-model="publicEngagement.title"
+                :rules="[v => !!v || 'Item is required']"
+                label="Title *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="publicEngagement.program_name"
+                v-if="publicEngagement.type!=='Others'"
+                :rules="[v => !!v || 'Item is required']"
+                label="Program Name *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="publicEngagement.target_audience"
+                :rules="[v => !!v || 'Item is required']"
+                label="Target Audience *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-menu
+                ref="menu"
+                v-model="date"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="publicEngagement.date"
+                    :return-value.sync="date"
+                    :rules="[v => !!v || 'Item is required']"
+                    readonly
+                    label="Date *"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="publicEngagement.date"
+                  no-title
+                  scrollable
                 >
-                </v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model="publicEngagement.facultyName"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Faculty Name"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field v-model="publicEngagement.title"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Title"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="publicEngagement.programName"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Program Name"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="publicEngagement.targetAudience"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Target Audience"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-menu
-                  v-model="date"
-                  :close-on-content-click="true"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="publicEngagement.date"
-                      label="Date"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker v-model="publicEngagement.date" color="green lighten-1" @input="menu1 = false"></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field v-model="publicEngagement.place"
-                  label="Place"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
+                  <v-spacer></v-spacer>
+                  <v-btn text @click="date = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text @click="$refs.menu.save(date)">
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="publicEngagement.place"
+                :rules="[v => !!v || 'Item is required']"
+                label="Place *"
+                required
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <span style="color:red; font-size:12px;">* Mandatory fields</span>
+          <v-row>
+            <v-col cols="12" lg="4">
+              <h3><span class="frm-title">Upload Images (If any)</span></h3>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-img
+                    :src="`${$axios.defaults.baseURL}${image_url}`"
+                    lazy-src="/image_placeholder.png"
+                    class="mt-3"
+                    max-width="100%"
+                    max-height="175"
+                  >
+                    <v-fade-transition>
+                      <v-overlay v-if="hover" absolute color="#00564c">
+                        <v-btn @click="$refs.image.click()">
+                          Upload Image
+                        </v-btn>
+                      </v-overlay>
+                    </v-fade-transition>
+                  </v-img>
+                </template>
+              </v-hover>
+              <input
+                ref="image"
+                type="file"
+                style="display:none;"
+                label="File input"
+                @change="handleFileUpload"
+              />
+            </v-col>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
@@ -105,7 +159,7 @@
       <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="programAdd" class="mr-4">
+      <v-btn medium color="#57a727" dark @click="publicAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -113,32 +167,95 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+import { mapState } from "vuex";
+import AddUser from "@/components/forms/AddUser";
 export default {
+  props: ["dataFrom"],
+  components: {
+    AddUser
+  },
   data: () => ({
-		lloading: false,
-		date: false,
-		valid: true,
-    publicEngagement: 
-		{
-			activityName: "",
-			activityType: "",
-			annualYear: 0,
-			approvalStatus: "PENDING",
-			approvedBy: "",
-			approvedDate: "",
-			date: "",
-			departmentId: 0,
-			facultyName: "",
-			place: "",
-			programName: "",
-			rejectedReason: "",
-			status: "VALID",
-			targetAudience: "",
-			title: "",
-			userProfileId: 0
+    dataFrom: [],
+    loading: false,
+    date: false,
+    valid: true,
+    publicEngagement: {
+      annual_year: 0,
+      type: "",
+      faculty_name: "",
+      title: "",
+      program_name: "",
+      target_audience: "",
+      date: "",
+      place: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      image: null,
+      user: 0
+    },
+    activityTypes: ["Public_Lecture", "Mass_Media", "Others"],
+    selectedFile: null,
+    image_url: null
+  }),
+  methods: {
+    getLatestUsers() {
+      console.log("recieving....");
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+      this.$store.dispatch("setStaffs", { qs: queryString });
+      this.dataFrom = this.$store.state.staffs;
+    },
+    reset() {
+      this.$refs.form.reset();
+      this.image_url = null;
+    },
+    async publicAdd () {
+			if (this.$refs.form.validate()) {
+				this.publicEngagement.annual_year = this.$store.state.selectedYear;
+				if (this.publicEngagement.user == 0)
+					this.publicEngagement.user = this.$store.state.auth.user.id;
+				this.publicEngagement.department = this.$store.state.auth.user.department;
+				if(this.$store.state.auth.user.userType==='DEPARTMENT') {
+          var today = new Date();
+          this.publicEngagement.approval_status = 'Approved';
+					this.publicEngagement.approved_date = this.$moment(today).format();
+				}
+				var payload = this.publicEngagement;
+				// console.log(payload);
+			 this.$store.dispatch('public/publicAdd', payload)
+					.then(resp => {
+						Swal.fire({
+							
+							title: 'Success',
+							text: 'Added Successfully!',
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500
+						})
+						this.reset();
+					})
+					.catch(err => {
+						Swal.fire('Something Wrong!');
+					});
+			}
 		},
-    approvals: ['PENDING', "REJECTED", 'APPROVED'],
-    activityTypes: ['PUBLIC_LECTURE', 'MASS_MEDIA', 'OTHERS'],
-  })
-}
+    async handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData();
+      data.append("files", this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: "POST",
+        url: "/upload",
+        data
+      });
+      this.image_url = uploadRes.data[0].url;
+      this.publicEngagement.image = uploadRes.data[0].id;
+    }
+  }
+};
 </script>

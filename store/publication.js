@@ -7,8 +7,7 @@ export const state = () => ({
 		error: {},
 	},
 	publicationTypes: {},
-	journalArticle: [],
-	publicationsCount: 0
+	journalArticle: []
 });
 
 export const getters =  {
@@ -28,7 +27,7 @@ export const mutations = {
 			state.publicationsData.result = publicationsData;
 			state.publicationsData.error = {};
 		} else {
-			console.log('error'+publicationsData);
+			// console.log('error'+publicationsData);
 			state.publicationsData.success = false;
 			state.publicationsData.error = {
 				message: {
@@ -37,11 +36,50 @@ export const mutations = {
 			};
 		}
 	},
-	SET_PUBLICATIONS_COUNT (state, publicationsCount) {
-		state.publicationsCount = publicationsCount;
-	},
 	SET_PUBLICATIONTYPES (state, publicationTypes) {
-		state.publicationTypes = publicationTypes;
+		state.publicationTypes = [
+			{
+				id: 1,
+				value: 'Journal_Article',
+				text: "Journal Article"
+			},
+			{
+				id: 2,
+				value: 'Articles_for_Professionals',
+				text: 'Articles for Professionals in Souvenirs Newsletters etc'
+			},
+			{
+				id: 3,
+				value: 'Book',
+				text: 'Book'
+			},
+			{
+				id: 4,
+				value: 'Book_Chapter',
+				text: 'Book Chapter'
+			},
+			{
+				id: 5,
+				value: 'Monograph',
+				text: 'Monograph'
+			},
+			{
+				id: 6,
+				value: 'Manual',
+				text: 'Manual'
+			},
+			{
+				id: 7,
+				value: 'Report',
+				text: 'Report'
+				
+			},
+			{
+				id: 8,
+				value: 'Article_for_General_public',
+				text: 'Article for General public or IEC Materials'
+			}
+		];
 	},
 	SET_JOURNALARTICLE (state, journalArticle) {
 		state.journalArticle = journalArticle;
@@ -66,35 +104,22 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_JOURNALARTICLE", error);
+				// commit("SET_JOURNALARTICLE", error);
 			})
 			.finally(function () {
 			// always executed
 			});
 	},
-	async countPublications ({commit}, {qs}) {
-		await this.$axios.$get(`/publications/count?${qs}`)
-		 .then(response =>  {
-		 // handle success
-			 commit("SET_PUBLICATIONS_COUNT", response);
-		 })
-		 .catch((e) => {
-		 // handle error
-			 commit("SET_PUBLICATIONS_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
-		 });
- },
+
 	async setPublicationsData ({commit}, {qs}) {
-		 await this.$axios.$get(`/publications?${qs}`)
+		await this.$axios.$get(`/publications?${qs}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_PUBLICATIONSDATA", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICATIONSDATA", error);
+				// commit("SET_PUBLICATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -110,7 +135,8 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICATIONSDATA", error);
+				// commit("SET_PUBLICATIONSDATA", error);
+				console.log(e);
 			})
 			.finally(function () {
 			// always executed
@@ -118,14 +144,14 @@ export const actions = {
 		
 	},
 	async updatePublication ({commit}, payload) {
-		await this.$axios.$put('/publications', payload)
+		await this.$axios.$put(`/publications/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PUBLICATIONSDATA", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICATIONSDATA", error);
+				// commit("SET_PUBLICATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -140,7 +166,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICATIONSDATA", error);
+				// commit("SET_PUBLICATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -149,18 +175,7 @@ export const actions = {
 	},
 
 	async setPublicationTypes ({commit}, publicationTypes) {
-		await this.$axios.$get('/publication-types', publicationTypes)
-			.then(response =>  {
-			// handle success
-				commit("SET_PUBLICATIONTYPES", response);
-			})
-			.catch((e) => {
-			// handle error
-				commit("SET_PUBLICATIONTYPES", error);
-			})
-			.finally(function () {
-			// always executed
-			});
+		commit('SET_PUBLICATIONTYPES', publicationTypes);
 	}
 };
 

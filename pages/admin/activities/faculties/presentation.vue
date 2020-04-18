@@ -27,7 +27,7 @@
                 </v-card>
               </v-col>
               <v-col cols="12" md="9" lg="9">
-                <PresentationForm />
+                <PresentationForm :dataFrom="staffs" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import PageHeader from "@/components/PageHeader";
 import FacultyActivities from "@/components/FacultyActivities";
 import YearDialog from "@/components/YearDialog";
@@ -81,17 +82,25 @@ export default {
     ],
     selectedYear: 0
   }),
-  async fetch({ store }) {
-    // await store.dispatch("setActivities");
-    // if (store.state.user.fullUser) {
-    //   let userId = store.state.auth.user.id;
-    //   await store.dispatch("user/setFullUser", { id: userId });
-    // }
+  computed: {
+    ...mapState({
+      staffs: state => state.staffs
+    })
   },
+  async fetch({ store }) {
+    await store.dispatch("setActivities");
+    let qs = "";
+    qs = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+    await store.dispatch("setStaffs", { qs: qs });
+  },
+
   methods: {
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
-    }
+    },
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
   }
 };
 </script>

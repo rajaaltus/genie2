@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <YearDialog @set-year="setYear" />
     <v-row>
       <v-col cols="12" md="9" sm="4" lg="9" class="mt-2 pb-0 px-0">
         <span class="theme-border"
@@ -12,11 +13,13 @@
           filled
           color="green"
           v-model="selectedYear"
+          :value="selectedYear"
           :items="reportYears"
           item-text="val"
           item-value="id"
           label="Reporting Year"
           required
+          
           @input="changeReportingYear"
         ></v-select>
       </v-col>
@@ -26,14 +29,33 @@
 
 <script>
 import { mapState } from "vuex";
+import YearDialog from '@/components/YearDialog'
+import Swal from 'sweetalert2'
 export default {
   props: ["title", "reportYears"],
+  components: {
+    YearDialog
+  },
+  data () {
+    return {
+      selectedYear: 0
+    }
+  },
   computed: {
     ...mapState(["selectedYear"])
   },
+  mounted () {
+    this.selectedYear = this.$store.state.selectedYear
+  },
   methods: {
-    async changeReportingYear() {
-      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    changeReportingYear() {
+      console.log(this.selectedYear)
+      this.$store.dispatch("setReportingYear", this.selectedYear);
+      console.log('From store: '+ this.$store.state.selectedYear)
+    },
+    setYear() {
+      console.log('receiving....')
+      this.selectedYear = this.$store.state.selectedYear
     }
   }
 };

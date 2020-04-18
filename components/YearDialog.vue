@@ -69,12 +69,15 @@ export default {
 		},
 	},
 	mounted () {
-		this.Ydialog = true;
+		if(this.$store.state.selectedYear == 0)
+			this.Ydialog = true;
 	},
   methods: {
     async setReportingYear () {
 			this.Ydialog = false;
 			await this.$store.dispatch('setReportingYear', this.selectedYear)
+			this.$emit('set-year')
+			console.log('emitting....')
 		},
   }
 }

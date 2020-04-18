@@ -327,12 +327,13 @@ export default {
           })
           .catch(err => {
             Swal.fire({
-              title: "Something Wrong!",
-              text: err,
-              icon: "warning",
-              showConfirmButton: false,
-              timer: 4500
-            });
+							title: 'Oops!',
+							text: 'Something Wrong',
+							icon: 'error',
+							showConfirmButton: false,
+							timer: 3000,
+							timerProgressBar: true,
+						})
           });
       }
     },

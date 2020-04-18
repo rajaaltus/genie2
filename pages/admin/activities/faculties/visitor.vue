@@ -94,13 +94,20 @@ export default {
       staffs: state => state.staffs
     })
   },
-  async fetch() {
-    // await this.$store.dispatch('setActivities')
+  async fetch({ store }) {
+    await store.dispatch("setActivities");
+    let qs = "";
+    qs = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
+    await store.dispatch("setStaffs", { qs: qs });
   },
+
   methods: {
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
-    }
+    },
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
   }
 };
 </script>

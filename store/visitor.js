@@ -1,4 +1,4 @@
-
+import Swal from 'sweetalert2';
 export const state = () => ({
 	// programmesData: []
 	visitorsData: {
@@ -6,7 +6,8 @@ export const state = () => ({
 		result: [],
 		error: {},
 	},
-	visitorsCount: 0
+	visitorsCount: 0,
+	visitorError: {}
 });
 
 export const getters =  {
@@ -34,6 +35,9 @@ export const mutations = {
 	},
 	SET_VISITORS_COUNT (state, visitorsCount) {
 		state.visitorsCount = visitorsCount;
+	},
+	SET_ERROR (state, visitorError) {
+		state.visitorError = visitorError;
 	}
 };
 
@@ -48,7 +52,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				console.log(error);
-				commit("SET_VISITORSDATA", error);
+				// commit("SET_VISITORSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -63,7 +67,7 @@ export const actions = {
 		 })
 		 .catch((e) => {
 		 // handle error
-			 commit("SET_VISITORS_COUNT", error);
+			//  commit("SET_VISITORS_COUNT", error);
 		 })
 		 .finally(function () {
 		 // always executed
@@ -77,9 +81,7 @@ export const actions = {
 				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				console.log(error);
-				commit("SET_VISITORSDATA", error);
+				commit("SET_ERROR", response);
 			})
 			.finally(function () {
 			// always executed
@@ -97,7 +99,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				// console.log(error);
-				commit("SET_VISITORSDATA", error);
+				// commit("SET_VISITORSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -115,7 +117,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				console.log(error);
-				commit("SET_VISITORSDATA", error);
+				// commit("SET_VISITORSDATA", error);
 			})
 			.finally(function () {
 			// always executed
