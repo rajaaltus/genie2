@@ -41,7 +41,7 @@
               @new-qualification="updateQualification"
             />
 
-            <Experience />
+            <Experience :experience="experience" @new-experience="updateExperience" />
 
             <Expansion />
           </v-tab-item>
@@ -95,13 +95,15 @@ export default {
   computed: {
     ...mapState({
       profile: state => state.user.userProfile,
-      qualifications: state => state.profile.educationData.result
+      qualifications: state => state.profile.educationData.result,
+      experience: state => state.profile.experienceData.result,
     })
   },
   async fetch({ store }) {
     let id = store.state.auth.user.id;
     await store.dispatch("user/setUserProfile", { id: id });
     await store.dispatch("profile/setEducationData", { id: id });
+    await store.dispatch("profile/setExperienceData", {id: id})
   },
   methods: {
     async updateQualification() {
@@ -109,6 +111,10 @@ export default {
       let id = this.$store.state.auth.user.id;
       await this.$store.dispatch("profile/setEducationData", { id: id });
       this.loading = false;
+    },
+    async updateExperience() {
+      let id = this.$store.state.auth.user.id;
+      await this.$store.dispatch("profile/setExperienceData", { id: id });
     }
   }
 };

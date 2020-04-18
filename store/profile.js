@@ -10,6 +10,11 @@ export const state = () => ({
 		success: false,
 		result: [],
 		error: {},
+	},
+	experienceData: {
+		success: false,
+		result: [],
+		error: {},
 	}
 });
 
@@ -30,6 +35,20 @@ export const mutations = {
 			console.log('error'+educationData);
 			state.educationData.success = false;
 			state.educationData.error = {
+				message: {
+					message: 'Error occured!'
+				}
+			};
+		}
+	},
+	SET_EXPERIENCE_DATA (state, experienceData) {
+		if (experienceData && Array.isArray(experienceData)) {
+			state.experienceData.success = true;
+			state.experienceData.result = experienceData;
+			state.experienceData.error = {};
+		} else {
+			state.experienceData.success = false;
+			state.experienceData.error = {
 				message: {
 					message: 'Error occured!'
 				}
@@ -70,6 +89,21 @@ export const actions = {
 			});
 		  
 	},
+	async setExperienceData ({commit}, {id}) {
+		await this.$axios.$get(`/experience-infos?user.id=${id}`)
+			.then(response =>  {
+				// handle success
+				commit("SET_EXPERIENCE_DATA", response);
+			})
+			.catch((e) => {
+				// handle error
+				// commit("SET_EDUCATION_DATA", error);
+			})
+			.finally(function () {
+				// always executed
+			});
+		  
+	},
 	async setExpertiseData ({commit}, {id}) {
 		await this.$axios.$get(`/expertise-infos?user.id=${id}`)
 			.then(response =>  {
@@ -93,6 +127,21 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				// commit("SET_EDUCATION_DATA", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+		
+	},
+	async addExperience ({commit}, payload) {
+		await this.$axios.$post('/experience-infos', payload)
+			.then(response =>  {
+			// handle success
+				commit("SET_EXPERIENCE_DATA", response);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_EXPERIENCE_DATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -128,6 +177,20 @@ export const actions = {
 			// always executed
 			});
 	},
+	async updateExperience ({commit}, payload) {
+		await this.$axios.$put(`/experience-infos/${payload.id}`, payload)
+			.then(response =>  {
+			// handle success
+				commit("SET_EXPERIENCE_DATA", response);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_EXPERTISE_DATA", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
 	async updateEducation ({commit}, payload) {
 		await this.$axios.$put(`/education-infos/${payload.id}`, payload)
 			.then(response =>  {
@@ -150,7 +213,21 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_EDUCATION_DATA", error);
+				// commit("SET_EDUCATION_DATA", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
+	async deleteExperience ({commit}, {id}) {
+		await this.$axios.$delete(`/experience-infos/${id}`)
+			.then(response =>  {
+			// handle success
+				commit("SET_EXPERIENCE_DATA", response);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_EDUCATION_DATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -164,7 +241,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_EXPERTISE_DATA", error);
+				// commit("SET_EXPERTISE_DATA", error);
 			})
 			.finally(function () {
 			// always executed

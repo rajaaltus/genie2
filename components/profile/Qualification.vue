@@ -1,14 +1,9 @@
 <template>
   <div>
     <v-dialog v-model="dialog" persistent max-width="50%">
-      <template v-slot:activator="{ on }">
-        <v-btn small color="warning" fab dark v-on="on" class="mt-2">
-          <v-icon>mdi-account-plus</v-icon>
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Create New Account</span>
+          <span class="headline">Edit Qualification</span>
         </v-card-title>
         <v-card-text>
           <v-row>
@@ -119,9 +114,8 @@
             >Close</v-btn
           >
           <v-btn color="green darken-1" small dark @click="save"
-            ><v-icon small class="pr-2">mdi-account-plus</v-icon>Create
-            Account</v-btn
-          >
+            ><v-icon small class="pr-2">mdi-check</v-icon>Edit
+          </v-btn>
         </v-card-actions>
 
         <!-- <pre>{{ editedItem }}</pre> -->
@@ -260,14 +254,14 @@
           </v-btn>
           <v-btn
             v-if="edit"
-            @click="deleteQ(item)"
+            @click="deleteItem(item)"
             class="ma-2"
             outlined
             x-small
             fab
             color="indigo"
           >
-            <v-icon>mdi-delete</v-icon>
+            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-subtitle class="body-2 font-weight-bold px-0"
@@ -289,16 +283,16 @@
               color="blue darken-2"
               dark
               fab
-              small
+              x-small
               @click="edit = false"
             >
               <v-icon>{{ edit ? "mdi-close" : "mdi-pencil" }}</v-icon>
             </v-btn>
           </template>
-          <v-btn fab dark small color="green" @click="activateForm">
+          <v-btn fab dark x-small color="green" @click="activateForm">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
-          <v-btn fab dark small color="indigo" @click="activateEdit">
+          <v-btn fab dark x-small color="indigo" @click="activateEdit">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </v-speed-dial>
@@ -378,6 +372,22 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
+    deleteItem(item) {
+      this.$store.dispatch('profile/deleteEducation', {id: item.id})
+      .then(resp => {
+          Swal.fire({
+            title: "Deleted",
+            text: "removed successfully!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.$emit("new-qualification");
+        })
+        .catch(e => {
+          Swal.fire("something Wrong!");
+        });
+    },
     save() {
       var payload = this.editedItem;
       this.$store
@@ -392,9 +402,9 @@ export default {
           });
           this.$emit("new-qualification");
         })
-        .catch((e) => {
-          Swal.fire('something Wrong!')
-			})
+        .catch(e => {
+          Swal.fire("something Wrong!");
+        });
     }
   }
 };
