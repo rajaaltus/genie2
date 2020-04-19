@@ -4,7 +4,7 @@ export const state = () => ({
 	strategy: "local",
 	user: false,
 	fullUser: {},
-	userProfile: {},
+	userProfile: [],
 	departments: {
 		success: false,
 		result: [],
@@ -115,6 +115,21 @@ export const actions = {
 			// always executed
 			});
 	},
+	async updateUser ({commit}, payload) {
+		await this.$axios.$put(`/users/${payload.id}`, payload)
+		.then(response =>  {
+			// handle success
+				return true;
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_USERPROFILE", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
+
 	async addProfile ({commit}, payload) {
 		await this.$axios.$post('/user-profiles', payload)
 			.then(response =>  {
@@ -208,7 +223,7 @@ export const actions = {
 		await this.$axios.$get(`/user-profiles?user.id=${id}`)
 			.then(response =>  {
 			// handle success
-				commit("SET_USERPROFILE", response);
+				commit("SET_USERPROFILE", response[0]);
 			})
 			.catch((e) => {
 			// handle error
@@ -216,7 +231,7 @@ export const actions = {
 			})
 			.finally(function () {
 			// always executed
-				console.log('finally');
+				// console.log('finally');
 			});
 	}
 };

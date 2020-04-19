@@ -23,7 +23,6 @@ export const mutations = {
 			state.recognitionsData.result = recognitionsData;
 			state.recognitionsData.error = {};
 		} else {
-			console.log('error'+recognitionsData);
 			state.recognitionsData.success = false;
 			state.recognitionsData.error = {
 				message: {
@@ -46,7 +45,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_RECOGNITIONSDATA", error);
+				// commit("SET_RECOGNITIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -60,7 +59,7 @@ export const actions = {
 		 })
 		 .catch((e) => {
 		 // handle error
-			 commit("SET_RECOGNITIONS_COUNT", error);
+			//  commit("SET_RECOGNITIONS_COUNT", error);
 		 })
 		 .finally(function () {
 		 // always executed
@@ -74,7 +73,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_RECOGNITIONSDATA", error);
+				// commit("SET_RECOGNITIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -89,7 +88,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_RECOGNITIONSDATA", error);
+				// commit("SET_RECOGNITIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -105,7 +104,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				console.log(error);
-				commit("SET_RECOGNITIONSDATA", error);
+				// commit("SET_RECOGNITIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
