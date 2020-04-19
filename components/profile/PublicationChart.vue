@@ -81,32 +81,76 @@
         <span>Articles for General Public / IEC Materials</span>
       </v-tooltip>
     </v-alert>
+    <pre>{{ publicationsData }}</pre>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       options: {
-      chart: {
-        id: "vuechart-example"
+        chart: {
+          id: "vuechart-example"
+        },
+        theme: {
+          palette: "palette5"
+        },
+        xaxis: {
+          categories: [
+            "Journal Article",
+            "Articles for Professionals in Souvenirs Newsletters etc",
+            "Book",
+            "Book Chapter",
+            "Monograph",
+            "Manual",
+            "Report",
+            "Article for General public or IEC Materials"
+          ]
+        }
       },
-      theme: {
-        palette: "palette5"
-      },
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+      series: [
+        {
+          name: "",
+          data: []
+        }
+      ],
+      categories: [
+        "Journal_Article",
+        "Articles_for_Professionals",
+        "Book",
+        "Book_Chapter",
+        "Monograph",
+        "Manual",
+        "Report",
+        "Article_for_General_public"
+      ]
+    };
+  },
+  computed: {
+    ...mapState({
+      publicationsData: state => state.publication.publicationsCount
+    })
+  },
+  
+  mounted() {
+    this.setPublicationData();
+  },
+  methods: {
+    setPublicationData() {
+      this.series[0].name = "Publications";
+      var newData = []
+      for (var index = 0; index < 8; index++) {
+        let queryString = "";
+        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$store.state.auth.user.id}&deleted_ne=true&publication_type=${this.categories[index]}`;
+        let count = 0
+        this.$store.dispatch("publication/countPublications", { qs: queryString })
+        newData.push(count)
       }
-    },
-    series: [
-      {
-        name: "Publications",
-        data: [60, 10, 35, 50, 12, 60, 70, 91]
-      }
-    ],
-    donutSeries: [20, 20, 20, 20, 20]
+      this.series[0].data = newData;
+      console.log(newData.toString())
     }
   }
-}
+};
 </script>
