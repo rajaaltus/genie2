@@ -4,9 +4,9 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="headline"
-            >{{profile[0].name}}</v-list-item-title
+            >{{profile.name}}</v-list-item-title
           >
-          <v-list-item-subtitle>{{profile[0].designation}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{profile.designation}}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -15,9 +15,9 @@
 
       <v-card-text>
         <v-icon small color="red" class="mdi mdi-email-outline mr-3"></v-icon>
-        <span class="body-2">{{profile[0].personal_email}}</span><br />
+        <span class="body-2">{{profile.personal_email}}</span><br />
         <v-icon small color="blue" class="mdi mdi-phone mr-3"></v-icon>
-        <span class="body-2">{{profile[0].contact_no}}</span>
+        <span class="body-2">{{profile.contact_no}}</span>
       </v-card-text>
 
       <v-card-actions>
@@ -41,10 +41,9 @@ export default {
     }
   },
   
-  async mounted() {
+  mounted() {
     if (this.profile.image!==null)
-      this.image_url = this.profile[0].image.url
-    
+      this.image_url = this.profile.image.url
   }
 }
 </script>

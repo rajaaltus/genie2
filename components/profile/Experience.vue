@@ -155,7 +155,7 @@
         <v-row>
           <v-col cols="12" lg="6">
             <v-text-field
-              v-model="experience.deignation"
+              v-model="experience.designation"
               :rules="[v => !!v || 'Please type Designation']"
               label="Designation *"
               required
@@ -269,7 +269,7 @@
         </v-btn>
       </v-form>
       <v-timeline dense>
-        <v-timeline-item small v-for="(item, index) in experience" :key="index">
+        <v-timeline-item small v-for="(item, index) in experiences" :key="index">
           <template>
             <span class="font-weight-bold"
               >{{ $moment(item.duration_from).format("YYYY") }} -
@@ -322,7 +322,7 @@
               dark
               fab
               x-small
-              @click="edit = false"
+              @click="closeEdit"
             >
               <v-icon>{{ edit ? "mdi-close" : "mdi-pencil" }}</v-icon>
             </v-btn>
@@ -342,7 +342,7 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  props: ["experience"],
+  props: ["experiences"],
   data() {
     return {
       dialog: false,
@@ -377,7 +377,7 @@ export default {
     },
     activateForm() {
       this.form = true;
-      // this.edit = false;
+      this.edit = true;
     },
     activateEdit() {
       this.form = false;
@@ -406,7 +406,9 @@ export default {
             this.reset();
             this.form=false;
           })
-          .catch(Swal.fire("something wrong"));
+          .catch(e => {
+          Swal.fire("something Wrong!");
+        });
       }
     },
     editExperience(item) {
@@ -433,7 +435,7 @@ export default {
     save() {
       var payload = this.editedItem;
       this.$store
-        .dispatch("profile/updateEducation", payload)
+        .dispatch("profile/updateExperience", payload)
         .then(resp => {
           Swal.fire({
             title: "Added",
@@ -443,6 +445,7 @@ export default {
             timer: 1500
           });
           this.$emit("new-experience");
+          this.dialog = false;
         })
         .catch(e => {
           Swal.fire("something Wrong!");

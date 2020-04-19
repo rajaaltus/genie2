@@ -242,7 +242,7 @@
           >{{ $moment(item.duration_from).format("YYYY") }} -
           {{ $moment(item.duration_to).format("YY") }}
           <v-btn
-            v-if="edit"
+            v-if="qEdit"
             @click="editQualification(item)"
             class="ma-2"
             outlined
@@ -253,7 +253,7 @@
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
           <v-btn
-            v-if="edit"
+            v-if="qEdit"
             @click="deleteItem(item)"
             class="ma-2"
             outlined
@@ -284,9 +284,9 @@
               dark
               fab
               x-small
-              @click="edit = false"
+              @click="closeEdit"
             >
-              <v-icon>{{ edit ? "mdi-close" : "mdi-pencil" }}</v-icon>
+              <v-icon>{{ qEdit ? "mdi-close" : "mdi-pencil" }}</v-icon>
             </v-btn>
           </template>
           <v-btn fab dark x-small color="green" @click="activateForm">
@@ -311,7 +311,7 @@ export default {
       dialog: false,
       editedFrom: false,
       editedTo: false,
-      edit: false,
+      qEdit: false,
       form: false,
       to: false,
       qualification: {
@@ -338,15 +338,15 @@ export default {
     },
     activateForm() {
       this.form = true;
-      // this.edit = false;
+      this.qEdit = true;
     },
     activateEdit() {
       this.form = false;
-      this.edit = true;
+      this.qEdit = true;
     },
     closeEdit() {
       this.form = false;
-      this.edit = false;
+      this.qEdit = false;
     },
     async addQualification() {
       if (this.$refs.form.validate()) {
@@ -364,8 +364,12 @@ export default {
               timer: 1500
             });
             this.$emit("new-qualification");
+            this.reset();
+            this.form=false;
           })
-          .catch(Swal.fire("something wrong"));
+          .catch(e => {
+          Swal.fire("something Wrong!");
+        });
       }
     },
     editQualification(item) {
