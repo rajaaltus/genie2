@@ -7,7 +7,9 @@ export const state = () => ({
 		error: {},
 	},
 	publicationTypes: {},
-	journalArticle: []
+	journalArticle: [],
+	publicationsCount: null,
+	stats: [],
 });
 
 export const getters =  {
@@ -16,11 +18,14 @@ export const getters =  {
 	},
 	publicationTypes (state) {
 		return state.publicationTypes;
-	}
+	},
+	
 };
 
 export const mutations = {
-	
+	SET_STATS (state, response) {
+		state.stats.push(response);
+	},
 	SET_PUBLICATIONSDATA (state, publicationsData) {
 		if (publicationsData && Array.isArray(publicationsData)) {
 			state.publicationsData.success = true;
@@ -35,6 +40,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_PUBLICATIONS_COUNT (state, publicationsCount) {
+		state.publicationsCount = publicationsCount;
 	},
 	SET_PUBLICATIONTYPES (state, publicationTypes) {
 		state.publicationTypes = [
@@ -83,10 +91,32 @@ export const mutations = {
 	},
 	SET_JOURNALARTICLE (state, journalArticle) {
 		state.journalArticle = journalArticle;
+	},
+	RESET_STATS(state, response) {
+		state.stats = response;
+		console.log('resetted:' +state.stats);
 	}
+
 };
 
 export const actions = {
+	resetStats({commit}) {
+		var response = [];
+		commit('RESET_STATS', response);
+	},
+	async setStats({commit}, {qs}) {
+		await this.$axios.$get(`/publications/count?${qs}`)
+		.then(response =>  {
+				commit("SET_STATS", response);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_JOURNALARTICLE", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
 	async setJournalArticle ({commit}, {id}) {
 		// await this.$axios({
 		// 	method: 'get',
@@ -110,7 +140,20 @@ export const actions = {
 			// always executed
 			});
 	},
-
+	async countPublications ({commit}, {qs}) {
+		await this.$axios.$get(`/publications/count?${qs}`)
+		 .then(response =>  {
+		 // handle success
+			 commit("SET_PUBLICATIONS_COUNT", response);
+		 })
+		 .catch((e) => {
+		 // handle error
+			//  commit("SET_PROGRAMMES_COUNT", error);
+		 })
+		 .finally(function () {
+		 // always executed
+		 });
+ },
 	async setPublicationsData ({commit}, {qs}) {
 		await this.$axios.$get(`/publications?${qs}`)
 			.then(response =>  {

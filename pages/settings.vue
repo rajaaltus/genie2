@@ -16,59 +16,93 @@
       </v-tab>
 
       <v-tab-item>
-        <v-card flat>
+        <div style="height: 400px;" v-if="loading" intermediate>
+          <v-row class="fill-height" align-content="center" justify="center">
+            <v-progress-circular
+              indeterminate
+              color="green"
+            ></v-progress-circular>
+          </v-row>
+        </div>
+        <v-card v-else>
+          <v-card-title>
+            <span class="headline">Create New Account</span>
+          </v-card-title>
           <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <h2>Personal Details</h2>
+            <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
               <v-row>
-                <v-col cols="6">
-                  <v-text-field
+                <v-col cols="4">
+                  <v-select
                     color="green"
-                    label="Full Name"
-                    :rules="[v => !!v || 'Full Name is Required']"
-                  ></v-text-field>
+                    v-model="newUser.userType"
+                    label="User Type"
+                    required
+                    outlined
+                    :items="userTypes"
+                    prepend-inner-icon="mdi-account-question"
+                  ></v-select>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="8">
                   <v-text-field
                     color="green"
-                    label="Designation"
-                    :rules="[v => !!v || 'Designation is Required']"
+                    v-model="newUser.fullname"
+                    label="Full Name"
+                    outlined
+                    hint="Ex: Mr. Mighty Joe"
+                    :rules="[v => !!v || 'Please Enter User\'s Full Name']"
+                    prepend-inner-icon="mdi-account-settings"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
                     color="green"
-                    :rules="[v => !!v || 'Email ID is Required']"
+                    v-model="newUser.email"
                     label="Email ID"
-                    placeholder="Also your Primary Login ID"
+                    required
+                    hint="Also your primary Login ID"
+                    outlined
+                    :rules="[
+                      v => !!v || 'Please enter email',
+                      v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+                    ]"
+                    prepend-inner-icon="email"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    v-model="password"
                     color="green"
                     :rules="[v => !!v || 'Password is Required']"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
+                    @click:append="show1 = !show1"
+                    readonly
                     label="Password"
-                    type="password"
-                    value="user@2020"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-switch
                     color="red darken-3"
                     label="Approved"
-                    input-value="true"
+                    value="true"
                     class="pl-2"
                   ></v-switch>
                 </v-col>
               </v-row>
-              <v-layout align-end justify-end>
-                <v-btn color="green darken-1" small dark>
-                  <v-icon small class="pr-2">mdi-account-plus</v-icon>
-                  Create Account
-                </v-btn>
-              </v-layout>
             </v-form>
           </v-card-text>
+          <v-card-actions class="pr-5">
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" small dark @click="reset"
+              >Reset</v-btn
+            >
+            <v-btn color="green darken-1" small dark @click="addUser"
+              ><v-icon small class="pr-2">mdi-account-plus</v-icon>Create
+              Account</v-btn
+            >
+          </v-card-actions>
+
+          <!-- <pre>{{ newUser }}</pre> -->
         </v-card>
       </v-tab-item>
 
@@ -76,7 +110,7 @@
         <v-card flat>
           <v-card-text class="px-0 py-1">
             <v-data-table
-              :items="staffs"
+              :items="users"
               :headers="headers"
               :loading="loading"
               loading-text="Loading... Please wait"
@@ -86,15 +120,13 @@
                   item.userType
                 }}</v-chip>
               </template>
-              
-              <template v-slot:item.actions="{ item }">
+
+              <template v-slot:item.blocked="{ item }">
                 <v-switch
-                color="red darken-3"
-                i
-                nput-value="true"
-                class="pl-2"
-              ></v-switch>
-              
+                  :value="item"
+                  :color="item?'green':'red'"
+                  class="pl-2"
+                ></v-switch>
               </template>
             </v-data-table>
           </v-card-text>
@@ -106,7 +138,6 @@
           <v-card-text class="px-0 py-1"> </v-card-text>
         </v-card>
       </v-tab-item>
-
     </v-tabs>
   </div>
 </template>
@@ -127,12 +158,34 @@ export default {
     wordcloud
   },
   data: () => ({
-    loading: false,
+    loading: true,
+    show1: false,
+    newUser: {
+      username: "",
+      fullname: "",
+      email: "",
+      password: "user@2020",
+      userType: "",
+      department: 0,
+      confirmed: true,
+      blocked: false
+    },
+    password: 'user@2020',
+    userTypes: [
+      {
+        text: "Faculty / Staff",
+        value: "FACULTY"
+      },
+      {
+        text: "Student",
+        value: "STUDENT"
+      }
+    ],
     headers: [
       { text: "Full Name", value: "fullname" },
       { text: "Email", value: "email" },
       { text: "Role", value: "userType" },
-      { text: "Approved", value: "actions" }
+      { text: "Approved", value: "blocked" }
     ],
     chartOptions: {
       series: [
@@ -216,16 +269,17 @@ export default {
 
   computed: {
     ...mapState({
-      staffs: state => state.staffs
+      users: state => state.user.usersList.result
     })
   },
   async fetch({ store }) {
     let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
-    store.dispatch("setStaffs", { qs: queryString });
+    queryString = `department.id=${store.state.auth.user.department}&userType_ne=DEPARTMENT`;
+    store.dispatch("user/setUsersList", { qs: queryString });
   },
   mounted() {
-    this.staffs = this.$store.state.staffs;
+    this.users = this.$store.state.user.usersList.result
+    this.reloadData();
   },
   methods: {
     deleteItem(item) {
@@ -235,15 +289,41 @@ export default {
         this.reloadData();
       }
     },
+    addUser() {
+      this.newUser.department = this.$store.state.auth.user.department;
+      this.newUser.password = "changemenow";
+      this.newUser.username = this.newUser.email;
+      var payload = this.newUser;
+      // console.log(payload);
+      this.$store
+        .dispatch("user/addUser", payload)
+        .then(resp => {
+          // console.log(resp);
+          Swal.fire({
+            title: "Account Created",
+            text: "User has been added successfully!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.dialog = false;
+          this.reset();
+          this.reloadData();
+        })
+        .catch(e => {});
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
     async reloadData() {
       this.loading = true;
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
-      await this.$store.dispatch("setStaffs", { qs: queryString });
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType_ne=DEPARTMENT&`;
+      this.$store.dispatch("user/setUsersList", { qs: queryString });
       this.loading = false;
     },
     getColor(userType) {
-      return userType === "FACULTY" ? "green" : "red";
+      return userType === "FACULTY" ? "green" : "orange";
     },
     wordClickHandler(name, value, vm) {
       console.log("wordClickHandler", name, value, vm);
