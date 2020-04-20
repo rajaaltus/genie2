@@ -39,6 +39,7 @@
                         name="password"
                         color="success"
                         @click:append="show1 = !show1"
+                        @keypress.enter="signIn"
                       />
                     </v-form>
                   </v-card-text>
@@ -54,6 +55,7 @@
                         small
                         class="float-right"
                         @click="signIn"
+                        
                       >
                         Login
                       </v-btn>
