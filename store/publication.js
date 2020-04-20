@@ -8,7 +8,8 @@ export const state = () => ({
 	},
 	publicationTypes: {},
 	journalArticle: [],
-	publicationsCount: null
+	publicationsCount: null,
+	stats: [],
 });
 
 export const getters =  {
@@ -22,7 +23,9 @@ export const getters =  {
 };
 
 export const mutations = {
-	
+	SET_STATS (state, response) {
+		state.stats.push(response);
+	},
 	SET_PUBLICATIONSDATA (state, publicationsData) {
 		if (publicationsData && Array.isArray(publicationsData)) {
 			state.publicationsData.success = true;
@@ -88,10 +91,32 @@ export const mutations = {
 	},
 	SET_JOURNALARTICLE (state, journalArticle) {
 		state.journalArticle = journalArticle;
+	},
+	RESET_STATS(state, response) {
+		state.stats = response;
+		console.log('resetted:' +state.stats);
 	}
+
 };
 
 export const actions = {
+	resetStats({commit}) {
+		var response = [];
+		commit('RESET_STATS', response);
+	},
+	async setStats({commit}, {qs}) {
+		await this.$axios.$get(`/publications/count?${qs}`)
+		.then(response =>  {
+				commit("SET_STATS", response);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_JOURNALARTICLE", error);
+			})
+			.finally(function () {
+			// always executed
+			});
+	},
 	async setJournalArticle ({commit}, {id}) {
 		// await this.$axios({
 		// 	method: 'get',
