@@ -42,7 +42,7 @@ export default {
   },
   
   mounted() {
-    if (this.profile.image!==null)
+    if (this.profile.image!==null && this.profile.image!==undefined)
       this.image_url = this.profile.image.url
   }
 }
