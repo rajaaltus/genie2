@@ -83,7 +83,7 @@ export const actions = {
 		 });
  },
 	async updateTheses ({commit}, payload) {
-		await this.$axios.$put('/theses', payload)
+		await this.$axios.$put(`/theses/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_THESESDATA", response);

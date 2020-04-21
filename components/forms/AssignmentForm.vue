@@ -15,7 +15,7 @@
         ></v-select>
       </v-col>
       <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" />
+        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
       </v-col>
     </v-row>
     <v-row>
@@ -120,7 +120,7 @@ import Swal from "sweetalert2";
 import { mapState } from "vuex";
 import AddUser from "@/components/forms/AddUser";
 export default {
-  props: ["dataFrom"],
+  props: ["dataFrom", "section"],
   components: {
     AddUser
   },
@@ -154,6 +154,13 @@ export default {
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
+    },
+     getLatestStudents() {
+      console.log("recieving...");
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
+      this.$store.dispatch("setStudents", { qs: queryString });
+      this.dataFrom = this.$store.state.students;
     },
     reset() {
       this.$refs.form.reset();

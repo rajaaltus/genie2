@@ -30,6 +30,7 @@
                 <ProgramForm
                   :programNames="$store.state.program.programNames"
                   :dataFrom="staffs"
+                  section="Select Faculty / Staff from the list"
                 />
                 
               </v-col>

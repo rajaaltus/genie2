@@ -110,7 +110,8 @@ export default {
           text: "Student",
           value: "STUDENT"
         }
-      ]
+      ],
+      userType: null,
     };
   },
   async mounted() {},
@@ -119,6 +120,7 @@ export default {
       this.newUser.department = this.$store.state.auth.user.department;
       this.newUser.password = "changemenow";
       this.newUser.username = this.newUser.email;
+      this.userType = this.newUser.userType;
       var payload = this.newUser;
       // console.log(payload);
       this.$store
@@ -133,7 +135,10 @@ export default {
             timer: 1500
           });
           this.dialog = false;
-          this.$emit("new-user");
+          if(this.userType==='STUDENT')
+            this.$emit("new-student");
+          else
+            this.$emit('new-user');
           console.log("emitting....");
         })
         .catch(e => {});
