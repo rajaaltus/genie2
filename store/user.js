@@ -1,3 +1,4 @@
+const limit = '&_limit=1000';
 export const state = () => ({
 	busy: false,
 	loggedIn: false,
@@ -174,7 +175,7 @@ export const actions = {
 			});
 	},
 	async setUsersList ({commit}, {qs}) {
-		await this.$axios.$get(`/users?${qs}`)
+		await this.$axios.$get(`/users?${qs}${limit}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_USERS_LIST", response);
@@ -189,7 +190,7 @@ export const actions = {
 			});
 	},
 	async setActiveUsersList ({commit}, {qs}) {
-		await this.$axios.$get(`/users?${qs}`)
+		await this.$axios.$get(`/users?${qs}${limit}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_ACTIVE_USERS_LIST", response);

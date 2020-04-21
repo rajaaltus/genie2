@@ -1,4 +1,4 @@
-
+const limit = '&_limit=1000';
 export const state = () => ({
 	
 	assignmentsData: {
@@ -54,7 +54,7 @@ export const actions = {
 		  
 	},
 	async countAssignments ({commit}, {qs}) {
-		await this.$axios.$get(`/key-assignments/count?${qs}`)
+		await this.$axios.$get(`/key-assignments/count?${qs}${limit}`)
 		 .then(response =>  {
 		 // handle success
 			 commit("SET_ASSIGNMENTS_COUNT", response);

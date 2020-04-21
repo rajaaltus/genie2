@@ -1,4 +1,4 @@
-
+const limit = '&_limit=1000';
 export const state = () => ({
 	
 	publicData: {
@@ -53,7 +53,7 @@ export const actions = {
 			});
 	},
 	async countPublicEngagements ({commit}, {qs}) {
-		await this.$axios.$get(`/public-engagements/count?${qs}`)
+		await this.$axios.$get(`/public-engagements/count?${qs}${limit}`)
 		 .then(response =>  {
 		 // handle success
 			 commit("SET_PUBLICENGAGEMENTS_COUNT", response);

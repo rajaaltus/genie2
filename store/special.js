@@ -1,4 +1,4 @@
-
+const limit = '&_limit=1000';
 export const state = () => ({
 	specialData: []
 });
@@ -16,7 +16,7 @@ export const mutations = {
 export const actions = {
   
 	async setSpecialData ({commit}, {qs}) {
-		await this.$axios.$get(`/pc-special-services?${qs}`)
+		await this.$axios.$get(`/pc-special-services?${qs}${limit}`)
 			.then(response =>  {
 				// handle success
 				commit("SET_SPECIAL_DATA", response);

@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2';
+const limit = '&_limit=1000';
 export const state = () => ({
 	// programmesData: []
 	visitorsData: {
@@ -43,7 +43,7 @@ export const mutations = {
 
 export const actions = {
 	async setVisitorsData ({commit}, {qs}) {
-		 await this.$axios.$get(`/visitors?${qs}`)
+		 await this.$axios.$get(`/visitors?${qs}${limit}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_VISITORSDATA", response);
