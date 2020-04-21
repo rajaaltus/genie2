@@ -82,7 +82,7 @@ export const actions = {
 		
 	},
 	async updatePatent ({commit}, payload) {
-		await this.$axios.$put('/patents', payload)
+		await this.$axios.$put(`/patents/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PATENTSDATA", response);

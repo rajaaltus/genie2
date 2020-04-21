@@ -82,7 +82,7 @@ export const actions = {
 		
 	},
 	async updateResearch ({commit}, payload) {
-		await this.$axios.$put('/research-activities', payload)
+		await this.$axios.$put(`/research-activities/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_RESEARCHDATA", response);
