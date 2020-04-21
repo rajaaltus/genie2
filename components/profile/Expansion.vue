@@ -15,7 +15,7 @@
           <v-row v-for="(item, index) in recognitionsData" :key="index">
             <v-col cols="12" lg="6">
               <v-img
-                :src="item.image_1!==null?$axios.defaults.baseURL+item.image_1.url:'/image_placeholder.png'"
+                :src="item.image_1!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image_1.url:'/image_placeholder.png'"
                 lazy-src="/image_placeholder.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
@@ -59,7 +59,7 @@
           <v-row v-for="(item, index) in presentationsData" :key="index">
             <v-col cols="12" lg="6">
               <v-img
-                :src="item.image!==null?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
+                :src="item.image!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
                 lazy-src="/image_placeholder.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
@@ -103,7 +103,7 @@
           <v-row v-for="(item, index) in participationsData" :key="index">
             <v-col cols="12" lg="6">
               <v-img
-                :src="item.image!==null?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
+                :src="item.image!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
                 lazy-src="/image_placeholder.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
@@ -147,7 +147,7 @@
           <v-row v-for="(item, index) in researchData" :key="index">
             <v-col cols="12" lg="6">
               <v-img
-                :src="item.image!==null?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
+                :src="item.image!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
                 lazy-src="/image_placeholder.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
@@ -191,7 +191,7 @@
           <v-row v-for="(item, index) in patentsData" :key="index">
             <v-col cols="12" lg="6">
               <v-img
-                :src="item.image!==null?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
+                :src="item.image!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image.url:'/image_placeholder.png'"
                 lazy-src="/image_placeholder.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
