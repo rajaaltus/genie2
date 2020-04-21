@@ -3,7 +3,9 @@
     <YearDialog v-if="$store.state.selectedYear == 0" />
     <v-row class="my-0">
       <v-col cols="12" lg="9" class="pb-0 px-4">
-      	<span class="theme-border"><h1 class="ml-3">{{ $metaInfo.title }}</h1></span>
+        <span class="theme-border"
+          ><h1 class="ml-3">{{ $metaInfo.title }}</h1></span
+        >
       </v-col>
       <v-col cols="12" lg="3" v-if="reportYears">
         <v-select
@@ -26,7 +28,6 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-				
         <v-row align="center" justify="start" no-gutters>
           <v-col
             cols="12"
@@ -35,14 +36,14 @@
             v-for="(activity, index) in $store.state.activities"
             :key="index"
           >
-						<v-skeleton-loader
-            v-if="loading"
-            height="94"
-            type="list-item-two-line"
-						>
-						</v-skeleton-loader>
+            <v-skeleton-loader
+              v-if="loading"
+              height="94"
+              type="list-item-two-line"
+            >
+            </v-skeleton-loader>
             <v-alert
-							v-else
+              v-else
               class="mr-2"
               border="left"
               colored-border
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 import PageHeader from "@/components/PageHeader";
 import YearDialog from "@/components/YearDialog";
 import FacultyActivities from "@/components/FacultyActivities";
@@ -106,8 +107,8 @@ export default {
         val: "2020-2021"
       }
     ],
-		annualYear: 0,
-		loading: true
+    annualYear: 0,
+    loading: true
   }),
   computed: {
     ...mapState({
@@ -115,7 +116,6 @@ export default {
     })
   },
   async fetch({ store }) {
-    
     await store.dispatch("setActivities");
     if (store.state.user.fullUser) {
       let userId = store.state.auth.user.id;
@@ -151,10 +151,10 @@ export default {
       this.reloadData();
     }
   },
-	async mounted() {
-		this.annualYear = this.$store.state.selectedYear;
-		this.loading = false;
-	},
+  async mounted() {
+    this.annualYear = this.$store.state.selectedYear;
+    this.loading = false;
+  },
   methods: {
     getActivityCount(id) {
       if (id == 1) {
@@ -195,15 +195,19 @@ export default {
       }
     },
     async reloadData() {
-			this.loading = true;
+      this.loading = true;
       let queryString = "";
       if (this.$store.state.auth.user.userType === "DEPARTMENT")
         queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
       else
         queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${id}&deleted_ne=true&annual_year=${this.annualYear}`;
-      await this.$store.dispatch("program/countProgrammes", { qs: queryString });
+      await this.$store.dispatch("program/countProgrammes", {
+        qs: queryString
+      });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", {
+        qs: queryString
+      });
       await this.$store.dispatch("presentation/countPresentations", {
         qs: queryString
       });
@@ -221,8 +225,10 @@ export default {
         qs: queryString
       });
       await this.$store.dispatch("patent/countPatents", { qs: queryString });
-			await this.$store.dispatch("assignment/countAssignments", { qs: queryString });
-			this.loading = false
+      await this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString
+      });
+      this.loading = false;
     }
   }
 };
@@ -233,5 +239,4 @@ export default {
   padding-right: 30px;
   font-size: 30px;
 }
-
 </style>
