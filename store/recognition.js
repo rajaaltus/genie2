@@ -81,7 +81,7 @@ export const actions = {
 		
 	},
 	async updateRecognition ({commit}, payload) {
-		await this.$axios.$put('/recognitions', payload)
+		await this.$axios.$put(`/recognitions/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_RECOGNITIONSDATA", response);

@@ -272,37 +272,6 @@
             ></v-textarea>
           </v-col>
         </v-row>
-				<v-row>
-            <v-col cols="12" lg="4">
-              <h3><span class="frm-title">Upload Images (If any)</span></h3>
-              <v-hover>
-                <template v-slot:default="{ hover }">
-                  <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
-                    lazy-src="/image_placeholder.png"
-                    class="mt-3"
-                    max-width="100%"
-                    max-height="175"
-                  >
-                    <v-fade-transition>
-                      <v-overlay v-if="hover" absolute color="#00564c">
-                        <v-btn @click="$refs.image.click()">
-                          Upload Image
-                        </v-btn>
-                      </v-overlay>
-                    </v-fade-transition>
-                  </v-img>
-                </template>
-              </v-hover>
-              <input
-                ref="image"
-                type="file"
-                style="display:none;"
-                label="File input"
-                @change="handleFileUpload"
-              />
-            </v-col>
-          </v-row>
       </v-col>
     </v-row>
     <v-row>

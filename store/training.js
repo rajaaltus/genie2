@@ -88,7 +88,7 @@ export const actions = {
 		
 	},
 	async updateTraining ({commit}, payload) {
-		await this.$axios.$put('/trainings', payload)
+		await this.$axios.$put(`/trainings/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_TRAININGSDATA", response);
@@ -97,7 +97,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				//console.log(error);
-				commit("SET_TRAININGSDATA", error);
+				// commit("SET_TRAININGSDATA", error);
 			})
 			.finally(function () {
 			// always executed

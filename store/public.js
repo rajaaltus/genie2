@@ -46,7 +46,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICDATA", error);
+				// commit("SET_PUBLICDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -60,7 +60,7 @@ export const actions = {
 		 })
 		 .catch((e) => {
 		 // handle error
-			 commit("SET_PUBLICENGAGEMENTS_COUNT", error);
+			//  commit("SET_PUBLICENGAGEMENTS_COUNT", error);
 		 })
 		 .finally(function () {
 		 // always executed
@@ -74,7 +74,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICDATA", error);
+				// commit("SET_PUBLICDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -82,14 +82,14 @@ export const actions = {
 		
 	},
 	async updatePublic ({commit}, payload) {
-		await this.$axios.$put('/public-engagements', payload)
+		await this.$axios.$put(`/public-engagements/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PUBLICDATA", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PUBLICDATA", error);
+				// commit("SET_PUBLICDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -105,7 +105,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				console.log(error);
-				commit("SET_PUBLICDATA", error);
+				// commit("SET_PUBLICDATA", error);
 			})
 			.finally(function () {
 			// always executed

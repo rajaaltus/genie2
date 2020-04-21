@@ -83,7 +83,7 @@ export const actions = {
 		
 	},
 	async updateAssignment ({commit}, payload) {
-		await this.$axios.$put('/key-assignments', payload)
+		await this.$axios.$put(`/key-assignments/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_ASSIGNMENTSDATA", response);

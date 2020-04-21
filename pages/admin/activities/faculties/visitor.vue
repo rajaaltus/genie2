@@ -13,11 +13,11 @@
       <v-tab-item>
         <v-card tile>
           <v-card-text>
-            <YearDialog v-if="$store.state.selectedYear == 0" />
+            <!-- <YearDialog v-if="$store.state.selectedYear == 0" /> -->
             <PageHeader
               :title="$metaInfo.title"
               :reportYears="reportYears"
-              :selectedYear="$store.state.selectedYear"
+              @set-year="setReportingYear"
               class="ml-0 pb-0 pt-0"
             />
             <v-row>
@@ -55,7 +55,7 @@ import PageHeader from "@/components/PageHeader";
 import FacultyActivities from "@/components/FacultyActivities";
 import YearDialog from "@/components/YearDialog";
 import VisitorForm from "@/components/forms/VisitorForm";
-import VisitorTable from "@/components/tables/VisitorTable";
+import VisitorTable from "@/components/tables/activities/VisitorTable";
 export default {
   head() {
     return {
