@@ -43,7 +43,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item dense link to="/settings">
+      <v-list-item dense link to="/settings" v-if="$auth.user.userType==='DEPARTMENT'">
         <v-list-item-icon>
           <v-icon color="orange">mdi-cogs</v-icon>
         </v-list-item-icon>
@@ -64,6 +64,7 @@
       <v-divider></v-divider>
 
       <v-list nav>
+        <div v-if="$auth.user.userType==='DEPARTMENT'">
         <template v-for="item in items">
           <v-list-group
             v-if="item.children"
@@ -120,6 +121,125 @@
             </v-list-item-content>
           </v-list-item>
         </template>
+        </div>
+        <!-- Faculty forms -->
+        <div v-if="$auth.user.userType==='FACULTY'">
+        <template v-for="item in itemsFaculty" >
+          <v-list-group
+            v-if="item.children"
+            :key="item.title"
+            :to="item.to"
+            v-model="item.model"
+            :prepend-icon="item.icon"
+            append-icon=""
+            color="green"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title class="menu-title">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.to"
+              link
+              router
+              dense
+              exact
+              class="px-2"
+            >
+              <v-list-item-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title class="menu-title">
+                  {{ child.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item
+            v-else
+            :key="item.title"
+            :to="item.to"
+            link
+            router
+            exact
+            dense
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="menu-title">
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        </div>
+        <!-- Student forms -->
+        <div v-if="$auth.user.userType==='STUDENT'">
+        <template v-for="item in itemsStudent" >
+          <v-list-group
+            v-if="item.children"
+            :key="item.title"
+            :to="item.to"
+            v-model="item.model"
+            :prepend-icon="item.icon"
+            append-icon=""
+            color="green"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title class="menu-title">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.to"
+              link
+              router
+              dense
+              exact
+              class="px-2"
+            >
+              <v-list-item-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title class="menu-title">
+                  {{ child.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item
+            v-else
+            :key="item.title"
+            :to="item.to"
+            link
+            router
+            exact
+            dense
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="menu-title">
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        </div>
       </v-list>
 
       <template v-slot:append>
@@ -220,6 +340,22 @@ export default {
               title: "Faculty / Staff",
               icon: "mdi-chevron-double-right",
               to: "/admin/activities/faculties"
+            }
+          ]
+        },
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
+        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+      ],
+      itemsStudent: [
+        { title: "Home", icon: "mdi-home", to: "/admin" },
+        {
+          title: "Activities & Resources",
+          icon: "mdi-library",
+          children: [
+            {
+              title: "Student",
+              icon: "mdi-chevron-double-right",
+              to: "/admin/activities/students"
             }
           ]
         },

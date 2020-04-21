@@ -1,3 +1,10 @@
+const srcs = {
+	1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+	2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+	3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+	4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+	5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
+};
 export const state = () => ({
   selectedYear: 0,
 	activities: [],
@@ -5,6 +12,20 @@ export const state = () => ({
 	reportYears: [],
 	students: [],
 	staffs: [],
+	
+	people: [
+		{ header: "Faculty" },
+		{ name: "Sandra Adams", group: "Faculty", avatar: srcs[1] },
+		{ name: "Ali Connors", group: "Faculty", avatar: srcs[2] },
+		{ name: "Trevor Hansen", group: "Faculty", avatar: srcs[3] },
+		{ name: "Tucker Smith", group: "Faculty", avatar: srcs[2] },
+		{ divider: true },
+		{ header: "Student" },
+		{ name: "Britta Holt", group: "Student", avatar: srcs[4] },
+		{ name: "Jane Smith ", group: "Student", avatar: srcs[5] },
+		{ name: "John Smith", group: "Student", avatar: srcs[1] },
+		{ name: "Sandra Williams", group: "Student", avatar: srcs[3] }
+	],
 });
 export const getters = {
 	activities(state) {

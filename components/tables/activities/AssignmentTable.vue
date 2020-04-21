@@ -103,7 +103,6 @@
                     <span style="color:red; font-size:12px;"
                       >* Mandatory fields</span
                     >
-
                   </v-row>
                   <v-hover>
                     <template v-slot:default="{ hover }">
@@ -145,7 +144,6 @@
                     @change="handleFileUpload"
                   />
                 </v-container>
-                
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -178,31 +176,31 @@ export default {
     dialog: false,
     annualYear: 0,
     headers: [
-			{
-				text: 'Last updated',
-				align: 'left',
-				value: 'updated_at'
-			},
-			{ text: 'Classifcation', value: 'classification' },
-			{ text: 'Roles', value: 'roles' },
-			{ text: 'Designation', value: 'designation' },
-			{ text: 'Brief Report', value: 'brief_report' },
-			{ text: 'Approval Status', value: 'approval_status' },
-			{ text: 'Actions', value: 'action', sortable: false },
-		],
+      {
+        text: "Last updated",
+        align: "left",
+        value: "updated_at"
+      },
+      { text: "Classifcation", value: "classification" },
+      { text: "Roles", value: "roles" },
+      { text: "Designation", value: "designation" },
+      { text: "Brief Report", value: "brief_report" },
+      { text: "Approval Status", value: "approval_status" },
+      { text: "Actions", value: "action", sortable: false }
+    ],
     editedItem: {
       annual_year: 0,
-			classification: "",
-			roles: "",
-			faculty_name: "",
-			designation: "",
-			brief_report: "",
-			approval_status: "Pending",
-			approved_by: null,
-			approved_date: null,
-			deleted: false,
-			department: 0,
-			user: 0,
+      classification: "",
+      roles: "",
+      faculty_name: "",
+      designation: "",
+      brief_report: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      user: 0,
       image: null,
       rejected_reason: null
     },
@@ -210,21 +208,21 @@ export default {
     selectedFile: null,
     deletedItem: {
       annual_year: 0,
-			classification: "",
-			roles: "",
-			faculty_name: "",
-			designation: "",
-			brief_report: "",
-			approval_status: "Pending",
-			approved_by: null,
-			approved_date: null,
-			deleted: false,
-			department: 0,
-			user: 0,
+      classification: "",
+      roles: "",
+      faculty_name: "",
+      designation: "",
+      brief_report: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      user: 0,
       image: null,
       rejected_reason: null
     },
-    classifications: ['International', 'National', 'NotApplicable', 'Others'],
+    classifications: ["International", "National", "NotApplicable", "Others"],
     imageToDelete: null
   }),
   computed: {
@@ -244,8 +242,8 @@ export default {
       store.state.auth.user.userType === "FACULTY" ||
       store.state.auth.user.userType === "STUDENT"
     ) {
-      queryString = `department.id=${store.state.auth.user.department}&user.id=${this.$auth.user.id}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
-      // console.log(queryString);
+      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
+      console.log(queryString);
       await store.dispatch("assignment/setAssignmentsData", {
         qs: queryString
       });
@@ -328,17 +326,19 @@ export default {
       }).then(result => {
         if (result.value) {
           this.loading = true;
-          this.$store.dispatch("assignment/updateAssignment", payload).then(resp => {
-            this.loading = false;
-            Swal.fire({
-              title: "Success",
-              text: "Deleted Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500
+          this.$store
+            .dispatch("assignment/updateAssignment", payload)
+            .then(resp => {
+              this.loading = false;
+              Swal.fire({
+                title: "Success",
+                text: "Deleted Successfully!",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              this.reloadData();
             });
-            this.reloadData();
-          });
           Swal.fire({
             title: "Something Wrong!",
             text: err,
@@ -351,20 +351,16 @@ export default {
     },
     async reloadData() {
       this.loading = true;
-      let deptId = this.$store.state.auth.user.department;
-      let userId = this.$store.state.auth.user.id;
-      let queryString = "";
-
       if (
-        this.$store.state.auth.user.userType === "Faculty" ||
-        this.$store.state.auth.user.userType === "Student"
-      ) {
-        queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.annualYear}`;
+        this.$store.state.auth.user.userType === "FACULTY" || this.$store.state.auth.user.userType === "STUDENT") {
+        let queryString = "";
+        queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.annualYear}`;
         await this.$store.dispatch("assignment/setAssignmentsData", {
           qs: queryString
         });
       } else {
-        queryString = `department.id=${deptId}&annual_year=${this.annualYear}&deleted_ne=true`;
+        let queryString = "";
+        queryString = `department.id=${this.$auth.user.department}&annual_year=${this.annualYear}&deleted_ne=true`;
         await this.$store.dispatch("assignment/setAssignmentsData", {
           qs: queryString
         });

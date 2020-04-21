@@ -89,7 +89,7 @@
               <v-row>
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="programLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -106,14 +106,14 @@
                   >
                     <h2 class="font-weight-bold">Programmes / Events</h2>
                     <span class="display-2 font-weight-bold">
-                      {{$store.state.program.programmesCount}}
+                      {{getActivityCount(1)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="visitorLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -129,14 +129,14 @@
                   >
                     <h2 class="font-weight-bold">Department Visitors</h2>
                     <span class="display-2 font-weight-bold">
-                      {{visitorCount}}
+                      {{getActivityCount(2)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="trainingLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -152,14 +152,14 @@
                   >
                     <h2 class="font-weight-bold">Training Underwent</h2>
                     <span class="display-2 font-weight-bold">
-                      {{trainingCount}}
+                      {{getActivityCount(3)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="presentationLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -175,14 +175,14 @@
                   >
                     <h2 class="font-weight-bold">Presentations / Posters</h2>
                     <span class="display-2 font-weight-bold">
-                      {{presentationCount}}
+                      {{getActivityCount(4)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="participationLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -198,14 +198,14 @@
                   >
                     <h2 class="font-weight-bold">Participations</h2>
                     <span class="display-2 font-weight-bold">
-                      {{participationCount}}
+                      {{getActivityCount(5)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="6">
                   <v-skeleton-loader
-                    v-if="publicationLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -221,7 +221,7 @@
                   >
                     <h2 class="font-weight-bold">Publications</h2>
                     <span class="display-2 font-weight-bold">
-                      {{publicationCount}}
+                      {{getActivityCount(6)}}
                     </span>
 
                     <v-tooltip top color="black">
@@ -308,7 +308,7 @@
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="publicLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -324,14 +324,14 @@
                   >
                     <h2 class="font-weight-bold">Public Engagement</h2>
                     <span class="display-2 font-weight-bold">
-                      {{publicCount}}
+                      {{getActivityCount(7)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="researchLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -347,14 +347,14 @@
                   >
                     <h2 class="font-weight-bold">Research Activities</h2>
                     <span class="display-2 font-weight-bold">
-                      {{researchCount}}
+                      {{getActivityCount(8)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="recognitionLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -370,14 +370,14 @@
                   >
                     <h2 class="font-weight-bold">Recognitions</h2>
                     <span class="display-2 font-weight-bold">
-                      {{$store.state.recognition.recognitionsCount}}
+                      {{getActivityCount(9)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="patentLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -393,14 +393,14 @@
                   >
                     <h2 class="font-weight-bold">Patents</h2>
                     <span class="display-2 font-weight-bold">
-                      {{patentCount}}
+                      {{getActivityCount(10)}}
                     </span>
                   </v-alert>
                 </v-col>
 
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
-                    v-if="assignmentLoading"
+                    v-if="loading"
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -416,7 +416,7 @@
                   >
                     <h2 class="font-weight-bold">Key Assignments</h2>
                     <span class="display-2 font-weight-bold">
-                      {{assigmentCount}}
+                      {{getActivityCount(11)}}
                     </span>
                   </v-alert>
                 </v-col>
@@ -521,6 +521,7 @@
 </template>
 
 <script>
+
 import PageHeader from "@/components/PageHeader";
 import YearDialog from "@/components/YearDialog";
 export default {
@@ -534,38 +535,10 @@ export default {
     YearDialog
   },
   data() {
-    const srcs = {
-      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
-    };
+    
     return {
-      programLoading: true,
-      programCount: 0,
-      visitorLoading: true,
-      visitorCount: 0,
-      trainingLoading: true,
-      trainingCount: 0,
-      presentationLoading: true,
-      presentationCount: 0,
-      participationLoading: true,
-      participationCount: 0,
-      publicationLoading: true,
-      publicationCount: 0,
-      publicLoading: true,
-      publicCount: 0,
-      researchLoading: true,
-      researchCount: 0,
-      recognitionLoading: true,
-      recognitionCount: 0,
-      patentLoading: true,
-      patentCount: 0,
-      assignmentLoading: true,
-      assigmentCount: 0,
-      selectedUser: 99,
-      
+      loading: false,
+      selectedUser: null,
       reportYears: [
         {
           id: 2017,
@@ -584,19 +557,7 @@ export default {
           val: "2020-2021"
         }
       ],
-      people: [
-        { header: "Faculty" },
-        { name: "Sandra Adams", group: "Faculty", avatar: srcs[1] },
-        { name: "Ali Connors", group: "Faculty", avatar: srcs[2] },
-        { name: "Trevor Hansen", group: "Faculty", avatar: srcs[3] },
-        { name: "Tucker Smith", group: "Faculty", avatar: srcs[2] },
-        { divider: true },
-        { header: "Student" },
-        { name: "Britta Holt", group: "Student", avatar: srcs[4] },
-        { name: "Jane Smith ", group: "Student", avatar: srcs[5] },
-        { name: "John Smith", group: "Student", avatar: srcs[1] },
-        { name: "Sandra Williams", group: "Student", avatar: srcs[3] }
-      ],
+      
       options: {
         chart: {
           id: "vuechart-example"
@@ -615,42 +576,127 @@ export default {
         }
       ],
       donutSeries: [20, 20, 20, 20, 20],
-      actions: [
-        'countProgrammes',
-        'countVistitors',
-        'countTrainings',
-        'countPresentations',
-        'countParticipations',
-        'countPublicEngagements',
-        'countResarch',
-        'countPublications',
-        'countRecognitions',
-        'countPatents',
-        'countAssignments'
-      ]
+      
     };
   },
-  
+  computed: {
+    people() {
+      return this.$store.state.people
+    }
+  },
   async fetch({ store }) {
-    let userId = store.state.auth.user.id;
-    await store.dispatch("user/setFullUser", { id: userId });
+    let queryString = "";
+    if (store.state.auth.user.userType === "DEPARTMENT")
+      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+    else
+      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+    await store.dispatch("program/countProgrammes", { qs: queryString });
+    await store.dispatch("visitor/countVisitors", { qs: queryString });
+    await store.dispatch("training/countTrainings", { qs: queryString });
+    await store.dispatch("presentation/countPresentations", {
+      qs: queryString
+    });
+    await store.dispatch("participation/countParticipations", {
+      qs: queryString
+    });
+    await store.dispatch("public/countPublicEngagements", { qs: queryString });
+    await store.dispatch("research/countResearch", { qs: queryString });
+    await store.dispatch("publication/countPublications", { qs: queryString });
+    await store.dispatch("recognition/countRecognitions", { qs: queryString });
+    await store.dispatch("patent/countPatents", { qs: queryString });
+    await store.dispatch("assignment/countAssignments", { qs: queryString });
+
   },
   watch: {
     isUpdating(val) {
       if (val) {
         setTimeout(() => (this.isUpdating = false), 3000);
       }
+    },
+    selectedYear(val) {
+      this.annualYear = this.selectedYear;
+      this.reloadData();
     }
   },
   mounted () {
     if (this.selectedYear == 0)
       this.selectedYear = this.$store.state.selectedYear;
     
-    this.fetchAll()
   },
   methods: {
-    reloadData() {
-      this.fetchAll();
+    getActivityCount(id) {
+      if (id == 1) {
+        return this.$store.state.program.programmesCount;
+      }
+      if (id == 2) {
+        return this.$store.state.visitor.visitorsCount;
+      }
+      if (id == 3) {
+        return this.$store.state.training.trainingsCount;
+      }
+      if (id == 4) {
+        return this.$store.state.presentation.presentationsCount;
+      }
+      if (id == 5) {
+        return this.$store.state.participation.participationsCount;
+      }
+      if (id == 6) {
+        return this.$store.state.public.publicCount;
+      }
+      if (id == 7) {
+        return this.$store.state.research.researchCount;
+      }
+      if (id == 8) {
+        return this.$store.state.publication.publicationsCount;
+      }
+      if (id == 9) {
+        return this.$store.state.recognition.recognitionsCount;
+      }
+      if (id == 10) {
+        return this.$store.state.patent.patentsCount;
+      }
+      if (id == 11) {
+        return this.$store.state.assignment.assignmentsCount;
+      }
+      if (id == 12) {
+        return this.$store.state.theses.thesesCount;
+      }
+    },
+    async reloadData() {
+      this.loading = true;
+      let queryString = "";
+      if (this.$store.state.auth.user.userType === "DEPARTMENT")
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
+      else
+        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.selectedYear}`;
+      await this.$store.dispatch("program/countProgrammes", {
+        qs: queryString
+      });
+      await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", {
+        qs: queryString
+      });
+      await this.$store.dispatch("presentation/countPresentations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("participation/countParticipations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("public/countPublicEngagements", {
+        qs: queryString
+      });
+      await this.$store.dispatch("research/countResearch", { qs: queryString });
+      await this.$store.dispatch("publication/countPublications", {
+        qs: queryString
+      });
+      await this.$store.dispatch("recognition/countRecognitions", {
+        qs: queryString
+      });
+      await this.$store.dispatch("patent/countPatents", { qs: queryString })
+      await this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString
+      })
+      this.loading = false;
     },
     setYear() {
       this.selectedYear = this.$store.state.selectedYear
@@ -659,106 +705,7 @@ export default {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
     },
-    fetchAll() {
-      this.fetchProgram();
-      this.fetchVisitor();
-      this.fetchTraining();
-      this.fetchPresentation();
-      this.fetchParticipation();
-      this.fetchPublic();
-      this.fetchResearch();
-      this.fetchRecognition();
-      this.fetchPatent();
-      this.fetchAssignment();
-    },
-    fetchProgram() {
-      this.programLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`program/countProgrammes`, {qs: queryString})
-      this.programCount = this.$store.state.program.programmesCount;
-      this.programLoading = false;
-    },
-    fetchVisitor() {
-      this.visitorLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`visitor/countVisitors`, {qs: queryString})
-      this.visitorCount = this.$store.state.visitor.visitorsCount;
-      this.visitorLoading = false;
-    },
-    fetchTraining() {
-      this.trainingLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`training/countTrainings`, {qs: queryString})
-      this.trainingCount = this.$store.state.training.trainingsCount;
-      this.trainingLoading = false;
-    },
-    fetchPresentation() {
-      this.presentationLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`presentation/countPresentations`, {qs: queryString})
-      this.presentationCount = this.$store.state.presentation.presentationsCount;
-      this.presentationLoading = false;
-    },
-    fetchParticipation() {
-      this.participationLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`participation/countParticipations`, {qs: queryString})
-      this.participationCount = this.$store.state.participation.participationsCount;
-      this.participationLoading = false;
-    },
-    fetchPublic() {
-      this.publicLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`public/countPublicEngagements`, {qs: queryString})
-      this.publicCount = this.$store.state.public.publicEngagementsCount;
-      this.publicLoading = false;
-    },
-    fetchResearch() {
-      this.researchLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`research/countResearch`, {qs: queryString})
-      this.researchCount = this.$store.state.research.researchCount;
-      this.researchLoading = false;
-    },
-    fetchResearch() {
-      this.researchLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`research/countResearch`, {qs: queryString})
-      this.researchCount = this.$store.state.research.researchCount;
-      this.researchLoading = false;
-    },
-    fetchRecognition() {
-      this.recognitionLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`recognition/countRecognitions`, {qs: queryString})
-      this.recognitionCount = this.$store.state.recognition.recognitionsCount;
-      this.recognitionLoading = false;
-    },
-    fetchPatent() {
-      this.patentLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`patent/countPatents`, {qs: queryString})
-      this.patentCount = this.$store.state.patent.patentsCount;
-      this.patentLoading = false;
-    },
-    fetchAssignment() {
-      this.assignmentLoading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&annual_year=${this.selectedYear}&user.id=${this.selectedUser}&deleted_ne=true`
-      this.$store.dispatch(`assignment/countAssignments`, {qs: queryString})
-      this.assignmentCount = this.$store.state.assignment.assignmentsCount;
-      this.assignmentLoading = false;
-    }
+    
   }
 };
 </script>
