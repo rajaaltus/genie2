@@ -13,14 +13,14 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-row v-for="(item, index) in recognitionsData" :key="index">
-            <v-col cols="12" lg="6">
+            <v-col cols="12" lg="3">
               <v-img
-                :src="item.image_1!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image_1.url:'/image_placeholder.png'"
-                lazy-src="/image_placeholder.png"
+                :src="item.image_1!==null && item.image_1!==undefined?$axios.defaults.baseURL+item.image_1.url:'/award_ph.jpg'"
+                lazy-src="/award_ph.jpg"
                 aspect-ratio="1"
                 class="grey lighten-2"
-                max-width="500"
-                max-height="300"
+                max-width="200"
+                max-height="150"
               >
                 <template v-slot:placeholder>
                   <v-row
@@ -36,7 +36,7 @@
                 </template>
               </v-img>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" lg="9">
               <h2>{{item.annual_year}}</h2> <!-- Data Access example -->
               <p>{{item.award_title}}</p> <!-- Data Access example -->
               <pre>{{ item }}</pre> 

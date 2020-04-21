@@ -102,7 +102,7 @@
                     border="left"
                     color="blue lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-clipboard-list"
                   >
                     <h2 class="font-weight-bold">Programmes / Events</h2>
                     <span class="display-2 font-weight-bold">
@@ -125,7 +125,7 @@
                     border="left"
                     color="orange lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-certificate-outline"
                   >
                     <h2 class="font-weight-bold">Department Visitors</h2>
                     <span class="display-2 font-weight-bold">
@@ -148,7 +148,7 @@
                     border="left"
                     color="green lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-bike-fast"
                   >
                     <h2 class="font-weight-bold">Training Underwent</h2>
                     <span class="display-2 font-weight-bold">
@@ -171,7 +171,7 @@
                     border="left"
                     color="red lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-billboard"
                   >
                     <h2 class="font-weight-bold">Presentations / Posters</h2>
                     <span class="display-2 font-weight-bold">
@@ -194,7 +194,7 @@
                     border="left"
                     color="pink lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-atom"
                   >
                     <h2 class="font-weight-bold">Participations</h2>
                     <span class="display-2 font-weight-bold">
@@ -217,11 +217,11 @@
                     border="left"
                     color="light-green lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-bookshelf"
                   >
                     <h2 class="font-weight-bold">Publications</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(6)}}
+                      {{getActivityCount(8)}}
                     </span>
 
                     <v-tooltip top color="black">
@@ -320,11 +320,11 @@
                     border="left"
                     color="deep-purple lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-air-horn"
                   >
                     <h2 class="font-weight-bold">Public Engagement</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(7)}}
+                      {{getActivityCount(6)}}
                     </span>
                   </v-alert>
                 </v-col>
@@ -343,11 +343,11 @@
                     border="left"
                     color="teal lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-book-search"
                   >
                     <h2 class="font-weight-bold">Research Activities</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(8)}}
+                      {{getActivityCount(7)}}
                     </span>
                   </v-alert>
                 </v-col>
@@ -366,7 +366,7 @@
                     border="left"
                     color="purple lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-crown"
                   >
                     <h2 class="font-weight-bold">Recognitions</h2>
                     <span class="display-2 font-weight-bold">
@@ -389,7 +389,7 @@
                     border="left"
                     color="lime lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-book-lock"
                   >
                     <h2 class="font-weight-bold">Patents</h2>
                     <span class="display-2 font-weight-bold">
@@ -412,7 +412,7 @@
                     border="left"
                     color="amber lighten-1"
                     colored-border
-                    icon="mdi-twitter"
+                    icon="mdi-ship-wheel"
                   >
                     <h2 class="font-weight-bold">Key Assignments</h2>
                     <span class="display-2 font-weight-bold">
@@ -422,7 +422,7 @@
                 </v-col>
               </v-row>
 
-              <v-row>
+              <!--<v-row>
                 <v-col cols="12" lg="6">
                   <v-card class="mx-auto">
                     <v-list-item>
@@ -465,7 +465,7 @@
                     </div>
                   </v-card>
                 </v-col>
-              </v-row>
+              </v-row>-->
             </v-card-text>
           </v-card>
         </v-tab-item>
