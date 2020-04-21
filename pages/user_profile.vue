@@ -155,6 +155,7 @@
               :participationsData="participationsData"
               :researchData="researchData"
               :patentsData="patentsData"
+              :publicationsData="publicationsData"
             />
           </v-tab-item>
 
@@ -231,8 +232,8 @@ export default {
       experiences: state => state.profile.experienceData.result,
       recognitionsData: state => state.recognition.recognitionsData.result,
       presentationsData: state => state.presentation.presentationsData.result,
-      participationsData: state =>
-        state.participation.participationsData.result,
+      participationsData: state => state.participation.participationsData.result,
+      publicationsData: state => state.publication.publicationsData.result,
       researchData: state => state.research.researchData.result,
       patentsData: state => state.patent.patentsData.result,
       stats: state => state.publication.stats
@@ -258,6 +259,7 @@ export default {
     });
     await store.dispatch("research/setResearchData", { qs: queryString });
     await store.dispatch("patent/setPatentsData", { qs: queryString });
+    await store.dispatch("publication/setPublicationsData", { qs: queryString });
   },
   mounted() {
     console.log(this.userProfile);
