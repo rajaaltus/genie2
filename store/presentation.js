@@ -48,7 +48,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				// console.log(error);
-				commit("SET_PRESENTATIONSDATA", error);
+				// commit("SET_PRESENTATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -88,7 +88,7 @@ export const actions = {
 		
 	},
 	async updatePresentation ({commit}, payload) {
-		await this.$axios.$put('/presentations', payload)
+		await this.$axios.$put(`/presentations/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PRESENTATIONSDATA", response);

@@ -90,7 +90,7 @@ export const actions = {
 		// commit('SET_VISITORSDATA', programmesData)
 	},
 	async updateVisitor ({commit}, payload) {
-		await this.$axios.$put('/visitors', payload)
+		await this.$axios.$put(`/visitors/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_VISITORSDATA", response);

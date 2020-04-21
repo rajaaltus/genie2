@@ -23,7 +23,7 @@ export const mutations = {
 			state.participationsData.result = participationsData;
 			state.participationsData.error = {};
 		} else {
-			console.log('error'+participationsData);
+			// console.log('error'+participationsData);
 			state.participationsData.success = false;
 			state.participationsData.error = {
 				message: {
@@ -84,14 +84,14 @@ export const actions = {
 		
 	},
 	async updateParticipation ({commit}, payload) {
-		await this.$axios.$put('/participations', payload)
+		await this.$axios.$put(`/participations/${payload.id}`, payload)
 			.then(response =>  {
 			// handle success
 				commit("SET_PARTICIPATIONSDATA", response);
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PARTICIPATIONSDATA", error);
+				// commit("SET_PARTICIPATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
@@ -108,7 +108,7 @@ export const actions = {
 			.catch((e) => {
 			// handle error
 				//console.log(error);
-				commit("SET_PARTICIPATIONSDATA", error);
+				// commit("SET_PARTICIPATIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
