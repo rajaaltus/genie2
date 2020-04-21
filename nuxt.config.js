@@ -88,7 +88,7 @@ export default {
 	axios: {
 		  baseURL: 'http://site1.localhost'
 		//  baseURL: 'http://localhost:1337'
-		// baseURL: 'http://arms.nimhans.ac.in:18080/api'
+		// baseURL: 'http://14.139.159.112:1338'
 	},
 
   /*
