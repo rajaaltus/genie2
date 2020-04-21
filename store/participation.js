@@ -1,4 +1,4 @@
-
+const limit = '&_limit=1000';
 export const state = () => ({
 	
 	participationsData: {
@@ -39,7 +39,7 @@ export const mutations = {
 
 export const actions = {
 	async setParticipationsData ({commit}, {qs}) {
-		 await this.$axios.$get(`/participations?${qs}`)
+		 await this.$axios.$get(`/participations?${qs}${limit}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_PARTICIPATIONSDATA", response);
