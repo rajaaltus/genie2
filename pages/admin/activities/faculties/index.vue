@@ -117,15 +117,11 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch("setActivities");
-    if (store.state.user.fullUser) {
-      let userId = store.state.auth.user.id;
-      await store.dispatch("user/setFullUser", { id: userId });
-    }
     let queryString = "";
     if (store.state.auth.user.userType === "DEPARTMENT")
       queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
     else
-      queryString = `department.id=${store.state.auth.user.department}&user.id=${id}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
@@ -200,7 +196,7 @@ export default {
       if (this.$store.state.auth.user.userType === "DEPARTMENT")
         queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.annualYear}`;
       else
-        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${id}&deleted_ne=true&annual_year=${this.annualYear}`;
+        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.annualYear}`;
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString
       });

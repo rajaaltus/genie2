@@ -448,20 +448,19 @@ export default {
     },
     async reloadData() {
       this.loading = true;
-      let deptId = this.$store.state.auth.user.department;
-      let userId = this.$store.state.auth.user.id;
-      let queryString = "";
-
+      
       if (
-        this.$store.state.auth.user.userType === "Faculty" ||
-        this.$store.state.auth.user.userType === "Student"
+        this.$store.state.auth.user.userType === "FACULTY" ||
+        this.$store.state.auth.user.userType === "STUDENT"
       ) {
-        queryString = `department.id=${deptId}&user.id=${userId}&deleted_ne=true&annual_year=${this.annualYear}`;
+        let queryString = "";
+        queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.annualYear}`;
         await this.$store.dispatch("visitor/setVisitorsData", {
           qs: queryString
         });
       } else {
-        queryString = `department.id=${deptId}&annual_year=${this.annualYear}&deleted_ne=true`;
+         let queryString = "";
+        queryString = `department.id=${this.$auth.user.department}&annual_year=${this.annualYear}&deleted_ne=true`;
         await this.$store.dispatch("visitor/setVisitorsData", {
           qs: queryString
         });
