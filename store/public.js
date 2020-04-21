@@ -6,7 +6,7 @@ export const state = () => ({
 		result: [],
 		error: {},
 	},
-	publicEngagementsCount: 0
+	publicEngagementsCount: null
 });
 
 export const getters =  {

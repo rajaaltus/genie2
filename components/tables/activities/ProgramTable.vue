@@ -9,6 +9,9 @@
       class="elevation-1"
       :loading="loading"
       loading-text="Loading... Please wait"
+      :footer-props="{
+    'items-per-page-options': [10, 20, 30, 40, 50]
+  }"
     >
       <template v-slot:item.updated_at="{ item }">
         {{ $moment(item.updated_at).fromNow() }}

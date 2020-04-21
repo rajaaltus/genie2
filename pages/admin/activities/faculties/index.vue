@@ -169,7 +169,7 @@ export default {
         return this.$store.state.participation.participationsCount;
       }
       if (id == 6) {
-        return this.$store.state.public.publicCount;
+        return this.$store.state.public.publicEngagementsCount;
       }
       if (id == 7) {
         return this.$store.state.research.researchCount;

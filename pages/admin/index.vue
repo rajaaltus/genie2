@@ -1,11 +1,7 @@
 <template>
   <div>
     <v-conatainer>
-      <YearDialog
-        :reportYears="reportYears"
-        v-if="$store.state.selectedYear == 0"
-        @set-year="setYear"
-      />
+      <YearDialog @set-year="setYear" />
       <v-tabs flat background-color="#323232" color="#6ac447" dark>
         <v-tab>
           <span class="mdi mdi-view-dashboard cust-icon"></span>
@@ -22,7 +18,7 @@
               <v-row class="pr-4">
                 <v-col cols="12" lg="3">
                   <v-select
-                    v-model= "selectedYear"
+                    v-model="selectedYear"
                     :items="reportYears"
                     item-value="id"
                     item-text="val"
@@ -221,7 +217,7 @@
                   >
                     <h2 class="font-weight-bold">Publications</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(6)}}
+                      {{getActivityCount(8)}}
                     </span>
 
                     <v-tooltip top color="black">
@@ -324,7 +320,7 @@
                   >
                     <h2 class="font-weight-bold">Public Engagement</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(7)}}
+                      {{ getActivityCount(6) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -347,7 +343,7 @@
                   >
                     <h2 class="font-weight-bold">Research Activities</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(8)}}
+                      {{getActivityCount(7)}}
                     </span>
                   </v-alert>
                 </v-col>
@@ -539,6 +535,7 @@ export default {
     return {
       loading: false,
       selectedUser: null,
+      selectedYear: 0,
       reportYears: [
         {
           id: 2017,
@@ -641,7 +638,7 @@ export default {
         return this.$store.state.participation.participationsCount;
       }
       if (id == 6) {
-        return this.$store.state.public.publicCount;
+        return this.$store.state.public.publicEngagementsCount;
       }
       if (id == 7) {
         return this.$store.state.research.researchCount;
@@ -658,9 +655,7 @@ export default {
       if (id == 11) {
         return this.$store.state.assignment.assignmentsCount;
       }
-      if (id == 12) {
-        return this.$store.state.theses.thesesCount;
-      }
+      
     },
     async reloadData() {
       this.loading = true;
@@ -698,7 +693,8 @@ export default {
       })
       this.loading = false;
     },
-    setYear() {
+   setYear() {
+      console.log('receiving....')
       this.selectedYear = this.$store.state.selectedYear
     },
     remove(item) {

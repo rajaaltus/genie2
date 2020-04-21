@@ -220,6 +220,26 @@
           </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <h2 class="font-weight-bold">
+            <v-icon
+              color="green darken-3"
+              class="mdi mdi-email-outline mr-3"
+            ></v-icon
+            >Publications
+          </h2>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row v-for="(item, index) in publicationsData" :key="index">
+            <v-col cols="12" lg="12">
+              <h2>{{item.annual_year}}</h2> <!-- Data Access example -->
+              <p>{{item.publication_type}}</p> <!-- Data Access example -->
+              <pre>{{ item }}</pre> 
+            </v-col>
+          </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-expansion-panels>
   </div>
 </template>
@@ -231,7 +251,8 @@ export default {
     "presentationsData",
     "participationsData",
     "researchData",
-    "patentsData"
+    "patentsData",
+    "publicationsData"
   ]
 };
 </script>
