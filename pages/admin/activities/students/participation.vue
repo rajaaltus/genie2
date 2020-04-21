@@ -17,7 +17,7 @@
             <PageHeader
               :title="$metaInfo.title"
               :reportYears="reportYears"
-              :selectedYear="$store.state.selectedYear"
+              @set-year="setReportingYear"
               class="ml-0 pb-0 pt-0"
             />
             <v-row>
@@ -27,7 +27,7 @@
                 </v-card>
               </v-col>
               <v-col cols="12" md="9" lg="9">
-
+                <ParticipationForm :dataFrom="students" section="Select Student from the list" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -36,7 +36,13 @@
 
       <v-tab-item>
         <v-card flat>
-          <v-card-text class="px-0 py-1"> </v-card-text>
+          <v-card-text class="px-0 py-1">
+            <v-row>
+              <v-col cols="12" md="12">
+                <ParticipationTable :reportYears="reportYears" />
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs>
@@ -44,9 +50,12 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 import PageHeader from '@/components/PageHeader'
 import StudentActivities from '@/components/StudentActivities'
+import YearDialog from '@/components/YearDialog'
+import ParticipationForm from '@/components/forms/ParticipationForm'
+import ParticipationTable from '@/components/tables/activities/ParticipationTable'
 export default {
   head() {
     return {
@@ -55,7 +64,51 @@ export default {
   }, 
   components: {
     PageHeader,
-    StudentActivities
+    StudentActivities,
+    YearDialog,
+    ParticipationForm,
+    ParticipationTable
+  },
+  data: () => ({
+    reportYears: [
+			{
+				id: 2017,
+				val: '2017-2018',
+			},
+			{
+				id: 2018,
+				val: '2018-2019'
+			},
+			{
+				id: 2019,
+				val: '2019-2020'
+			},
+			{
+				id: 2020,
+				val: '2020-2021'
+			}
+    ],
+    selectedYear: 0,
+  }),
+  computed: {
+    ...mapState({
+      students: state => state.students
+    })
+  },
+  async fetch({ store }) {
+    await store.dispatch("setStudentActivities");
+    let qs = "";
+    qs = `department.id=${store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
+    await store.dispatch("setStudents", { qs: qs });
+  },
+
+  methods: {
+    async changeReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
   }
 } 
 </script>

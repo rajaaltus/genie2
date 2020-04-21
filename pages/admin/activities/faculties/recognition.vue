@@ -26,7 +26,7 @@
                 </v-card>
               </v-col>
               <v-col cols="12" md="9" lg="9">
-                <RecognitionForm :dataFrom="staffs" />
+                <RecognitionForm :dataFrom="staffs" section="Select Faculty / Staff from the list" />
               </v-col>
             </v-row>
           </v-card-text>
