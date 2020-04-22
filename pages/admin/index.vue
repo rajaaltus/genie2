@@ -320,11 +320,7 @@
                   >
                     <h2 class="font-weight-bold">Public Engagement</h2>
                     <span class="display-2 font-weight-bold">
-<<<<<<< HEAD
                       {{getActivityCount(6)}}
-=======
-                      {{ getActivityCount(6) }}
->>>>>>> ea244e832f3fac8760b8e1bc63e00c3bf3ed3a3b
                     </span>
                   </v-alert>
                 </v-col>

@@ -1,33 +1,29 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" persistent max-width="50%">
+    <v-dialog v-model="dialog" persistent max-width="60%">
       <v-card>
         <v-card-title>
-          <span class="headline">Edit Qualification</span>
+          <span class="headline">Update Qualification Details</span>
         </v-card-title>
         <v-card-text>
           <v-row>
-            <v-col cols="4">
+            <v-col cols="12" md="3" lg="3">
               <v-text-field
                 color="green"
                 v-model="editedItem.qualification"
-                label="Qualification *"
-                required
-                outlined
+                label="Degree"
+                :rules="[v => !!v || 'Please Enter your Degree Name']"
               ></v-text-field>
             </v-col>
-            <v-col cols="8">
+            <v-col cols="12" md="5" lg="5">
               <v-text-field
                 color="green"
                 v-model="editedItem.institute"
-                label="Institute *"
-                outlined
-                :rules="[v => !!v || 'Please Enter institute Name']"
+                label="Institute &amp; Place"
+                :rules="[v => !!v || 'Please Enter Institute Name']"
               ></v-text-field>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="2" lg="2">
               <v-menu
                 ref="menu"
                 v-model="editedFrom"
@@ -42,8 +38,7 @@
                     :return-value.sync="editedFrom"
                     :rules="[v => !!v || 'Item is required']"
                     readonly
-                    outlined
-                    label="From Date "
+                    label="From"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -67,7 +62,7 @@
                 </v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="2" lg="2">
               <v-menu
                 ref="menu1"
                 v-model="editedTo"
@@ -82,8 +77,7 @@
                     :rules="[v => !!v || 'Item is required']"
                     :return-value.sync="editedTo"
                     readonly
-                    outlined
-                    label="To Date "
+                    label="To"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -110,11 +104,11 @@
         </v-card-text>
         <v-card-actions class="pr-5">
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" small dark @click="dialog = false"
+          <v-btn color="red darken-1" small dark @click="dialog = false"
             >Close</v-btn
           >
           <v-btn color="green darken-1" small dark @click="save"
-            ><v-icon small class="pr-2">mdi-check</v-icon>Edit
+            ><v-icon small class="pr-2">mdi-content-save</v-icon>Save
           </v-btn>
         </v-card-actions>
 
@@ -129,30 +123,27 @@
       colored-border
       icon="mdi-hospital-building"
     >
-      <h2 class="font-weight-bold">Qualifications</h2>
+      <h2 class="font-weight-bold mb-4">Qualifications</h2>
 
       <v-form ref="form" v-model="valid" lazy-validation v-if="form">
         <v-row>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="3">
             <v-text-field
               v-model="qualification.qualification"
-              :rules="[v => !!v || 'Please type qualification']"
-              label="Qualification *"
+              :rules="[v => !!v || 'Please type your Degree Name']"
+              label="Degree"
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="5">
             <v-text-field
               v-model="qualification.institute"
               :rules="[v => !!v || 'Please type qualification']"
-              label="Institution *"
+              label="Institution &amp; Place"
               required
             ></v-text-field>
           </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="2">
             <v-menu
               ref="menu"
               v-model="from"
@@ -167,7 +158,7 @@
                   :return-value.sync="from"
                   :rules="[v => !!v || 'Item is required']"
                   readonly
-                  label="From Date "
+                  label="From Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -187,7 +178,7 @@
               </v-date-picker>
             </v-menu>
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="2">
             <v-menu
               ref="menu1"
               v-model="to"
@@ -202,7 +193,7 @@
                   :rules="[v => !!v || 'Item is required']"
                   :return-value.sync="to"
                   readonly
-                  label="To Date "
+                  label="To Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -223,50 +214,52 @@
           </v-col>
         </v-row>
 
-        <v-btn small color="success" class="mr-4" @click="addQualification">
-          Add Qualification
+        <v-btn x-small color="success" class="mr-2" @click="addQualification">
+          <v-icon small class="pr-1">mdi-plus</v-icon> Add
         </v-btn>
 
-        <v-btn small color="error" class="mr-4" @click="reset">
-          Reset Form
+        <v-btn x-small color="error" class="mr-4" @click="reset">
+          <v-icon small class="pr-1">mdi-reload</v-icon> Reset
         </v-btn>
       </v-form>
-
+      <br>
       <v-card
         flat
-        class="py-0"
+        class="mb-3"
         v-for="(item, index) in qualifications"
         :key="index"
       >
-        <v-card-title class="title font-weight-bold px-0"
-          >{{ $moment(item.duration_from).format("YYYY") }} -
-          {{ $moment(item.duration_to).format("YY") }}
+          <v-chip label small color="light-blue darken-1 mb-2" dark>
+            <span class="font-weight-normal">{{ item.qualification }}</span>
+          </v-chip>
+          <v-chip label small color="light-blue lighten-4 mb-2">{{ item.institute }}</v-chip>
+          <v-chip label small color="light-blue lighten-5 mb-2">
+            From {{ $moment(item.duration_from).format("YYYY") }} -
+            to {{ $moment(item.duration_to).format("YYYY") }}
+          </v-chip>
+          
           <v-btn
             v-if="qEdit"
             @click="editQualification(item)"
-            class="ma-2"
+            class="ml-2 mb-2"
             outlined
             x-small
             fab
-            color="indigo"
+            color="green"
           >
-            <v-icon>mdi-pencil</v-icon>
+          <v-icon>mdi-pencil</v-icon>
           </v-btn>
           <v-btn
             v-if="qEdit"
             @click="deleteItem(item)"
-            class="ma-2"
+            class="mb-2"
             outlined
             x-small
             fab
-            color="indigo"
+            color="red"
           >
-            <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
+          <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
           </v-btn>
-        </v-card-title>
-        <v-card-subtitle class="body-2 font-weight-bold px-0"
-          >{{ item.qualification }}, {{ item.institute }}
-        </v-card-subtitle>
       </v-card>
 
       <v-layout align-end justify-end>
@@ -280,13 +273,13 @@
           <template v-slot:activator>
             <v-btn
               v-model="fab"
-              color="blue darken-2"
+              color="red darken-1"
               dark
               fab
               x-small
               @click="closeEdit"
             >
-              <v-icon>{{ qEdit ? "mdi-close" : "mdi-pencil" }}</v-icon>
+            <v-icon>{{ qEdit ? "mdi-close" : "mdi-pencil" }}</v-icon>
             </v-btn>
           </template>
           <v-btn fab dark x-small color="green" @click="activateForm">
