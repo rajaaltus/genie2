@@ -1,20 +1,39 @@
 <template>
-  <v-app>
-    <PageHeader :title="$metaInfo.title" /> 
-  </v-app>
+  <div>
+    <PageHeader :title="$metaInfo.title" />
+    <v-row>
+      <v-col cols="12" lg="3">
+        <ApprovalActivities />
+      </v-col>
+      <v-col cols="12" lg="9">
+        <nuxt-child />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
-
-import PageHeader from '@/components/PageHeader'
+import PageHeader from "@/components/PageHeader"
+import ApprovalActivities from "@/components/ApprovalActivities"
+import Program from "@/components/approvals/Program"
 export default {
   head() {
     return {
-      title: 'Approvals'
-    }
-  }, 
+      title: "Approvals"
+    };
+  },
   components: {
-    PageHeader
+    PageHeader,
+    ApprovalActivities,
+    Program
+  },
+  data() {
+    return {
+      
+    };
+  },
+  async fetch({store}) {
+    await store.dispatch('setApprovalActivities')
   }
-} 
+};
 </script>

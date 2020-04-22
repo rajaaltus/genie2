@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row no-gutters>
+    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
       <v-col cols="11" lg="11">
         <v-select
           v-model="theses.user"

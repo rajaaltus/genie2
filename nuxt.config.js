@@ -26,6 +26,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '@/assets/style.css'
   ],
   router: {
     middleware: ['auth']

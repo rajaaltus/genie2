@@ -50,7 +50,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				commit("SET_PROGRAMMESDATA", error);
+				// commit("SET_PROGRAMMESDATA", error);
 			})
 			.finally(function () {
 			// always executed
