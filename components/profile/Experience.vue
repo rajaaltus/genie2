@@ -1,44 +1,39 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" persistent max-width="50%">
+    <v-dialog v-model="dialog" persistent max-width="60%">
       <v-card>
         <v-card-title>
-          <span class="headline">Edit Experience</span>
+          <span class="headline">Update Experience Details</span>
         </v-card-title>
         <v-card-text>
           <v-row>
-            <v-col cols="4">
+            <v-col cols="12" md="4" lg="4">
               <v-text-field
                 color="green"
                 v-model="editedItem.designation"
-                label="Designation *"
+                label="Designation"
                 required
-                outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="8">
+            <v-col cols="12" md="8" lg="8">
               <v-text-field
                 color="green"
                 v-model="editedItem.organization"
-                label="Organization *"
-                outlined
+                label="Organization"
                 :rules="[v => !!v || 'Please Enter organization Name']"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12" md="4" lg="4">
               <v-text-field
                 color="green"
                 v-model="editedItem.place"
-                label="Place *"
-                outlined
+                label="Place"
                 :rules="[v => !!v || 'Please Enter Place ']"
               ></v-text-field>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="4" lg="4">
               <v-menu
                 ref="menu"
                 v-model="editedFrom"
@@ -53,8 +48,7 @@
                     :return-value.sync="editedFrom"
                     :rules="[v => !!v || 'Item is required']"
                     readonly
-                    outlined
-                    label="From Date "
+                    label="From"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -78,7 +72,7 @@
                 </v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="4" lg="4">
               <v-menu
                 ref="menu1"
                 v-model="editedTo"
@@ -93,8 +87,7 @@
                     :rules="[v => !!v || 'Item is required']"
                     :return-value.sync="editedTo"
                     readonly
-                    outlined
-                    label="To Date "
+                    label="To"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -104,7 +97,7 @@
                   scrollable
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="editeTo = false">
+                  <v-btn color="red darken-1" small dark @click="editeTo = false">
                     Cancel
                   </v-btn>
                   <v-btn
@@ -129,12 +122,13 @@
         </v-card-text>
         <v-card-actions class="pr-5">
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" small dark @click="dialog = false"
+          <v-btn color="red darken-1" small dark @click="dialog = false"
             >Close</v-btn
           >
           <v-btn color="green darken-1" small dark @click="save"
-            ><v-icon small class="pr-2">mdi-check</v-icon>Edit
+            ><v-icon small class="pr-2">mdi-content-save</v-icon>Save
           </v-btn>
+         
         </v-card-actions>
 
         <!-- <pre>{{ editedItem }}</pre> -->
@@ -153,35 +147,34 @@
 
       <v-form ref="form" v-model="valid" lazy-validation v-if="form">
         <v-row>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="4">
             <v-text-field
+              color="amber"
               v-model="experience.designation"
-              :rules="[v => !!v || 'Please type Designation']"
-              label="Designation *"
-              required
+              :rules="[v => !!v || 'Please Enter your Designation']"
+              label="Designation"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="8">
             <v-text-field
+              color="amber"
               v-model="experience.organization"
-              :rules="[v => !!v || 'Please type Organization']"
-              label="Organization *"
-              required
+              :rules="[v => !!v || 'Please Enter your Organization']"
+              label="Organization"
             ></v-text-field>
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" lg="4">
             <v-text-field
+              color="amber"
               v-model="experience.place"
-              :rules="[v => !!v || 'Please type Place']"
-              label="Place *"
+              :rules="[v => !!v || 'Please Enter Place']"
+              label="Place"
               required
             ></v-text-field>
-            </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" lg="6">
+          </v-col>
+          <v-col cols="12" lg="4">
             <v-menu
               ref="menu"
               v-model="from"
@@ -192,11 +185,12 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  color="amber"
                   v-model="experience.duration_from"
                   :return-value.sync="from"
                   :rules="[v => !!v || 'Item is required']"
                   readonly
-                  label="From Date "
+                  label="From"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -216,7 +210,7 @@
               </v-date-picker>
             </v-menu>
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="4">
             <v-menu
               ref="menu1"
               v-model="to"
@@ -227,11 +221,12 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+                  color="amber"
                   v-model="experience.duration_to"
                   :rules="[v => !!v || 'Item is required']"
                   :return-value.sync="to"
                   readonly
-                  label="To Date "
+                  label="To"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -252,57 +247,60 @@
           </v-col>
         </v-row>
         <v-row>
-            <v-col cols="12">
-              <v-textarea
-                v-model="experience.brief_summary"
-                label="Brief Summary "
-              ></v-textarea>
-            </v-col>
-          </v-row>
+          <v-col cols="12">
+            <v-textarea
+              color="amber"
+              v-model="experience.brief_summary"
+              label="Brief Summary "
+            ></v-textarea>
+          </v-col>
+        </v-row>
 
-        <v-btn small color="success" class="mr-4" @click="addExperience">
-          Add Experience
+        <v-btn x-small color="success" class="mr-2" @click="addExperience">
+          <v-icon small class="pr-1">mdi-plus</v-icon> Add
         </v-btn>
 
-        <v-btn small color="error" class="mr-4" @click="reset">
-          Reset Form
+        <v-btn x-small color="error" class="mr-4" @click="reset">
+          <v-icon small class="pr-1">mdi-reload</v-icon> Reset
         </v-btn>
       </v-form>
+      <br />
       <v-timeline dense>
-        <v-timeline-item small v-for="(item, index) in experiences" :key="index">
-          <template>
-            <span class="font-weight-bold"
-              >{{ $moment(item.duration_from).format("YYYY") }} -
-              {{ $moment(item.duration_to).format("YY") }}
-            </span>
-          </template>
+        <v-timeline-item
+          small
+          color="yellow"
+          v-for="(item, index) in experiences"
+          :key="index"
+        >
+            
           <div class="py-4">
-            <h2>
-              {{ item.designation
-              }}<v-btn
+            <v-chip label small color="yellow lighten-2 mb-2">
+            <span class="body-2 font-weight-bold">From {{ $moment(item.duration_from).format("YYYY") }} -
+            to {{ $moment(item.duration_to).format("YYYY") }}</span>
+          </v-chip>
+            <h2>{{ item.designation }} </h2>
+            <div>{{ item.organization }}, {{ item.place }}.</div>
+            <v-btn
                 v-if="edit"
                 @click="editExperience(item)"
-                class="ma-2"
+                class="mr-1"
                 outlined
                 x-small
                 fab
-                color="indigo"
+                color="green"
               >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-btn
                 v-if="edit"
                 @click="deleteItem(item)"
-                class="ma-2"
                 outlined
                 x-small
                 fab
-                color="indigo"
+                color="red"
               >
                 <v-icon @click="deleteItem(item)">mdi-delete</v-icon>
               </v-btn>
-            </h2>
-            <div>{{ item.organization }}, {{ item.place }}.</div>
           </div>
         </v-timeline-item>
       </v-timeline>
@@ -318,7 +316,7 @@
           <template v-slot:activator>
             <v-btn
               v-model="fab"
-              color="blue darken-2"
+              color="red darken-1"
               dark
               fab
               x-small
@@ -404,11 +402,11 @@ export default {
             });
             this.$emit("new-experience");
             this.reset();
-            this.form=false;
+            this.form = false;
           })
           .catch(e => {
-          Swal.fire("something Wrong!");
-        });
+            Swal.fire("something Wrong!");
+          });
       }
     },
     editExperience(item) {

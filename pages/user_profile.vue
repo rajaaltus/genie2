@@ -3,9 +3,8 @@
     <v-row>
       <v-col cols="12" md="3" lg="3">
         <ProfileCard :profile="userProfile" />
-        
-        <PublicationChart @fetched="reloadChart" :stats="stats" />
-        <WordCloud />
+        <!-- <PublicationChart @fetched="reloadChart" :stats="stats" />
+        <WordCloud /> -->
       </v-col>
 
       <v-col cols="12" md="9" lg="9">
@@ -30,6 +29,107 @@
           </v-layout>
 
           <v-tab-item class="pt-1">
+
+            <v-skeleton-loader
+                    v-if="loading"
+                    height="120"
+                    type="list-item-avatar-two-line"
+                  >
+                  </v-skeleton-loader>
+                  <v-alert
+                    v-else
+                    tile
+                    elevation="1"
+                    border="left"
+                    color="light-green lighten-1"
+                    colored-border
+                    icon="mdi-bookshelf"
+                  >
+                    <h2 class="font-weight-bold">Publications</h2>
+                    <span class="display-2 font-weight-bold">39
+                    </span>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="ml-12"
+                          tile
+                          x-small
+                          color="green darken-3"
+                          v-on="on"
+                          >125</v-btn
+                        >
+                      </template>
+                      <span>Journal Articles</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green darken-2" v-on="on"
+                          >117</v-btn
+                        >
+                      </template>
+                      <span
+                        >Articles for Professionals in Souvenirs, Newsletters,
+                        etc..</span
+                      >
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green darken-1" v-on="on"
+                          >26</v-btn
+                        >
+                      </template>
+                      <span>Books</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green lighten-1" v-on="on"
+                          >85</v-btn
+                        >
+                      </template>
+                      <span>Book Chapters</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green lighten-2" v-on="on"
+                          >216</v-btn
+                        >
+                      </template>
+                      <span>Monographs</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green lighten-3" v-on="on"
+                          >47</v-btn
+                        >
+                      </template>
+                      <span>Manuals</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green lighten-4" v-on="on"
+                          >112</v-btn
+                        >
+                      </template>
+                      <span>Reports</span>
+                    </v-tooltip>
+
+                    <v-tooltip top color="black">
+                      <template v-slot:activator="{ on }">
+                        <v-btn tile x-small color="green lighten-5" v-on="on"
+                          >8</v-btn
+                        >
+                      </template>
+                      <span>Articles for General Public / IEC Materials</span>
+                    </v-tooltip>
+                  </v-alert>
+
             <v-skeleton-loader
               v-if="loading"
               height="130"
