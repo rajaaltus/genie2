@@ -42,8 +42,12 @@ export default {
   },
   
   mounted() {
-    if (this.profile.image!==null && this.profile.image!==undefined)
+    // console.log(this.profile)
+    if (this.profile.image!==null)
       this.image_url = this.profile.image.url
+      // console.log('its not null')
+    // else  
+    //   console.log('its null')
   }
 }
 </script>
