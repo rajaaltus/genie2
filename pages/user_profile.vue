@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12" md="3" lg="3">
-        <ProfileCard :profile="userProfile" />
+        <ProfileCard :profile="userProfile" v-if="userProfile" />
         <!-- <PublicationChart @fetched="reloadChart" :stats="stats" />
         <WordCloud /> -->
       </v-col>
@@ -261,7 +261,7 @@ export default {
     await store.dispatch("patent/setPatentsData", { qs: queryString });
     await store.dispatch("publication/setPublicationsData", { qs: queryString });
   },
-  mounted() {
+  async mounted() {
     console.log(this.userProfile);
     if (this.userProfile === undefined) {
       Swal.fire({

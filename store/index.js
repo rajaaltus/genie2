@@ -9,7 +9,105 @@ export const state = () => ({
   selectedYear: 0,
 	activities: [],
 	studentActivities: [],
-	approvalActivities: [],
+	approvalActivities: [	
+		{
+			id: 1,
+			title: 'Programmes / Events',
+			count: 12,
+			icon: 'mdi-clipboard-list',
+			path: '/admin/activities/faculties/program',
+			dataName: 'programmesData'
+			
+		},
+		{
+			id: 2,
+			title: 'Department Visitors',
+			count: 5,
+			icon: 'mdi-certificate-outline',
+			path: '/admin/activities/faculties/visitor',
+			dataName: 'visitorsData'
+		},
+		{
+			id: 3,
+			title: 'Training Underwent',
+			count: 8,
+			icon: 'mdi-bike-fast',
+			path: '/admin/activities/faculties/training',
+			dataName: ''
+		},
+		{
+			id: 4,
+			title: 'Presentations / Posters',
+			count: 14,
+			icon: 'mdi-billboard',
+			path: '/admin/activities/faculties/presentation',
+			dataName: ''
+		},
+		{
+			id: 5,
+			title: 'Participations',
+			count: 4,
+			icon: 'mdi-atom',
+			path: '/admin/activities/faculties/participation',
+			dataName: ''
+		},
+		{
+			id: 6,
+			title: 'Public Engagement',
+			count: 2,
+			icon: 'mdi-air-horn',
+			path: '/admin/activities/faculties/public',
+			dataName: ''
+		},
+		{
+			id: 7,
+			title: 'Research Activities',
+			count: 7,
+			icon: 'mdi-book-search',
+			path: '/admin/activities/faculties/research',
+			dataName: ''
+		},
+		{
+			id: 8,
+			title: 'Publications',
+			count: 6,
+			icon: 'mdi-bookshelf',
+			path: '/admin/activities/faculties/publication',
+			dataName: ''
+		},
+		{
+			id: 9,
+			title: 'Recognitions',
+			count: 18,
+			icon: 'mdi-crown',
+			path: '/admin/activities/faculties/recognition',
+			dataName: ''
+		},
+		{
+			id: 10,
+			title: 'Patents',
+			count: 7,
+			icon: 'mdi-book-lock',
+			path: '/admin/activities/faculties/patent',
+			dataName: ''
+		},
+		{
+			id: 11,
+			title: 'Key Assignments',
+			count: 20,
+			icon: 'mdi-ship-wheel',
+			path: '/admin/activities/faculties/assignment',
+			dataName: ''
+		},
+		{
+			id: 12,
+			title: 'Theses / Dissertions',
+			count: 20,
+			icon: 'mdi-album',
+			path: '/admin/activities/students/theses',
+			dataName: ''
+		}
+	],
 	reportYears: [],
 	students: [],
 	staffs: [],

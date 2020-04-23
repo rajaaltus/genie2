@@ -31,12 +31,14 @@
 
                 <v-col cols="11" lg="3">
                   <v-autocomplete
+                    v-model="selectedUser"
                     :items="people"
                     color="blue-grey lighten-2"
                     label="Faculty / Staff / Student"
-                    item-text="name"
-                    item-value="name"
+                    item-text="fullname"
+                    item-value="id"
                     outlined
+                    @input="getUserWise"
                   >
                     <template v-slot:selection="data">
                       <v-chip
@@ -44,10 +46,10 @@
                         :input-value="data.selected"
                         @click="data.select"
                       >
-                        <v-avatar left>
+                        <!-- <v-avatar left>
                           <v-img :src="data.item.avatar"></v-img>
-                        </v-avatar>
-                        {{ data.item.name }}
+                        </v-avatar> -->
+                        {{ data.item.fullname }}
                       </v-chip>
                     </template>
                     <template v-slot:item="data">
@@ -58,14 +60,14 @@
                       </template>
                       <template v-else>
                         <v-list-item-avatar>
-                          <img :src="data.item.avatar" />
+                          <img :src="data.item.avatar!==null?$axios.defaults.baseURL+data.item.avatar.url:'/avatar-default-icon.png'" />
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title
-                            v-html="data.item.name"
+                            v-html="data.item.fullname"
                           ></v-list-item-title>
                           <v-list-item-subtitle
-                            v-html="data.item.group"
+                            v-html="data.item.userType"
                           ></v-list-item-subtitle>
                         </v-list-item-content>
                       </template>
@@ -467,49 +469,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <v-card tile>
-            <v-card-text class="px-0 py-1">
-              <v-row class="px-5">
-                <v-col cols="3" md="3">
-                  <v-select
-                    item-value="id"
-                    item-text="year"
-                    label="Reporting Year"
-                    color="success"
-                  ></v-select>
-                </v-col>
-
-                <v-col cols="3" md="3">
-                  <v-select
-                    item-value="id"
-                    item-text="fullname"
-                    label="Faculty / Staff / Student"
-                    color="success"
-                  ></v-select>
-                </v-col>
-
-                <v-col cols="1" md="1">
-                  <div class="my-4">
-                    <v-btn color="green darken-2" fab x-small dark>
-                      <v-icon>mdi-reload</v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-              </v-row>
-
-              <v-expansion-panels flat multiple>
-                <v-expansion-panel v-for="(item, i) in 5" :key="i">
-                  <v-expansion-panel-header>Item</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-card-text>
-          </v-card>
+          <ReportPreview />
         </v-tab-item>
       </v-tabs>
     </v-conatainer>
@@ -520,6 +480,7 @@
 
 import PageHeader from "@/components/PageHeader";
 import YearDialog from "@/components/YearDialog";
+import ReportPreview from "@/components/ReportPreview"
 export default {
   head() {
     return {
@@ -528,7 +489,8 @@ export default {
   },
   components: {
     PageHeader,
-    YearDialog
+    YearDialog,
+    ReportPreview
   },
   data() {
     
@@ -578,7 +540,7 @@ export default {
   },
   computed: {
     people() {
-      return this.$store.state.people
+      return this.$store.state.user.activeUsersList.result
     }
   },
   async fetch({ store }) {
@@ -590,12 +552,8 @@ export default {
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
-    await store.dispatch("presentation/countPresentations", {
-      qs: queryString
-    });
-    await store.dispatch("participation/countParticipations", {
-      qs: queryString
-    });
+    await store.dispatch("presentation/countPresentations", { qs: queryString });
+    await store.dispatch("participation/countParticipations", { qs: queryString });
     await store.dispatch("public/countPublicEngagements", { qs: queryString });
     await store.dispatch("research/countResearch", { qs: queryString });
     await store.dispatch("publication/countPublications", { qs: queryString });
@@ -603,13 +561,12 @@ export default {
     await store.dispatch("patent/countPatents", { qs: queryString });
     await store.dispatch("assignment/countAssignments", { qs: queryString });
 
+    let queryString1 = '';
+    queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
+    await store.dispatch("user/setActiveUsersList", {qs: queryString1})
+    
   },
   watch: {
-    isUpdating(val) {
-      if (val) {
-        setTimeout(() => (this.isUpdating = false), 3000);
-      }
-    },
     selectedYear(val) {
       this.annualYear = this.selectedYear;
       this.reloadData();
@@ -618,9 +575,25 @@ export default {
   mounted () {
     if (this.selectedYear == 0)
       this.selectedYear = this.$store.state.selectedYear;
-    
   },
   methods: {
+    async getUserWise() {
+      this.loading = true;
+      let queryString = '';
+      queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`
+      await this.$store.dispatch("program/countProgrammes", { qs: queryString });
+      await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", { qs: queryString });
+      await this.$store.dispatch("presentation/countPresentations", { qs: queryString });
+      await this.$store.dispatch("participation/countParticipations", { qs: queryString });
+      await this.$store.dispatch("public/countPublicEngagements", { qs: queryString });
+      await this.$store.dispatch("research/countResearch", { qs: queryString });
+      await this.$store.dispatch("publication/countPublications", { qs: queryString });
+      await this.$store.dispatch("recognition/countRecognitions", { qs: queryString });
+      await this.$store.dispatch("patent/countPatents", { qs: queryString })
+      await this.$store.dispatch("assignment/countAssignments", { qs: queryString })
+      this.loading = false;
+    },
     getActivityCount(id) {
       if (id == 1) {
         return this.$store.state.program.programmesCount;
@@ -660,37 +633,21 @@ export default {
     async reloadData() {
       this.loading = true;
       let queryString = "";
-      if (this.$store.state.auth.user.userType === "DEPARTMENT")
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      else
+      // if (this.$store.state.auth.user.userType === "DEPARTMENT")
+      //   queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
+      // else
         queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      await this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
-      });
+      await this.$store.dispatch("program/countProgrammes", { qs: queryString });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", {
-        qs: queryString
-      });
-      await this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
-      });
+      await this.$store.dispatch("training/countTrainings", { qs: queryString });
+      await this.$store.dispatch("presentation/countPresentations", { qs: queryString });
+      await this.$store.dispatch("participation/countParticipations", { qs: queryString });
+      await this.$store.dispatch("public/countPublicEngagements", { qs: queryString });
       await this.$store.dispatch("research/countResearch", { qs: queryString });
-      await this.$store.dispatch("publication/countPublications", {
-        qs: queryString
-      });
-      await this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
-      });
+      await this.$store.dispatch("publication/countPublications", { qs: queryString });
+      await this.$store.dispatch("recognition/countRecognitions", { qs: queryString });
       await this.$store.dispatch("patent/countPatents", { qs: queryString })
-      await this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
-      })
+      await this.$store.dispatch("assignment/countAssignments", { qs: queryString })
       this.loading = false;
     },
    setYear() {
