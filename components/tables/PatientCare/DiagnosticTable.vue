@@ -20,6 +20,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -65,6 +66,7 @@
                     <v-row>
                       <v-col cols="4">
                         <v-select
+                          color="green"
                           v-model="editedItem.lab_type"
                           label="Lab Service Type"
                           :rules="[v => !!v || 'Select the Lab Service Type']"
@@ -76,6 +78,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-combobox
+                          color="green"
                           v-model="editedItem.pc_diagnostic_test"
                           :rules="[v => !!v || 'Enter the Test Name']"
                           label="Test Name"
@@ -101,6 +104,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.samples_analyzed"
                           type="number"
                           :rules="[

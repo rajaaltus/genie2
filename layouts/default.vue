@@ -305,7 +305,7 @@ export default {
               to: "/admin/departments/hrd"
             },
             {
-              title: "Faculty / Staff",
+              title: "Departmental Staff",
               icon: "mdi-chevron-double-right",
               to: "/admin/departments/faculty"
             }

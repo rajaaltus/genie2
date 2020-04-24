@@ -27,6 +27,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -63,6 +64,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
+                      color="green"
                         v-model="editedItem.training_name"
                         :rules="[v => !!v || 'Item is required']"
                         label="Course / Training"
@@ -72,6 +74,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
+                      color="green"
                         v-model="editedItem.institutional_affiliation"
                         label="Institute Affiliation"
                         required
@@ -80,6 +83,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
+                      color="green"
                         v-model="editedItem.no_of_candidates"
                         :rules="[v => !!v || 'Item is required']"
                         label="Number of Candidates"
@@ -99,6 +103,7 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
+                          color="green"
                             v-model="editedItem.from_date"
                             :rules="[v => !!v || 'Item is required']"
                             label="From Date"
@@ -123,6 +128,7 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
+                          color="green"
                             v-model="editedItem.to_date"
                             :rules="[v => !!v || 'Item is required']"
                             label="To Date"
@@ -139,6 +145,7 @@
 
                     <v-col cols="4">
                       <v-select
+                      color="green"
                         v-model="editedItem.remarks_status"
                         :items="remarks"
                         label="Status"
@@ -146,6 +153,7 @@
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
+                      color="green"
                         v-model="editedItem.brief_report"
                         label="Brief Report"
                       ></v-textarea>
