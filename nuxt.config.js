@@ -52,7 +52,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    'nuxt-graphql-request'
+    'nuxt-graphql-request',
+    'nuxt-pdf'
   ],
    
   graphql: {
