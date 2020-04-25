@@ -32,6 +32,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -76,6 +77,7 @@
                       <template>
                         <v-col cols="4">
                           <v-combobox
+                            color="green"
                             v-model="editedItem.Procedure"
                             :items="procedures"
                             :loading="isLoading"
@@ -114,6 +116,7 @@
                       </template>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.classification"
                           :rules="[v => !!v || 'Item is required']"
                           label="Classification"
@@ -123,6 +126,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.no_of_patients"
                           :rules="[v => !!v || 'Item is required']"
                           label="Total Patients"
@@ -130,6 +134,7 @@
                       </v-col>
                       <v-col cols="12">
                         <v-textarea
+                        color="green"
                           v-model="editedItem.description"
                           label="Description"
                         ></v-textarea>

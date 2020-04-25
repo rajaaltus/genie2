@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^18.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
     "@nuxtjs/auth": "^4.8.5",
     "@nuxtjs/axios": "^5.3.6",
@@ -22,6 +23,7 @@
     "moment": "^2.24.0",
     "nuxt": "^2.0.0",
     "nuxt-graphql-request": "^1.0.1",
+    "nuxt-pdf": "^1.0.4",
     "sweetalert2": "^9.7.2",
     "vue-apexcharts": "^1.5.3",
     "vue-moment": "^4.1.0",

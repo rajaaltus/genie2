@@ -20,6 +20,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+          color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -66,6 +67,7 @@
                     <v-row>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.registrations"
                           label="Registrations"
                           required
@@ -79,6 +81,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.admissions"
                           label="Admissions"
                           required
@@ -92,6 +95,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.deaths"
                           label="Deaths"
                           required
@@ -106,6 +110,7 @@
 
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.internal_ref"
                           label="Referrals - Internal"
                           required
@@ -119,6 +124,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.external_ref"
                           label="Referrals - External"
                           required

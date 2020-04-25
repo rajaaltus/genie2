@@ -44,7 +44,7 @@ export default {
 			},
 			{
 				id: 4,
-				title: 'Clinical Procedures',
+				title: 'Special Clinics / Services / Procedures',
 				count: 14,
 				icon: 'mdi-loupe',
 				path: '/admin/departments/pcActivities/special',

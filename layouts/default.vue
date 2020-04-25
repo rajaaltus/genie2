@@ -305,7 +305,7 @@ export default {
               to: "/admin/departments/hrd"
             },
             {
-              title: "Faculty / Staff",
+              title: "Departmental Staff",
               icon: "mdi-chevron-double-right",
               to: "/admin/departments/faculty"
             }
@@ -328,7 +328,8 @@ export default {
           ]
         },
         { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
-        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" },
+        { title: "Test Report", icon: "mdi-cogs", to:"/admin/medium" }
       ],
       itemsFaculty: [
         { title: "Home", icon: "mdi-home", to: "/admin" },

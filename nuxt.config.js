@@ -52,7 +52,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    'nuxt-graphql-request'
+    'nuxt-graphql-request',
+    'nuxt-pdf'
   ],
    
   graphql: {
@@ -90,7 +91,7 @@ export default {
       
 		  baseURL: 'http://site1.localhost'
 		//  baseURL: 'http://localhost:1337'
-		//  baseURL: 'http://14.139.159.112:1338'
+		// baseURL: 'http://14.139.159.112:1338'
 	},
 
   /*

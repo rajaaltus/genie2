@@ -60,7 +60,7 @@ import DiagnosticTable from "@/components/tables/PatientCare/DiagnosticTable";
 export default {
   head() {
     return {
-      title: "Diagnostics Services"
+      title: "Diagnostic Services"
     };
   },
   components: {

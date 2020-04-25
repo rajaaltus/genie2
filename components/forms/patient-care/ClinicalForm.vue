@@ -94,6 +94,7 @@
             </v-text-field>
           </v-col>
         </v-row>
+        <span class="caption font-weight-light grey lighten-4 px-2 py-1">Note:Clinical services including Inpatient and Outpatient services.</span>
       </v-container>
         <v-row no-gutters>
           <v-spacer></v-spacer>
