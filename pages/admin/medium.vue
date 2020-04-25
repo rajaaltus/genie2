@@ -64,7 +64,7 @@
     </v-row>
 
     <client-only>
-      <v-container style="height: 400px;" v-if="loading">
+      <div style="height: 400px;" v-if="loading">
       <v-row
         class="fill-height"
         align-content="center"
@@ -78,14 +78,14 @@
         </v-col>
         <v-col cols="6">
           <v-progress-linear
-            color="deep-purple accent-4"
+            color="green"
             indeterminate
             rounded
             height="6"
           ></v-progress-linear>
         </v-col>
       </v-row>
-    </v-container>
+    </div>
       <ckeditor
         v-else
         v-model="report"
@@ -114,7 +114,7 @@ export default {
     PageHeader
   },
   data: () => ({
-    loading: true,
+    loading: false,
     editorConfig: {
       height: "200px"
     },
@@ -191,7 +191,7 @@ export default {
     this.fetchAllData();
   },
   methods: {
-    async setReport() {
+    setReport() {
       this.report = null;
       //Program Formatting
       var programmes = this.programmes.map(
@@ -309,6 +309,7 @@ export default {
       );
       
       this.report = [...programmes, ...visitors, ...trainings, ...presentations, ...participations, ...publics, ...researchData, ...publications, ...recognitions, ...patents, assignments, ...theses].join(" ");
+      this.loading = false;
     },
     async fetchAllData() {
       this.loading = true;
@@ -342,8 +343,9 @@ export default {
           qs: queryString
         });
         this.$store.dispatch("theses/setThesesData", { qs: queryString });
-      this.loading = false;
-      this.setReport();
+      
+      await this.setReport()
+      
       //   return this.$store.state.program.programmesData.result;
       //   return this.$store.state.visitor.visitorsData.result;
       //   return this.$store.state.training.trainingsData.result;
