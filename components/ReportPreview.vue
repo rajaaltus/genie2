@@ -3,7 +3,7 @@
     <v-card tile>
       <v-card-text class="px-0 py-1">
         <v-row class="px-5">
-          <v-col cols="11" lg="3">
+          <v-col cols="12" lg="3">
             <v-select
               v-model="selectedYear"
               :items="reportYears"
@@ -15,7 +15,7 @@
             ></v-select>
           </v-col>
 
-          <v-col cols="11" lg="3">
+          <v-col cols="12" lg="3">
             <v-autocomplete
               v-model="selectedUser"
               :items="people"
@@ -62,16 +62,24 @@
               </v-btn>
             </div>
           </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="11" lg="4">
-            <div class="text-center d-flex pb-4 mt-4">
-              <v-btn @click="all" class="mr-2" color="primary"
-                >Expand &amp; Fetch All</v-btn
+          <v-col cols="3" md="3" lg="3">
+          <v-layout align-end justify-end>
+            <v-btn color="red lighten-1" small dark class="my-4">
+              <v-icon small class="px-1">mdi-file-pdf</v-icon>
+              Download Report
+            </v-btn>
+          </v-layout>
+          </v-col>
+          <v-col cols="12" lg="2">
+          <v-layout align-end justify-end>
+              <v-btn @click="all" fab x-small class="mr-2 my-4" color="grey lighten-4">
+              <v-icon>mdi-arrow-expand-all</v-icon>
+              </v-btn
               >
-              <v-btn class="mx-2" fab dark small color="pink" @click="none">
-                <v-icon dark>mdi-close</v-icon>
+              <v-btn class="mr-2 my-4" fab x-small color="grey lighten-4" @click="none">
+                <v-icon>mdi-arrow-collapse-all</v-icon>
               </v-btn>
-            </div>
+          </v-layout>
           </v-col>
         </v-row>
         <!-- <pre>{{allActivities}}</pre> -->

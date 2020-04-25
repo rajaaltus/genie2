@@ -9,7 +9,7 @@
         </v-tab>
         <v-tab>
           <span class="mdi mdi-file-word cust-icon"></span>
-          Consolidated Report
+          Consolidated Report Preview
         </v-tab>
 
         <v-tab-item>
