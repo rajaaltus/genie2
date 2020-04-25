@@ -21,6 +21,7 @@
               v-model="special.description"
               :rules="[v => !!v || 'Enter a Brief Description']"
               label="Description"
+              placeholder="Specify the services offered and the number of patients benefitted from the services."
               required
             >
             </v-textarea>
@@ -58,6 +59,7 @@
             >
             </v-text-field>
           </v-col>
+           <span class="caption font-weight-light grey lighten-4 px-2 py-1">Note: Please include all the special clinics / services / procedures being run by the department.</span>
         </v-row>
       </v-container>
       <v-row no-gutters>

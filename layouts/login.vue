@@ -6,7 +6,7 @@
           <v-container fluid class="fill-height">
             <v-row align="center" justify="center">
               <v-col cols="12" sm="8" md="4">
-                <v-card v-if="!registerForm" tile color="rgba(255,255,255,0.5)">
+                <v-card v-if="!registerForm" tile color="rgba(255,255,255,1)" style="border-bottom:3px solid #43A047;">
                   <v-toolbar flat tile color="rgba(255,255,255,0.1)">
                     <v-toolbar-title
                       ><img
@@ -20,24 +20,26 @@
                   <v-card-text>
                     <v-form ref="login">
                       <v-text-field
+                        color="green darken-1"
                         dense
                         outlined
                         v-model="loginData.login"
-                        label="Email / Employee Id / Student Id"
+                        prepend-inner-icon= "mdi-account-box-outline"
+                        label="Email / Employee ID / Student ID"
                         type="text"
-                        color="success"
                       />
 
                       <v-text-field
                         dense
                         outlined
+                        prepend-inner-icon= "mdi-account-key"
                         id="password"
                         v-model="loginData.password"
                         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="show1 ? 'text' : 'password'"
                         label="Password"
                         name="password"
-                        color="success"
+                        color="green darken-1"
                         @click:append="show1 = !show1"
                         @keypress.enter="signIn"
                       />
@@ -45,7 +47,8 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-col cols="8">
-                      <v-btn color="primary" small text @click="gotoRegister">
+                      <v-btn color="blue-grey darken-3" small text @click="gotoRegister">
+                        <v-icon small class="pr-2">mdi-account-plus</v-icon>
                         Create Account
                       </v-btn>
                     </v-col>
@@ -57,6 +60,7 @@
                         @click="signIn"
                         
                       >
+                       <v-icon small class="pr-2">mdi-login-variant</v-icon>
                         Login
                       </v-btn>
                     </v-col>
@@ -65,7 +69,7 @@
 
                 <!-- register Form -->
                 <!-- <pre>{{ register }}</pre> -->
-                <v-card v-if="registerForm" tile color="rgba(255,255,255,0.6)">
+                <v-card v-if="registerForm" tile color="rgba(255,255,255,1)">
                   <v-toolbar flat tile color="rgba(255,255,255,0.1)">
                     <v-toolbar-title
                       ><img
@@ -77,52 +81,76 @@
                   </v-toolbar>
                   <v-card-text>
                     <v-form ref="registerForm" lazy-validation @submit.prevent>
+                    <v-row>
+                      <v-col cols="6" md="6" lg="6">
+                      <v-select
+                        dense
+                        outlined
+                        v-model="register.department"
+                        :rules="[v => !!v || 'Please select your Department']"
+                        label="Your Department"
+                        :items="departments"
+                        item-text="name"
+                        item-value="id"
+                        color="green darken-3"
+                      >
+                      </v-select>
+                      </v-col>
+                      <v-col cols="6" md="6" lg="6">
                       <v-select
                         dense
                         outlined
                         v-model="register.userType"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Select Role*"
+                        :rules="[v => !!v || 'Please select your Role']"
+                        label="Your Role"
                         :items="roles"
                         item-text="text"
                         item-value="value"
-                        color="success"
+                        color="green darken-3"
                       >
                       </v-select>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-text-field
-                            v-model="register.fullname"
-                            :rules="[v => !!v || 'Fullname is required']"
-                            label="Full Name"
-                            type="text"
-                            outlined
-                            dense
-                          />
-                        </v-col>
-                      </v-row>
+                      </v-col>
 
+                      <v-col cols="12" md="12" lg="12">
+                        <v-text-field
+                          color="green darken-3"
+                          v-model="register.fullname"
+                          :rules="[v => !!v || 'Enter your Full Name']"
+                          label="Full Name"
+                          type="text"
+                          outlined
+                          dense
+                        />
+                      </v-col>
+
+                      <v-col cols="12" md="12" lg="12">
                       <v-text-field
                         outlined
                         v-model="register.email"
                         :rules="[
                           v => !!v || 'E-mail is required',
-                          v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+                          v => /.+@.+\..+/.test(v) || 'Enter your valid Email ID'
                         ]"
                         label="Email Address"
                         placeholder="Also your primary Login ID"
                         type="email"
-                        color="success"
+                        color="green darken-3"
                       />
+                      </v-col>
+
+                      <v-col cols="12" md="12" lg="12">
                       <v-text-field
                         outlined
                         v-model="register.username"
-                        :rules="[v => !!v || 'Employee Id is required']"
+                        :rules="[v => !!v || 'Enter your Identification No']"
                         label="Login ID (Employee / Student ID)"
                         placeholder="Also your alternative Login ID"
                         type="text"
-                        color="success"
+                        color="green darken-3"
                       />
+                      </v-col>
+
+                      <v-col cols="12" md="12" lg="12">
                       <v-text-field
                         dense
                         outlined
@@ -130,36 +158,29 @@
                         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="show1 ? 'text' : 'password'"
                         label="Password"
-                        color="success"
+                        color="green darken-3"
                         @click:append="show1 = !show1"
                       />
-                      <v-select
-                        dense
-                        outlined
-                        v-model="register.department"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Select your department*"
-                        :items="departments"
-                        item-text="name"
-                        item-value="id"
-                        color="success"
-                      >
-                      </v-select>
+                      </v-col>
+                    </v-row>
                     </v-form>
                   </v-card-text>
                   <v-card-actions>
                     <v-col cols="8">
-                      <v-btn color="primary" small text @click="loginForm">
+                      <v-btn color="blue-grey darken-3" small text @click="loginForm">
+                        <v-icon small class="pr-2">mdi-login-variant</v-icon>
                         Login
                       </v-btn>
                     </v-col>
                     <v-col cols="4">
                       <v-btn
-                        color="success"
+                        color="green darken-3"
                         small
                         class="float-right"
                         @click="registerMe"
+                        dark
                       >
+                        <v-icon small class="pr-2">mdi-account-plus</v-icon>
                         Create Account
                       </v-btn>
                     </v-col>
@@ -302,7 +323,7 @@ export default {
 
 <style scoped>
 .backdrop {
-  background-image: url("/bg-2.jpg");
+  background-image: url("/bg-3.jpg");
   background-size: cover;
   background-position: center center;
   width: 100vw;

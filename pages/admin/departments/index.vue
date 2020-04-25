@@ -200,7 +200,7 @@ if (process.client) {
 export default {
   head() {
     return {
-      title: "Department Profile"
+      title: "About the Department"
     };
   },
   components: {

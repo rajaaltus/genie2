@@ -18,6 +18,7 @@
           <v-toolbar-title><span class="frm-title">Clinical Services</span></v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -62,8 +63,9 @@
                     <v-row>
                       <v-col cols="4">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.screenings"
-                          label="Screenings *"
+                          label="Screenings"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -73,8 +75,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.registrations"
-                          label="Registrations *"
+                          label="Registrations"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -84,8 +87,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.followups"
-                          label="Follow-ups *"
+                          label="Follow-ups"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -95,8 +99,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.admissions"
-                          label="Admissions *"
+                          label="Admissions"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -106,8 +111,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.discharges"
-                          label="Discharges *"
+                          label="Discharges"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -117,8 +123,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.deaths"
-                          label="Deaths *"
+                          label="Deaths"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -128,8 +135,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.emergencies"
-                          label="Emergencies *"
+                          label="Emergencies"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -139,8 +147,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.internal_ref"
-                          label="Referrals - Internal *"
+                          label="Referrals - Internal"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'
@@ -150,8 +159,9 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                        color="green"
                           v-model="editedItem.external_ref"
-                          label="Referrals - External *"
+                          label="Referrals - External"
                           type="number"
                           :rules="[
                             v => !!v || 'Enter Total No. of Patients / Cases'

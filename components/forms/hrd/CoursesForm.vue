@@ -49,13 +49,13 @@
             <v-textarea
             color="green"
               v-model="hrd.thesis_title"
-              label="Title of Thesis (if applicable)"
+              label="Title of Thesis (If applicable)"
               required
             >
             </v-textarea>
           </v-col>
           <v-col cols="12">
-            <v-text-field v-model="hrd.guides" label="Guides" :rules="[v => !!v || 'Item is required']">
+            <v-text-field color="green" v-model="hrd.guides" label="Guides (If applicable)">
             </v-text-field>
           </v-col>
           <v-col cols="6">

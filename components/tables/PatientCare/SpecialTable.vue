@@ -22,6 +22,7 @@
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
+            color="green"
             v-model="annualYear"
             :items="reportYears"
             item-text="val"
@@ -67,6 +68,7 @@
                     <v-row>
                       <v-col cols="12">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.service_name"
                           label="Special Clinic / Service / Procedure Name"
                           :rules="[
@@ -78,6 +80,7 @@
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.description"
                           label="Description"
                           :rules="[v => !!v || 'Enter a Brief Description']"
@@ -85,6 +88,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.followup_patients"
                           label="Follow Up Patients"
                           :rules="[
@@ -94,6 +98,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.referrals"
                           label="Referrals"
                           :rules="[
@@ -105,6 +110,7 @@
 
                       <v-col cols="4">
                         <v-text-field
+                          color="green"
                           v-model="editedItem.new_patients"
                           label="New Patients"
                           :rules="[
