@@ -86,6 +86,7 @@
                     color="green"
                     label="Approved"
                     class="pl-2"
+                    @change="blockUser"
                   ></v-switch>
                 </v-col>
               </v-row>
@@ -123,9 +124,10 @@
 
               <template v-slot:item.blocked="{ item }">
                 <v-switch
-                  :value="item"
-                  :color="item?'green':'red'"
+                  v-model="blocked"
+                  color="green"
                   class="pl-2"
+                  @input="blockUser"
                 ></v-switch>
               </template>
             </v-data-table>
@@ -195,7 +197,7 @@ export default {
       { text: "Full Name", value: "fullname" },
       { text: "Email", value: "email" },
       { text: "Role", value: "userType" },
-      { text: "Approved", value: "blocked" }
+      { text: "Block user", value: "blocked" }
     ],
     chartOptions: {
       series: [
@@ -205,76 +207,6 @@ export default {
       ]
     },
     myColors: ["#1f77b4", "#629fc9", "#94bedb", "#c9e0ef"],
-    defaultWords: [
-      {
-        name: "Cat",
-        value: 1
-      },
-      {
-        name: "fish",
-        value: 2
-      },
-      {
-        name: "things",
-        value: 3
-      },
-      {
-        name: "look",
-        value: 4
-      },
-      {
-        name: "two",
-        value: 5
-      },
-      {
-        name: "fun",
-        value: 6
-      },
-      {
-        name: "know",
-        value: 7
-      },
-      {
-        name: "good",
-        value: 8
-      },
-      {
-        name: "play",
-        value: 9
-      },
-      {
-        name: "fish",
-        value: 10
-      },
-      {
-        name: "things",
-        value: 11
-      },
-      {
-        name: "look",
-        value: 12
-      },
-      {
-        name: "two",
-        value: 13
-      },
-      {
-        name: "fun",
-        value: 14
-      },
-      {
-        name: "know",
-        value: 15
-      },
-      {
-        name: "good",
-        value: 16
-      },
-      {
-        name: "play",
-        value: 17
-      }
-    ]
   }),
 
   computed: {
@@ -298,6 +230,10 @@ export default {
         Swal.fire("deleted");
         this.reloadData();
       }
+    },
+    blockUser() {
+      var payload = this.newUser;
+      console.log(payload)
     },
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
