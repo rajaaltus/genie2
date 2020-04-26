@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-conatainer>
-      <YearDialog @set-year="setYear" />
+    <v-container fluid>
+      <YearDialog />
       <v-tabs flat background-color="#323232" color="#6ac447" dark>
         <v-tab>
           <span class="mdi mdi-view-dashboard cust-icon"></span>
@@ -19,6 +19,7 @@
                 <v-col cols="12" lg="3">
                   <v-select
                     v-model="selectedYear"
+                    ref="year"
                     :items="reportYears"
                     item-value="id"
                     item-text="val"
@@ -32,6 +33,8 @@
                 <v-col cols="11" lg="3">
                   <v-autocomplete
                     v-model="selectedUser"
+                    v-if="$auth.user.userType==='DEPARTMENT'"
+                    ref="user"
                     :items="people"
                     color="blue-grey lighten-2"
                     label="Faculty / Staff / Student"
@@ -60,7 +63,13 @@
                       </template>
                       <template v-else>
                         <v-list-item-avatar>
-                          <img :src="data.item.avatar!==null?$axios.defaults.baseURL+data.item.avatar.url:'/avatar-default-icon.png'" />
+                          <img
+                            :src="
+                              data.item.avatar !== null
+                                ? $axios.defaults.baseURL + data.item.avatar.url
+                                : '/avatar-default-icon.png'
+                            "
+                          />
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title
@@ -77,7 +86,13 @@
 
                 <v-col cols="1" lg="1">
                   <div class="my-4">
-                    <v-btn color="green darken-2" fab x-small dark>
+                    <v-btn
+                      @click="resetFilter"
+                      color="green darken-2"
+                      fab
+                      x-small
+                      dark
+                    >
                       <v-icon>mdi-reload</v-icon>
                     </v-btn>
                   </div>
@@ -105,7 +120,7 @@
                   >
                     <h2 class="font-weight-bold">Programmes / Events</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(1)}}
+                      {{ getActivityCount(1) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -128,7 +143,7 @@
                   >
                     <h2 class="font-weight-bold">Department Visitors</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(2)}}
+                      {{ getActivityCount(2) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -151,7 +166,7 @@
                   >
                     <h2 class="font-weight-bold">Training Underwent</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(3)}}
+                      {{ getActivityCount(3) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -174,7 +189,7 @@
                   >
                     <h2 class="font-weight-bold">Presentations / Posters</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(4)}}
+                      {{ getActivityCount(4) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -197,7 +212,7 @@
                   >
                     <h2 class="font-weight-bold">Participations</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(5)}}
+                      {{ getActivityCount(5) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -220,7 +235,7 @@
                   >
                     <h2 class="font-weight-bold">Publications</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(8)}}
+                      {{ getActivityCount(8) }}
                     </span>
 
                     <v-tooltip top color="black">
@@ -231,7 +246,7 @@
                           x-small
                           color="green darken-3"
                           v-on="on"
-                          >125</v-btn
+                          >{{ journalArticles }}</v-btn
                         >
                       </template>
                       <span>Journal Articles</span>
@@ -239,9 +254,9 @@
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green darken-2" v-on="on"
-                          >117</v-btn
-                        >
+                        <v-btn tile x-small color="green darken-2" v-on="on">{{
+                          articles
+                        }}</v-btn>
                       </template>
                       <span
                         >Articles for Professionals in Souvenirs, Newsletters,
@@ -251,54 +266,54 @@
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green darken-1" v-on="on"
-                          >26</v-btn
-                        >
+                        <v-btn tile x-small color="green darken-1" v-on="on">{{
+                          books
+                        }}</v-btn>
                       </template>
                       <span>Books</span>
                     </v-tooltip>
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-1" v-on="on"
-                          >85</v-btn
-                        >
+                        <v-btn tile x-small color="green lighten-1" v-on="on">{{
+                          bookChapters
+                        }}</v-btn>
                       </template>
                       <span>Book Chapters</span>
                     </v-tooltip>
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-2" v-on="on"
-                          >216</v-btn
-                        >
+                        <v-btn tile x-small color="green lighten-2" v-on="on">{{
+                          monoGraphs
+                        }}</v-btn>
                       </template>
                       <span>Monographs</span>
                     </v-tooltip>
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-3" v-on="on"
-                          >47</v-btn
-                        >
+                        <v-btn tile x-small color="green lighten-3" v-on="on">{{
+                          manuals
+                        }}</v-btn>
                       </template>
                       <span>Manuals</span>
                     </v-tooltip>
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-4" v-on="on"
-                          >112</v-btn
-                        >
+                        <v-btn tile x-small color="green lighten-4" v-on="on">{{
+                          reports
+                        }}</v-btn>
                       </template>
                       <span>Reports</span>
                     </v-tooltip>
 
                     <v-tooltip top color="black">
                       <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-5" v-on="on"
-                          >8</v-btn
-                        >
+                        <v-btn tile x-small color="green lighten-5" v-on="on">{{
+                          general
+                        }}</v-btn>
                       </template>
                       <span>Articles for General Public / IEC Materials</span>
                     </v-tooltip>
@@ -323,7 +338,7 @@
                   >
                     <h2 class="font-weight-bold">Public Engagement</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(6)}}
+                      {{ getActivityCount(6) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -346,7 +361,7 @@
                   >
                     <h2 class="font-weight-bold">Research Activities</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(7)}}
+                      {{ getActivityCount(7) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -369,7 +384,7 @@
                   >
                     <h2 class="font-weight-bold">Recognitions</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(9)}}
+                      {{ getActivityCount(9) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -392,7 +407,7 @@
                   >
                     <h2 class="font-weight-bold">Patents</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(10)}}
+                      {{ getActivityCount(10) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -415,7 +430,7 @@
                   >
                     <h2 class="font-weight-bold">Key Assignments</h2>
                     <span class="display-2 font-weight-bold">
-                      {{getActivityCount(11)}}
+                      {{ getActivityCount(11) }}
                     </span>
                   </v-alert>
                 </v-col>
@@ -473,15 +488,14 @@
           <ReportPreview />
         </v-tab-item>
       </v-tabs>
-    </v-conatainer>
+    </v-container>
   </div>
 </template>
 
 <script>
-
 import PageHeader from "@/components/PageHeader";
 import YearDialog from "@/components/YearDialog";
-import ReportPreview from "@/components/ReportPreview"
+import ReportPreview from "@/components/ReportPreview";
 export default {
   head() {
     return {
@@ -494,30 +508,11 @@ export default {
     ReportPreview
   },
   data() {
-    
     return {
+      resetCall: false,
       loading: false,
       selectedUser: null,
       selectedYear: 0,
-      reportYears: [
-        {
-          id: 2017,
-          val: "2017-2018"
-        },
-        {
-          id: 2018,
-          val: "2018-2019"
-        },
-        {
-          id: 2019,
-          val: "2019-2020"
-        },
-        {
-          id: 2020,
-          val: "2020-2021"
-        }
-      ],
-      
       options: {
         chart: {
           id: "vuechart-example"
@@ -535,64 +530,186 @@ export default {
           data: [60, 10, 35, 50, 12, 60, 70, 91]
         }
       ],
-      donutSeries: [20, 20, 20, 20, 20],
-      
+      donutSeries: [20, 20, 20, 20, 20]
     };
   },
   computed: {
+    journalArticles() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Journal_Article"
+      ).length;
+      return result;
+    },
+    articles() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication =>
+          publication.publication_type === "Articles_for_Professionals"
+      ).length;
+      return result;
+    },
+    books() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Book"
+      ).length;
+      return result;
+    },
+    bookChapters() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Book_Chapter"
+      ).length;
+      return result;
+    },
+    monoGraphs() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Monograph"
+      ).length;
+      return result;
+    },
+    manuals() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Manual"
+      ).length;
+      return result;
+    },
+    reports() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication => publication.publication_type === "Report"
+      ).length;
+      return result;
+    },
+    general() {
+      var result = this.$store.state.publication.publicationsData.result.filter(
+        publication =>
+          publication.publication_type === "Article_for_General_public"
+      ).length;
+      return result;
+    },
     people() {
-      return this.$store.state.user.activeUsersList.result
+      return this.$store.state.user.activeUsersList.result;
+    },
+    reportYears() {
+      return this.$store.state.reportYears;
     }
   },
   async fetch({ store }) {
     let queryString = "";
     if (store.state.auth.user.userType === "DEPARTMENT")
-      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
     else
-      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&deleted_ne=true`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
-    await store.dispatch("presentation/countPresentations", { qs: queryString });
-    await store.dispatch("participation/countParticipations", { qs: queryString });
+    await store.dispatch("presentation/countPresentations", {
+      qs: queryString
+    });
+    await store.dispatch("participation/countParticipations", {
+      qs: queryString
+    });
     await store.dispatch("public/countPublicEngagements", { qs: queryString });
     await store.dispatch("research/countResearch", { qs: queryString });
     await store.dispatch("publication/countPublications", { qs: queryString });
+    await store.dispatch("publication/setPublicationsData", {
+      qs: queryString
+    });
     await store.dispatch("recognition/countRecognitions", { qs: queryString });
     await store.dispatch("patent/countPatents", { qs: queryString });
     await store.dispatch("assignment/countAssignments", { qs: queryString });
 
-    let queryString1 = '';
+    let queryString1 = "";
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
-    await store.dispatch("user/setActiveUsersList", {qs: queryString1})
-    
+    await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
   },
-  watch: {
-    selectedYear(val) {
-      this.annualYear = this.selectedYear;
-      this.reloadData();
-    }
-  },
-  mounted () {
-    if (this.selectedYear == 0)
-      this.selectedYear = this.$store.state.selectedYear;
+  // watch: {
+  //   selectedYear(val) {
+  //     this.annualYear = this.selectedYear;
+  //     this.reloadData();
+  //   }
+  // },
+  mounted() {
+    // if (this.selectedYear == 0)
+    //   this.selectedYear = this.$store.state.selectedYear;
   },
   methods: {
+    resetFilter() {
+      this.resetCall = true;
+      this.$refs.year.reset();
+      if(this.$auth.user.userType==='DEPARTMENT')
+        this.$refs.user.reset();
+      let queryString = "";
+      if (this.$store.state.auth.user.userType === "DEPARTMENT")
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      else
+        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$store.state.auth.user.id}&deleted_ne=true`;
+       this.$store.dispatch("program/countProgrammes", {
+        qs: queryString
+      });
+       this.$store.dispatch("visitor/countVisitors", { qs: queryString });
+       this.$store.dispatch("training/countTrainings", {
+        qs: queryString
+      });
+       this.$store.dispatch("presentation/countPresentations", {
+        qs: queryString
+      });
+       this.$store.dispatch("participation/countParticipations", {
+        qs: queryString
+      });
+       this.$store.dispatch("public/countPublicEngagements", {
+        qs: queryString
+      });
+       this.$store.dispatch("research/countResearch", { qs: queryString });
+       this.$store.dispatch("publication/countPublications", {
+        qs: queryString
+      });
+       this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString
+      });
+       this.$store.dispatch("recognition/countRecognitions", {
+        qs: queryString
+      });
+       this.$store.dispatch("patent/countPatents", { qs: queryString });
+       this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString
+      });
+    },
     async getUserWise() {
       this.loading = true;
-      let queryString = '';
-      queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`
-      await this.$store.dispatch("program/countProgrammes", { qs: queryString });
+      let queryString = "";
+      if (this.resetCall) {
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      }
+      else
+        queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`;
+      await this.$store.dispatch("program/countProgrammes", {
+        qs: queryString
+      });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", { qs: queryString });
-      await this.$store.dispatch("presentation/countPresentations", { qs: queryString });
-      await this.$store.dispatch("participation/countParticipations", { qs: queryString });
-      await this.$store.dispatch("public/countPublicEngagements", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", {
+        qs: queryString
+      });
+      await this.$store.dispatch("presentation/countPresentations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("participation/countParticipations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("public/countPublicEngagements", {
+        qs: queryString
+      });
       await this.$store.dispatch("research/countResearch", { qs: queryString });
-      await this.$store.dispatch("publication/countPublications", { qs: queryString });
-      await this.$store.dispatch("recognition/countRecognitions", { qs: queryString });
-      await this.$store.dispatch("patent/countPatents", { qs: queryString })
-      await this.$store.dispatch("assignment/countAssignments", { qs: queryString })
+      await this.$store.dispatch("publication/countPublications", {
+        qs: queryString
+      });
+      await this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("recognition/countRecognitions", {
+        qs: queryString
+      });
+      await this.$store.dispatch("patent/countPatents", { qs: queryString });
+      await this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString
+      });
       this.loading = false;
     },
     getActivityCount(id) {
@@ -629,7 +746,6 @@ export default {
       if (id == 11) {
         return this.$store.state.assignment.assignmentsCount;
       }
-      
     },
     async reloadData() {
       this.loading = true;
@@ -637,29 +753,55 @@ export default {
       // if (this.$store.state.auth.user.userType === "DEPARTMENT")
       //   queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
       // else
+      if (this.resetCall)
+      {
+        if (this.$store.state.auth.user.userType === "DEPARTMENT")
+          queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+        else
+          queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true`;
+      }
+      else
         queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      await this.$store.dispatch("program/countProgrammes", { qs: queryString });
+      await this.$store.dispatch("program/countProgrammes", {
+        qs: queryString
+      });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", { qs: queryString });
-      await this.$store.dispatch("presentation/countPresentations", { qs: queryString });
-      await this.$store.dispatch("participation/countParticipations", { qs: queryString });
-      await this.$store.dispatch("public/countPublicEngagements", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", {
+        qs: queryString
+      });
+      await this.$store.dispatch("presentation/countPresentations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("participation/countParticipations", {
+        qs: queryString
+      });
+      await this.$store.dispatch("public/countPublicEngagements", {
+        qs: queryString
+      });
       await this.$store.dispatch("research/countResearch", { qs: queryString });
-      await this.$store.dispatch("publication/countPublications", { qs: queryString });
-      await this.$store.dispatch("recognition/countRecognitions", { qs: queryString });
-      await this.$store.dispatch("patent/countPatents", { qs: queryString })
-      await this.$store.dispatch("assignment/countAssignments", { qs: queryString })
+      await this.$store.dispatch("publication/countPublications", {
+        qs: queryString
+      });
+      await this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("recognition/countRecognitions", {
+        qs: queryString
+      });
+      await this.$store.dispatch("patent/countPatents", { qs: queryString });
+      await this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString
+      });
       this.loading = false;
     },
-   setYear() {
-      console.log('receiving....')
-      this.selectedYear = this.$store.state.selectedYear
-    },
+    //  setYear() {
+    //     console.log('receiving....')
+    //     this.selectedYear = this.$store.state.selectedYear
+    //   },
     remove(item) {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
-    },
-    
+    }
   }
 };
 </script>

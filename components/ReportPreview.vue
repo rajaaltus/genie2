@@ -18,6 +18,7 @@
           <v-col cols="12" lg="3">
             <v-autocomplete
               v-model="selectedUser"
+              v-if="$auth.user.userType==='DEPARTMENT'"
               :items="people"
               color="blue-grey lighten-2"
               label="Faculty / Staff / Student"
@@ -64,7 +65,7 @@
           </v-col>
           <v-col cols="3" md="3" lg="3">
           <v-layout align-end justify-end>
-            <v-btn color="red lighten-1" small dark class="my-4">
+            <v-btn to="/admin/medium" color="red lighten-1" small dark class="my-4">
               <v-icon small class="px-1">mdi-file-pdf</v-icon>
               Download Report
             </v-btn>
@@ -94,7 +95,7 @@
               ><h3>{{ activity.title }}</h3></v-expansion-panel-header
             >
             <v-expansion-panel-content>
-              <pre>{{ setDataById(activity.id) }}</pre>
+              <!-- <pre>{{ setDataById(activity.id) }}</pre> -->
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -110,28 +111,14 @@ export default {
       loading: false,
       selectedUser: null,
       selectedYear: 0,
-      reportYears: [
-        {
-          id: 2017,
-          val: "2017-2018"
-        },
-        {
-          id: 2018,
-          val: "2018-2019"
-        },
-        {
-          id: 2019,
-          val: "2019-2020"
-        },
-        {
-          id: 2020,
-          val: "2020-2021"
-        }
-      ],
       panel: []
     };
   },
   computed: {
+    
+    reportYears() {
+      return this.$store.state.reportYears
+    },
     people() {
       return this.$store.state.user.activeUsersList.result;
     },
