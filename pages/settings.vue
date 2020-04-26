@@ -82,9 +82,9 @@
                 </v-col>
                 <v-col cols="6">
                   <v-switch
-                    color="red darken-3"
+                    v-model="newUser.confirmed"
+                    color="green"
                     label="Approved"
-                    value="true"
                     class="pl-2"
                   ></v-switch>
                 </v-col>
@@ -161,6 +161,16 @@ export default {
     loading: true,
     show1: false,
     newUser: {
+      username: "",
+      fullname: "",
+      email: "",
+      password: "user@2020",
+      userType: "",
+      department: 0,
+      confirmed: true,
+      blocked: false
+    },
+    dafaultUser: {
       username: "",
       fullname: "",
       email: "",
@@ -307,7 +317,7 @@ export default {
             timer: 1500
           });
           this.dialog = false;
-          this.reset();
+          this.newUser = Object.assign({}, this.defaultUser);
           this.reloadData();
         })
         .catch(e => {});

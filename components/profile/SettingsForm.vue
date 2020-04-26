@@ -167,11 +167,10 @@ export default {
     this.profile = Object.assign({}, this.userProfile);
   },
   methods: {
-    async updateProfile() {
+     updateProfile() {
       var payload = this.profile;
       console.log(payload);
-      this.$emit("profile-update");
-      await this.$store
+       this.$store
         .dispatch("user/updateUserProfile", payload)
         .then(resp => {
           Swal.fire({
@@ -182,23 +181,14 @@ export default {
             timer: 1500
           });
           this.$emit("profile-update");
-          this.profile = Object.assign({}, this.$store.state.user.userProfile);
+          // this.profile = Object.assign({}, this.$store.state.user.userProfile);
         })
         .catch(e => {
           Swal.fire("something Wrong!");
+          
         });
     },
-    async reloadProfile() {
-      await this.$store
-        .dispatch("user/setUserProfile", { id: this.$store.state.auth.user.id })
-        .then(resp => {
-          console.log(resp.message);
-        })
-        .catch(e => {})
-        .finally(() => {
-          this.loading = false;
-        });
-    }
+    
   }
 };
 </script>

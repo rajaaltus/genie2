@@ -620,12 +620,7 @@ export default {
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
   },
-  // watch: {
-  //   selectedYear(val) {
-  //     this.annualYear = this.selectedYear;
-  //     this.reloadData();
-  //   }
-  // },
+  
   mounted() {
     // if (this.selectedYear == 0)
     //   this.selectedYear = this.$store.state.selectedYear;

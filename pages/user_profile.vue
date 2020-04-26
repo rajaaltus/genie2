@@ -2,7 +2,11 @@
   <div>
     <v-row>
       <v-col cols="12" md="3" lg="3">
-        <ProfileCard :profile="userProfile" v-if="userProfile" />
+        <ProfileCard
+          :profile="userProfile"
+          v-if="userProfile"
+          @profile-update="reloadProfile"
+        />
         <!-- <PublicationChart @fetched="reloadChart" :stats="stats" />
         <WordCloud /> -->
       </v-col>
@@ -29,106 +33,104 @@
           </v-layout>
 
           <v-tab-item class="pt-1">
-
             <v-skeleton-loader
-                    v-if="loading"
-                    height="120"
-                    type="list-item-avatar-two-line"
-                  >
-                  </v-skeleton-loader>
-                  <v-alert
-                    v-else
+              v-if="loading"
+              height="120"
+              type="list-item-avatar-two-line"
+            >
+            </v-skeleton-loader>
+            <v-alert
+              v-else
+              tile
+              elevation="1"
+              border="left"
+              color="light-green lighten-1"
+              colored-border
+              icon="mdi-bookshelf"
+            >
+              <h2 class="font-weight-bold">Publications</h2>
+              <span class="display-2 font-weight-bold">{{publicationsData.length}} </span>
+
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ml-12"
                     tile
-                    elevation="1"
-                    border="left"
-                    color="light-green lighten-1"
-                    colored-border
-                    icon="mdi-bookshelf"
+                    x-small
+                    color="green darken-3"
+                    v-on="on"
+                    >{{journalArticles}}</v-btn
                   >
-                    <h2 class="font-weight-bold">Publications</h2>
-                    <span class="display-2 font-weight-bold">39
-                    </span>
+                </template>
+                <span>Journal Articles</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          class="ml-12"
-                          tile
-                          x-small
-                          color="green darken-3"
-                          v-on="on"
-                          >125</v-btn
-                        >
-                      </template>
-                      <span>Journal Articles</span>
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green darken-2" v-on="on"
+                    >{{articles}}</v-btn
+                  >
+                </template>
+                <span
+                  >Articles for Professionals in Souvenirs, Newsletters,
+                  etc..</span
+                >
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green darken-2" v-on="on"
-                          >117</v-btn
-                        >
-                      </template>
-                      <span
-                        >Articles for Professionals in Souvenirs, Newsletters,
-                        etc..</span
-                      >
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green darken-1" v-on="on"
+                    >{{books}}</v-btn
+                  >
+                </template>
+                <span>Books</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green darken-1" v-on="on"
-                          >26</v-btn
-                        >
-                      </template>
-                      <span>Books</span>
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green lighten-1" v-on="on"
+                    >{{bookChapters}}</v-btn
+                  >
+                </template>
+                <span>Book Chapters</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-1" v-on="on"
-                          >85</v-btn
-                        >
-                      </template>
-                      <span>Book Chapters</span>
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green lighten-2" v-on="on"
+                    >{{monoGraphs}}</v-btn
+                  >
+                </template>
+                <span>Monographs</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-2" v-on="on"
-                          >216</v-btn
-                        >
-                      </template>
-                      <span>Monographs</span>
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green lighten-3" v-on="on"
+                    >{{manuals}}</v-btn
+                  >
+                </template>
+                <span>Manuals</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-3" v-on="on"
-                          >47</v-btn
-                        >
-                      </template>
-                      <span>Manuals</span>
-                    </v-tooltip>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green lighten-4" v-on="on"
+                    >{{reports}}</v-btn
+                  >
+                </template>
+                <span>Reports</span>
+              </v-tooltip>
 
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-4" v-on="on"
-                          >112</v-btn
-                        >
-                      </template>
-                      <span>Reports</span>
-                    </v-tooltip>
-
-                    <v-tooltip top color="black">
-                      <template v-slot:activator="{ on }">
-                        <v-btn tile x-small color="green lighten-5" v-on="on"
-                          >8</v-btn
-                        >
-                      </template>
-                      <span>Articles for General Public / IEC Materials</span>
-                    </v-tooltip>
-                  </v-alert>
+              <v-tooltip top color="black">
+                <template v-slot:activator="{ on }">
+                  <v-btn tile x-small color="green lighten-5" v-on="on"
+                    >{{general}}</v-btn
+                  >
+                </template>
+                <span>Articles for General Public / IEC Materials</span>
+              </v-tooltip>
+            </v-alert>
 
             <v-skeleton-loader
               v-if="loading"
@@ -223,7 +225,7 @@ export default {
       email: "",
       user: 0,
       active_status: true
-    },
+    }
   }),
   computed: {
     ...mapState({
@@ -232,11 +234,68 @@ export default {
       experiences: state => state.profile.experienceData.result,
       recognitionsData: state => state.recognition.recognitionsData.result,
       presentationsData: state => state.presentation.presentationsData.result,
-      participationsData: state => state.participation.participationsData.result,
+      participationsData: state =>
+        state.participation.participationsData.result,
       publicationsData: state => state.publication.publicationsData.result,
       researchData: state => state.research.researchData.result,
       patentsData: state => state.patent.patentsData.result,
-      stats: state => state.publication.stats
+      stats: state => state.publication.stats,
+      journalArticles() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Journal_Article"
+        ).length;
+        return result;
+      },
+      articles() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication =>
+            publication.publication_type === "Articles_for_Professionals"
+        ).length;
+        return result;
+      },
+      books() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Book"
+        ).length;
+        return result;
+      },
+      bookChapters() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Book_Chapter"
+        ).length;
+        return result;
+      },
+      monoGraphs() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Monograph"
+        ).length;
+        return result;
+      },
+      manuals() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Manual"
+        ).length;
+        return result;
+      },
+      reports() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication => publication.publication_type === "Report"
+        ).length;
+        return result;
+      },
+      general() {
+        var result = this.$store.state.publication.publicationsData.result.filter(
+          publication =>
+            publication.publication_type === "Article_for_General_public"
+        ).length;
+        return result;
+      },
+      people() {
+        return this.$store.state.user.activeUsersList.result;
+      },
+      reportYears() {
+        return this.$store.state.reportYears;
+      }
     })
   },
   async fetch({ store }) {
@@ -259,7 +318,9 @@ export default {
     });
     await store.dispatch("research/setResearchData", { qs: queryString });
     await store.dispatch("patent/setPatentsData", { qs: queryString });
-    await store.dispatch("publication/setPublicationsData", { qs: queryString });
+    await store.dispatch("publication/setPublicationsData", {
+      qs: queryString
+    });
   },
   async mounted() {
     console.log(this.userProfile);
@@ -318,7 +379,7 @@ export default {
       this.loading = true;
       console.log("Receiving...");
       await this.$store
-        .dispatch("user/setUserProfile", { id: this.$store.state.auth.user.id })
+        .dispatch("user/setUserProfile", { id: this.$auth.user.id })
         .then(resp => {
           console.log(resp.message);
         })
@@ -327,8 +388,7 @@ export default {
           this.loading = false;
         });
     },
-    async reloadChart() {
-    }
+    async reloadChart() {}
   }
 };
 </script>
