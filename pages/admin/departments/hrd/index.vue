@@ -31,7 +31,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9" lg="9">
-        <h2>Aside</h2>
+        <h2>Loading...</h2>
       </v-col>
     </v-row>
   </v-app>
@@ -50,26 +50,16 @@ export default {
     PageHeader
   },
   data: () => ({
-    reportYears: [
-      {
-        id: 2017,
-        val: "2017-2018"
-      },
-      {
-        id: 2018,
-        val: "2018-2019"
-      },
-      {
-        id: 2019,
-        val: "2019-2020"
-      },
-      {
-        id: 2020,
-        val: "2020-2021"
-      }
-    ],
     selectedYear: 0,
-  })
+  }),
+  computed: {
+    reportYears() {
+      return this.$store.state.reportYears;
+    },
+  },
+  mounted() {
+    this.$router.push('/admin/departments/hrd/courses')
+  }
 } 
 </script>
 

@@ -82,9 +82,9 @@
                 </v-col>
                 <v-col cols="6">
                   <v-switch
-                    color="red darken-3"
-                    label="Approved"
-                    value="true"
+                    v-model="newUser.blocked"
+                    color="red"
+                    label="Blocked"
                     class="pl-2"
                   ></v-switch>
                 </v-col>
@@ -123,9 +123,11 @@
 
               <template v-slot:item.blocked="{ item }">
                 <v-switch
-                  :value="item"
-                  :color="item?'green':'red'"
+                  color="red"
                   class="pl-2"
+                  :value="false"
+                  :input-value="item.blocked"
+                  @change="blockUser(item.id, $event !== null, $event)"
                 ></v-switch>
               </template>
             </v-data-table>
@@ -158,9 +160,20 @@ export default {
     wordcloud
   },
   data: () => ({
+    blocked: false,
     loading: true,
     show1: false,
     newUser: {
+      username: "",
+      fullname: "",
+      email: "",
+      password: "user@2020",
+      userType: "",
+      department: 0,
+      confirmed: true,
+      blocked: false
+    },
+    dafaultUser: {
       username: "",
       fullname: "",
       email: "",
@@ -185,7 +198,7 @@ export default {
       { text: "Full Name", value: "fullname" },
       { text: "Email", value: "email" },
       { text: "Role", value: "userType" },
-      { text: "Approved", value: "blocked" }
+      { text: "Block user", value: "blocked" }
     ],
     chartOptions: {
       series: [
@@ -195,76 +208,6 @@ export default {
       ]
     },
     myColors: ["#1f77b4", "#629fc9", "#94bedb", "#c9e0ef"],
-    defaultWords: [
-      {
-        name: "Cat",
-        value: 1
-      },
-      {
-        name: "fish",
-        value: 2
-      },
-      {
-        name: "things",
-        value: 3
-      },
-      {
-        name: "look",
-        value: 4
-      },
-      {
-        name: "two",
-        value: 5
-      },
-      {
-        name: "fun",
-        value: 6
-      },
-      {
-        name: "know",
-        value: 7
-      },
-      {
-        name: "good",
-        value: 8
-      },
-      {
-        name: "play",
-        value: 9
-      },
-      {
-        name: "fish",
-        value: 10
-      },
-      {
-        name: "things",
-        value: 11
-      },
-      {
-        name: "look",
-        value: 12
-      },
-      {
-        name: "two",
-        value: 13
-      },
-      {
-        name: "fun",
-        value: 14
-      },
-      {
-        name: "know",
-        value: 15
-      },
-      {
-        name: "good",
-        value: 16
-      },
-      {
-        name: "play",
-        value: 17
-      }
-    ]
   }),
 
   computed: {
@@ -289,9 +232,41 @@ export default {
         this.reloadData();
       }
     },
+    blockUser(index, value, event) { 
+       var payload = Object.assign({}, {
+         id: index,
+         blocked: event
+       })
+       var currentState = event?'block':'unblock';
+       Swal.fire({
+        title: `Are you sure you want to ${currentState} this user?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, I am Sure.",
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(result => {
+        if (!result.dismiss) {
+          this.$store
+            .dispatch("user/updateUser", payload)
+            .then(response => {
+              Swal.fire({
+                type: "success",
+                title: "Updated Successfully!",
+                position: "top-end",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              let queryString = "";
+              queryString = `department.id=${this.$store.state.auth.user.department}`;
+              this.$store.dispatch("user/setUsersList", {qs: queryString});
+            });
+        }
+      });
+    },
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
-      this.newUser.password = "changemenow";
+      this.newUser.password = this.password;
       this.newUser.username = this.newUser.email;
       var payload = this.newUser;
       // console.log(payload);
@@ -307,7 +282,7 @@ export default {
             timer: 1500
           });
           this.dialog = false;
-          this.reset();
+          this.newUser = Object.assign({}, this.defaultUser);
           this.reloadData();
         })
         .catch(e => {});
@@ -318,7 +293,7 @@ export default {
     async reloadData() {
       this.loading = true;
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&userType_ne=DEPARTMENT&`;
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType_ne=DEPARTMENT`;
       this.$store.dispatch("user/setUsersList", { qs: queryString });
       this.loading = false;
     },

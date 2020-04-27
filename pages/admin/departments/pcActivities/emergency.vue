@@ -74,29 +74,14 @@ export default {
     EmergencyTable
   },
   data: () => ({
-    reportYears: [
-      {
-        id: 2017,
-        val: "2017-2018"
-      },
-      {
-        id: 2018,
-        val: "2018-2019"
-      },
-      {
-        id: 2019,
-        val: "2019-2020"
-      },
-      {
-        id: 2020,
-        val: "2020-2021"
-      }
-    ],
   }),
   computed: {
     emergencyData () {
       return this.$store.state.emergency.emergencyData;
-    }
+    },
+    reportYears() {
+			return this.$store.state.reportYears
+		}
     // ...mapState({
     //   emergencyData: state =>  state.emergency.emergencyData
     // })
