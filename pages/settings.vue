@@ -83,10 +83,9 @@
                 <v-col cols="6">
                   <v-switch
                     v-model="newUser.blocked"
-                    color="green"
-                    label="Approved"
+                    color="red"
+                    label="Blocked"
                     class="pl-2"
-                    @click="blockUser"
                   ></v-switch>
                 </v-col>
               </v-row>
@@ -124,7 +123,7 @@
 
               <template v-slot:item.blocked="{ item }">
                 <v-switch
-                  color="green"
+                  color="red"
                   class="pl-2"
                   :value="false"
                   :input-value="item.blocked"
@@ -234,7 +233,6 @@ export default {
       }
     },
     blockUser(index, value, event) { 
-       console.log(`${index} ${value} ${event}`);
        var payload = Object.assign({}, {
          id: index,
          blocked: event
@@ -268,7 +266,7 @@ export default {
     },
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
-      this.newUser.password = "changemenow";
+      this.newUser.password = this.password;
       this.newUser.username = this.newUser.email;
       var payload = this.newUser;
       // console.log(payload);
@@ -295,7 +293,7 @@ export default {
     async reloadData() {
       this.loading = true;
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&userType_ne=DEPARTMENT&`;
+      queryString = `department.id=${this.$store.state.auth.user.department}&userType_ne=DEPARTMENT`;
       this.$store.dispatch("user/setUsersList", { qs: queryString });
       this.loading = false;
     },
