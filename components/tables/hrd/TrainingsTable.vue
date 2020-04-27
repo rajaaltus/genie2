@@ -64,7 +64,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                      color="green"
+                        color="green"
                         v-model="editedItem.training_name"
                         :rules="[v => !!v || 'Item is required']"
                         label="Course / Training"
@@ -74,7 +74,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                      color="green"
+                        color="green"
                         v-model="editedItem.institutional_affiliation"
                         label="Institute Affiliation"
                         required
@@ -83,7 +83,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                      color="green"
+                        color="green"
                         v-model="editedItem.no_of_candidates"
                         :rules="[v => !!v || 'Item is required']"
                         label="Number of Candidates"
@@ -95,6 +95,7 @@
 
                     <v-col cols="4">
                       <v-menu
+                        ref="menu"
                         v-model="editFrom"
                         :close-on-content-click="false"
                         transition="scale-transition"
@@ -103,8 +104,8 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
-                          color="green"
                             v-model="editedItem.from_date"
+                            :return-value.sync="editFrom"
                             :rules="[v => !!v || 'Item is required']"
                             label="From Date"
                             v-on="on"
@@ -113,13 +114,27 @@
                         <v-date-picker
                           v-model="editedItem.from_date"
                           color="green lighten-1"
+                          no-title
+                          scrollable
                           @input="menu1 = false"
                         >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="editFrom = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(editFrom)"
+                          >
+                            OK
+                          </v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-col>
                     <v-col cols="4">
                       <v-menu
+                        ref="menu"
                         v-model="editTo"
                         :close-on-content-click="false"
                         transition="scale-transition"
@@ -128,24 +143,38 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-text-field
-                          color="green"
                             v-model="editedItem.to_date"
+                            :return-value.sync="editFrom"
                             :rules="[v => !!v || 'Item is required']"
-                            label="To Date"
+                            label="From Date"
                             v-on="on"
                           ></v-text-field>
                         </template>
                         <v-date-picker
                           v-model="editedItem.to_date"
                           color="green lighten-1"
-                          @input="menu2 = false"
-                        ></v-date-picker>
+                          no-title
+                          scrollable
+                          @input="menu1 = false"
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="editTo = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(editTo)"
+                          >
+                            OK
+                          </v-btn>
+                        </v-date-picker>
                       </v-menu>
                     </v-col>
 
                     <v-col cols="4">
                       <v-select
-                      color="green"
+                        color="green"
                         v-model="editedItem.remarks_status"
                         :items="remarks"
                         label="Status"
@@ -153,7 +182,7 @@
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
-                      color="green"
+                        color="green"
                         v-model="editedItem.brief_report"
                         label="Brief Report"
                       ></v-textarea>

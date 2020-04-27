@@ -17,7 +17,6 @@
             <PageHeader
               :title="$metaInfo.title"
               :reportYears="reportYears"
-              :selectedYear="$store.state.selectedYear"
               class="ml-0 pb-0 pt-0"
             />
             <v-row>
@@ -92,26 +91,13 @@ export default {
     TrainingsTable
   },
   data: () => ({
-    reportYears: [
-      {
-        id: 2017,
-        val: "2017-2018"
-      },
-      {
-        id: 2018,
-        val: "2018-2019"
-      },
-      {
-        id: 2019,
-        val: "2019-2020"
-      },
-      {
-        id: 2020,
-        val: "2020-2021"
-      }
-    ],
     selectedYear: 0
   }),
+  computed: {
+    reportYears() {
+      return this.$store.state.reportYears;
+    },
+  },
   async fetch({ store }) {
     let queryString = "";
     queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;

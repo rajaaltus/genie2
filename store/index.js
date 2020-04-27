@@ -6,7 +6,25 @@ const srcs = {
 	5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
 };
 export const state = () => ({
-  selectedYear: 0,
+	selectedYear: 0,
+	reportYears: [
+		{
+			id: 2018,
+			val: "2018-2019"
+		},
+		{
+			id: 2019,
+			val: "2019-2020"
+		},
+		{
+			id: 2020,
+			val: "2020-2021"
+		},
+		{
+			id: 2021,
+			val: "2021-2022"
+		}
+	],
 	activities: [],
 	studentActivities: [],
 	approvalActivities: [	
@@ -108,7 +126,6 @@ export const state = () => ({
 			dataName: ''
 		}
 	],
-	reportYears: [],
 	students: [],
 	staffs: [],
 	

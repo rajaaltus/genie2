@@ -119,6 +119,45 @@
             </v-menu>
           </v-col>
                   </v-row>
+                  <v-hover>
+                    <template v-slot:default="{ hover }">
+                      <v-img
+                        :src="`${$axios.defaults.baseURL}${image_url}`"
+                        lazy-src="/image_placeholder.png"
+                        aspect-ratio="1"
+                        class="grey lighten-2"
+                        max-width="100%"
+                        max-height="400"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="grey lighten-5"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                        <v-fade-transition>
+                          <v-overlay v-if="hover" absolute color="#036358">
+                            <v-btn @click="$refs.image.click()">
+                              {{ image_url ? "Edit Image" : "Upload Image" }}
+                            </v-btn>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </v-img>
+                    </template>
+                  </v-hover>
+                  <input
+                    ref="image"
+                    type="file"
+                    style="display:none;"
+                    label="File input"
+                    @change="handleFileUpload"
+                  />
                 </v-container>
               </v-card-text>
             </v-card>
@@ -158,8 +197,10 @@ export default {
       designation: "",
       leaving_date: "",
       deleted: false,
-      department: 0
+      department: 0,
+      image: null
     },
+    image_url: "/image_placeholder.png",
     deletedItem: {
       annual_year: 0,
       faculty_status: "",
@@ -167,8 +208,10 @@ export default {
       designation: "",
       leaving_date: "",
       deleted: false,
-      department: 0
+      department: 0,
+      image: null
     },
+    imageToDelete: null,
     dialog: false,
     //Data table header
     headers: [
@@ -199,6 +242,36 @@ export default {
     this.annualYear = this.$store.state.selectedYear;
   },
   methods: {
+    async handleFileUpload(event) {
+      console.log(this.image_url);
+      if (this.image_url !== undefined) {
+        this.imageToDelete = this.editedItem.image.id;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('editing');
+      } else {
+        this.editedItem.image = null;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.image_url = uploadRes.data[0].url;
+        this.editedItem.image = uploadRes.data[0].id;
+        // Swal.fire('Pudhusu');
+      }
+    },
     reloadData() {
       this.loading = true;
       let queryString = "";

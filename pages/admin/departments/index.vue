@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
-    <YearDialog v-if="$store.state.selectedYear == 0" />
+    <YearDialog />
     <v-row class="my-0">
       <v-col cols="12" lg="9" class="pb-0 px-4">
       	<span class="theme-border"><h1 class="ml-3">{{ $metaInfo.title }}</h1></span>
       </v-col>
-      <v-col cols="12" lg="3" v-if="reportYears">
+      <v-col cols="12" lg="3" >
         <v-select
           filled
           color="green"
@@ -129,6 +129,7 @@
           <v-img
             :src="`${$axios.defaults.baseURL}${img_url2}`"
             lazy-src="/image_placeholder.png"
+            aspect-ratio="1"
             class="grey lighten-2"
             max-width="30%"
             max-height="300"
@@ -258,32 +259,17 @@ export default {
       departmentImageId: 0,
       status: "VALID"
     },
-    reportYears: [
-      {
-        id: 2017,
-        val: "2017-2018"
-      },
-      {
-        id: 2018,
-        val: "2018-2019"
-      },
-      {
-        id: 2019,
-        val: "2019-2020"
-      },
-      {
-        id: 2020,
-        val: "2020-2021"
-      }
-    ],
-    selectedYear: 0
+    annualYear: 0
   }),
   watch: {
-    selectedYear(val) {
+    annualYear(val) {
       this.reload();
     }
   },
   computed: {
+    reportYears() {
+      return this.$store.state.reportYears;
+    },
     ...mapState({
       newAbout: state => state.about.newAbout
     }),
@@ -300,15 +286,13 @@ export default {
       this.snackbar = true;
       this.submitMessage = err;
     });
-    if (store.state.selectedYear == 0) this.Ydialog = true;
-    else this.selectedYear = store.state.selectedYear;
+   
     let queryString = "";
     queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.selectedYear}`;
     await store.dispatch("about/setAboutData", { query: queryString });
   },
-  mounted() {
+  async mounted() {
       this.annualYear = this.$store.state.selectedYear;
-    
 
     if (this.newAbout.length > 0) {
       this.departmentAbout = Object.assign({}, this.newAbout[0]);
@@ -327,6 +311,10 @@ export default {
   },
 
   methods: {
+    async setYear() {
+      console.log('setting...')
+      this.annualYear = this.$store.state.selectedYear;
+    },
     async handleFileUpload1(event) {
       if (this.img_url1 === null || this.img_url1 === undefined) {
         this.selectedFile = event.target.files[0];
@@ -504,7 +492,14 @@ export default {
           method: "POST",
           url: "/upload",
           data
-        });
+        })
+        .catch(err=>{
+          Swal.fire({
+            title: 'Something Wrong!',
+            text: err.response,
+            icon: 'error'
+          })
+        })
         this.img_url3 = uploadRes.data[0].url;
         this.departmentAbout.image_3 = uploadRes.data[0].id;
         var payload = this.departmentAbout;
@@ -542,7 +537,14 @@ export default {
           method: "POST",
           url: "/upload",
           data
-        });
+        })
+        .catch(err=>{
+          Swal.fire({
+            title: 'Something Wrong!',
+            text: err.response,
+            icon: 'error'
+          })
+        })
         this.img_url3 = uploadRes.data[0].url;
         this.departmentAbout.image_3 = uploadRes.data[0].id;
         var payload = Object.assign(
@@ -583,7 +585,7 @@ export default {
       if (this.newAbout.length > 0) {
         this.departmentAbout.department = this.$store.state.auth.user.department;
         var payload = this.departmentAbout;
-        //  console.log(payload);
+         console.log(payload);
         await this.$store
           .dispatch("about/updateAbout", payload)
           .then(resp => {
@@ -606,7 +608,7 @@ export default {
             });
           });
       } else {
-        this.departmentAbout.annual_year = this.selectedYear;
+        this.departmentAbout.annual_year = this.$store.state.selectedYear;
         this.departmentAbout.department = this.$store.state.auth.user.department;
         if (
           this.departmentAbout.introduction != "" &&
@@ -620,7 +622,7 @@ export default {
               Swal.fire({
                 title: "Success",
                 text: "Profile Added!",
-                type: "success",
+                icon: "success",
                 showConfirmButton: false,
                 timer: 1500
               });
@@ -630,7 +632,7 @@ export default {
               Swal.fire({
                 title: "Oops!",
                 text: "Exceeds Word limit, (should be less than 150 words.)",
-                type: "warning",
+                icon: "warning",
                 showConfirmButton: false,
                 timer: 3000
               });

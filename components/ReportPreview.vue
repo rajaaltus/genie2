@@ -18,6 +18,7 @@
           <v-col cols="12" lg="3">
             <v-autocomplete
               v-model="selectedUser"
+              v-if="$auth.user.userType === 'DEPARTMENT'"
               :items="people"
               color="blue-grey lighten-2"
               label="Faculty / Staff / Student"
@@ -63,40 +64,176 @@
             </div>
           </v-col>
           <v-col cols="3" md="3" lg="3">
-          <v-layout align-end justify-end>
-            <v-btn color="red lighten-1" small dark class="my-4">
-              <v-icon small class="px-1">mdi-file-pdf</v-icon>
-              Download Report
-            </v-btn>
-          </v-layout>
+            <v-layout align-end justify-end>
+              <v-btn
+                to="/admin/medium"
+                color="red lighten-1"
+                small
+                dark
+                class="my-4"
+              >
+                <v-icon small class="px-1">mdi-file-pdf</v-icon>
+                Download Report
+              </v-btn>
+            </v-layout>
           </v-col>
           <v-col cols="12" lg="2">
-          <v-layout align-end justify-end>
-              <v-btn @click="all" fab x-small class="mr-2 my-4" color="grey lighten-4">
-              <v-icon>mdi-arrow-expand-all</v-icon>
-              </v-btn
+            <v-layout align-end justify-end>
+              <v-btn
+                @click="all"
+                fab
+                x-small
+                class="mr-2 my-4"
+                color="grey lighten-4"
               >
-              <v-btn class="mr-2 my-4" fab x-small color="grey lighten-4" @click="none">
+                <v-icon>mdi-arrow-expand-all</v-icon>
+              </v-btn>
+              <v-btn
+                class="mr-2 my-4"
+                fab
+                x-small
+                color="grey lighten-4"
+                @click="none"
+              >
                 <v-icon>mdi-arrow-collapse-all</v-icon>
               </v-btn>
-          </v-layout>
+            </v-layout>
           </v-col>
         </v-row>
         <!-- <pre>{{allActivities}}</pre> -->
         <v-expansion-panels flat multiple v-model="panel">
-          <v-expansion-panel v-for="(activity, i) in allActivities" :key="i">
+          <v-expansion-panel>
             <v-skeleton-loader v-if="loading" height="50" type="list-item">
             </v-skeleton-loader>
-            <v-expansion-panel-header
-              v-else
-              ripple
-              @click="getDataById(activity.id)"
-              ><h3>{{ activity.title }}</h3></v-expansion-panel-header
+            <v-expansion-panel-header v-else ripple @click="getDataById(1)"
+              ><h3>Programmes / Events</h3></v-expansion-panel-header
             >
             <v-expansion-panel-content>
-              <pre>{{ setDataById(activity.id) }}</pre>
+              <Program :programmes="programmes" />
             </v-expansion-panel-content>
           </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(2)"
+              ><h3>Visitors to the Department</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Visitor :visitors="visitors" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(3)"
+              ><h3>Trainings</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Training :trainings="trainings" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(4)"
+              ><h3>Presentations / Posters</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Presentation :presentations="presentations" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(5)"
+              ><h3>Participations</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Participation :participations="participations" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(6)"
+              ><h3>Public Engagements</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <PublicEngagement :publics="publics" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(7)"
+              ><h3>Research Activities</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Research :researchData="researchData" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(8)"
+              ><h3>Publications</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Publication :publications="publications" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(9)"
+              ><h3>Recognitions</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Recognition :recognitions="recognitions" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(10)"
+              ><h3>Patents</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Patent :patents="patents" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(11)"
+              ><h3>Key Assignments</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Assignment :assignments="assignments" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel v-if="$auth.user.userType!=='FACULTY'">
+            <v-skeleton-loader v-if="loading" height="50" type="list-item">
+            </v-skeleton-loader>
+            <v-expansion-panel-header v-else ripple @click="getDataById(12)"
+              ><h3>Theses / Dissertions</h3></v-expansion-panel-header
+            >
+            <v-expansion-panel-content>
+              <Theses :theses="theses" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
         </v-expansion-panels>
       </v-card-text>
     </v-card>
@@ -104,34 +241,82 @@
 </template>
 
 <script>
+import Program from "@/components/ReportPreview/Program";
+import Visitor from "@/components/ReportPreview/Visitor";
+import Training from "@/components/ReportPreview/Training";
+import Presentation from "@/components/ReportPreview/Presentation";
+import Participation from "@/components/ReportPreview/Participation";
+import PublicEngagement from "@/components/ReportPreview/PublicEngagement";
+import Publication from "@/components/ReportPreview/Publication";
+import Research from "@/components/ReportPreview/Research";
+import Recognition from "@/components/ReportPreview/Recognition";
+import Patent from "@/components/ReportPreview/Patent";
+import Assignment from "@/components/ReportPreview/Assignment";
+import Theses from "@/components/ReportPreview/Theses";
+
 export default {
+  components: {
+    Program,
+    Visitor,
+    Training,
+    Presentation,
+    Participation,
+    PublicEngagement,
+    Publication,
+    Research,
+    Recognition,
+    Patent,
+    Assignment,
+    Theses
+  },
   data() {
     return {
       loading: false,
       selectedUser: null,
       selectedYear: 0,
-      reportYears: [
-        {
-          id: 2017,
-          val: "2017-2018"
-        },
-        {
-          id: 2018,
-          val: "2018-2019"
-        },
-        {
-          id: 2019,
-          val: "2019-2020"
-        },
-        {
-          id: 2020,
-          val: "2020-2021"
-        }
-      ],
       panel: []
     };
   },
   computed: {
+    programmes() {
+      return this.$store.state.program.programmesData.result;
+    },
+    visitors() {
+      return this.$store.state.visitor.visitorsData.result;
+    },
+    trainings() {
+      return this.$store.state.training.trainingsData.result;
+    },
+    presentations() {
+      return this.$store.state.presentation.presentationsData.result;
+    },
+    participations() {
+      return this.$store.state.participation.participationsData.result;
+    },
+    publics() {
+      return this.$store.state.public.publicData.result;
+    },
+    publications() {
+      return this.$store.state.publication.publicationsData.result;
+    },
+    researchData() {
+      return this.$store.state.research.researchData.result;
+    },
+    recognitions() {
+      return this.$store.state.recognition.recognitionsData.result;
+    },
+    patents() {
+      return this.$store.state.patent.patentsData.result;
+    },
+    assignments() {
+      return this.$store.state.assignment.assignmentsData.result;
+    },
+    theses() {
+      return this.$store.state.theses.thesesData.result;
+    },
+    reportYears() {
+      return this.$store.state.reportYears;
+    },
     people() {
       return this.$store.state.user.activeUsersList.result;
     },
@@ -145,8 +330,14 @@ export default {
   mounted() {
     if (this.selectedYear == 0)
       this.selectedYear = this.$store.state.selectedYear;
-    if (this.selectedUser === null)
-      this.selectedUser = this.$auth.user.id;
+    if (this.selectedUser === null) this.selectedUser = this.$auth.user.id;
+
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+
+      setTimeout(() => this.$nuxt.$loading.finish(), 500)
+    })
+
   },
   methods: {
     all() {
@@ -183,25 +374,18 @@ export default {
       });
       this.$store.dispatch("theses/setThesesData", { qs: queryString });
       this.loading = false;
-      return this.$store.state.program.programmesData.result;
-      return this.$store.state.visitor.visitorsData.result;
-      return this.$store.state.training.trainingsData.result;
-      return this.$store.state.presentation.presentationsData.result;
-      return this.$store.state.participation.participationsData.result;
-      return this.$store.state.public.publicData.result;
-      return this.$store.state.research.researchData.result;
-      return this.$store.state.publication.publicationsData.result;
-      return this.$store.state.recognition.recognitionsData.result;
-      return this.$store.state.patent.patentsData.result;
-      return this.$store.state.assignment.assignmentsData.result;
-      return this.$store.state.theses.thesesData.result;
-      
     },
     getDataById(id) {
+      this.loading = true;
+      this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+
+      setTimeout(() => this.$nuxt.$loading.finish(), 1000)
+    })
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&annual_year=${this.selectedYear}&deleted_ne=true&_sort=created_at:DESC`;
       if (id == 1) {
-        this.loading = true;
+        
         this.$store.dispatch("program/setProgrammesData", { qs: queryString });
         this.loading = false;
       }

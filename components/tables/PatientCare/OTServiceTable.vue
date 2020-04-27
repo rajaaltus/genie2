@@ -174,7 +174,6 @@ export default {
     loading: false,
     annualYear: 0,
     isLoading: false,
-    procedures: [],
     search: "",
     editedItem: {
       Procedure: "",
@@ -211,7 +210,10 @@ export default {
   computed: {
     ...mapState({
       otservicesData: state => state.otservice.otservicesData
-    })
+    }),
+    procedures() {
+      return this.$store.state.otservice.otservicesData.map(item => item.Procedure);
+    }
   },
   mounted () {
     this.annualYear = this.$store.state.selectedYear;
@@ -227,14 +229,14 @@ export default {
   },
 
   methods: {
-    getProcedures() {
-      var procedures = [];
-      this.$store.state.otservice.otservicesData.forEach(function(item, index) {
-        procedures.push(item.Procedure);
-      });
-      return procedures;
-      this.isLoading = false;
-    },
+    // getProcedures() {
+    //   var procedures = [];
+    //   this.$store.state.otservice.otservicesData.forEach(function(item, index) {
+    //     procedures.push(item.Procedure);
+    //   });
+    //   return procedures;
+    //   this.isLoading = false;
+    // },
     async reloadData() {
       this.loading = true;
       let queryString = "";
