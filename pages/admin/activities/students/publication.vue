@@ -77,7 +77,7 @@ export default {
       students: state => state.students,
       publicationTypes: state => state.publication.publicationTypes,
     }),
-    	reportYears() {
+    reportYears() {
 			return this.$store.state.reportYears
 		}
   },
