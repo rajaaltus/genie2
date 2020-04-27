@@ -48,9 +48,9 @@
                   color="green"
                   v-model="faculty.leaving_date"
                   :rules="[v => !!v || 'Item is required']"
-                  :return-value.sync="date1"
+                  :return-value.sync="duration_to"
                   readonly
-                  label="To Date"
+                  label="Leaving Date"
                   v-on="on"
                 ></v-text-field>
               </template>
@@ -59,11 +59,40 @@
                 <v-btn text color="primary" @click="duration_to = false">
                   Cancel
                 </v-btn>
-                <v-btn text color="primary" @click="$refs.menu1.save(date1)">
+                <v-btn text color="primary" @click="$refs.menu1.save(duration_to)">
                   OK
                 </v-btn>
               </v-date-picker>
             </v-menu>
+          </v-col>
+          <v-col cols="12" lg="4">
+            <h3><span class="frm-title">Upload Image (If any)</span></h3>
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-img
+                  :src="`${$axios.defaults.baseURL}${image_url}`"
+                  lazy-src="/image_placeholder.png"
+                  class="mt-3"
+                  max-width="100%"
+                  max-height="175"
+                >
+                  <v-fade-transition>
+                    <v-overlay v-if="hover" absolute color="#00564c">
+                      <v-btn @click="$refs.image.click()">
+                        Upload Image
+                      </v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                </v-img>
+              </template>
+            </v-hover>
+            <input
+              ref="image"
+              type="file"
+              style="display:none;"
+              label="File input"
+              @change="handleFileUpload"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -94,11 +123,27 @@ export default {
       designation: "",
       leaving_date: "",
       deleted: false,
-      department: 0
+      department: 0,
+      image: null
     },
+    selectedFile: null,
+    image_url: null,
     facultyStatus: ["Superannuated", "Retired", "VRS"]
   }),
   methods: {
+    async handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      // console.log(this.selectedFile);
+      const data = new FormData();
+      data.append("files", this.selectedFile);
+      const uploadRes = await this.$axios({
+        method: "POST",
+        url: "/upload",
+        data
+      });
+      this.image_url = uploadRes.data[0].url;
+      this.faculty.image = uploadRes.data[0].id;
+    },
     async addFaculty() {
       if (this.$refs.form.validate()) {
         this.faculty.annual_year = this.$store.state.selectedYear;
@@ -133,6 +178,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+      this.image_url = null;
     }
   }
 };
