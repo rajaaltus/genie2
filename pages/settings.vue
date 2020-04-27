@@ -82,11 +82,11 @@
                 </v-col>
                 <v-col cols="6">
                   <v-switch
-                    v-model="newUser.confirmed"
+                    v-model="newUser.blocked"
                     color="green"
                     label="Approved"
                     class="pl-2"
-                    @change="blockUser"
+                    @click="blockUser"
                   ></v-switch>
                 </v-col>
               </v-row>
@@ -124,10 +124,11 @@
 
               <template v-slot:item.blocked="{ item }">
                 <v-switch
-                  v-model="blocked"
                   color="green"
                   class="pl-2"
-                  @input="blockUser"
+                  :value="false"
+                  :input-value="item.blocked"
+                  @change="blockUser(item.id, $event !== null, $event)"
                 ></v-switch>
               </template>
             </v-data-table>
@@ -160,6 +161,7 @@ export default {
     wordcloud
   },
   data: () => ({
+    blocked: false,
     loading: true,
     show1: false,
     newUser: {
@@ -231,9 +233,38 @@ export default {
         this.reloadData();
       }
     },
-    blockUser() {
-      var payload = this.newUser;
-      console.log(payload)
+    blockUser(index, value, event) { 
+       console.log(`${index} ${value} ${event}`);
+       var payload = Object.assign({}, {
+         id: index,
+         blocked: event
+       })
+       var currentState = event?'block':'unblock';
+       Swal.fire({
+        title: `Are you sure you want to ${currentState} this user?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, I am Sure.",
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(result => {
+        if (!result.dismiss) {
+          this.$store
+            .dispatch("user/updateUser", payload)
+            .then(response => {
+              Swal.fire({
+                type: "success",
+                title: "Updated Successfully!",
+                position: "top-end",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+              });
+              let queryString = "";
+              queryString = `department.id=${this.$store.state.auth.user.department}`;
+              this.$store.dispatch("user/setUsersList", {qs: queryString});
+            });
+        }
+      });
     },
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
