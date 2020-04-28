@@ -7,7 +7,7 @@
     </template>
   </ClientOnly>
   <div class="my-8">
-  {{content}}
+  <!-- {{content}} -->
   </div>
   </div>
 </template>
