@@ -27,8 +27,10 @@
     "nuxt-pdf": "^1.0.4",
     "sweetalert2": "^9.7.2",
     "vue-apexcharts": "^1.5.3",
+    "vue-cli-plugin-vuetify-preset-crane": "^1.0.2",
     "vue-moment": "^4.1.0",
-    "vue-wordcloud": "^1.1.1"
+    "vue-wordcloud": "^1.1.1",
+    "tiptap-vuetify": "^2.11.1"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0"
