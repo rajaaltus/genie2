@@ -53,7 +53,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     'nuxt-graphql-request',
-    'nuxt-pdf'
+    'nuxt-pdf',
+    '@nuxtjs/pwa'
   ],
    
   graphql: {
