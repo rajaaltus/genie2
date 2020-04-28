@@ -38,6 +38,7 @@ export default {
     { src: '~/plugins/moment.js' },
     { src : '~/plugins/vue-apexchart.js', ssr : false },
     { src : '~/plugins/highcharts-vue.js' },
+    { src: '~/plugins/TiptapVuetify', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -53,7 +54,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     'nuxt-graphql-request',
-    'nuxt-pdf'
+    'nuxt-pdf',
+    '@nuxtjs/pwa'
   ],
    
   graphql: {
@@ -130,6 +132,7 @@ export default {
   ** Build configuration
   */
   build: {
+    
     vendor : [
       'vue-apexchart'
     ],

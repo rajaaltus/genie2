@@ -1,59 +1,119 @@
 <template>
-  <v-app>
-    <PageHeader :title="$metaInfo.title" /> 
-      <v-row no-gutters>
-        <v-col cols="12" md="12" lg="4">
-          <div id="vuechart-example">
-            <client-only>
-            <apexchart width="80%" type="bar" :options="options" :series="series"></apexchart>
-            </client-only>
-          </div>
-        </v-col>
-        <v-col cols="12" lg="4" md="12">
-          <div>
-            <apexchart width="80%" type="line" :options="options" :series="series"></apexchart>
-          </div>
-        </v-col>
-        <v-col cols="12" lg="4" md="12">
-          <div>
-            <apexchart width="380" type="donut" :options="options" :series="donutSeries"></apexchart>
-          </div>
-        </v-col>
-      </v-row>
-  </v-app>
+  <div>
+    <PageHeader
+      :title="$metaInfo.title"
+      :reportYears="reportYears"
+      @set-year="setReportingYear"
+      class="ml-0 pb-0 pt-0"
+    />
+    <v-stepper v-model="report" vertical>
+      <v-stepper-step :complete="report > 1" step="1" editable>
+        Report
+        <small>Summarize if needed</small>
+      </v-stepper-step>
+
+      <v-stepper-content step="1">
+        <div class="my-4">
+          <Editor v-model="step1" :content="introduction" />
+          <pre>{{step1}}</pre>
+        </div>
+         
+        <v-btn color="primary" @click="report = 2">Continue</v-btn>
+        <v-btn text>Cancel</v-btn>
+      </v-stepper-content>
+
+      <v-stepper-step :complete="report > 2" step="2" editable
+        >Configure analytics for this app</v-stepper-step
+      >
+
+      <v-stepper-content step="2">
+         <div class="my-4">
+          <Editor v-model="step2" :content="promotions"/>
+        </div>
+        <v-btn color="primary" @click="report = 3">Continue</v-btn>
+        <v-btn text>Cancel</v-btn>
+      </v-stepper-content>
+
+      <v-stepper-step :complete="report > 3" step="3" editable
+        >Select an ad format and name ad unit</v-stepper-step
+      >
+
+      <v-stepper-content step="3">
+         <div class="my-4">
+          <Editor v-model="step3" :content="publications"/>
+        </div>
+        <v-btn color="primary" @click="report = 4">Continue</v-btn>
+        <v-btn text>Cancel</v-btn>
+      </v-stepper-content>
+
+      <v-stepper-step step="4">View setup instructions</v-stepper-step>
+      <v-stepper-content step="4">
+         <div class="my-4">
+          <Editor v-model="step4" :content="activities"/>
+        </div>
+        <v-btn color="primary" @click="report = 1">Continue</v-btn>
+        <v-btn text>Cancel</v-btn>
+      </v-stepper-content>
+    </v-stepper>
+  </div>
 </template>
 
 <script>
-
-import PageHeader from '@/components/PageHeader'
+import PageHeader from "@/components/PageHeader"
+import Editor from '@/components/Editor'
 export default {
   head() {
     return {
-      title: 'Reports'
-    }
-  }, 
-  components: {
-    PageHeader
+      title: "Annual Report"
+    };
   },
-  data: () => ({
-    options: {
-      chart: {
-        id: 'vuechart-example'
-        
-      },
-      theme: {
-        palette: 'palette3'
-      },
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-      }
+  components: {
+    PageHeader,
+    Editor
+  },
+  computed: {
+    reportYears() {
+      return this.$store.state.reportYears;
+    }
+  },
+  data() {
+    return {
+      report: 1,
+      step1: "",
+      step2: "",
+      step3: "",
+      step4: ""
+    };
+  },
+  computed: {
+    introduction() {
+      return `<h1>Yay Headlines from Introduction!</h1>
+      <hr>
+      <p>All these <strong>cool tags</strong> are working now.</p>`;
     },
-    series: [{
-      name: 'Publications',
-      data: [60, 10, 35, 50, 12, 60, 70, 91]
-    }],
-    donutSeries: [20, 20, 20, 20, 20]
-   
-  })
-} 
+    promotions() {
+      return `<h1>Yay Headlines from Promotions!</h1>
+      <hr>
+      <p>All these <strong>cool tags</strong> are working now.</p>`;
+    },
+    publications() {
+      return `<h1>Yay Headlines from Publications!</h1>
+      <hr>
+      <p>All these <strong>cool tags</strong> are working now.</p>`;
+    },
+    activities() {
+      return `<h1>Yay Headlines from Activities!</h1>
+      <hr>
+      <p>All these <strong>cool tags</strong> are working now.</p>`;
+    },
+  },
+  methods: {
+    async changeReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
+    }
+  }
+};
 </script>
