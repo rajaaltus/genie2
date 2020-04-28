@@ -55,7 +55,8 @@ export default {
     '@nuxtjs/auth',
     'nuxt-graphql-request',
     'nuxt-pdf',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'vue-scrollto/nuxt'
   ],
    
   graphql: {

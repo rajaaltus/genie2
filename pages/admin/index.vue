@@ -25,7 +25,6 @@
                     item-text="val"
                     label="Reporting Year"
                     color="success"
-                    outlined
                     @input="reloadData"
                   ></v-select>
                 </v-col>
@@ -40,7 +39,6 @@
                     label="Faculty / Staff / Student"
                     item-text="fullname"
                     item-value="id"
-                    outlined
                     @input="getUserWise"
                   >
                     <template v-slot:selection="data">

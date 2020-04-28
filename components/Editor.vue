@@ -6,8 +6,9 @@
       Loading...
     </template>
   </ClientOnly>
-  
-  {{content}}
+  <div class="my-8">
+  <!-- {{content}} -->
+  </div>
   </div>
 </template>
 
