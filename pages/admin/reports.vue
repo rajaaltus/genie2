@@ -215,11 +215,11 @@ export default {
         .map(
           (program, index) =>
             `
-            <h2>${index + 1}. ${program.name.toUpperCase()}<h2>
+            <h4><b>${index + 1}. ${program.name}</b><h4>
             <h4><span>Duration: </span>${program.from_date} - ${
               program.to_date
             }</h4>
-            <p>${program.brief_report}</p><hr>
+            <p>${program.brief_report}</p>
             `
         )
         .join("");

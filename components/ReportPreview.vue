@@ -39,12 +39,7 @@
 
           <v-col cols="auto" lg="auto">
             <v-row>
-              <div class="my-4">
-                <v-btn color="blue-grey" fab x-small dark @click="reset">
-                  <v-icon>mdi-reload</v-icon>
-                </v-btn>
-              </div>
-              <div class="mx-4 my-4">
+              <div class="mr-1 my-4">
                 <v-btn
                   v-if="queryData.annualYear && queryData.userType"
                   :loading="goBtnLoading"
@@ -56,6 +51,11 @@
                   @click="loader = 'goBtnLoading'"
                 >
                   Go
+                </v-btn>
+              </div>
+              <div class="my-4">
+                <v-btn color="red darken-2" fab x-small dark @click="reset">
+                  <v-icon>mdi-reload</v-icon>
                 </v-btn>
               </div>
             </v-row>
@@ -146,7 +146,6 @@
 
           <v-stepper-items>
             <v-stepper-content step="1" style="padding:0px;">
-              <pre> {{ programmes[0] }} </pre>
               <Editor :content="step1Data" />
 
               <v-card flat class="mb-5">
@@ -202,6 +201,7 @@
             </v-stepper-content>
 
             <v-stepper-content step="4" style="padding:0px;">
+            
               <Editor :content="step4Data" />
               <v-card flat class="mb-5">
                 <v-layout align-center justify-center>
@@ -304,7 +304,8 @@ export default {
       this[l] = !this[l];
 
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
+      // queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&deleted_ne=true`;
       await this.$store.dispatch("program/setProgrammesData", {
         qs: queryString
       });
@@ -366,11 +367,9 @@ export default {
         .map(
           (program, index) =>
             `
-            <h2>${index + 1}. ${program.name.toUpperCase()}<h2>
-            <h4><span>Duration: </span>${program.from_date} - ${
-              program.to_date
-            }</h4>
-            <p>${program.brief_report}</p><hr>
+            <h4><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}"</b> at ${program.location} from ${program.from_date} to ${program.to_date}, Coordinated by ${program.coordinators}.<h4>
+            <h4>Colloboration: ${program.colloborations}, Total Participants: ${program.participants_count}</h4>
+            <p><b><u>Brief Report:</u></b> ${program.brief_report}</p>
             `
         )
         .join("");
@@ -380,11 +379,8 @@ export default {
         .map(
           (visitor, index) =>
             `
-            <h2>${index + 1}. ${visitor.name.toUpperCase()}<h2>
-            <h4><span>Duration: </span>${visitor.from_date} - ${
-              visitor.to_date
-            }</h4>
-            <p>${visitor.brief_report}</p><hr>
+            <h4>${index + 1}. ${visitor.name}, ${visitor.designation} from ${visitor.institutional_affiliation} visited our department during ${visitor.from_date} - ${visitor.to_date}. He / She had given a lecture titled "${visitor.title}"</h4>
+            <p><b><u>Brief Report:</u></b> ${visitor.brief_report}</p>
             `
         )
         .join("");
@@ -394,11 +390,8 @@ export default {
         .map(
           (training, index) =>
             `
-            <h2>${index + 1}. ${training.program_name.toUpperCase()}<h2>
-            <h4><span>Duration: </span>${training.from_date} - ${
-              training.to_date
-            }</h4>
-            <p>${training.brief_report}</p><hr>
+            <h4>${index + 1}. ${training.faculty_name} attended a training programme on "${training.program_name}" at ${training.institutional_affiliation} from ${training.from_date} to ${training.to_date}, funded by ${training.funded_by}.</h4>
+            <p><b><u>Brief Report:</u></b> ${training.brief_report}</p>
             `
         )
         .join("");
@@ -408,9 +401,8 @@ export default {
         .map(
           (presentation, index) =>
             `
-            <h2>${index + 1}. ${presentation.type.toUpperCase()}<h2>
-            <h4><span>Forum: </span>${presentation.forum}</h4>
-            <p>${presentation.reference}</p><hr>
+            <h4><b>${index + 1}. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${presentation.title}" by ${presentation.faculty_name}. Co-authors: ${presentation.coauthors}</h4>
+            <p><b><u>Reference:</u></b> ${presentation.reference}</p>
             `
         )
         .join("");
@@ -420,9 +412,7 @@ export default {
         .map(
           (participation, index) =>
             `
-            <h2>${index + 1}. ${participation.program_name.toUpperCase()}<h2>
-            <h4><span>Forum: </span>${participation.forum}</h4>
-            <p>${participation.place}</p><hr>
+            <h4><b>${index + 1}.</b> ${participation.faculty_name}, ${participation.designation} participated in ${participation.forum} programme titled "${participation.program_name}", from ${participation.from_date} to ${participation.to_date} at ${participation.place}.</h4>
             `
         )
         .join("");
@@ -432,9 +422,8 @@ export default {
         .map(
           (item, index) =>
             `
-            <h2>${index + 1}. ${item.title.toUpperCase()}<h2>
-            <h4><span>Program Name: </span>${item.program_name}</h4>
-            <p>Date: ${item.date}</p><hr>
+            <h4><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${item.title}" given by ${item.faculty_name} on ${item.date} at ${item.place}.</h4>
+            <h4><b>Program Name: </b>${item.program_name}, <b>Target Audience: </b>${item.target_audience}</h4>
             `
         )
         .join("");
@@ -444,9 +433,10 @@ export default {
         .map(
           (research, index) =>
             `
-            <h2>${index + 1}. ${research.title.toUpperCase()}<h2>
-            <h4><span>Funding Agency: </span>${research.funding_agency}</h4>
-            <p>Date: ${research.research_abstract}</p><hr>
+            <h4><b>${index + 1}. ${research.research_status.toUpperCase()}:</b> ${research.title}</h4>
+            <h4>${research.investigator_type}: ${research.investigator_name}, Total Duration(in months): ${research.total_durations}</h4>
+            <h4>Source of Funding: ${research.funding_source}, Funding agency : ${research.funding_agency}, Total funding: ${research.total_funds}, Funding during the review period/year: ${research.funding_on_review_period}</h4>
+            <p><b><u>Brief Report/Abstract: </u></b> ${research.research_abstract}</p>
             `
         )
         .join("");
@@ -456,9 +446,8 @@ export default {
         .map(
           (publication, index) =>
             `
-            <h2>${index + 1}. ${publication.publication_type.toUpperCase()}<h2>
-            <h4><span>Classification: </span>${publication.classification}</h4>
-            <p>Date: ${publication.reference}</p><hr>
+            <h4><b>${index + 1}. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></h4>
+            <p>${publication.reference}</p>
             `
         )
         .join("");
@@ -468,9 +457,7 @@ export default {
         .map(
           (recognition, index) =>
             `
-            <h2>${index + 1}. ${recognition.award_title.toUpperCase()}<h2>
-            <h4><span>Organization: </span>${recognition.organization}</h4>
-            <p>Date: ${recognition.date}</p><hr>
+            <h4><b>${index + 1}.</b> ${recognition.faculty_name} has been awarded as "${recognition.award_title}" from ${recognition.organization},${recognition.place} on ${recognition.date}.</h4>
             `
         )
         .join("");
@@ -480,9 +467,8 @@ export default {
         .map(
           (patent, index) =>
             `
-            <h2>${index + 1}. ${patent.title.toUpperCase()}<h2>
-            <h4><span>Reg.NO: </span>${patent.registration_no}</h4>
-            <p>Report: ${patent.brief_report}</p><hr>
+            <h4><b>${index + 1}. ${patent.registration_no}:</b> ${patent.title}</h4>
+            <p><b><u>Brief Report: </u></b> ${patent.brief_report}</p>
             `
         )
         .join("");
@@ -492,47 +478,49 @@ export default {
         .map(
           (assignment, index) =>
             `
-            <h2>${index + 1}. ${assignment.roles.toUpperCase()}<h2>
-            <h4><span>Classification: </span>${assignment.classification}</h4>
-            <p>Report: ${assignment.brief_report}</p><hr>
+            <h4><b>${index + 1}. ${assignment.classification.toUpperCase()}:</b> ${assignment.faculty_name}, ${assignment.designation}, ${assignment.roles}</b></h4>
+            <p><b><u>Brief Report: </u></b> ${assignment.brief_report}</p>
             `
         )
         .join("");
     },
     step1Data() {
       return (
-        `<h1>Programmes / Events</h1>` +
+        `<h1><b><u>Section B:</u></b></h1>` +
+        `<h3><b>1. CONFERENCES / WORKSHOPS / SEMINARS /SYMPOSIUM / SCIENTIFIC PROGRAMMES</b></h3>` +
         this.formattedProgrammes +
-        `<h1>Visitors</h1>` +
+        `<hr><h3><b>2. VISITORS TO THE DEPARTMENT<b></h3>` +
         this.formattedVisitors +
-        `<h1>Trainings</h1>` +
+        `<hr><h3><b>3. SPECIFIC TRAINING UNDERWENT BY THE FACULTY / STAFF / STUDENTS OUTSIDE NIMHANS<b></h3>` +
         this.formattedTrainings
       );
     },
     step2Data() {
       return (
-        `<h1>Presentation / Posters</h1>` +
+        `<h3><b>4. CONTRIBUTION TO SCIENTIFIC DELIBERATIONS</b></h3>` +
+        `<h3><b>A. PRESENTATIONS/ POSTERS</b></h3>` +
         this.formattedPresentations +
-        `<h1>Participations</h1>` +
+        `<hr><h3><b>B. PARTICIPATIONS</b></h3>` +
         this.formattedParticipations
       );
     },
     step3Data() {
-      return `<h1>Public Engagements</h1>` + this.formattedPublics;
+      return `<h3><b>5. PUBLIC ENGAGEMENT & OUTREACH ACTIVITIES</b></h3>` + this.formattedPublics;
     },
     step4Data() {
-      return `<h1>Research Activities</h1>` + this.formattedResearch;
+      return `<h3><b>6. RESEARCH ACTIVITIES</b></h3>` + this.formattedResearch;
     },
     step5Data() {
-      return `<h1>Publications</h1>` + this.formattedPublications;
+      return `<h3><b>5. PUBLICATIONS</b></h3>` + this.formattedPublications;
     },
     step6Data() {
       return (
-        `<h1>Recognitions</h1>` +
+        `<h3><b>5. RECOGNITION OF NIMHANS CONTRIBUTION </b></h3>` +
+        `<h3><b>A. AWARDS AND HONORS </b></h3>` +
         this.formattedRecognitions +
-        `<h1>Patents</h1>` +
+        `<hr><h3><b>B. PATENTS </b></h3>` +
         this.formattedPatents +
-        `<h1>Key Assignments</h1>` +
+        `<hr><h3><b>C. KEY ASSIGNMENTS </b></h3>` +
         this.formattedAssignments
       );
     }
