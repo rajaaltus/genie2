@@ -2,47 +2,72 @@
   <div>
     <v-card tile color="grey lighten-5">
       <v-card-text class="px-0 py-0">
-        <v-row class="px-5">
+        <v-row class="px-5" ref="queryData">
           <v-col cols="12" lg="3">
             <v-select
-              v-model="selectedYear"
+              ref="annualYear"
+              v-model="queryData.annualYear"
               :items="reportYears"
               item-value="id"
               item-text="val"
               label="Reporting Year"
               color="success"
-              @input="fetchAllData"
             ></v-select>
           </v-col>
 
           <v-col cols="12" lg="3">
             <v-select
-              item-value="id"
-              item-text="val"
+              ref="userType"
+              v-model="queryData.userType"
               label="User Type"
+              :items="userTypes"
               color="success"
             ></v-select>
           </v-col>
 
           <v-col cols="12" lg="3">
             <v-select
+              ref="people"
+              v-model="people"
+              :items="peoples"
+              item-text="fullname"
               item-value="id"
-              item-text="val"
               label="Faulty / Staff / Student"
               color="success"
             ></v-select>
           </v-col>
 
           <v-col cols="auto" lg="auto">
-            <div class="my-4">
-              <v-btn color="green darken-2" fab x-small dark>
-                <v-icon>mdi-reload</v-icon>
-              </v-btn>
-            </div>
+            <v-row>
+              <div class="my-4">
+                <v-btn color="blue-grey" fab x-small dark @click="reset">
+                  <v-icon>mdi-reload</v-icon>
+                </v-btn>
+              </div>
+              <div class="mx-4 my-4">
+                <v-btn
+                  v-if="queryData.annualYear && queryData.userType"
+                  :loading="goBtnLoading"
+                  :disabled="goBtnLoading"
+                  color="green"
+                  x-small
+                  class="white--text"
+                  fab
+                  @click="loader = 'goBtnLoading'"
+                >
+                  Go
+                </v-btn>
+              </div>
+            </v-row>
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto" md="auto" lg="auto">
-            <v-card tile class="px-2 py-2" color="yellow lighten-1">
+            <v-card
+              v-if="queryData.annualYear && !people"
+              tile
+              class="px-2 py-2"
+              color="yellow lighten-1"
+            >
               <span class="caption font-weight-bold">Available Reports </span>
               <v-layout align-end justify-start>
                 <v-tooltip bottom color="#2c549b">
@@ -81,8 +106,8 @@
             </v-card>
           </v-col>
         </v-row>
-
-        <v-stepper v-model="report" style="border-radius:0;">
+        <!-- {{ queryData }} -->
+        <v-stepper v-if="dataLoaded" v-model="report" style="border-radius:0;">
           <v-stepper-header>
             <v-stepper-step :complete="report > 1" step="1" editable id="top1"
               >Programmes / Events</v-stepper-step
@@ -250,9 +275,76 @@ export default {
     PageHeader,
     Editor
   },
+  data() {
+    return {
+      report: 1,
+      people: "",
+      step1: "",
+      step2: "",
+      step3: "",
+      step4: "",
+      step5: "",
+      step6: "",
+      dataLoaded: false,
+      queryData: {
+        annualYear: 0,
+        userType: ""
+      },
+      loader: null,
+      goBtnLoading: false,
+      userTypes: [
+        { text: "Faculty", value: "FACULTY" },
+        { text: "Student", value: "STUDENT" }
+      ]
+    };
+  },
+  watch: {
+    async loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
+      await this.$store.dispatch("program/setProgrammesData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("visitor/setVisitorsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("training/setTrainingsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("presentation/setPresentationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("participation/setParticipationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("public/setPublicData", { qs: queryString });
+      await this.$store.dispatch("research/setResearchData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("recognition/setRecognitionsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("patent/setPatentsData", { qs: queryString });
+      await this.$store.dispatch("assignment/setAssignmentsData", {
+        qs: queryString
+      });
+      this[l] = !this[l];
+      (this.loader = null), (this.dataLoaded = true);
+    }
+  },
+
   computed: {
     reportYears() {
       return this.$store.state.reportYears;
+    },
+    peoples() {
+      return this.$store.state.user.activeUsersList.result;
     },
     ...mapState({
       programmes: state => state.program.programmesData.result,
@@ -445,18 +537,6 @@ export default {
       );
     }
   },
-  data() {
-    return {
-      report: 1,
-      step1: "",
-      step2: "",
-      step3: "",
-      step4: "",
-      step5: "",
-      step6: ""
-    };
-  },
-
   async fetch({ store }) {
     let queryString = "";
     queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
@@ -486,6 +566,15 @@ export default {
     },
     async setReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
+    },
+    save() {
+      console.log("Save Clicked!");
+    },
+    reset() {
+      this.$refs.annualYear.reset();
+      this.$refs.userType.reset();
+      this.$refs.people.reset();
+      this.dataLoaded = false;
     }
   }
 };
