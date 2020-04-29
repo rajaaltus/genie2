@@ -55,6 +55,7 @@
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
         <v-stepper-content step="1">
+          <pre> {{ programmes[0] }} </pre>
           <Editor :content="step1Data" />
 
           <v-row>

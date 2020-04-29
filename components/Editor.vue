@@ -1,7 +1,7 @@
 <template>
 <div>
   <ClientOnly>
-    <tiptap-vuetify v-model="content" :extensions="extensions"/>
+    <tiptap-vuetify v-model="content" :extensions="extensions" />
     <template #placeholder>
       Loading...
     </template>

@@ -121,6 +121,7 @@
 
           <v-stepper-items>
             <v-stepper-content step="1" style="padding:0px;">
+              <pre> {{ programmes[0] }} </pre>
               <Editor :content="step1Data" />
 
               <v-card flat class="mb-5">
