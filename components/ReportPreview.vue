@@ -154,7 +154,7 @@
                     id="submit"
                     color="green darken-2"
                     dark
-                    @click="report = 2"
+                    @click="handleNext(1)"
                   >
                     Next
                   </v-btn>
@@ -173,7 +173,7 @@
                     id="submit"
                     color="green darken-2"
                     dark
-                    @click="report = 3"
+                    @click="handleNext(2)"
                   >
                     Next
                   </v-btn>
@@ -192,7 +192,7 @@
                     id="submit"
                     color="green darken-2"
                     dark
-                    @click="report = 4"
+                    @click="handleNext(3)"
                   >
                     Next
                   </v-btn>
@@ -211,7 +211,7 @@
                     id="submit"
                     color="green darken-2"
                     dark
-                    @click="report = 5"
+                    @click="handleNext(4)"
                   >
                     Next
                   </v-btn>
@@ -231,7 +231,7 @@
                     id="submit"
                     color="green darken-2"
                     dark
-                    @click="report = 6"
+                    @click="handleNext(5)"
                   >
                     Next
                   </v-btn>
@@ -346,6 +346,7 @@ export default {
       return this.$store.state.user.activeUsersList.result;
     },
     ...mapState({
+      aboutData: state => state.about.newAbout,
       programmes: state => state.program.programmesData.result,
       visitors: state => state.visitor.visitorsData.result,
       trainings: state => state.training.trainingsData.result,
@@ -359,7 +360,9 @@ export default {
       assignments: state => state.assignment.assignmentsData.result,
       theses: state => state.theses.thesesData.result
     }),
-
+    // formattedAbout() {
+    //   return this.aboutData
+    // },
     formattedProgrammes() {
       return this.programmes
         .map(
@@ -498,6 +501,7 @@ export default {
         )
         .join("");
     },
+    
     step1Data() {
       return (
         `<h1>Programmes / Events</h1>` +
@@ -568,6 +572,13 @@ export default {
     },
     save() {
       console.log("Save Clicked!");
+    },
+    handleNext(step) {
+      console.log('clicked at: '+ step);
+        this.report = step+1
+        this.$emit('next-clicked', step)
+        console.log('emiting...')
+      console.log('Cuurent tab: '+ this.report);
     },
     reset() {
       this.$refs.annualYear.reset();

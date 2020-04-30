@@ -1,13 +1,13 @@
 <template>
 <div>
   <ClientOnly>
-    <tiptap-vuetify v-model="content" :extensions="extensions"/>
+    <tiptap-vuetify v-model="content" :extensions="extensions" @next="handleNext" />
     <template #placeholder>
       Loading...
     </template>
   </ClientOnly>
   <div class="my-8">
-  <!-- {{content}} -->
+  {{content}}
   </div>
   </div>
 </template>
@@ -35,8 +35,9 @@ import {
 export default {
   props: ['content'],
   components: { TiptapVuetify },
-  data: () => ({
-    extensions: [
+  data() {
+    return {
+      extensions: [
       History,
       Blockquote,
       Link,
@@ -61,12 +62,15 @@ export default {
       Paragraph,
       HardBreak
     ],
-    // content: `
-      
-    //   <h1>Yay Headlines!</h1>
-    //   <hr>
-    //   <p>All these <strong>cool tags</strong> are working now.</p>
-    // `
-  })
+    
+    }
+  },
+  methods: {
+    handleNext() {
+      console.log('Data to Save: '+ this.content);
+    }
+  }
+    
+ 
 }
 </script>
