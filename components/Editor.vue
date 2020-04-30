@@ -199,8 +199,11 @@ export default {
               section_f: this.content
             }
           );
+      let rid = 0;
+      rid = payload.id;
+      console.log(rid);
       await this.$store.dispatch("report/updateReport", payload);
-      this.$router.push(`/admin/generate/${this.$store.state.report.reportId}`);
+      this.$router.push(`/admin/generate/${rid}`);
     }
     
   }

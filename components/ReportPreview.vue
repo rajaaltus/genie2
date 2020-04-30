@@ -241,7 +241,7 @@ export default {
       this.reportStepper = val;
     },
     async loader() {
-      await this.$store.dispatch('report/initializeReportId', 0);
+      this.$store.dispatch('report/initializeReportId', 0);
       this.dataLoaded = false;
       this.report = 1;
       const l = this.loader;

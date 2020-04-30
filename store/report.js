@@ -21,6 +21,12 @@ export const mutations = {
     state.savedReports.result = response;
     
   },
+  SET_POST_REPORTS(state, response) {
+    state.savedReports.success = true;
+    state.reportId = response.id;
+    state.savedReports.result = response;
+    
+  },
   SET_GEN_REPORT(state, response) {
     state.generatedReport = response;
   },
@@ -61,7 +67,7 @@ export const actions =  {
   async addReport({commit}, payload) {
     await this.$axios.$post('/saved-reports', payload)
     .then(response=> {
-      commit("SET_REPORTS", response);
+      commit("SET_POST_REPORTS", response);
     })
     .catch((e)=>{
       commit("SET_REPORT_ERRORS", e.response);  

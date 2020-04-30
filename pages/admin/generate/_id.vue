@@ -8,7 +8,7 @@
         <v-btn color="primary" small>Save PDF</v-btn>
       </v-col>
     </v-row>
-   <FinalEditor :content="savedData.section_a+savedData.section_b+savedData.section_c+savedData.section_d+savedData.section_e+savedData.section_f" />
+   <FinalEditor :content="sectionA + sectionB + sectionC +  sectionD + sectionE + sectionF" />
   </div>
 </template>
 
@@ -36,8 +36,30 @@ export default {
       savedData: state => state.report.generatedReport
     }),
     sectionA() {
-      return this.savedData.sectionA;
+      if (this.savedData.section_a)
+        return this.savedData.section_a
+    },
+    sectionB() {
+      if (this.savedData.section_a)
+        return this.savedData.section_b
+    },
+    sectionC() {
+      if (this.savedData.section_c)
+        return this.savedData.section_c
+    },
+    sectionD() {
+      if (this.savedData.section_d)
+        return this.savedData.section_d
+    },
+    sectionE() {
+      if (this.savedData.section_e)
+        return this.savedData.section_e
+    },
+    sectionF() {
+      if (this.savedData.section_f)
+        return this.savedData.section_f
     }
+
   },
   async fetch({store, params}) {
     await store.dispatch('report/getById', {id: params.id});
