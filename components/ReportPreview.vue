@@ -109,149 +109,94 @@
         <!-- {{ queryData }} -->
         <v-stepper v-if="dataLoaded" v-model="report" style="border-radius:0;">
           <v-stepper-header>
-            <v-stepper-step :complete="report > 1" step="1" editable id="top1"
+            <v-stepper-step :complete="report > 1" step="1" 
               >Programmes / Events</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 2" step="2" editable id="top2"
+            <v-stepper-step :complete="report > 2" step="2" 
               >Contribution To Scientific Deliberations</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 3" step="3" editable id="top3"
+            <v-stepper-step :complete="report > 3" step="3" 
               >Public Engagement</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 4" step="4" editable id="top4"
+            <v-stepper-step :complete="report > 4" step="4" 
               >Research Activities</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 5" step="5" editable id="top5"
+            <v-stepper-step :complete="report > 5" step="5" 
               >Publications</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6" editable id="top6"
-              >Recogntions</v-stepper-step
-            >
+            <v-stepper-step step="6" >Recogntions</v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
             <v-stepper-content step="1" style="padding:0px;">
-              <Editor :content="step1Data" />
-
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn
-                    id="submit"
-                    color="green darken-2"
-                    dark
-                    @click="handleNext(1)"
-                  >
-                    Next
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step1Data"
+                :step="1"
+                @next="handleNext(1)"
+                @previous="handlePrevious(1)"
+                :selectedYear="queryData.annualYear"
+                :selectedUserType="queryData.userType"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="2" style="padding:0px;">
-              <Editor :content="step2Data" />
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn color="error" class="mr-2" @click="report = 1"
-                    >Previous</v-btn
-                  >
-                  <v-btn
-                    id="submit"
-                    color="green darken-2"
-                    dark
-                    @click="handleNext(2)"
-                  >
-                    Next
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step2Data"
+                :step="2"
+                @next="handleNext(2)"
+                @previous="handlePrevious(2)"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="3" style="padding:0px;">
-              <Editor :content="step3Data" />
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn color="error" class="mr-2" @click="report = 2"
-                    >Previous</v-btn
-                  >
-                  <v-btn
-                    id="submit"
-                    color="green darken-2"
-                    dark
-                    @click="handleNext(3)"
-                  >
-                    Next
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step3Data"
+                :step="3"
+                @next="handleNext(3)"
+                @previous="handlePrevious(3)"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="4" style="padding:0px;">
-              <Editor :content="step4Data" />
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn color="error" class="mr-2" @click="report = 3"
-                    >Previous</v-btn
-                  >
-                  <v-btn
-                    id="submit"
-                    color="green darken-2"
-                    dark
-                    @click="handleNext(4)"
-                  >
-                    Next
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step4Data"
+                :step="4"
+                @next="handleNext(4)"
+                @previous="handlePrevious(4)"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="5" style="padding:0px;">
-              <Editor :content="step5Data" />
-
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn color="error" class="mr-2" @click="report = 4"
-                    >Previous</v-btn
-                  >
-                  <v-btn
-                    id="submit"
-                    color="green darken-2"
-                    dark
-                    @click="handleNext(5)"
-                  >
-                    Next
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step5Data"
+                :step="5"
+                @next="handleNext(5)"
+                @previous="handlePrevious(5)"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="6" style="padding:0px;">
-              <Editor :content="step6Data" />
-
-              <v-card flat class="mb-5">
-                <v-layout align-center justify-center>
-                  <v-btn color="error" class="mr-2" @click="report = 5"
-                    >Previous</v-btn
-                  >
-                  <v-btn id="submit" color="green darken-2" dark @click="save">
-                    Approve &amp; Save
-                  </v-btn>
-                </v-layout>
-              </v-card>
+              <Editor
+                :content="step6Data"
+                :step="6"
+                @next="handleNext(6)"
+                @previous="handlePrevious(6)"
+              />
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
@@ -278,12 +223,6 @@ export default {
     return {
       report: 1,
       people: "",
-      step1: "",
-      step2: "",
-      step3: "",
-      step4: "",
-      step5: "",
-      step6: "",
       dataLoaded: false,
       queryData: {
         annualYear: 0,
@@ -298,10 +237,21 @@ export default {
     };
   },
   watch: {
+    report(val) {
+      this.reportStepper = val;
+    },
     async loader() {
+      await this.$store.dispatch('report/initializeReportId', 0);
+      this.dataLoaded = false;
+      this.report = 1;
       const l = this.loader;
       this[l] = !this[l];
 
+      let findQuery = "";
+      findQuery = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&userType=${this.queryData.userType}`;
+      await this.$store.dispatch('report/setSavedReport', {fq: findQuery})
+      
+      console.log('Fetch Started from Watch: ');
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
       await this.$store.dispatch("program/setProgrammesData", {
@@ -335,10 +285,22 @@ export default {
       });
       this[l] = !this[l];
       (this.loader = null), (this.dataLoaded = true);
+    
     }
   },
 
   computed: {
+    // reportId() {
+    //   return this.$store.state.report.reportId;
+    // },
+    reportStepper: {
+      get() {
+        return this.$store.state.reportStepper;
+      },
+      set(report) {
+        this.$store.dispatch("updateStepper", report);
+      }
+    },
     reportYears() {
       return this.$store.state.reportYears;
     },
@@ -501,7 +463,7 @@ export default {
         )
         .join("");
     },
-    
+
     step1Data() {
       return (
         `<h1>Programmes / Events</h1>` +
@@ -540,29 +502,6 @@ export default {
       );
     }
   },
-  async fetch({ store }) {
-    let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
-    await store.dispatch("program/setProgrammesData", { qs: queryString });
-    await store.dispatch("visitor/setVisitorsData", { qs: queryString });
-    await store.dispatch("training/setTrainingsData", { qs: queryString });
-    await store.dispatch("presentation/setPresentationsData", {
-      qs: queryString
-    });
-    await store.dispatch("participation/setParticipationsData", {
-      qs: queryString
-    });
-    await store.dispatch("public/setPublicData", { qs: queryString });
-    await store.dispatch("research/setResearchData", { qs: queryString });
-    await store.dispatch("publication/setPublicationsData", {
-      qs: queryString
-    });
-    await store.dispatch("recognition/setRecognitionsData", {
-      qs: queryString
-    });
-    await store.dispatch("patent/setPatentsData", { qs: queryString });
-    await store.dispatch("assignment/setAssignmentsData", { qs: queryString });
-  },
   methods: {
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
@@ -574,17 +513,17 @@ export default {
       console.log("Save Clicked!");
     },
     handleNext(step) {
-      console.log('clicked at: '+ step);
-        this.report = step+1
-        this.$emit('next-clicked', step)
-        console.log('emiting...')
-      console.log('Cuurent tab: '+ this.report);
+      this.report = step + 1;
+    },
+    handlePrevious(step) {
+      this.report = step - 1;
     },
     reset() {
       this.$refs.annualYear.reset();
       this.$refs.userType.reset();
       this.$refs.people.reset();
       this.dataLoaded = false;
+      this.$store.dispatch("updateStepper", 0);
     }
   }
 };
