@@ -25,7 +25,6 @@
                     item-text="val"
                     label="Reporting Year"
                     color="success"
-                    outlined
                     @input="reloadData"
                   ></v-select>
                 </v-col>
@@ -40,7 +39,6 @@
                     label="Faculty / Staff / Student"
                     item-text="fullname"
                     item-value="id"
-                    outlined
                     @input="getUserWise"
                   >
                     <template v-slot:selection="data">
@@ -435,51 +433,6 @@
                   </v-alert>
                 </v-col>
               </v-row>
-
-              <!--<v-row>
-                <v-col cols="12" lg="6">
-                  <v-card class="mx-auto">
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title class="headline"
-                          >Publications</v-list-item-title
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <div id="vuechart-example">
-                      <client-only>
-                        <apexchart
-                          width="100%"
-                          type="bar"
-                          :options="options"
-                          :series="series"
-                        ></apexchart>
-                      </client-only>
-                    </div>
-                  </v-card>
-                </v-col>
-                <v-col cols="12" lg="6">
-                  <v-card class="mx-auto">
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title class="headline"
-                          >Research Activities</v-list-item-title
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <div>
-                      <apexchart
-                        width="100%"
-                        type="line"
-                        :options="options"
-                        :series="series"
-                      ></apexchart>
-                    </div>
-                  </v-card>
-                </v-col>
-              </v-row>-->
             </v-card-text>
           </v-card>
         </v-tab-item>

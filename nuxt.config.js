@@ -38,6 +38,7 @@ export default {
     { src: '~/plugins/moment.js' },
     { src : '~/plugins/vue-apexchart.js', ssr : false },
     { src : '~/plugins/highcharts-vue.js' },
+    { src: '~/plugins/TiptapVuetify', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -53,7 +54,9 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     'nuxt-graphql-request',
-    'nuxt-pdf'
+    'nuxt-pdf',
+    '@nuxtjs/pwa',
+    'vue-scrollto/nuxt'
   ],
    
   graphql: {
@@ -89,9 +92,9 @@ export default {
   */
 	axios: {
       
-		  baseURL: 'http://site1.localhost'
+		 baseURL: 'http://site1.localhost'
 		//  baseURL: 'http://localhost:1337'
-		// baseURL: 'http://14.139.159.112:1338'
+		//  baseURL: 'http://14.139.159.112:1338'
 	},
 
   /*
@@ -130,6 +133,7 @@ export default {
   ** Build configuration
   */
   build: {
+    
     vendor : [
       'vue-apexchart'
     ],

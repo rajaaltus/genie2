@@ -1,566 +1,529 @@
 <template>
   <div>
-    <v-card tile>
-      <v-card-text class="px-0 py-1">
-        <v-row class="px-5">
+    <v-card tile color="grey lighten-5">
+      <v-card-text class="px-0 py-0">
+        <v-row class="px-5" ref="queryData">
           <v-col cols="12" lg="3">
             <v-select
-              v-model="selectedYear"
+              ref="annualYear"
+              v-model="queryData.annualYear"
               :items="reportYears"
               item-value="id"
               item-text="val"
               label="Reporting Year"
               color="success"
-              @input="fetchAllData"
             ></v-select>
           </v-col>
 
           <v-col cols="12" lg="3">
-            <v-autocomplete
-              v-model="selectedUser"
-              v-if="$auth.user.userType === 'DEPARTMENT'"
-              :items="people"
-              color="blue-grey lighten-2"
-              label="Faculty / Staff / Student"
+            <v-select
+              ref="userType"
+              v-model="queryData.userType"
+              label="User Type"
+              :items="userTypes"
+              color="success"
+            ></v-select>
+          </v-col>
+
+          <v-col cols="12" lg="3">
+            <v-select
+              ref="people"
+              v-model="people"
+              :items="peoples"
               item-text="fullname"
               item-value="id"
-              @input="fetchAllData"
-            >
-              <template v-slot:selection="data">
-                {{ data.item.fullname }}
-              </template>
-              <template v-slot:item="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item"></v-list-item-content>
-                </template>
-                <template v-else>
-                  <v-list-item-avatar>
-                    <img
-                      :src="
-                        data.item.avatar !== null
-                          ? $axios.defaults.baseURL + data.item.avatar.url
-                          : '/avatar-default-icon.png'
-                      "
-                    />
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="data.item.fullname"
-                    ></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-html="data.item.userType"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </template>
-            </v-autocomplete>
+              label="Faulty / Staff / Student"
+              color="success"
+            ></v-select>
           </v-col>
 
-          <v-col cols="1" lg="1">
-            <div class="my-4">
-              <v-btn color="green darken-2" fab x-small dark>
-                <v-icon>mdi-reload</v-icon>
-              </v-btn>
-            </div>
+          <v-col cols="auto" lg="auto">
+            <v-row>
+              <div class="my-4">
+                <v-btn color="blue-grey" fab x-small dark @click="reset">
+                  <v-icon>mdi-reload</v-icon>
+                </v-btn>
+              </div>
+              <div class="mx-4 my-4">
+                <v-btn
+                  v-if="queryData.annualYear && queryData.userType"
+                  :loading="goBtnLoading"
+                  :disabled="goBtnLoading"
+                  color="green"
+                  x-small
+                  class="white--text"
+                  fab
+                  @click="loader = 'goBtnLoading'"
+                >
+                  Go
+                </v-btn>
+              </div>
+            </v-row>
           </v-col>
-          <v-col cols="3" md="3" lg="3">
-            <v-layout align-end justify-end>
-              <v-btn
-                to="/admin/medium"
-                color="red lighten-1"
-                small
-                dark
-                class="my-4"
-              >
-                <v-icon small class="px-1">mdi-file-pdf</v-icon>
-                Download Report
-              </v-btn>
-            </v-layout>
-          </v-col>
-          <v-col cols="12" lg="2">
-            <v-layout align-end justify-end>
-              <v-btn
-                @click="all"
-                fab
-                x-small
-                class="mr-2 my-4"
-                color="grey lighten-4"
-              >
-                <v-icon>mdi-arrow-expand-all</v-icon>
-              </v-btn>
-              <v-btn
-                class="mr-2 my-4"
-                fab
-                x-small
-                color="grey lighten-4"
-                @click="none"
-              >
-                <v-icon>mdi-arrow-collapse-all</v-icon>
-              </v-btn>
-            </v-layout>
+          <v-spacer></v-spacer>
+          <v-col cols="auto" md="auto" lg="auto">
+            <v-card
+              v-if="queryData.annualYear && !people"
+              tile
+              class="px-2 py-2"
+              color="yellow lighten-1"
+            >
+              <span class="caption font-weight-bold">Available Reports </span>
+              <v-layout align-end justify-start>
+                <v-tooltip bottom color="#2c549b">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      to="/admin/reports"
+                      color="#2c549b"
+                      class="mr-1"
+                      x-small
+                      fab
+                      dark
+                      v-on="on"
+                    >
+                      <v-icon small class="px-1">mdi-file-word</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Faculty Report</span>
+                </v-tooltip>
+
+                <v-tooltip bottom color="#2c549b">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      to="/admin/reports"
+                      color="#2c549b"
+                      x-small
+                      fab
+                      dark
+                      v-on="on"
+                    >
+                      <v-icon small class="px-1">mdi-file-word</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Student Report</span>
+                </v-tooltip>
+              </v-layout>
+            </v-card>
           </v-col>
         </v-row>
-        <!-- <pre>{{allActivities}}</pre> -->
-        <v-expansion-panels flat multiple v-model="panel">
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(1)"
-              ><h3>Programmes / Events</h3></v-expansion-panel-header
+        <!-- {{ queryData }} -->
+        <v-stepper v-if="dataLoaded" v-model="report" style="border-radius:0;">
+          <v-stepper-header>
+            <v-stepper-step :complete="report > 1" step="1" 
+              >Programmes / Events</v-stepper-step
             >
-            <v-expansion-panel-content>
-              <Program :programmes="programmes" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(2)"
-              ><h3>Visitors to the Department</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Visitor :visitors="visitors" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-divider></v-divider>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(3)"
-              ><h3>Trainings</h3></v-expansion-panel-header
+            <v-stepper-step :complete="report > 2" step="2" 
+              >Contribution To Scientific Deliberations</v-stepper-step
             >
-            <v-expansion-panel-content>
-              <Training :trainings="trainings" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(4)"
-              ><h3>Presentations / Posters</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Presentation :presentations="presentations" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-divider></v-divider>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(5)"
-              ><h3>Participations</h3></v-expansion-panel-header
+            <v-stepper-step :complete="report > 3" step="3" 
+              >Public Engagement</v-stepper-step
             >
-            <v-expansion-panel-content>
-              <Participation :participations="participations" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(6)"
-              ><h3>Public Engagements</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <PublicEngagement :publics="publics" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-divider></v-divider>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(7)"
-              ><h3>Research Activities</h3></v-expansion-panel-header
+            <v-stepper-step :complete="report > 4" step="4" 
+              >Research Activities</v-stepper-step
             >
-            <v-expansion-panel-content>
-              <Research :researchData="researchData" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(8)"
-              ><h3>Publications</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Publication :publications="publications" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(9)"
-              ><h3>Recognitions</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Recognition :recognitions="recognitions" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-divider></v-divider>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(10)"
-              ><h3>Patents</h3></v-expansion-panel-header
+            <v-stepper-step :complete="report > 5" step="5" 
+              >Publications</v-stepper-step
             >
-            <v-expansion-panel-content>
-              <Patent :patents="patents" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
 
-          <v-expansion-panel>
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(11)"
-              ><h3>Key Assignments</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Assignment :assignments="assignments" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-divider></v-divider>
 
-          <v-expansion-panel v-if="$auth.user.userType!=='FACULTY'">
-            <v-skeleton-loader v-if="loading" height="50" type="list-item">
-            </v-skeleton-loader>
-            <v-expansion-panel-header v-else ripple @click="getDataById(12)"
-              ><h3>Theses / Dissertions</h3></v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <Theses :theses="theses" />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
+            <v-stepper-step step="6" >Recogntions</v-stepper-step>
+          </v-stepper-header>
 
-        </v-expansion-panels>
+          <v-stepper-items>
+            <v-stepper-content step="1" style="padding:0px;">
+              <Editor
+                :content="step1Data"
+                :step="1"
+                @next="handleNext(1)"
+                @previous="handlePrevious(1)"
+                :selectedYear="queryData.annualYear"
+                :selectedUserType="queryData.userType"
+              />
+            </v-stepper-content>
+
+            <v-stepper-content step="2" style="padding:0px;">
+              <Editor
+                :content="step2Data"
+                :step="2"
+                @next="handleNext(2)"
+                @previous="handlePrevious(2)"
+              />
+            </v-stepper-content>
+
+            <v-stepper-content step="3" style="padding:0px;">
+              <Editor
+                :content="step3Data"
+                :step="3"
+                @next="handleNext(3)"
+                @previous="handlePrevious(3)"
+              />
+            </v-stepper-content>
+
+            <v-stepper-content step="4" style="padding:0px;">
+              <Editor
+                :content="step4Data"
+                :step="4"
+                @next="handleNext(4)"
+                @previous="handlePrevious(4)"
+              />
+            </v-stepper-content>
+
+            <v-stepper-content step="5" style="padding:0px;">
+              <Editor
+                :content="step5Data"
+                :step="5"
+                @next="handleNext(5)"
+                @previous="handlePrevious(5)"
+              />
+            </v-stepper-content>
+
+            <v-stepper-content step="6" style="padding:0px;">
+              <Editor
+                :content="step6Data"
+                :step="6"
+                @next="handleNext(6)"
+                @previous="handlePrevious(6)"
+              />
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script>
-import Program from "@/components/ReportPreview/Program";
-import Visitor from "@/components/ReportPreview/Visitor";
-import Training from "@/components/ReportPreview/Training";
-import Presentation from "@/components/ReportPreview/Presentation";
-import Participation from "@/components/ReportPreview/Participation";
-import PublicEngagement from "@/components/ReportPreview/PublicEngagement";
-import Publication from "@/components/ReportPreview/Publication";
-import Research from "@/components/ReportPreview/Research";
-import Recognition from "@/components/ReportPreview/Recognition";
-import Patent from "@/components/ReportPreview/Patent";
-import Assignment from "@/components/ReportPreview/Assignment";
-import Theses from "@/components/ReportPreview/Theses";
-
+import { mapState } from "vuex";
+import PageHeader from "@/components/PageHeader";
+import Editor from "@/components/Editor";
 export default {
+  head() {
+    return {
+      title: "Annual Report"
+    };
+  },
   components: {
-    Program,
-    Visitor,
-    Training,
-    Presentation,
-    Participation,
-    PublicEngagement,
-    Publication,
-    Research,
-    Recognition,
-    Patent,
-    Assignment,
-    Theses
+    PageHeader,
+    Editor
   },
   data() {
     return {
-      loading: false,
-      selectedUser: null,
-      selectedYear: 0,
-      panel: []
+      report: 1,
+      people: "",
+      dataLoaded: false,
+      queryData: {
+        annualYear: 0,
+        userType: ""
+      },
+      loader: null,
+      goBtnLoading: false,
+      userTypes: [
+        { text: "Faculty", value: "FACULTY" },
+        { text: "Student", value: "STUDENT" }
+      ]
     };
   },
+  watch: {
+    report(val) {
+      this.reportStepper = val;
+    },
+    async loader() {
+      await this.$store.dispatch('report/initializeReportId', 0);
+      this.dataLoaded = false;
+      this.report = 1;
+      const l = this.loader;
+      this[l] = !this[l];
+
+      let findQuery = "";
+      findQuery = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&userType=${this.queryData.userType}`;
+      await this.$store.dispatch('report/setSavedReport', {fq: findQuery})
+      
+      console.log('Fetch Started from Watch: ');
+      let queryString = "";
+      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
+      await this.$store.dispatch("program/setProgrammesData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("visitor/setVisitorsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("training/setTrainingsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("presentation/setPresentationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("participation/setParticipationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("public/setPublicData", { qs: queryString });
+      await this.$store.dispatch("research/setResearchData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("recognition/setRecognitionsData", {
+        qs: queryString
+      });
+      await this.$store.dispatch("patent/setPatentsData", { qs: queryString });
+      await this.$store.dispatch("assignment/setAssignmentsData", {
+        qs: queryString
+      });
+      this[l] = !this[l];
+      (this.loader = null), (this.dataLoaded = true);
+    
+    }
+  },
+
   computed: {
-    programmes() {
-      return this.$store.state.program.programmesData.result;
-    },
-    visitors() {
-      return this.$store.state.visitor.visitorsData.result;
-    },
-    trainings() {
-      return this.$store.state.training.trainingsData.result;
-    },
-    presentations() {
-      return this.$store.state.presentation.presentationsData.result;
-    },
-    participations() {
-      return this.$store.state.participation.participationsData.result;
-    },
-    publics() {
-      return this.$store.state.public.publicData.result;
-    },
-    publications() {
-      return this.$store.state.publication.publicationsData.result;
-    },
-    researchData() {
-      return this.$store.state.research.researchData.result;
-    },
-    recognitions() {
-      return this.$store.state.recognition.recognitionsData.result;
-    },
-    patents() {
-      return this.$store.state.patent.patentsData.result;
-    },
-    assignments() {
-      return this.$store.state.assignment.assignmentsData.result;
-    },
-    theses() {
-      return this.$store.state.theses.thesesData.result;
+    // reportId() {
+    //   return this.$store.state.report.reportId;
+    // },
+    reportStepper: {
+      get() {
+        return this.$store.state.reportStepper;
+      },
+      set(report) {
+        this.$store.dispatch("updateStepper", report);
+      }
     },
     reportYears() {
       return this.$store.state.reportYears;
     },
-    people() {
+    peoples() {
       return this.$store.state.user.activeUsersList.result;
     },
-    allActivities() {
-      return this.$store.getters.approvalActivities;
+    ...mapState({
+      aboutData: state => state.about.newAbout,
+      programmes: state => state.program.programmesData.result,
+      visitors: state => state.visitor.visitorsData.result,
+      trainings: state => state.training.trainingsData.result,
+      presentations: state => state.presentation.presentationsData.result,
+      participations: state => state.participation.participationsData.result,
+      publics: state => state.public.publicData.result,
+      researchData: state => state.research.researchData.result,
+      publications: state => state.publication.publicationsData.result,
+      recognitions: state => state.recognition.recognitionsData.result,
+      patents: state => state.patent.patentsData.result,
+      assignments: state => state.assignment.assignmentsData.result,
+      theses: state => state.theses.thesesData.result
+    }),
+    // formattedAbout() {
+    //   return this.aboutData
+    // },
+    formattedProgrammes() {
+      return this.programmes
+        .map(
+          (program, index) =>
+            `
+            <h2>${index + 1}. ${program.name.toUpperCase()}<h2>
+            <h4><span>Duration: </span>${program.from_date} - ${
+              program.to_date
+            }</h4>
+            <p>${program.brief_report}</p><hr>
+            `
+        )
+        .join("");
     },
-    activityLength() {
-      return this.$store.getters.approvalActivities.length;
+    formattedVisitors() {
+      return this.visitors
+        .map(
+          (visitor, index) =>
+            `
+            <h2>${index + 1}. ${visitor.name.toUpperCase()}<h2>
+            <h4><span>Duration: </span>${visitor.from_date} - ${
+              visitor.to_date
+            }</h4>
+            <p>${visitor.brief_report}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedTrainings() {
+      return this.trainings
+        .map(
+          (training, index) =>
+            `
+            <h2>${index + 1}. ${training.program_name.toUpperCase()}<h2>
+            <h4><span>Duration: </span>${training.from_date} - ${
+              training.to_date
+            }</h4>
+            <p>${training.brief_report}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedPresentations() {
+      return this.presentations
+        .map(
+          (presentation, index) =>
+            `
+            <h2>${index + 1}. ${presentation.type.toUpperCase()}<h2>
+            <h4><span>Forum: </span>${presentation.forum}</h4>
+            <p>${presentation.reference}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedParticipations() {
+      return this.participations
+        .map(
+          (participation, index) =>
+            `
+            <h2>${index + 1}. ${participation.program_name.toUpperCase()}<h2>
+            <h4><span>Forum: </span>${participation.forum}</h4>
+            <p>${participation.place}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedPublics() {
+      return this.publics
+        .map(
+          (item, index) =>
+            `
+            <h2>${index + 1}. ${item.title.toUpperCase()}<h2>
+            <h4><span>Program Name: </span>${item.program_name}</h4>
+            <p>Date: ${item.date}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedResearch() {
+      return this.researchData
+        .map(
+          (research, index) =>
+            `
+            <h2>${index + 1}. ${research.title.toUpperCase()}<h2>
+            <h4><span>Funding Agency: </span>${research.funding_agency}</h4>
+            <p>Date: ${research.research_abstract}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedPublications() {
+      return this.publications
+        .map(
+          (publication, index) =>
+            `
+            <h2>${index + 1}. ${publication.publication_type.toUpperCase()}<h2>
+            <h4><span>Classification: </span>${publication.classification}</h4>
+            <p>Date: ${publication.reference}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedRecognitions() {
+      return this.recognitions
+        .map(
+          (recognition, index) =>
+            `
+            <h2>${index + 1}. ${recognition.award_title.toUpperCase()}<h2>
+            <h4><span>Organization: </span>${recognition.organization}</h4>
+            <p>Date: ${recognition.date}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedPatents() {
+      return this.patents
+        .map(
+          (patent, index) =>
+            `
+            <h2>${index + 1}. ${patent.title.toUpperCase()}<h2>
+            <h4><span>Reg.NO: </span>${patent.registration_no}</h4>
+            <p>Report: ${patent.brief_report}</p><hr>
+            `
+        )
+        .join("");
+    },
+    formattedAssignments() {
+      return this.assignments
+        .map(
+          (assignment, index) =>
+            `
+            <h2>${index + 1}. ${assignment.roles.toUpperCase()}<h2>
+            <h4><span>Classification: </span>${assignment.classification}</h4>
+            <p>Report: ${assignment.brief_report}</p><hr>
+            `
+        )
+        .join("");
+    },
+
+    step1Data() {
+      return (
+        `<h1>Programmes / Events</h1>` +
+        this.formattedProgrammes +
+        `<h1>Visitors</h1>` +
+        this.formattedVisitors +
+        `<h1>Trainings</h1>` +
+        this.formattedTrainings
+      );
+    },
+    step2Data() {
+      return (
+        `<h1>Presentation / Posters</h1>` +
+        this.formattedPresentations +
+        `<h1>Participations</h1>` +
+        this.formattedParticipations
+      );
+    },
+    step3Data() {
+      return `<h1>Public Engagements</h1>` + this.formattedPublics;
+    },
+    step4Data() {
+      return `<h1>Research Activities</h1>` + this.formattedResearch;
+    },
+    step5Data() {
+      return `<h1>Publications</h1>` + this.formattedPublications;
+    },
+    step6Data() {
+      return (
+        `<h1>Recognitions</h1>` +
+        this.formattedRecognitions +
+        `<h1>Patents</h1>` +
+        this.formattedPatents +
+        `<h1>Key Assignments</h1>` +
+        this.formattedAssignments
+      );
     }
   },
-  mounted() {
-    if (this.selectedYear == 0)
-      this.selectedYear = this.$store.state.selectedYear;
-    if (this.selectedUser === null) this.selectedUser = this.$auth.user.id;
-
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-
-      setTimeout(() => this.$nuxt.$loading.finish(), 500)
-    })
-
-  },
   methods: {
-    all() {
-      this.panel = [...Array(this.activityLength).keys()].map((k, i) => i);
-      this.fetchAllData();
+    async changeReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
     },
-    none() {
-      this.panel = [];
+    async setReportingYear() {
+      await this.$store.dispatch("setReportingYear", this.selectedYear);
     },
-    fetchAllData() {
-      this.loading = true;
-      let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.selectedUser}&annual_year=${this.selectedYear}&deleted_ne=true&_sort=created_at:DESC`;
-      this.$store.dispatch("program/setProgrammesData", { qs: queryString });
-      this.$store.dispatch("visitor/setVisitorsData", { qs: queryString });
-      this.$store.dispatch("training/setTrainingsData", { qs: queryString });
-      this.$store.dispatch("presentation/setPresentationsData", {
-        qs: queryString
-      });
-      this.$store.dispatch("participation/setParticipationsData", {
-        qs: queryString
-      });
-      this.$store.dispatch("public/setPublicData", { qs: queryString });
-      this.$store.dispatch("publication/setPublicationsData", {
-        qs: queryString
-      });
-      this.$store.dispatch("research/setResearchData", { qs: queryString });
-      this.$store.dispatch("recognition/setRecognitionsData", {
-        qs: queryString
-      });
-      this.$store.dispatch("patent/setPatentsData", { qs: queryString });
-      this.$store.dispatch("assignment/setAssignmentsData", {
-        qs: queryString
-      });
-      this.$store.dispatch("theses/setThesesData", { qs: queryString });
-      this.loading = false;
+    save() {
+      console.log("Save Clicked!");
     },
-    getDataById(id) {
-      this.loading = true;
-      this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-
-      setTimeout(() => this.$nuxt.$loading.finish(), 1000)
-    })
-      let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&annual_year=${this.selectedYear}&deleted_ne=true&_sort=created_at:DESC`;
-      if (id == 1) {
-        
-        this.$store.dispatch("program/setProgrammesData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 2) {
-        this.loading = true;
-        this.$store.dispatch("visitor/setVisitorsData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 3) {
-        this.loading = true;
-        this.$store.dispatch("training/setTrainingsData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 4) {
-        this.loading = true;
-        this.$store.dispatch("presentation/setPresentationsData", {
-          qs: queryString
-        });
-        this.loading = false;
-      }
-      if (id == 5) {
-        this.loading = true;
-        this.$store.dispatch("participation/setParticipationsData", {
-          qs: queryString
-        });
-        this.loading = false;
-      }
-      if (id == 6) {
-        this.loading = true;
-        this.$store.dispatch("public/setPublicData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 7) {
-        this.loading = true;
-        this.$store.dispatch("research/setResearchData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 8) {
-        this.loading = true;
-        this.$store.dispatch("publication/setPublicationsData", {
-          qs: queryString
-        });
-        this.loading = false;
-      }
-      if (id == 9) {
-        this.loading = true;
-        this.$store.dispatch("recognition/setRecognitionsData", {
-          qs: queryString
-        });
-        this.loading = false;
-      }
-      if (id == 10) {
-        this.loading = true;
-        this.$store.dispatch("patent/setPatentsData", { qs: queryString });
-        this.loading = false;
-      }
-      if (id == 11) {
-        this.loading = true;
-        this.$store.dispatch("assignment/setAssignmentsData", {
-          qs: queryString
-        });
-        this.loading = false;
-      }
-      if (id == 12) {
-        this.loading = true;
-        this.$store.dispatch("theses/setThesesData", { qs: queryString });
-        this.loading = false;
-      }
+    handleNext(step) {
+      this.report = step + 1;
     },
-    setDataById(id) {
-      if (id == 1) {
-        return this.$store.state.program.programmesData.result;
-      }
-      if (id == 2) {
-        return this.$store.state.visitor.visitorsData.result;
-      }
-      if (id == 3) {
-        return this.$store.state.training.trainingsData.result;
-      }
-      if (id == 4) {
-        return this.$store.state.presentation.presentationsData.result;
-      }
-      if (id == 5) {
-        return this.$store.state.participation.participationsData.result;
-      }
-      if (id == 6) {
-        return this.$store.state.public.publicData.result;
-      }
-      if (id == 7) {
-        return this.$store.state.research.researchData.result;
-      }
-      if (id == 8) {
-        return this.$store.state.publication.publicationsData.result;
-      }
-      if (id == 9) {
-        return this.$store.state.recognition.recognitionsData.result;
-      }
-      if (id == 10) {
-        return this.$store.state.patent.patentsData.result;
-      }
-      if (id == 11) {
-        return this.$store.state.assignment.assignmentsData.result;
-      }
-      if (id == 12) {
-        return this.$store.state.theses.thesesData.result;
-      }
+    handlePrevious(step) {
+      this.report = step - 1;
     },
-    async getUserWise() {
-      this.loading = true;
-      let queryString = "";
-      queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      await this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
-      });
-      await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", {
-        qs: queryString
-      });
-      await this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
-      });
-      await this.$store.dispatch("research/countResearch", { qs: queryString });
-      await this.$store.dispatch("publication/countPublications", {
-        qs: queryString
-      });
-      await this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
-      });
-      await this.$store.dispatch("patent/countPatents", { qs: queryString });
-      await this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
-      });
-      this.loading = false;
-    },
-    async reloadData() {
-      this.loading = true;
-      let queryString = "";
-      if (this.$store.state.auth.user.userType === "DEPARTMENT")
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      else
-        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.selectedYear}`;
-      await this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
-      });
-      await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      await this.$store.dispatch("training/countTrainings", {
-        qs: queryString
-      });
-      await this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
-      });
-      await this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
-      });
-      await this.$store.dispatch("research/countResearch", { qs: queryString });
-      await this.$store.dispatch("publication/countPublications", {
-        qs: queryString
-      });
-      await this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
-      });
-      await this.$store.dispatch("patent/countPatents", { qs: queryString });
-      await this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
-      });
-      this.loading = false;
+    reset() {
+      this.$refs.annualYear.reset();
+      this.$refs.userType.reset();
+      this.$refs.people.reset();
+      this.dataLoaded = false;
+      this.$store.dispatch("updateStepper", 0);
     }
   }
 };

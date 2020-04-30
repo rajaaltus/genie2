@@ -7,6 +7,7 @@ const srcs = {
 };
 export const state = () => ({
 	selectedYear: 0,
+	reportStepper: 0,
 	reportYears: [
 		{
 			id: 2018,
@@ -152,6 +153,9 @@ export const getters = {
 	}
 };
 export const mutations = {
+	UPDATE_STEPPER(state, reportStepper) {
+		state.reportStepper = reportStepper;
+	},
 	SET_STUDENTS (state, students) {
 		state.students = students;
 	},
@@ -374,6 +378,9 @@ export const mutations = {
 };
 
 export const actions = {
+	async updateStepper({commit}, reportStepper) {
+		commit ('UPDATE_STEPPER', reportStepper);
+	},
   async setReportingYear ({commit}, selectedYear) {
 		commit ('SET_REPORTING_YEAR', selectedYear);
   },

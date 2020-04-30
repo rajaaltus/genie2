@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PageHeader :title="$metaInfo.title" />
     <v-row class="px-5">
       <v-col cols="11" lg="3">
         <v-select
@@ -74,7 +73,7 @@
           class="subtitle-1 text-center"
           cols="12"
         >
-          Generating report document...
+          Generating the Report. Please Wait...
         </v-col>
         <v-col cols="6">
           <v-progress-linear
@@ -91,7 +90,6 @@
         v-model="report"
         :editor="editor"
         :config="editorConfig"
-        class="document-editor"
       ></ckeditor>
     </client-only>
   </div>
@@ -179,13 +177,19 @@ export default {
     setReport() {
       this.report = null;
       //Program Formatting
+      var programHeader = [
+      `<div class="test">
+       <h1>Programmes / Events</h1>
+      <h4>Depertment of Science</h4>
+      </div>
+      `];
       var programmes = this.programmes.map(
         program =>
           `
             <h2>${program.name.toUpperCase()}<h2>
-            <h4><span>Duration: </span>${program.from_date} - ${
+            <h3><span>Duration: </span>${program.from_date} - ${
             program.to_date
-          }</h4>
+          }</h3>
             <p>${program.brief_report}</p><hr>
             `
       );
@@ -293,7 +297,7 @@ export default {
             `
       );
       
-      this.report = [...programmes, ...visitors, ...trainings, ...presentations, ...participations, ...publics, ...researchData, ...publications, ...recognitions, ...patents, assignments, ...theses].join(" ");
+      this.report = [...programHeader,...programmes, ...visitors, ...trainings, ...presentations, ...participations, ...publics, ...researchData, ...publications, ...recognitions, ...patents, assignments, ...theses].join(" ");
       this.loading = false;
     },
     async fetchAllData() {
