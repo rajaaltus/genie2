@@ -231,6 +231,7 @@ export default {
       loader: null,
       goBtnLoading: false,
       userTypes: [
+        {text: "Department", value: "DEPARTMENT" },
         { text: "Faculty", value: "FACULTY" },
         { text: "Student", value: "STUDENT" }
       ]

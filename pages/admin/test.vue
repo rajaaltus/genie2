@@ -1,178 +1,215 @@
 <template>
-<div class="container">
-  <div class="document-editor">
-    <div class="document-editor__toolbar"></div>
-    <div class="document-editor__editable-container">
-      <div class="document-editor__editable">
-        <p>The initial editor data.</p>
+  <div class="editor">
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+      <div class="menubar">
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.bold() }"
+          @click="commands.bold"
+        >
+          <icon name="bold" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.italic() }"
+          @click="commands.italic"
+        >
+          <icon name="italic" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.strike() }"
+          @click="commands.strike"
+        >
+          <icon name="strike" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.underline() }"
+          @click="commands.underline"
+        >
+          <icon name="underline" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.code() }"
+          @click="commands.code"
+        >
+          <icon name="code" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.paragraph() }"
+          @click="commands.paragraph"
+        >
+          <icon name="paragraph" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+          @click="commands.heading({ level: 1 })"
+        >
+          H1
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+          @click="commands.heading({ level: 2 })"
+        >
+          H2
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+          @click="commands.heading({ level: 3 })"
+        >
+          H3
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.bullet_list() }"
+          @click="commands.bullet_list"
+        >
+          <icon name="ul" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.ordered_list() }"
+          @click="commands.ordered_list"
+        >
+          <icon name="ol" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.blockquote() }"
+          @click="commands.blockquote"
+        >
+          <icon name="quote" />
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.code_block() }"
+          @click="commands.code_block"
+        >
+          <icon name="code" />
+        </button>
+
+        <button
+          class="menubar__button"
+          @click="commands.horizontal_rule"
+        >
+          <icon name="hr" />
+        </button>
+
+        <button
+          class="menubar__button"
+          @click="commands.undo"
+        >
+          <icon name="undo" />
+        </button>
+
+        <button
+          class="menubar__button"
+          @click="commands.redo"
+        >
+          <icon name="redo" />
+        </button>
+
       </div>
-    </div>
-  </div>
+    </editor-menu-bar>
+
+    <editor-content class="editor__content" :editor="editor" />
   </div>
 </template>
 
 <script>
-let DecoupledEditor;
-if (process.browser) {
-  DecoupledEditor = require("@ckeditor/ckeditor5-build-decoupled-document");
-}
-
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions'
 export default {
-  mounted() {
-    DecoupledEditor.create(
-      document.querySelector(".document-editor__editable"),
-      {}
-    )
-      .then(editor => {
-        const toolbarContainer = document.querySelector(
-          ".document-editor__toolbar"
-        );
-
-        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-
-        window.editor = editor;
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-};
+  components: {
+    EditorContent,
+    EditorMenuBar,
+  },
+  data() {
+    return {
+      editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        content: `
+          <h2>
+            Hi there,
+          </h2>
+          <p>
+            this is a very <em>basic</em> example of tiptap.
+          </p>
+          <pre><code>body { display: none; }</code></pre>
+          <ul>
+            <li>
+              A regular list
+            </li>
+            <li>
+              With regular items
+            </li>
+          </ul>
+          <blockquote>
+            It's amazing 👏
+            <br />
+            – mom
+          </blockquote>
+        `,
+      }),
+    }
+  },
+  beforeDestroy() {
+    this.editor.destroy()
+  },
+}
 </script>
-
-<style scoped>
-.document-editor {
-  border: 1px solid var(--ck-color-base-border);
-  border-radius: var(--ck-border-radius);
-
-  /* Set vertical boundaries for the document editor. */
-  max-height: 700px;
-
-  /* This element is a flex container for easier rendering. */
-  display: flex;
-  flex-flow: column nowrap;
-}
-.document-editor__toolbar {
-  /* Make sure the toolbar container is always above the editable. */
-  z-index: 1;
-
-  /* Create the illusion of the toolbar floating over the editable. */
-  box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.2);
-
-  /* Use the CKEditor CSS variables to keep the UI consistent. */
-  border-bottom: 1px solid var(--ck-color-toolbar-border);
-}
-
-/* Adjust the look of the toolbar inside the container. */
-.document-editor__toolbar .ck-toolbar {
-  border: 0;
-  border-radius: 0;
-}
-.document-editor__editable-container {
-  padding: calc(2 * var(--ck-spacing-large));
-  background: var(--ck-color-base-foreground);
-
-  /* Make it possible to scroll the "page" of the edited content. */
-  overflow-y: scroll;
-}
-
-.document-editor__editable-container .ck-editor__editable {
-  /* Set the dimensions of the "page". */
-  width: 15.8cm;
-  min-height: 21cm;
-
-  /* Keep the "page" off the boundaries of the container. */
-  padding: 1cm 2cm 2cm;
-
-  border: 1px hsl(0, 0%, 82.7%) solid;
-  border-radius: var(--ck-border-radius);
-  background: white;
-
-  /* The "page" should cast a slight shadow (3D illusion). */
-  box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.1);
-
-  /* Center the "page". */
-  margin: 0 auto;
-}
-.document-editor .ck-content,
-.document-editor .ck-heading-dropdown .ck-list .ck-button__label {
-  font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-.document-editor .ck-heading-dropdown .ck-list .ck-button__label {
-  line-height: calc(
-    1.7 * var(--ck-line-height-base) * var(--ck-font-size-base)
-  );
-  min-width: 6em;
-}
-
-/* Scale down all heading previews because they are way too big to be presented in the UI.
-Preserve the relative scale, though. */
-.document-editor
-  .ck-heading-dropdown
-  .ck-list
-  .ck-button:not(.ck-heading_paragraph)
-  .ck-button__label {
-  transform: scale(0.8);
-  transform-origin: left;
-}
-
-/* Set the styles for "Heading 1". */
-.document-editor .ck-content h2,
-.document-editor .ck-heading-dropdown .ck-heading_heading1 .ck-button__label {
-  font-size: 2.18em;
-  font-weight: normal;
-}
-
-.document-editor .ck-content h2 {
-  line-height: 1.37em;
-  padding-top: 0.342em;
-  margin-bottom: 0.142em;
-}
-
-/* Set the styles for "Heading 2". */
-.document-editor .ck-content h3,
-.document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
-  font-size: 1.75em;
-  font-weight: normal;
-  color: hsl(203, 100%, 50%);
-}
-
-.document-editor
-  .ck-heading-dropdown
-  .ck-heading_heading2.ck-on
-  .ck-button__label {
-  color: var(--ck-color-list-button-on-text);
-}
-
-/* Set the styles for "Heading 2". */
-.document-editor .ck-content h3 {
-  line-height: 1.86em;
-  padding-top: 0.171em;
-  margin-bottom: 0.357em;
-}
-
-/* Set the styles for "Heading 3". */
-.document-editor .ck-content h4,
-.document-editor .ck-heading-dropdown .ck-heading_heading3 .ck-button__label {
-  font-size: 1.31em;
-  font-weight: bold;
-}
-
-.document-editor .ck-content h4 {
-  line-height: 1.24em;
-  padding-top: 0.286em;
-  margin-bottom: 0.952em;
-}
-
-/* Set the styles for "Paragraph". */
-.document-editor .ck-content p {
-  font-size: 1em;
-  line-height: 1.63em;
-  padding-top: 0.5em;
-  margin-bottom: 1.13em;
-}
-.document-editor .ck-content blockquote {
-  font-family: Georgia, serif;
-  margin-left: calc(2 * var(--ck-spacing-large));
-  margin-right: calc(2 * var(--ck-spacing-large));
-}
-</style>
