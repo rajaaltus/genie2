@@ -1,7 +1,7 @@
 <template>
   <div>
     <ClientOnly>
-      <tiptap-vuetify v-model="content" :extensions="extensions" />
+      <tiptap-vuetify v-model="content" :extensions="extensions" :native-extensions="nativeExtensions"/>
       <template #placeholder>
         Loading...
       </template>
@@ -26,9 +26,9 @@ import {
   Blockquote,
   HardBreak,
   HorizontalRule,
-  History
+  History,
 } from "tiptap-vuetify";
-import { mapState } from "vuex";
+import { Table, TableHeader, TableCell, TableRow } from "tiptap-extensions";
 export default {
   props: ["content"],
   components: { TiptapVuetify },
@@ -48,17 +48,25 @@ export default {
           Heading,
           {
             options: {
-              levels: [1, 2, 3]
-            }
-          }
+              levels: [1, 2, 3],
+            },
+          },
         ],
         Bold,
         Link,
         Code,
         HorizontalRule,
         Paragraph,
-        HardBreak
-      ]
+        HardBreak,
+      ],
+      nativeExtensions: [
+        new Table({
+          resizable: true,
+        }),
+        new TableHeader(),
+        new TableCell(),
+        new TableRow(),
+      ],
     };
   },
 };
