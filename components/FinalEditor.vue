@@ -69,5 +69,10 @@ export default {
       ],
     };
   },
+  methods: {
+    beforeDestroy() {
+			this.editor.destroy()
+		},
+  }
 };
 </script>

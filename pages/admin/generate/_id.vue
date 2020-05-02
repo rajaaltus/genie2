@@ -8,30 +8,48 @@
         <v-btn color="primary" small>Save PDF</v-btn>
       </v-col>
     </v-row>
-    <!-- <pre>{{aboutData}}</pre> -->
-    <pre>{{diagnosticsData}}</pre>
-   <FinalEditor :content="formattedAbout + formattedClinical + formattedEmergency + sectionA + sectionB + sectionC +  sectionD + sectionE + sectionF" />
+    <!-- <pre>{{retaired[0]}}</pre> -->
+    <!-- <pre>{{ formattedDiagnostics }}</pre> -->
+    <FinalEditor
+      :content="
+        formattedAbout +
+        formattedClinical +
+        formattedEmergency +
+        formattedDiagnostics +
+        formattedSpecial +
+        formattedOT +
+        formattedHRD +
+        formattedTrainings +
+        formattedRetaired +
+        sectionA +
+        sectionB +
+        sectionC +
+        sectionD +
+        sectionE +
+        sectionF
+      "
+    />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import PageHeader from "@/components/PageHeader"
-import FinalEditor from "@/components/FinalEditor"
+import { mapState } from "vuex";
+import PageHeader from "@/components/PageHeader";
+import FinalEditor from "@/components/FinalEditor";
 export default {
   head() {
     return {
-      title: 'Generated Report'
-    }
+      title: "Generated Report",
+    };
   },
   components: {
     PageHeader,
-    FinalEditor
+    FinalEditor,
   },
   data() {
     return {
-      reportData: []
-    }
+      
+    };
   },
   computed: {
     ...mapState({
@@ -39,65 +57,100 @@ export default {
       aboutData: state => state.about.newAbout[0],
       clinicalData: state => state.clinical.clinicalData.result,
       emergencyData: state => state.emergency.emergencyData,
-      diagnosticsData: state => state.diagnostic.diagnosticsData
+      diagnosticsData: state => state.diagnostic.diagnosticData,
+      specialData: state => state.special.specialData,
+      otservicesData: state => state.otservice.otservicesData,
+      hrdCourses: state => state.hrdCourse.hrdCourses.result,
+      hrdTrainings: state => state.hrdTraining.hrdTrainings.result,
+      retaired: state => state.faculty.facultyData.result
     }),
     formattedAbout() {
       return `
        <h1>1. ABOUT THE DEPARTMENT</h1>${this.aboutData.introduction}<br>
        <h6>${this.aboutData.facilities}<br>
-      `
+      `;
     },
     formattedClinical() {
-      let sum =0;
+      let sum = 0;
       return `
+
       <h1>2. PATIENT CARE ACTIVITIES</h1>
       <h2> A. Clinical Services</h2>
       <table>
+      <thead>
       <tr>
-      <th colspan="3">Clinical Services</th>
+      <th>Clinical Services</th>
       <th>No.Of Patients /Cases</th>
       </tr>
+      <thead>
+
+      <tbody>
       <tr>
       <td>Screenings</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.screenings,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.screenings,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Registrations</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.registrations,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.registrations,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>followups</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.followups,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.followups,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Admissions</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.admissions,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.admissions,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Discharges</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.discharges,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.discharges,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Deaths</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.deaths,0)}</td>
+      <td>${this.clinicalData.reduce((sum, item) => sum + item.deaths, 0)}</td>
       </tr>
       <tr>
       <td>Emergencies</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.emergencies,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.emergencies,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>External Reference</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.external_ref,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.external_ref,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Internal Reference</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.internal_ref,0)}</td>
+      <td>${this.clinicalData.reduce(
+        (sum, item) => sum + item.internal_ref,
+        0
+      )}</td>
       </tr>
+      </tbody>
       </table>
-      `
+      `;
     },
     formattedEmergency() {
-      let sum =0;
+      let sum = 0;
       return `
       <h2> B. Emergency Services</h2>
       <table>
@@ -105,86 +158,224 @@ export default {
       <th colspan="3">Emergency Services</th>
       <th>No.Of Patients /Cases</th>
       </tr>
-      
+
       <td>Registrations</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.registrations,0)}</td>
+      <td>${this.emergencyData.reduce(
+        (sum, item) => sum + item.registrations,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Admissions</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.admissions,0)}</td>
+      <td>${this.emergencyData.reduce(
+        (sum, item) => sum + item.admissions,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Deaths</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.deaths,0)}</td>
+      <td>${this.emergencyData.reduce((sum, item) => sum + item.deaths, 0)}</td>
       </tr>
       <tr>
       <td>External Reference</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.external_ref,0)}</td>
+      <td>${this.emergencyData.reduce(
+        (sum, item) => sum + item.external_ref,
+        0
+      )}</td>
       </tr>
       <tr>
       <td>Internal Reference</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.internal_ref,0)}</td>
+      <td>${this.emergencyData.reduce(
+        (sum, item) => sum + item.internal_ref,
+        0
+      )}</td>
       </tr>
       </table>
-      `
+      `;
     },
-    // formattedDiagnostics() {
-    //   let arrays = [];
-    //   arrays = Object.assign([],this.diagnosticsData)
-    //   return this.arrays
-    //     .map(
-    //       item => item.lab_type
-    //     )
-
-    //   // `
-    //   // <h2> C. Diagnostic Services</h2>
-    //   // <table>
-    //   // <tr>
-    //   // <th colspan="3">Lab Services</th>
-    //   // <th>Total No.Of Samples Analyzed</th>
-    //   // </tr>
-    //   // <tr>
-    //   // <td>${}</td>
-    //   // <td></td>
-    //   // </tr>
-    //   // </table>
-    //   // `
-    // },
+    formattedDiagnostics() {
+      let sum = 0;
+      return `
+      <h2> C. Diagnostic Services</h2>
+      <table>
+      <tr>
+      <th>Lab Services</th>
+      <th>Total No.Of Samples Analyzed</th>
+      </tr>
+      <tr>
+      <td>Routine Test</td>
+      <td>${this.diagnosticsData.filter(({lab_type}) => lab_type==='Routine_Test').reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
+      </tr>
+      <tr>
+      <td>Special Test</td>
+      <td>${this.diagnosticsData.filter(({lab_type}) => lab_type==='Special_Test').reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
+      </tr>
+      </table>
+      `;
+    },
+    formattedSpecial() {
+      var html = `
+      <h2>D. Special Clinics / Services / Proceduress</h2>
+      <table>
+      <tr>
+      <th>Special Services</th>
+      <th>New Patients</th>
+      <th>Follow-up Patients</th>
+      <th>Referrals</th>
+      <th>Description</th>
+      </tr>`;
+      for (var i=0; i<this.specialData.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.specialData[i].service_name}</td>
+      <td>${this.specialData[i].new_patients}</td>
+      <td>${this.specialData[i].followup_patients}</td>
+      <td>${this.specialData[i].referrals}</td>
+      <td>${this.specialData[i].description}</td>
+      </tr>`;
+      }
+      html += `</table>
+      `;
+      return html;
+    },
+    formattedOT() {
+      var html = `
+      <h2>E.	OT & Other Procedures</h2>
+      <table>
+      <tr>
+      <th>Procedure</th>
+      <th>Classification</th>
+      <th>No Of Patients</th>
+      <th>Description</th>
+      </tr>`;
+      for (var i=0; i<this.otservicesData.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.otservicesData[i].Procedure}</td>
+      <td>${this.otservicesData[i].classification}</td>
+      <td>${this.otservicesData[i].no_of_patients}</td>
+      <td>${this.otservicesData[i].description}</td>
+      </tr>`;
+      }
+      html += `</table>
+      `;
+      return html;
+    },
+    formattedHRD() {
+      var html = `
+      <h1>3.	HUMAN RESOURCE DEVELOPMENT </h1>
+      <h2>A.	Details of Regular Courses</h2>
+      <table>
+      <tr>
+      <th>Course</th>
+      <th>Name of the Candidate</th>
+      <th>Duration</th>
+      <th>Status</th>
+      <th>Title of the thesis (for Ph.D.)</th>
+      <th>Guide(for Ph.D.)</th>
+      </tr>`;
+      for (var i=0; i<this.hrdCourses.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.hrdCourses[i].course_name}</td>
+      <td>${this.hrdCourses[i].candidate_name}</td>
+      <td>${this.hrdCourses[i].durations} Years</td>
+      <td>${this.hrdCourses[i].remarks_status}</td>
+      <td>${this.hrdCourses[i].thesis_title}</td>
+      <td>${this.hrdCourses[i].guides}</td>
+      </tr>`;
+      }
+      html += `</table>
+      `;
+      return html;
+    },
+    formattedTrainings() {
+      var html = `
+      <h2>B.	Faculty/staff/students from other institutions trained at NIMHANS</h2>
+      <table>
+      <tr>
+      <th>Name of the course / Training</th>
+      <th>Institutional affiliation</th>
+      <th>Number of Candidates</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Status</th>
+      <th>Description</th>
+      </tr>`;
+      for (var i=0; i<this.hrdTrainings.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.hrdTrainings[i].training_name}</td>
+      <td>${this.hrdTrainings[i].institutional_affiliation}</td>
+      <td>${this.hrdTrainings[i].no_of_candidates} Years</td>
+      <td>${this.hrdTrainings[i].from_date}</td>
+      <td>${this.hrdTrainings[i].to_date}</td>
+      <td>${this.hrdTrainings[i].remarks_status}</td>
+      <td>${this.hrdTrainings[i].brief_report}</td>
+      </tr>`;
+      }
+      html += `</table>
+      `;
+      return html;
+    },
+    formattedRetaired() {
+      var html = `
+      <h1>4.	DETAILS OF DEPARTMENTAL STAFF</h1>
+      <h2>B.	A.	List of Faculty and staff served NIMHANS and superannuated/resigned/VRS</h2>
+      <table>
+      <tr>
+      <th></th>
+      <th>Name of the Official and Designation</th>
+      <th>Date of Joining </th>
+      <th>Date of Leaving</th>
+      <th>Image URL</th>
+      </tr>`;
+      for (var i=0; i<this.retaired.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.retaired[i].faculty_status}</td>
+      <td>${this.retaired[i].faculty_name}</td>
+      <td></td>
+      <td>${this.retaired[i].leaving_date}</td>
+      <td>${this.retaired[i].image?this.retaired[i].image:''}</td>
+      </tr>`;
+      }
+      html += `</table>
+      `;
+      return html;
+    },
     sectionA() {
-      if (this.savedData.section_a)
-        return this.savedData.section_a
+      if (this.savedData.section_a) return this.savedData.section_a;
     },
     sectionB() {
-      if (this.savedData.section_a)
-        return this.savedData.section_b
+      if (this.savedData.section_a) return this.savedData.section_b;
     },
     sectionC() {
-      if (this.savedData.section_c)
-        return this.savedData.section_c
+      if (this.savedData.section_c) return this.savedData.section_c;
     },
     sectionD() {
-      if (this.savedData.section_d)
-        return this.savedData.section_d
+      if (this.savedData.section_d) return this.savedData.section_d;
     },
     sectionE() {
-      if (this.savedData.section_e)
-        return this.savedData.section_e
+      if (this.savedData.section_e) return this.savedData.section_e;
     },
     sectionF() {
-      if (this.savedData.section_f)
-        return this.savedData.section_f
-    }
-
+      if (this.savedData.section_f) return this.savedData.section_f;
+    },
   },
-  async fetch({store, params}) {
-    await store.dispatch('report/getById', {id: params.id});
-    let queryString = '';
-    queryString = `department.id=${store.state.auth.user.department}&annual_year=2019`
-    await store.dispatch('about/setAboutData', {query: queryString})
-    await store.dispatch('clinical/setClinicalData', {qs: queryString})
-    await store.dispatch('emergency/setEmergencyData', {qs: queryString})
-    await store.dispatch('diagnostic/setDiagnosticData', {qs: queryString})
+  async fetch({ store, params }) {
+    await store.dispatch("report/getById", { id: params.id });
+    let queryString = "";
+    queryString = `department.id=${store.state.auth.user.department}&annual_year=2019`;
+    await store.dispatch("about/setAboutData", { query: queryString });
+    await store.dispatch("clinical/setClinicalData", { qs: queryString });
+    await store.dispatch("emergency/setEmergencyData", { qs: queryString });
+    await store.dispatch("diagnostic/setDiagnosticData", { qs: queryString });
+    await store.dispatch("special/setSpecialData", {qs: queryString});
+    await store.dispatch("otservice/setOTServicesData", {qs: queryString});
+    await store.dispatch("hrdCourse/setHRDCourses", {qs: queryString});
+    await store.dispatch("hrdTraining/setHRDTrainings", {qs: queryString});
+    await store.dispatch("faculty/setFacultyData", {qs: queryString})
   },
-  
-}
+};
 </script>

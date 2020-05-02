@@ -12,8 +12,8 @@ export const getters = {
 
 export const mutations = {
 	
-	SET_DIAGNOSTIC_DATA (state, diagnosticData) {
-		state.diagnosticData = diagnosticData;
+	SET_DIAGNOSTIC_DATA (state, response) {
+		state.diagnosticData = response;
 	},
 	SET_TEST (state, testData) {
 		state.testData = testData;
