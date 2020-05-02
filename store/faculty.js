@@ -33,7 +33,7 @@ export const mutations = {
 export const actions = {
   
 	async setFacultyData ({commit}, {qs}) {
-		await this.$axios.$get(`/retired-faculties?${qs}`)
+		await this.$axios.$get(`/retired-faculties?${qs}&_sort=faculty_status:ASC`)
 			.then(response =>  {
 				// handle success
 				commit("SET_FACULTY_DATA", response);

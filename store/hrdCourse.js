@@ -32,7 +32,7 @@ export const mutations = {
 export const actions = {
   
 	async setHRDCourses ({commit}, {qs}) {
-		await this.$axios.$get(`/hrd-courses?${qs}`)
+		await this.$axios.$get(`/hrd-courses?${qs}&_sort=course_name:ASC`)
 			.then(response =>  {
 				// handle success
 				commit("SET_HRD_COURSES", response);
