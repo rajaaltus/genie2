@@ -10,6 +10,7 @@
     </v-row>
     <!-- <pre>{{retaired[0]}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
+   
     <FinalEditor
       :content="
         formattedAbout +
@@ -29,7 +30,7 @@
         sectionF
       "
     />
-  </div>
+    </div>
 </template>
 
 <script>
@@ -155,7 +156,7 @@ export default {
       <h2> B. Emergency Services</h2>
       <table>
       <tr>
-      <th colspan="3">Emergency Services</th>
+      <th>Emergency Services</th>
       <th>No.Of Patients /Cases</th>
       </tr>
 
@@ -379,3 +380,5 @@ export default {
   },
 };
 </script>
+
+
