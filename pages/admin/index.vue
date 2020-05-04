@@ -16,7 +16,7 @@
           <v-card flat>
             <v-card-text class="px-0 py-2">
               <v-row class="pr-4">
-                <v-col cols="12" lg="3">
+                <v-col cols="12" lg="2">
                   <v-select
                     v-model="selectedYear"
                     ref="year"
@@ -25,33 +25,76 @@
                     item-text="val"
                     label="Reporting Year"
                     color="success"
-                    @input="reloadData"
                   ></v-select>
                 </v-col>
-
+                
+                <v-col cols="12" lg="2">
+                  <v-select
+                    ref="userType"
+                    v-model="userType"
+                    label="User Type"
+                    :items="userTypes"
+                    color="success"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" lg="3">
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="month"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="month"
+                        label="Pick the month"
+                        prepend-icon="event"
+                        readonly
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="month"
+                      type="month"
+                      no-title
+                      scrollable
+                    >
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu = false"
+                        >Cancel</v-btn
+                      >
+                      <v-btn text color="primary" @click="$refs.menu.save(month)"
+                        >OK</v-btn
+                      >
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
                 <v-col cols="11" lg="3">
                   <v-autocomplete
                     v-model="selectedUser"
-                    v-if="$auth.user.userType==='DEPARTMENT'"
+                    v-if="$auth.user.userType === 'DEPARTMENT'"
                     ref="user"
-                    :items="people"
+                    :items="assignedPeople"
                     color="blue-grey lighten-2"
                     label="Faculty / Staff / Student"
                     item-text="fullname"
                     item-value="id"
-                    @input="getUserWise"
                   >
                     <template v-slot:selection="data">
-                      <v-chip
+                      <!-- <v-chip
                         v-bind="data.attrs"
                         :input-value="data.selected"
                         @click="data.select"
-                      >
-                        <!-- <v-avatar left>
+                      > -->
+                      <!-- <v-avatar left>
                           <v-img :src="data.item.avatar"></v-img>
                         </v-avatar> -->
-                        {{ data.item.fullname }}
-                      </v-chip>
+                      {{ data.item.fullname }}
+                      <!-- </v-chip> -->
                     </template>
                     <template v-slot:item="data">
                       <template v-if="typeof data.item !== 'object'">
@@ -82,18 +125,34 @@
                   </v-autocomplete>
                 </v-col>
 
-                <v-col cols="1" lg="1">
-                  <div class="my-4">
-                    <v-btn
-                      @click="resetFilter"
-                      color="green darken-2"
-                      fab
-                      x-small
-                      dark
-                    >
-                      <v-icon>mdi-reload</v-icon>
-                    </v-btn>
-                  </div>
+                <v-col cols="auto" lg="auto">
+                  <v-row>
+                    <div class="mx-4 my-4">
+                      <v-btn
+                        v-if="selectedYear"
+                        :loading="goBtnLoading"
+                        :disabled="goBtnLoading"
+                        color="green"
+                        x-small
+                        class="white--text"
+                        fab
+                        @click="loader = 'goBtnLoading'"
+                      >
+                        Go
+                      </v-btn>
+                    </div>
+                    <div class="my-4">
+                      <v-btn
+                        color="blue-grey"
+                        fab
+                        x-small
+                        dark
+                        @click="resetFilter"
+                      >
+                        <v-icon>mdi-reload</v-icon>
+                      </v-btn>
+                    </div>
+                  </v-row>
                 </v-col>
               </v-row>
 
@@ -452,87 +511,149 @@ import ReportPreview from "@/components/ReportPreview";
 export default {
   head() {
     return {
-      title: "Dashboard"
+      title: "Dashboard",
     };
   },
   components: {
     PageHeader,
     YearDialog,
-    ReportPreview
+    ReportPreview,
   },
   data() {
     return {
+      month: null,
+      menu: false,
+      modal: false,
+      userTypeFlag: false,
+      monthFlag: false,
+      firstDate: null,
+      lastDate: null,
       resetCall: false,
+      dataLoaded: false,
+      loader: null,
+      assignedPeople: [],
       loading: false,
+      goBtnLoading: false,
       selectedUser: null,
       selectedYear: 0,
+      query: null,
+      userType: null,
+      userTypes: [
+        {
+          text: "Department",
+          value: "DEPARTMENT",
+        },
+        {
+          text: "Faculty",
+          value: "FACULTY",
+        },
+        {
+          text: "Student",
+          value: "STUDENT",
+        },
+      ],
       options: {
         chart: {
-          id: "vuechart-example"
+          id: "vuechart-example",
         },
         theme: {
-          palette: "palette3"
+          palette: "palette3",
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+        },
       },
       series: [
         {
           name: "Publications",
-          data: [60, 10, 35, 50, 12, 60, 70, 91]
-        }
+          data: [60, 10, 35, 50, 12, 60, 70, 91],
+        },
       ],
-      donutSeries: [20, 20, 20, 20, 20]
+      donutSeries: [20, 20, 20, 20, 20],
     };
+  },
+  watch: {
+    async loader() {
+      this.dataLoaded = false;
+      const l = this.loader;
+      this[l] = !this[l];
+      if (this.userTypeFlag)
+        console.log(this.query + "&userType=" + this.userType);
+      await setTimeout(() => {
+        (this.loader = null), (this[l] = !this[l]), (this.dataLoaded = true);
+      }, 3000);
+    },
+    selectedYear(val) {
+      this.query = null;
+      this.$refs.userType.reset();
+      this.userTypeFlag = false;
+      this.query = "?annual_year=" + val;
+      console.log(this.query);
+    },
+    userType(val) {
+      this.userTypeFlag = true;
+      if (val === "FACULTY") this.assignedPeople = this.faculties;
+      if (val === "STUDENT") this.assignedPeople = this.students;
+      if (val === "DEPARTMENT") this.assignedPeople = this.people;
+    },
+    month(val) {
+      this.monthFlag = true;
+      var Month = this.$moment(val)
+      this.firstDate = this.$moment(Month).format('DD MM YYYY')
+      console.log('First Date:', this.$moment(Month).format('DD MM YYYY'))
+      console.log('Selected Month', this.$moment(Month).format('MMM'))
+      var lastDate = this.$moment(Month).daysInMonth()
+      console.log(this.$moment(Month).format(`${lastDate}-MM-YYYY`));
+      this.lastDate = this.$moment(Month).format(`${lastDate}-MM-YYYY`)
+    } 
   },
   computed: {
     journalArticles() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Journal_Article"
+        (publication) => publication.publication_type === "Journal_Article"
       ).length;
       return result;
     },
     articles() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication =>
+        (publication) =>
           publication.publication_type === "Articles_for_Professionals"
       ).length;
       return result;
     },
     books() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Book"
+        (publication) => publication.publication_type === "Book"
       ).length;
       return result;
     },
     bookChapters() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Book_Chapter"
+        (publication) => publication.publication_type === "Book_Chapter"
       ).length;
       return result;
     },
     monoGraphs() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Monograph"
+        (publication) => publication.publication_type === "Monograph"
       ).length;
       return result;
     },
     manuals() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Manual"
+        (publication) => publication.publication_type === "Manual"
       ).length;
       return result;
     },
     reports() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication => publication.publication_type === "Report"
+        (publication) => publication.publication_type === "Report"
       ).length;
       return result;
     },
     general() {
       var result = this.$store.state.publication.publicationsData.result.filter(
-        publication =>
+        (publication) =>
           publication.publication_type === "Article_for_General_public"
       ).length;
       return result;
@@ -540,9 +661,15 @@ export default {
     people() {
       return this.$store.state.user.activeUsersList.result;
     },
+    faculties() {
+      return this.people.filter((item) => item.userType === "FACULTY");
+    },
+    students() {
+      return this.people.filter((item) => item.userType === "STUDENT");
+    },
     reportYears() {
       return this.$store.state.reportYears;
-    }
+    },
   },
   async fetch({ store }) {
     let queryString = "";
@@ -554,16 +681,16 @@ export default {
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
     await store.dispatch("presentation/countPresentations", {
-      qs: queryString
+      qs: queryString,
     });
     await store.dispatch("participation/countParticipations", {
-      qs: queryString
+      qs: queryString,
     });
     await store.dispatch("public/countPublicEngagements", { qs: queryString });
     await store.dispatch("research/countResearch", { qs: queryString });
     await store.dispatch("publication/countPublications", { qs: queryString });
     await store.dispatch("publication/setPublicationsData", {
-      qs: queryString
+      qs: queryString,
     });
     await store.dispatch("recognition/countRecognitions", { qs: queryString });
     await store.dispatch("patent/countPatents", { qs: queryString });
@@ -573,51 +700,56 @@ export default {
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
   },
-  
+
   mounted() {
-    // if (this.selectedYear == 0)
-    //   this.selectedYear = this.$store.state.selectedYear;
+    if (this.userType) {
+      if (this.userType === "FACULTY") this.assignPeople = this.faculties;
+    } else this.assignedPeople = this.people;
   },
   methods: {
+    assignPeople() {
+      if (this.userType) {
+        if (this.userType === "FACULTY") this.assignPeople = this.faculties;
+      }
+    },
     resetFilter() {
       this.resetCall = true;
       this.$refs.year.reset();
-      if(this.$auth.user.userType==='DEPARTMENT')
-        this.$refs.user.reset();
+      if (this.$auth.user.userType === "DEPARTMENT") this.$refs.user.reset();
       let queryString = "";
       if (this.$store.state.auth.user.userType === "DEPARTMENT")
         queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
       else
         queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$store.state.auth.user.id}&deleted_ne=true`;
-       this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
+      this.$store.dispatch("program/countProgrammes", {
+        qs: queryString,
       });
-       this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-       this.$store.dispatch("training/countTrainings", {
-        qs: queryString
+      this.$store.dispatch("visitor/countVisitors", { qs: queryString });
+      this.$store.dispatch("training/countTrainings", {
+        qs: queryString,
       });
-       this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
+      this.$store.dispatch("presentation/countPresentations", {
+        qs: queryString,
       });
-       this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
+      this.$store.dispatch("participation/countParticipations", {
+        qs: queryString,
       });
-       this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
+      this.$store.dispatch("public/countPublicEngagements", {
+        qs: queryString,
       });
-       this.$store.dispatch("research/countResearch", { qs: queryString });
-       this.$store.dispatch("publication/countPublications", {
-        qs: queryString
+      this.$store.dispatch("research/countResearch", { qs: queryString });
+      this.$store.dispatch("publication/countPublications", {
+        qs: queryString,
       });
-       this.$store.dispatch("publication/setPublicationsData", {
-        qs: queryString
+      this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString,
       });
-       this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
+      this.$store.dispatch("recognition/countRecognitions", {
+        qs: queryString,
       });
-       this.$store.dispatch("patent/countPatents", { qs: queryString });
-       this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
+      this.$store.dispatch("patent/countPatents", { qs: queryString });
+      this.$store.dispatch("assignment/countAssignments", {
+        qs: queryString,
       });
     },
     async getUserWise() {
@@ -625,38 +757,37 @@ export default {
       let queryString = "";
       if (this.resetCall) {
         queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
-      }
-      else
+      } else
         queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`;
       await this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
       await this.$store.dispatch("training/countTrainings", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("research/countResearch", { qs: queryString });
       await this.$store.dispatch("publication/countPublications", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("publication/setPublicationsData", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("patent/countPatents", { qs: queryString });
       await this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
+        qs: queryString,
       });
       this.loading = false;
     },
@@ -701,44 +832,42 @@ export default {
       // if (this.$store.state.auth.user.userType === "DEPARTMENT")
       //   queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&annual_year=${this.selectedYear}`;
       // else
-      if (this.resetCall)
-      {
+      if (this.resetCall) {
         if (this.$store.state.auth.user.userType === "DEPARTMENT")
           queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
         else
           queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true`;
-      }
-      else
+      } else
         queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.selectedYear}`;
       await this.$store.dispatch("program/countProgrammes", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
       await this.$store.dispatch("training/countTrainings", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("presentation/countPresentations", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("participation/countParticipations", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("public/countPublicEngagements", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("research/countResearch", { qs: queryString });
       await this.$store.dispatch("publication/countPublications", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("publication/setPublicationsData", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("recognition/countRecognitions", {
-        qs: queryString
+        qs: queryString,
       });
       await this.$store.dispatch("patent/countPatents", { qs: queryString });
       await this.$store.dispatch("assignment/countAssignments", {
-        qs: queryString
+        qs: queryString,
       });
       this.loading = false;
     },
@@ -749,8 +878,8 @@ export default {
     remove(item) {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,36 +1,22 @@
 <template>
   <div>
     <PageHeader :title="$metaInfo.title" />
+     <!-- <pre>{{content}}</pre> -->
     <v-row>
       <v-spacer></v-spacer>
+      
       <v-col cols="12" lg="2">
-        <v-btn color="green" class="mr-2" small>Copy</v-btn>
-        <v-btn color="primary" small>Save PDF</v-btn>
+        <!-- <v-btn color="green" class="mr-2" small @click="copyReport">Copy</v-btn> -->
+        <v-btn color="primary" class="mr-8" small @click="exportToDoc(`Report-${$route.params.id}`)">Save as MS-Word</v-btn>
       </v-col>
     </v-row>
-    <!-- <pre>{{retaired[0]}}</pre> -->
+    <!-- <pre>{{content}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
-   
-    <FinalEditor
-      :content="
-        formattedAbout +
-        formattedClinical +
-        formattedEmergency +
-        formattedDiagnostics +
-        formattedSpecial +
-        formattedOT +
-        formattedHRD +
-        formattedTrainings +
-        formattedRetaired +
-        sectionA +
-        sectionB +
-        sectionC +
-        sectionD +
-        sectionE +
-        sectionF
-      "
-    />
+
+    <FinalEditor id="content" :content="content" />
+    <div id="download" style="display:none" v-html="content">
     </div>
+  </div>
 </template>
 
 <script>
@@ -48,27 +34,49 @@ export default {
     FinalEditor,
   },
   data() {
-    return {
-      
-    };
+    return {};
   },
   computed: {
     ...mapState({
-      savedData: state => state.report.generatedReport,
-      aboutData: state => state.about.newAbout[0],
-      clinicalData: state => state.clinical.clinicalData.result,
-      emergencyData: state => state.emergency.emergencyData,
-      diagnosticsData: state => state.diagnostic.diagnosticData,
-      specialData: state => state.special.specialData,
-      otservicesData: state => state.otservice.otservicesData,
-      hrdCourses: state => state.hrdCourse.hrdCourses.result,
-      hrdTrainings: state => state.hrdTraining.hrdTrainings.result,
-      retaired: state => state.faculty.facultyData.result
+      savedData: (state) => state.report.generatedReport,
+      aboutData: (state) => state.about.newAbout[0],
+      clinicalData: (state) => state.clinical.clinicalData.result,
+      emergencyData: (state) => state.emergency.emergencyData,
+      diagnosticsData: (state) => state.diagnostic.diagnosticData,
+      specialData: (state) => state.special.specialData,
+      otservicesData: (state) => state.otservice.otservicesData,
+      hrdCourses: (state) => state.hrdCourse.hrdCourses.result,
+      hrdTrainings: (state) => state.hrdTraining.hrdTrainings.result,
+      retaired: (state) => state.faculty.facultyData.result,
     }),
+    content() {
+      return (
+        this.formattedAbout +
+        this.formattedClinical +
+        this.formattedEmergency +
+        this.formattedDiagnostics +
+        this.formattedSpecial +
+        this.formattedOT +
+        this.formattedHRD +
+        this.formattedTrainings +
+        this.formattedRetaired +
+        this.sectionA +
+        this.sectionB +
+        this.sectionC +
+        this.sectionD +
+        this.sectionE +
+        this.sectionF
+      );
+    },
     formattedAbout() {
       return `
-       <h1>1. ABOUT THE DEPARTMENT</h1>${this.aboutData.introduction}<br>
-       <h6>${this.aboutData.facilities}<br>
+      <center>
+      <h2>NATIONAL INSTITUTE OF MENTAL HEALTH & NEUROSCIENCES</h2>
+      <h3>Bengaluru – 560029</h3>
+      <h1>Annual Report for the year ${this.$store.state.selectedYear}-${this.$store.state.selectedYear+1}</h1>
+      </center>
+      <h2>1. ABOUT THE DEPARTMENT</h2>${this.aboutData.introduction}<br>
+      <h6>${this.aboutData.facilities}<br>
       `;
     },
     formattedClinical() {
@@ -205,11 +213,15 @@ export default {
       </tr>
       <tr>
       <td>Routine Test</td>
-      <td>${this.diagnosticsData.filter(({lab_type}) => lab_type==='Routine_Test').reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
+      <td>${this.diagnosticsData
+        .filter(({ lab_type }) => lab_type === "Routine_Test")
+        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
       </tr>
       <tr>
       <td>Special Test</td>
-      <td>${this.diagnosticsData.filter(({lab_type}) => lab_type==='Special_Test').reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
+      <td>${this.diagnosticsData
+        .filter(({ lab_type }) => lab_type === "Special_Test")
+        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
       </tr>
       </table>
       `;
@@ -225,7 +237,7 @@ export default {
       <th>Referrals</th>
       <th>Description</th>
       </tr>`;
-      for (var i=0; i<this.specialData.length; i++) {
+      for (var i = 0; i < this.specialData.length; i++) {
         let sum = 0;
         html += `<tr>
       <td>${this.specialData[i].service_name}</td>
@@ -249,7 +261,7 @@ export default {
       <th>No Of Patients</th>
       <th>Description</th>
       </tr>`;
-      for (var i=0; i<this.otservicesData.length; i++) {
+      for (var i = 0; i < this.otservicesData.length; i++) {
         let sum = 0;
         html += `<tr>
       <td>${this.otservicesData[i].Procedure}</td>
@@ -275,7 +287,7 @@ export default {
       <th>Title of the thesis (for Ph.D.)</th>
       <th>Guide(for Ph.D.)</th>
       </tr>`;
-      for (var i=0; i<this.hrdCourses.length; i++) {
+      for (var i = 0; i < this.hrdCourses.length; i++) {
         let sum = 0;
         html += `<tr>
       <td>${this.hrdCourses[i].course_name}</td>
@@ -303,7 +315,7 @@ export default {
       <th>Status</th>
       <th>Description</th>
       </tr>`;
-      for (var i=0; i<this.hrdTrainings.length; i++) {
+      for (var i = 0; i < this.hrdTrainings.length; i++) {
         let sum = 0;
         html += `<tr>
       <td>${this.hrdTrainings[i].training_name}</td>
@@ -331,14 +343,14 @@ export default {
       <th>Date of Leaving</th>
       <th>Image URL</th>
       </tr>`;
-      for (var i=0; i<this.retaired.length; i++) {
+      for (var i = 0; i < this.retaired.length; i++) {
         let sum = 0;
         html += `<tr>
       <td>${this.retaired[i].faculty_status}</td>
       <td>${this.retaired[i].faculty_name}</td>
       <td></td>
       <td>${this.retaired[i].leaving_date}</td>
-      <td>${this.retaired[i].image?this.retaired[i].image:''}</td>
+      <td>${this.retaired[i].image ? this.retaired[i].image : ""}</td>
       </tr>`;
       }
       html += `</table>
@@ -372,13 +384,56 @@ export default {
     await store.dispatch("clinical/setClinicalData", { qs: queryString });
     await store.dispatch("emergency/setEmergencyData", { qs: queryString });
     await store.dispatch("diagnostic/setDiagnosticData", { qs: queryString });
-    await store.dispatch("special/setSpecialData", {qs: queryString});
-    await store.dispatch("otservice/setOTServicesData", {qs: queryString});
-    await store.dispatch("hrdCourse/setHRDCourses", {qs: queryString});
-    await store.dispatch("hrdTraining/setHRDTrainings", {qs: queryString});
-    await store.dispatch("faculty/setFacultyData", {qs: queryString})
+    await store.dispatch("special/setSpecialData", { qs: queryString });
+    await store.dispatch("otservice/setOTServicesData", { qs: queryString });
+    await store.dispatch("hrdCourse/setHRDCourses", { qs: queryString });
+    await store.dispatch("hrdTraining/setHRDTrainings", { qs: queryString });
+    await store.dispatch("faculty/setFacultyData", { qs: queryString });
+  },
+  methods: {
+    copyReport() {
+      console.log("copied!");
+    },
+    exportToDoc(filename = "") {
+      var preHtml =
+        "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+      var postHtml = "</body></html>";
+      var html =
+        // preHtml + document.getElementsByClassName('ProseMirror')[0].innerHTML + postHtml;
+        preHtml + document.getElementById('download').innerHTML + postHtml;
+
+      var blob = new Blob(["\ufeff", html], {
+        type: "application/msword",
+      });
+
+      // Specify link url
+      var url =
+        "data:application/vnd.ms-word;charset=utf-8," +
+        encodeURIComponent(html);
+
+      // Specify file name
+      filename = filename ? filename + ".doc" : "document.doc";
+
+      // Create download link element
+      var downloadLink = document.createElement("a");
+
+      document.body.appendChild(downloadLink);
+
+      if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Create a link to the file
+        downloadLink.href = url;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        //triggering the function
+        downloadLink.click();
+      }
+
+      document.body.removeChild(downloadLink);
+    },
   },
 };
 </script>
-
-
