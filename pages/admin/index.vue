@@ -568,7 +568,7 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     month(val) {
-      var Month = `01 ${val} ${this.selectedYear}`;
+      var Month = `01-${val}-${this.selectedYear}`;
       this.firstDate = this.$moment(Month).format("YYYY-MM-DD");
       var lastDate = this.$moment(Month).daysInMonth();
       this.lastDate = this.$moment(Month).format(`YYYY-MM-${lastDate}`);

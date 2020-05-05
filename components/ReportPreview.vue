@@ -2,11 +2,11 @@
   <div>
     <v-card tile color="grey lighten-5">
       <v-card-text class="px-0 py-0">
-        <v-row class="px-5" ref="queryData">
+        <v-row class="px-5">
           <v-col cols="12" lg="3">
             <v-select
-              ref="annualYear"
-              v-model="queryData.annualYear"
+              v-model="selectedYear"
+              ref="year"
               :items="reportYears"
               item-value="id"
               item-text="val"
@@ -14,11 +14,20 @@
               color="success"
             ></v-select>
           </v-col>
-
+          <v-col cols="12" lg="2">
+            <v-select
+              ref="month"
+              v-model="month"
+              :items="months"
+              placeholder="Select Month"
+            >
+            </v-select>
+          </v-col>
           <v-col cols="12" lg="3">
             <v-select
-              ref="userType"
-              v-model="queryData.userType"
+              ref="user-type"
+              v-if="$auth.user.userType === 'DEPARTMENT'"
+              v-model="userType"
               label="User Type"
               :items="userTypes"
               color="success"
@@ -26,35 +35,73 @@
           </v-col>
 
           <v-col cols="12" lg="3">
-            <v-select
-              ref="people"
-              v-model="people"
-              :items="peoples"
+            <v-autocomplete
+              v-model="selectedUser"
+              v-if="$auth.user.userType === 'DEPARTMENT'"
+              ref="user"
+              :items="assignedPeople"
+              color="blue-grey lighten-2"
+              label="Faculty / Staff / Student"
               item-text="fullname"
               item-value="id"
-              label="Faulty / Staff / Student"
-              color="success"
-            ></v-select>
+            >
+              <template v-slot:selection="data">
+                <!-- <v-chip
+                        v-bind="data.attrs"
+                        :input-value="data.selected"
+                        @click="data.select"
+                      > -->
+                <!-- <v-avatar left>
+                          <v-img :src="data.item.avatar"></v-img>
+                        </v-avatar> -->
+                {{ data.item.fullname }}
+                <!-- </v-chip> -->
+              </template>
+              <template v-slot:item="data">
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item"></v-list-item-content>
+                </template>
+                <template v-else>
+                  <v-list-item-avatar>
+                    <img
+                      :src="
+                        data.item.avatar !== null
+                          ? $axios.defaults.baseURL + data.item.avatar.url
+                          : '/avatar-default-icon.png'
+                      "
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="data.item.fullname"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-html="data.item.userType"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-autocomplete>
           </v-col>
 
           <v-col cols="auto" lg="auto">
             <v-row>
-              <div class="mr-1 my-4">
+              <div class="mx-4 my-4">
                 <v-btn
-                  v-if="queryData.annualYear && queryData.userType"
-                  :loading="goBtnLoading"
-                  :disabled="goBtnLoading"
+                  v-if="selectedYear"
+                  :loading="loading"
+                  :disabled="loading"
                   color="green"
                   x-small
                   class="white--text"
                   fab
-                  @click="loader = 'goBtnLoading'"
+                  @click="loader()"
                 >
                   Go
                 </v-btn>
               </div>
               <div class="my-4">
-                <v-btn color="red darken-2" fab x-small dark @click="reset">
+                <v-btn color="blue-grey" fab x-small dark @click="resetFilter">
                   <v-icon>mdi-reload</v-icon>
                 </v-btn>
               </div>
@@ -63,7 +110,7 @@
           <v-spacer></v-spacer>
           <v-col cols="auto" md="auto" lg="auto">
             <v-card
-              v-if="queryData.annualYear && !people"
+              v-if="selectedYear && !people"
               tile
               class="px-2 py-2"
               color="yellow lighten-1"
@@ -107,54 +154,54 @@
           </v-col>
         </v-row>
         <!-- {{ queryData }} -->
-        <v-stepper v-if="dataLoaded" v-model="report" style="border-radius:0;">
+        <v-stepper v-if="dataLoaded" v-model="report" style="border-radius: 0;">
           <v-stepper-header>
-            <v-stepper-step :complete="report > 1" step="1" 
+            <v-stepper-step :complete="report > 1" step="1"
               >Programmes / Events</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 2" step="2" 
+            <v-stepper-step :complete="report > 2" step="2"
               >Contribution To Scientific Deliberations</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 3" step="3" 
+            <v-stepper-step :complete="report > 3" step="3"
               >Public Engagement</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 4" step="4" 
+            <v-stepper-step :complete="report > 4" step="4"
               >Research Activities</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="report > 5" step="5" 
+            <v-stepper-step :complete="report > 5" step="5"
               >Publications</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="6" >Recogntions</v-stepper-step>
+            <v-stepper-step step="6">Recogntions</v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
-            <v-stepper-content step="1" style="padding:0px;">
+            <v-stepper-content step="1" style="padding: 0px;">
               <Editor
                 :content="step1Data"
                 :step="1"
                 @next="handleNext(1)"
                 @previous="handlePrevious(1)"
-                :selectedYear="queryData.annualYear"
-                :selectedUserType="queryData.userType"
+                :selectedYear="selectedYear"
+                :selectedUserType="userType"
               />
             </v-stepper-content>
 
-            <v-stepper-content step="2" style="padding:0px;">
+            <v-stepper-content step="2" style="padding: 0px;">
               <Editor
                 :content="step2Data"
                 :step="2"
@@ -163,7 +210,7 @@
               />
             </v-stepper-content>
 
-            <v-stepper-content step="3" style="padding:0px;">
+            <v-stepper-content step="3" style="padding: 0px;">
               <Editor
                 :content="step3Data"
                 :step="3"
@@ -172,7 +219,7 @@
               />
             </v-stepper-content>
 
-            <v-stepper-content step="4" style="padding:0px;">
+            <v-stepper-content step="4" style="padding: 0px;">
               <Editor
                 :content="step4Data"
                 :step="4"
@@ -181,7 +228,7 @@
               />
             </v-stepper-content>
 
-            <v-stepper-content step="5" style="padding:0px;">
+            <v-stepper-content step="5" style="padding: 0px;">
               <Editor
                 :content="step5Data"
                 :step="5"
@@ -190,7 +237,7 @@
               />
             </v-stepper-content>
 
-            <v-stepper-content step="6" style="padding:0px;">
+            <v-stepper-content step="6" style="padding: 0px;">
               <Editor
                 :content="step6Data"
                 :step="6"
@@ -212,83 +259,85 @@ import Editor from "@/components/Editor";
 export default {
   head() {
     return {
-      title: "Annual Report"
+      title: "Annual Report",
     };
   },
   components: {
     PageHeader,
-    Editor
+    Editor,
   },
   data() {
     return {
       report: 1,
-      people: "",
+      months: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
+      month: null,
       dataLoaded: false,
-      queryData: {
-        annualYear: 0,
-        userType: ""
-      },
-      loader: null,
-      goBtnLoading: false,
+      firstDate: null,
+      lastDate: null,
+      assignedPeople: [],
+      loading: false,
+      selectedUser: null,
+      selectedYear: 0,
+      query: null,
+      yearParam: null,
+      userTypeParam: null,
+      monthParam: null,
+      userParam: null,
+      userType: null,
       userTypes: [
-        {text: "Department", value: "DEPARTMENT" },
-        { text: "Faculty", value: "FACULTY" },
-        { text: "Student", value: "STUDENT" }
-      ]
+        {
+          text: "Department",
+          value: "DEPARTMENT",
+        },
+        {
+          text: "Faculty",
+          value: "FACULTY",
+        },
+        {
+          text: "Student",
+          value: "STUDENT",
+        },
+      ],
     };
   },
   watch: {
     report(val) {
       this.reportStepper = val;
     },
-    async loader() {
-      this.$store.dispatch('report/initializeReportId', 0);
-      this.dataLoaded = false;
-      this.report = 1;
-      const l = this.loader;
-      this[l] = !this[l];
-
-      let findQuery = "";
-      findQuery = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&userType=${this.queryData.userType}`;
-      await this.$store.dispatch('report/setSavedReport', {fq: findQuery})
-      
-      console.log('Fetch Started from Watch: ');
-      let queryString = "";
-      // queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&user.userType=${this.queryData.userType}&deleted_ne=true`;
-      queryString = `department.id=${this.$store.state.auth.user.department}&annual_year=${this.queryData.annualYear}&deleted_ne=true`;
-      await this.$store.dispatch("program/setProgrammesData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("visitor/setVisitorsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("training/setTrainingsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("presentation/setPresentationsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("participation/setParticipationsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("public/setPublicData", { qs: queryString });
-      await this.$store.dispatch("research/setResearchData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("publication/setPublicationsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("recognition/setRecognitionsData", {
-        qs: queryString
-      });
-      await this.$store.dispatch("patent/setPatentsData", { qs: queryString });
-      await this.$store.dispatch("assignment/setAssignmentsData", {
-        qs: queryString
-      });
-      this[l] = !this[l];
-      (this.loader = null), (this.dataLoaded = true);
-    
+    selectedYear(val) {
+      this.yearParam = "annual_year=" + val;
+    },
+    userType(val) {
+      this.userParam = null;
+      this.userTypeParam = `&user.userType=${val}`;
+      if (val === "FACULTY") this.assignedPeople = this.faculties;
+      if (val === "STUDENT") this.assignedPeople = this.students;
+      if (val === "DEPARTMENT") this.assignedPeople = this.people;
+    },
+    month(val) {
+      var Month = `01-${val}-${this.selectedYear}`;
+      this.firstDate = this.$moment(Month).format("YYYY-MM-DD");
+      var lastDate = this.$moment(Month).daysInMonth();
+      this.lastDate = this.$moment(Month).format(`YYYY-MM-${lastDate}`);
+      this.monthParam = `&created_at_gt=${this.firstDate}&created_at_lt=${this.lastDate}`
+    },
+    selectedUser(val) {
+      this.userParam = `&user.id=${val}`
     }
+    
   },
 
   computed: {
@@ -301,28 +350,34 @@ export default {
       },
       set(report) {
         this.$store.dispatch("updateStepper", report);
-      }
+      },
     },
     reportYears() {
       return this.$store.state.reportYears;
     },
-    peoples() {
+    people() {
       return this.$store.state.user.activeUsersList.result;
     },
+    faculties() {
+      return this.people.filter((item) => item.userType === "FACULTY");
+    },
+    students() {
+      return this.people.filter((item) => item.userType === "STUDENT");
+    },
     ...mapState({
-      aboutData: state => state.about.newAbout,
-      programmes: state => state.program.programmesData.result,
-      visitors: state => state.visitor.visitorsData.result,
-      trainings: state => state.training.trainingsData.result,
-      presentations: state => state.presentation.presentationsData.result,
-      participations: state => state.participation.participationsData.result,
-      publics: state => state.public.publicData.result,
-      researchData: state => state.research.researchData.result,
-      publications: state => state.publication.publicationsData.result,
-      recognitions: state => state.recognition.recognitionsData.result,
-      patents: state => state.patent.patentsData.result,
-      assignments: state => state.assignment.assignmentsData.result,
-      theses: state => state.theses.thesesData.result
+      aboutData: (state) => state.about.newAbout,
+      programmes: (state) => state.program.programmesData.result,
+      visitors: (state) => state.visitor.visitorsData.result,
+      trainings: (state) => state.training.trainingsData.result,
+      presentations: (state) => state.presentation.presentationsData.result,
+      participations: (state) => state.participation.participationsData.result,
+      publics: (state) => state.public.publicData.result,
+      researchData: (state) => state.research.researchData.result,
+      publications: (state) => state.publication.publicationsData.result,
+      recognitions: (state) => state.recognition.recognitionsData.result,
+      patents: (state) => state.patent.patentsData.result,
+      assignments: (state) => state.assignment.assignmentsData.result,
+      theses: (state) => state.theses.thesesData.result,
     }),
     // formattedAbout() {
     //   return this.aboutData
@@ -332,8 +387,16 @@ export default {
         .map(
           (program, index) =>
             `
-            <h4><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}"</b> at ${program.location} from ${program.from_date} to ${program.to_date}, Coordinated by ${program.coordinators}.<h4>
-            <h4>Colloboration: ${program.colloborations}, Total Participants: ${program.participants_count}</h4>
+            <h4><b>${
+              index + 1
+            }. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${
+              program.name
+            }"</b> at ${program.location} from ${program.from_date} to ${
+              program.to_date
+            }, Coordinated by ${program.coordinators}.<h4>
+            <h4>Colloboration: ${program.colloborations}, Total Participants: ${
+              program.participants_count
+            }</h4>
             <p><b><u>Brief Report:</u></b> ${program.brief_report}</p>
             `
         )
@@ -344,7 +407,11 @@ export default {
         .map(
           (visitor, index) =>
             `
-            <h4>${index + 1}. ${visitor.name}, ${visitor.designation} from ${visitor.institutional_affiliation} visited our department during ${visitor.from_date} - ${visitor.to_date}. He / She had given a lecture titled "${visitor.title}"</h4>
+            <h4>${index + 1}. ${visitor.name}, ${visitor.designation} from ${
+              visitor.institutional_affiliation
+            } visited our department during ${visitor.from_date} - ${
+              visitor.to_date
+            }. He / She had given a lecture titled "${visitor.title}"</h4>
             <p><b><u>Brief Report:</u></b> ${visitor.brief_report}</p>
             `
         )
@@ -355,7 +422,13 @@ export default {
         .map(
           (training, index) =>
             `
-            <h4>${index + 1}. ${training.faculty_name} attended a training programme on "${training.program_name}" at ${training.institutional_affiliation} from ${training.from_date} to ${training.to_date}, funded by ${training.funded_by}.</h4>
+            <h4>${index + 1}. ${
+              training.faculty_name
+            } attended a training programme on "${training.program_name}" at ${
+              training.institutional_affiliation
+            } from ${training.from_date} to ${training.to_date}, funded by ${
+              training.funded_by
+            }.</h4>
             <p><b><u>Brief Report:</u></b> ${training.brief_report}</p>
             `
         )
@@ -366,7 +439,13 @@ export default {
         .map(
           (presentation, index) =>
             `
-            <h4><b>${index + 1}. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${presentation.title}" by ${presentation.faculty_name}. Co-authors: ${presentation.coauthors}</h4>
+            <h4><b>${
+              index + 1
+            }. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${
+              presentation.title
+            }" by ${presentation.faculty_name}. Co-authors: ${
+              presentation.coauthors
+            }</h4>
             <p><b><u>Reference:</u></b> ${presentation.reference}</p>
             `
         )
@@ -377,7 +456,13 @@ export default {
         .map(
           (participation, index) =>
             `
-            <h4><b>${index + 1}.</b> ${participation.faculty_name}, ${participation.designation} participated in ${participation.forum} programme titled "${participation.program_name}", from ${participation.from_date} to ${participation.to_date} at ${participation.place}.</h4>
+            <h4><b>${index + 1}.</b> ${participation.faculty_name}, ${
+              participation.designation
+            } participated in ${participation.forum} programme titled "${
+              participation.program_name
+            }", from ${participation.from_date} to ${
+              participation.to_date
+            } at ${participation.place}.</h4>
             `
         )
         .join("");
@@ -387,8 +472,14 @@ export default {
         .map(
           (item, index) =>
             `
-            <h4><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${item.title}" given by ${item.faculty_name} on ${item.date} at ${item.place}.</h4>
-            <h4><b>Program Name: </b>${item.program_name}, <b>Target Audience: </b>${item.target_audience}</h4>
+            <h4><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${
+              item.title
+            }" given by ${item.faculty_name} on ${item.date} at ${
+              item.place
+            }.</h4>
+            <h4><b>Program Name: </b>${
+              item.program_name
+            }, <b>Target Audience: </b>${item.target_audience}</h4>
             `
         )
         .join("");
@@ -398,10 +489,24 @@ export default {
         .map(
           (research, index) =>
             `
-            <h4><b>${index + 1}. ${research.research_status.toUpperCase()}:</b> ${research.title}</h4>
-            <h4>${research.investigator_type}: ${research.investigator_name}, Total Duration(in months): ${research.total_durations}</h4>
-            <h4>Source of Funding: ${research.funding_source}, Funding agency : ${research.funding_agency}, Total funding: ${research.total_funds}, Funding during the review period/year: ${research.funding_on_review_period}</h4>
-            <p><b><u>Brief Report/Abstract: </u></b> ${research.research_abstract}</p>
+            <h4><b>${
+              index + 1
+            }. ${research.research_status.toUpperCase()}:</b> ${
+              research.title
+            }</h4>
+            <h4>${research.investigator_type}: ${
+              research.investigator_name
+            }, Total Duration(in months): ${research.total_durations}</h4>
+            <h4>Source of Funding: ${
+              research.funding_source
+            }, Funding agency : ${research.funding_agency}, Total funding: ${
+              research.total_funds
+            }, Funding during the review period/year: ${
+              research.funding_on_review_period
+            }</h4>
+            <p><b><u>Brief Report/Abstract: </u></b> ${
+              research.research_abstract
+            }</p>
             `
         )
         .join("");
@@ -411,7 +516,9 @@ export default {
         .map(
           (publication, index) =>
             `
-            <h4><b>${index + 1}. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></h4>
+            <h4><b>${
+              index + 1
+            }. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></h4>
             <p>${publication.reference}</p>
             `
         )
@@ -422,7 +529,11 @@ export default {
         .map(
           (recognition, index) =>
             `
-            <h4><b>${index + 1}.</b> ${recognition.faculty_name} has been awarded as "${recognition.award_title}" from ${recognition.organization},${recognition.place} on ${recognition.date}.</h4>
+            <h4><b>${index + 1}.</b> ${
+              recognition.faculty_name
+            } has been awarded as "${recognition.award_title}" from ${
+              recognition.organization
+            },${recognition.place} on ${recognition.date}.</h4>
             `
         )
         .join("");
@@ -432,7 +543,9 @@ export default {
         .map(
           (patent, index) =>
             `
-            <h4><b>${index + 1}. ${patent.registration_no}:</b> ${patent.title}</h4>
+            <h4><b>${index + 1}. ${patent.registration_no}:</b> ${
+              patent.title
+            }</h4>
             <p><b><u>Brief Report: </u></b> ${patent.brief_report}</p>
             `
         )
@@ -443,7 +556,11 @@ export default {
         .map(
           (assignment, index) =>
             `
-            <h4><b>${index + 1}. ${assignment.classification.toUpperCase()}:</b> ${assignment.faculty_name}, ${assignment.designation}, ${assignment.roles}</b></h4>
+            <h4><b>${
+              index + 1
+            }. ${assignment.classification.toUpperCase()}:</b> ${
+              assignment.faculty_name
+            }, ${assignment.designation}, ${assignment.roles}</b></h4>
             <p><b><u>Brief Report: </u></b> ${assignment.brief_report}</p>
             `
         )
@@ -471,7 +588,10 @@ export default {
       );
     },
     step3Data() {
-      return `<h3><b>5. PUBLIC ENGAGEMENT & OUTREACH ACTIVITIES</b></h3>` + this.formattedPublics;
+      return (
+        `<h3><b>5. PUBLIC ENGAGEMENT & OUTREACH ACTIVITIES</b></h3>` +
+        this.formattedPublics
+      );
     },
     step4Data() {
       return `<h3><b>6. RESEARCH ACTIVITIES</b></h3>` + this.formattedResearch;
@@ -489,9 +609,75 @@ export default {
         `<hr><h3><b>C. KEY ASSIGNMENTS </b></h3>` +
         this.formattedAssignments
       );
-    }
+    },
   },
   methods: {
+    async loader() {
+      this.$store.dispatch("report/initializeReportId", 0);
+      this.report = 1;
+      this.loading = true;
+      this.query = null;
+      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true"
+      if(this.month)
+        this.query += this.monthParam
+     
+      if(this.userType)
+        this.query += this.userTypeParam
+     
+      if(this.selectedUser)
+        this.query += this.userParam;
+
+      if(this.$auth.user.userType==="FACULTY" || this.$auth.user.userType==="STUDENT")
+        this.query += `&user.id=${this.$auth.user.id}`
+     
+      let queryString = '';
+      queryString = this.query+`&department.id=${this.$auth.user.department}&deleted_ne=true`;
+      
+      await this.$store.dispatch("program/setProgrammesData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("visitor/setVisitorsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("training/setTrainingsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("presentation/setPresentationsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("participation/setParticipationsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("public/setPublicData", { qs: queryString });
+      await this.$store.dispatch("research/setResearchData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("publication/setPublicationsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("recognition/setRecognitionsData", {
+        qs: queryString,
+      });
+      await this.$store.dispatch("patent/setPatentsData", { qs: queryString });
+      await this.$store.dispatch("assignment/setAssignmentsData", {
+        qs: queryString,
+      });
+      this.loading = false;
+      this.dataLoaded = true;
+    },
+    resetFilter() {
+      this.month = null;
+      this.selectedYear = 0;
+      this.userType = null;
+      this.yearParam = null;
+      this.monthParam=null;
+      this.userTypeParam = null;
+      this.userParam = null;
+      this.$refs.month.reset()
+      this.query = null;
+      this.selectedUser = null;
+      this.assignedPeople = this.people;
+    },
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
     },
@@ -507,13 +693,13 @@ export default {
     handlePrevious(step) {
       this.report = step - 1;
     },
-    reset() {
-      this.$refs.annualYear.reset();
-      this.$refs.userType.reset();
-      this.$refs.people.reset();
-      this.dataLoaded = false;
-      this.$store.dispatch("updateStepper", 0);
-    }
-  }
+    // reset() {
+    //   this.$refs.annualYear.reset();
+    //   this.$refs.userType.reset();
+    //   this.$refs.people.reset();
+    //   this.dataLoaded = false;
+    //   this.$store.dispatch("updateStepper", 0);
+    // },
+  },
 };
 </script>
