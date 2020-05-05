@@ -332,7 +332,7 @@ export default {
         .map(
           (program, index) =>
             `
-            <h4><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}"</b> at ${program.location} from ${program.from_date} to ${program.to_date}, Coordinated by ${program.coordinators}.<h4>
+            <h4><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}"</b> at ${program.location} from ${program.from_date} to ${program.to_date}, Coordinated by ${program.coordinators}.</h4>
             <h4>Colloboration: ${program.colloborations}, Total Participants: ${program.participants_count}</h4>
             <p><b><u>Brief Report:</u></b> ${program.brief_report}</p>
             `

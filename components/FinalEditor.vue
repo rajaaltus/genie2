@@ -80,7 +80,7 @@ export default {
 <style lang="scss">
   .tiptap-vuetify-editor {
   position: relative;
-  max-width: 85%;
+  max-width: 100%;
   margin: 0 auto 5rem auto;
 
   &__content {
@@ -155,7 +155,7 @@ export default {
 
       td, th {
         min-width: 1em;
-        border: 2px solid #CCCCCC !important;
+        border: 1px solid #CCCCCC !important;
         padding: 3px 5px;
         vertical-align: top;
         box-sizing: border-box;
@@ -167,7 +167,7 @@ export default {
 
       th {
         font-weight: bold;
-        text-align: left;
+        text-align: center;
       }
 
       .selectedCell:after {
