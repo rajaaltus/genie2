@@ -1,42 +1,48 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="patent.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          placeholder="Select Faculty / Staff from the List"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="patent.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="12">
               <v-text-field
                 v-model="patent.faculty_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Faculty Name(s) *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Faculty Name(s)"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="patent.title"
-                :rules="[v => !!v || 'Item is required']"
-                label="Patent Filed / Title *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Patent Filed / Title"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -45,31 +51,31 @@
             <v-col cols="6">
               <v-text-field
                 v-model="patent.registration_no"
-                :rules="[v => !!v || 'Item is required']"
-                label="Registration / Application No *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Registration / Application No"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 v-model="patent.patent_status"
-                :rules="[v => !!v || 'Item is required']"
                 label="Patent Status *"
+                color="success"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-textarea
+                auto-grow
+                row-height="15"
                 v-model="patent.brief_report"
-                label="Brief Report *"
-                :rules="[v => !!v || 'Item is required']"
-                counter="1000"
-                maxlength="1000"
-                hint="Only 1000 Characters are allowed."
+                label="Brief Report"
+                counter
+                color="success"
               ></v-textarea>
             </v-col>
           </v-row>
-          <span style="color:red; font-size:12px;">* Mandatory fields</span>
           <v-row>
             <v-col cols="12" lg="4">
               <h3><span class="frm-title">Upload Images (If any)</span></h3>
@@ -95,7 +101,7 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
@@ -123,7 +129,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom", "section"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     loading: false,
@@ -142,14 +148,14 @@ export default {
       deleted: false,
       department: 0,
       user: 0,
-      image: null
+      image: null,
     },
     selectedFile: null,
     image_url: null,
     patentStatus: [
       { text: "Yes", value: 1 },
-      { text: "No", value: 0 }
-    ]
+      { text: "No", value: 0 },
+    ],
   }),
   methods: {
     getLatestUsers() {
@@ -159,7 +165,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -174,8 +180,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.patent.annual_year = this.$store.state.selectedYear;
 
-        if (this.patent.user == 0)
-          this.patent.user = this.$store.state.auth.user.id;
+        // if (this.patent.user == 0)
+        //   this.patent.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.patent.approved_date = this.$moment(today).format();
@@ -187,17 +193,17 @@ export default {
 
         this.$store
           .dispatch("patent/patentAdd", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire("Something wrong!");
           });
       }
@@ -210,11 +216,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.patent.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

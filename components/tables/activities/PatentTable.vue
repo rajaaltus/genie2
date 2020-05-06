@@ -26,7 +26,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Patents</span></v-toolbar-title
           >
@@ -38,6 +43,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -49,11 +55,11 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Patent - Edit Form</v-toolbar-title>
+                <v-toolbar-title>Patents</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="close">
@@ -70,40 +76,43 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.faculty_name"
-                        label="Faculty Name *"
+                        label="Faculty Name(s)"
                         :rules="[v => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Patent Filed / Title *"
+                        label="Patent Filed / Title"
                         :rules="[v => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.registration_no"
-                        label="Registration / Application No *"
+                        label="Registration / Application No"
                         :rules="[v => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.patent_status"
-                        label="Patent Status *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Patent Status"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
+                        auto-grow
+                        row-height="15"
+                        counter
                         v-model="editedItem.brief_report"
-                        counter="1000"
-                        maxlength="1000"
-                        hint="Only 1000 Characters are allowed."
-                        label="Brief Report *"
+                        label="Brief Report"
                         :value="value"
-                        :rules="[v => !!v || 'Item is required']"
+                        color="success"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -161,8 +170,8 @@
         >
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
+        <v-btn color="success" small>
+          Reload
         </v-btn>
       </template>
     </v-data-table>

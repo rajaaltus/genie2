@@ -2,13 +2,14 @@
   <div class="text-center">
     <v-dialog v-model="dialog" persistent max-width="50%">
       <template v-slot:activator="{ on }">
-        <v-btn small color="warning" fab dark v-on="on" class="mt-2">
+        <v-btn x-small color="amber darken-4" fab dark v-on="on" class="mt-4">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Create New Account</span>
+          <span class="headline">Add New User</span><br>
+          <span class="caption font-weight-light">This credentials can be given to the respective faculty / student for their use of this application.<br>The default <b>PASSWORD</b> is: user@2020</span>
         </v-card-title>
         <v-card-text>
           <v-row>
@@ -61,8 +62,7 @@
                 <v-col cols="6">
                   <v-switch
                     color="red darken-3"
-                    label="Approved"
-                    input-value="true"
+                    label="Blocked"
                     class="pl-2"
                   ></v-switch>
                 </v-col>

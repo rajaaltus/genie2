@@ -58,7 +58,7 @@ import TrainingTable from "@/components/tables/activities/TrainingTable"
 export default {
   head() {
     return {
-      title: "Training Underwent"
+      title: "Specific training underwent by the Faculty/Staff/Students outside NIMHANS"
     };
   },
   components: {

@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title"
               >Presentations / Posters</span
@@ -32,6 +37,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -43,12 +49,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Presentaions / Posters | Update Details</v-toolbar-title
+                  >Presentaions / Posters</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -63,60 +69,63 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.faculty_name"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Faculty Name(s) *"
-                        required
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="6">
+                    <v-col cols="3">
                       <v-select
                         v-model="editedItem.type"
                         :rules="[v => !!v || 'Item is required']"
                         :items="contributionType"
-                        label="Type of Contribution *"
+                        label="Type of Contribution"
+                        color="success"
                       ></v-select>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="3">
                       <v-select
                         v-model="editedItem.forum"
                         :rules="[v => !!v || 'Item is required']"
                         :items="forum"
-                        label="Forum *"
+                        label="Forum"
+                        color="success"
                       ></v-select>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="editedItem.faculty_name"
+                        :rules="[v => !!v || 'Item is required']"
+                        label="Who presented / Author(s)"
+                        required
+                        color="success"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.title"
+                        :rules="[v => !!v || 'Item is required']"
+                        label="Title"
+                        required
+                        color="success"
+                      >
+                      </v-text-field>
                     </v-col>
 
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.coauthors"
                         label="Co-Author(s)"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.title"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Title *"
-                        required
-                      >
-                      </v-text-field>
+                        color="success"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-container fluid>
                       <v-textarea
                         v-model="editedItem.reference"
-                        label="Reference *"
+                        :rules="[v => !!v || 'Item is required']"
+                        label="Reference"
                         :value="value"
+                        color="success"
                       ></v-textarea>
-                      <span style="color:red; font-size:12px;"
-                        >* Mandatory fields</span
-                      >
                     </v-container>
                   </v-row>
                   <v-hover>
@@ -197,6 +206,7 @@ export default {
         value: "updated_at"
       },
       { text: "Contribution Type", value: "type" },
+      { text: "Forum", value: "forum" },
       { text: "Reference", value: "reference" },
       { text: "Approval Status", value: "approval_status" },
       { text: "Actions", value: "action", sortable: false }

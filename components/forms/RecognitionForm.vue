@@ -1,51 +1,58 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="recognition.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          :placeholder="section"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="recognition.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="12">
               <v-text-field
                 v-model="recognition.faculty_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Faculty Name(s) *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Faculty Name(s)"
                 required
+                color="success" 
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="recognition.award_title"
-                :rules="[v => !!v || 'Item is required']"
-                label="Award / Honour Title *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Award / Honour Title"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="4">
               <v-text-field
                 v-model="recognition.organization"
-                :rules="[v => !!v || 'Item is required']"
-                label="Organization *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Organization"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -63,9 +70,10 @@
                   <v-text-field
                     v-model="recognition.date"
                     :return-value.sync="date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     readonly
-                    label="Date *"
+                    color="success"
+                    label="Date"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -83,22 +91,22 @@
             <v-col cols="4">
               <v-text-field
                 v-model="recognition.place"
-                :rules="[v => !!v || 'Item is required']"
-                label="Place *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Place"
+                color="success"
               >
               </v-text-field>
             </v-col>
           </v-row>
-          <span style="color:red; font-size:12px;">* Mandatory fields</span>
         </v-form>
       </v-col>
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="recognitionAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="recognitionAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -112,7 +120,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom", "section"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     loading: false,
@@ -133,8 +141,8 @@ export default {
       user: 0,
       image_1: null,
       image_2: null,
-      image_3: null
-    }
+      image_3: null,
+    },
   }),
   methods: {
     getLatestUsers() {
@@ -144,7 +152,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -158,8 +166,8 @@ export default {
     async recognitionAdd() {
       if (this.$refs.form.validate()) {
         this.recognition.annual_year = this.$store.state.selectedYear;
-        if (this.recognition.user == 0)
-          this.recognition.user = this.$store.state.auth.user.id;
+        // if (this.recognition.user == 0)
+        //   this.recognition.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.recognition.approved_date = this.$moment(today).format();
@@ -170,17 +178,17 @@ export default {
         var vm = this;
         this.$store
           .dispatch("recognition/recognitionAdd", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             this.snackbar = true;
             this.submitMessage = err;
           });
@@ -194,11 +202,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.recognition.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

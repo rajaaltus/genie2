@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius: 0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Research Activities</span></v-toolbar-title
           >
@@ -30,6 +35,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -41,13 +47,11 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title
-                  >Research Activities | Update Details</v-toolbar-title
-                >
+                <v-toolbar-title>Research Activities</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="close">
@@ -64,38 +68,60 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.faculty_name"
-                        label="Faculty Name(s) *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Faculty Name"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Project Name *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Project Name / Title"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
                       <v-select
                         v-model="editedItem.investigator_type"
                         :items="investigatorTypes"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Investigator Type *"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        label="Are you PI / Co-PI"
+                        color="success"
+                        readonly
                       ></v-select>
                     </v-col>
-                    <v-col cols="8">
+                    <v-col cols="8" v-if="editedItem.investigator_type==='Principal_Investigator'">
                       <v-text-field
                         v-model="editedItem.investigator_name"
-                        label="Name *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Name of the Co-PIs"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" v-else-if="editedItem.investigator_type==='CoInvestigator'">
+                      <v-text-field
+                        v-model="editedItem.investigator_name"
+                        label="Name of the PIs"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="8" v-else>
+                      <v-text-field
+                        v-model="editedItem.investigator_name"
+                        label="Name of the Investigators"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.total_durations"
-                        label="Project Duration *"
+                        label="Project Duration (In months)"
                         type="number"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
 
@@ -103,31 +129,35 @@
                       <v-select
                         v-model="editedItem.funding_source"
                         :items="fundingSource"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Funding Source *"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        label="Funding Source"
+                        color="success"
                       ></v-select>
                     </v-col>
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.funding_agency"
-                        label="Funding Agency *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Funding Agency"
+                        color="success"
+                        :rules="[(v) => !!v || 'Item is required']"
                       ></v-text-field>
                     </v-col>
 
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.total_funds"
-                        label="Total Fund (in lakhs) *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Total Funds (In lakhs)"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
 
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.funding_on_review_period"
-                        label="Funding during the review period / year *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Funding during the review period / year (In lakhs)"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
                       ></v-text-field>
                     </v-col>
 
@@ -135,8 +165,9 @@
                       <v-select
                         v-model="editedItem.research_status"
                         :items="researchStatus"
-                        label="Research Status *"
-                        :rules="[v => !!v || 'Item is required']"
+                        label="Research Status"
+                        color="success"
+                        :rules="[(v) => !!v || 'Item is required']"
                       ></v-select>
                     </v-col>
                     <!--<v-col cols="4">
@@ -147,16 +178,14 @@
 													></v-select>
 												</v-col>-->
                     <v-col cols="12">
-                      <v-text-field
+                      <v-textarea
                         v-model="editedItem.research_abstract"
-                        label="Research Abstract *"
-                        :rules="[v => !!v || 'Item is required']"
-                      ></v-text-field>
+                        label="Research Abstract"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        color="success"
+                      ></v-textarea>
                     </v-col>
                   </v-row>
-                  <span style="color:red; font-size:12px;"
-                    >* Mandatory fields</span
-                  >
                   <v-hover>
                     <template v-slot:default="{ hover }">
                       <v-img
@@ -192,7 +221,7 @@
                   <input
                     ref="image"
                     type="file"
-                    style="display:none;"
+                    style="display: none;"
                     label="File input"
                     @change="handleFileUpload"
                   />
@@ -229,81 +258,81 @@ export default {
     dialog: false,
     annualYear: 0,
     headers: [
-			{
-				text: 'Last updated',
-				align: 'left',
-				value: 'updated_at'
-			},
-			{ text: 'Project Name / Title', value: 'title' },
-			{ text: 'Investigator Type', value: 'investigator_type' },
-			{ text: 'Name of the Investigator', value: 'investigator_name' },
-			{ text: 'Project Duration', value: 'total_durations' },
-			{ text: 'Source of Funding', value: 'funding_source' },
-			{ text: 'Status', value: 'research_status' },
-			{ text: 'Approval Status', value: 'approval_status' },
-			{ text: 'Actions', value: 'action', sortable: false },
-		],
+      {
+        text: "Last updated",
+        align: "left",
+        value: "updated_at",
+      },
+      { text: "Project Name / Title", value: "title" },
+      { text: "Investigator Type", value: "investigator_type" },
+      { text: "Name of the Investigator", value: "investigator_name" },
+      { text: "Project Duration", value: "total_durations" },
+      { text: "Source of Funding", value: "funding_source" },
+      { text: "Status", value: "research_status" },
+      { text: "Approval Status", value: "approval_status" },
+      { text: "Actions", value: "action", sortable: false },
+    ],
     editedItem: {
       annual_year: 0,
-			title: "",
-			investigator_type: "",
-			faculty_name: "",
-			investigator_name: "",
-			total_durations: 0,
-			funding_source: "",
-			funding_agency: "",
-			total_funds: 0,
-			funding_on_review_period: 0,
-			research_status: "",
-			research_abstract: "",
-			approval_status: "Pending",
-			approved_by: null,
-			approved_date: null,
-			deleted: false,
-			department: 0,
-			user: 0,
+      title: "",
+      investigator_type: "",
+      faculty_name: "",
+      investigator_name: "",
+      total_durations: 0,
+      funding_source: "",
+      funding_agency: "",
+      total_funds: 0,
+      funding_on_review_period: 0,
+      research_status: "",
+      research_abstract: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      user: 0,
       image: null,
-      rejected_reason: null
+      rejected_reason: null,
     },
     image_url: "/image_placeholder.png",
     selectedFile: null,
     deletedItem: {
       annual_year: 0,
-			title: "",
-			investigator_type: "",
-			faculty_name: "",
-			investigator_name: "",
-			total_durations: 0,
-			funding_source: "",
-			funding_agency: "",
-			total_funds: 0,
-			funding_on_review_period: 0,
-			research_status: "",
-			research_abstract: "",
-			approval_status: "Pending",
-			approved_by: null,
-			approved_date: null,
-			deleted: false,
-			department: 0,
-			user: 0,
+      title: "",
+      investigator_type: "",
+      faculty_name: "",
+      investigator_name: "",
+      total_durations: 0,
+      funding_source: "",
+      funding_agency: "",
+      total_funds: 0,
+      funding_on_review_period: 0,
+      research_status: "",
+      research_abstract: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
+      user: 0,
       image: null,
-      rejected_reason: null
+      rejected_reason: null,
     },
     imageToDelete: null,
-    fundingSource: ['Intramural', 'Extramural', 'Non_Funded'],
-		investigatorTypes: ['Principal_Investigator', 'CoInvestigator'],
-		researchStatus: ['Completed', 'Ongoing', "New"],
+    fundingSource: ["Intramural", "Extramural", "Non_Funded"],
+    investigatorTypes: ["Principal_Investigator", "CoInvestigator"],
+    researchStatus: ["Completed", "Ongoing", "New"],
   }),
   computed: {
     ...mapState({
-      researchData: state => state.research.researchData.result,
-      staffs: state => state.staffs
-    })
+      researchData: (state) => state.research.researchData.result,
+      staffs: (state) => state.staffs,
+    }),
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   async fetch({ store }) {
     let queryString = "";
@@ -314,12 +343,12 @@ export default {
       queryString = `department.id=${store.state.auth.user.department}&user.id=${this.$auth.user.id}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
       // console.log(queryString);
       await store.dispatch("research/setResearchData", {
-        qs: queryString
+        qs: queryString,
       });
     } else {
       queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.selectedYear}&deleted_ne=true`;
       await store.dispatch("research/setResearchData", {
-        qs: queryString
+        qs: queryString,
       });
     }
   },
@@ -338,7 +367,7 @@ export default {
         const uploadRes = await this.$axios({
           method: "POST",
           url: "/upload",
-          data
+          data,
         });
         this.image_url = uploadRes.data[0].url;
         this.editedItem.image = uploadRes.data[0].id;
@@ -351,7 +380,7 @@ export default {
         const uploadRes = await this.$axios({
           method: "POST",
           url: "/upload",
-          data
+          data,
         });
         this.image_url = uploadRes.data[0].url;
         this.editedItem.image = uploadRes.data[0].id;
@@ -377,7 +406,7 @@ export default {
         {},
         {
           id: item.id,
-          deleted: item.deleted
+          deleted: item.deleted,
         }
       );
       this.deletedItem.deleted = true;
@@ -391,27 +420,29 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then(result => {
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
         if (result.value) {
           this.loading = true;
-          this.$store.dispatch("research/updateResearch", payload).then(resp => {
-            this.loading = false;
-            Swal.fire({
-              title: "Success",
-              text: "Deleted Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500
+          this.$store
+            .dispatch("research/updateResearch", payload)
+            .then((resp) => {
+              this.loading = false;
+              Swal.fire({
+                title: "Success",
+                text: "Deleted Successfully!",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.reloadData();
             });
-            this.reloadData();
-          });
           Swal.fire({
             title: "Something Wrong!",
             text: err,
             icon: "warning",
             showConfirmButton: false,
-            timer: 4500
+            timer: 4500,
           });
         }
       });
@@ -426,13 +457,13 @@ export default {
         let queryString = "";
         queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.annualYear}`;
         await this.$store.dispatch("research/setResearchData", {
-          qs: queryString
+          qs: queryString,
         });
       } else {
         let queryString = "";
         queryString = `department.id=${this.$auth.user.department}&annual_year=${this.annualYear}&deleted_ne=true`;
         await this.$store.dispatch("research/setResearchData", {
-          qs: queryString
+          qs: queryString,
         });
       }
       this.loading = false;
@@ -452,13 +483,13 @@ export default {
         console.log(payload);
         this.$store
           .dispatch("research/updateResearch", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Updated Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
 
             if (this.imageToDelete) {
@@ -467,19 +498,19 @@ export default {
             }
             this.reloadData();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire({
               title: "Something Wrong!",
               text: err,
               icon: "warning",
               showConfirmButton: false,
-              timer: 4500
+              timer: 4500,
             });
           });
       }
       this.close();
-    }
-  }
+    },
+  },
 };
 </script>
 

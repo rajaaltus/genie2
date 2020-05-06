@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title"
               >Visitors to the Department</span
@@ -43,12 +48,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Visitor to the Department | Update Details</v-toolbar-title
+                  >Visitor to the Department</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -69,27 +74,30 @@
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Visitor Name *"
+                        label="Name of the Visitor"
                         :rules="[v => !!v || 'Item is required']"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.designation"
-                        label="Designation *"
+                        label="Designation"
                         :rules="[v => !!v || 'Item is required']"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.institutional_affiliation"
-                        label="Institute Affiliation *"
+                        label="Institutional Affiliation"
                         :rules="[v => !!v || 'Item is required']"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -98,9 +106,10 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Lecture Title *"
+                        label="Title of the Lecture"
                         :rules="[v => !!v || 'Item is required']"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -121,7 +130,8 @@
                             :return-value.sync="date"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
-                            label="From Date *"
+                            color="success"
+                            label="From"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -132,12 +142,12 @@
                           scrollable
                         >
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="editFrom = false">
+                          <v-btn text color="success" @click="editFrom = false">
                             Cancel
                           </v-btn>
                           <v-btn
                             text
-                            color="primary"
+                            color="success"
                             @click="$refs.menu.save(date)"
                           >
                             OK
@@ -160,7 +170,8 @@
                             :rules="[v => !!v || 'Item is required']"
                             :return-value.sync="date1"
                             readonly
-                            label="To Date *"
+                            color="success"
+                            label="To"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -170,12 +181,12 @@
                           scrollable
                         >
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="editTo = false">
+                          <v-btn text color="success" @click="editTo = false">
                             Cancel
                           </v-btn>
                           <v-btn
                             text
-                            color="primary"
+                            color="success"
                             @click="$refs.menu1.save(date1)"
                           >
                             OK
@@ -189,13 +200,8 @@
                       <v-textarea
                         v-model="editedItem.brief_report"
                         label="Brief Report *"
-                        counter="1000"
-                        maxlength="1000"
-                        hint="Only 1000 Characters are allowed."
+                        color="success"
                       ></v-textarea>
-                      <span style="color:red; font-size:12px;"
-                        >* Mandatory fields</span
-                      >
                     </v-container>
                   </v-row>
                   <v-hover>
@@ -276,15 +282,15 @@ export default {
         value: "updated_at"
       },
       {
-        text: "Name",
+        text: "Visitor Name",
         align: "left",
         value: "name"
       },
       { text: "Designation", value: "designation" },
-      { text: "institutionAffiliation", value: "institutional_affiliation" },
+      { text: "Institutional Affiliation", value: "institutional_affiliation" },
       { text: "From", value: "from_date" },
       { text: "To", value: "to_date" },
-      { text: "Title", value: "title" },
+      { text: "Title of Lecture", value: "title" },
       { text: "Approval Status", value: "approval_status" },
       { text: "Actions", value: "action", sortable: false }
     ],

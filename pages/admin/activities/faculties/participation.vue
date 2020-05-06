@@ -58,7 +58,7 @@ import ParticipationTable from '@/components/tables/activities/ParticipationTabl
 export default {
   head() {
     return {
-      title: 'Participation'
+      title: 'Contribution To Scientific Deliberations - Participation'
     }
   }, 
   components: {

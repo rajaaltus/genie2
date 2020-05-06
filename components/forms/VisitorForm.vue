@@ -1,51 +1,58 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="visitor.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          placeholder="Select Faculty / Staff from the List"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="visitor.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="4">
               <v-text-field
                 v-model="visitor.name"
-                label="Visitor Name *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Name of the Visitor"
+                :rules="[(v) => !!v || 'Item is required']"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="4">
               <v-text-field
                 v-model="visitor.designation"
-                label="Designation *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Designation"
+                :rules="[(v) => !!v || 'Item is required']"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="4">
               <v-text-field
                 v-model="visitor.institutional_affiliation"
-                label="Institute Affiliation *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Institute Affiliation"
+                :rules="[(v) => !!v || 'Item is required']"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -54,9 +61,10 @@
             <v-col cols="12">
               <v-text-field
                 v-model="visitor.title"
-                label="Lecture Title *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Title of the Lecture"
+                :rules="[(v) => !!v || 'Item is required']"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -75,9 +83,10 @@
                   <v-text-field
                     v-model="visitor.from_date"
                     :return-value.sync="date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     readonly
-                    label="From Date *"
+                    color="success"
+                    label="From"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -88,10 +97,10 @@
                   scrollable
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="duration_from = false">
+                  <v-btn text color="success" @click="duration_from = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                  <v-btn text color="success" @click="$refs.menu.save(date)">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -109,19 +118,20 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="visitor.to_date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     :return-value.sync="date1"
                     readonly
-                    label="To Date *"
+                    color="success"
+                    label="To"
                     v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="visitor.to_date" no-title scrollable>
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="duration_to = false">
+                  <v-btn text color="success" @click="duration_to = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu1.save(date1)">
+                  <v-btn text color="success" @click="$refs.menu1.save(date1)">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -132,13 +142,11 @@
             <v-container fluid>
               <v-textarea
                 v-model="visitor.brief_report"
-                counter="1000"
-                maxlength="1000"
-                :rules="[v => !!v || 'Item is required']"
-                hint="Only 1000 Characters are allowed."
-                label="Brief Report *"
+                counter
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Brief Report"
+                color="success"
               ></v-textarea>
-              <span style="color:red; font-size:12px;">* Mandatory fields</span>
             </v-container>
           </v-row>
           <v-row>
@@ -167,7 +175,7 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
@@ -195,7 +203,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom"],
   components: {
-    AddUser
+    AddUser,
   },
   data() {
     return {
@@ -219,11 +227,11 @@ export default {
         department: 0,
         user: 0,
         image: null,
-        rejected_reason: null
+        rejected_reason: null,
       },
       approvals: ["Pending", "Rejected", "Approved"],
       selectedFile: null,
-      image_url: null
+      image_url: null,
     };
   },
   methods: {
@@ -234,7 +242,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -253,7 +261,7 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.visitor.image = uploadRes.data[0].id;
@@ -266,34 +274,34 @@ export default {
           this.visitor.approved_date = this.$moment(today).format();
           this.visitor.approval_status = "Approved";
         }
-        if (this.visitor.user == 0)
-          this.visitor.user = this.$store.state.auth.user.id;
+        // if (this.visitor.user == 0)
+        //   this.visitor.user = this.$store.state.auth.user.id;
         this.visitor.department = this.$store.state.auth.user.department;
         var payload = this.visitor;
         // console.log(payload);
         this.$store
           .dispatch("visitor/addVisitor", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire({
               title: "Oops!",
-              text: 'Someting Wrong!',
+              text: "Someting Wrong!",
               icon: "error",
               showConfirmButton: false,
               timer: 3000,
-            })
+            });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

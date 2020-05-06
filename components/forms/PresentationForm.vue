@@ -1,84 +1,92 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="presentation.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          :placeholder="section"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="presentation.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="3">
+              <v-select
+                v-model="presentation.type"
+                :rules="[(v) => !!v || 'Item is required']"
+                :items="contributionType"
+                label="Type of Contribution"
+                color="success"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="presentation.forum"
+                :rules="[(v) => !!v || 'Item is required']"
+                :items="forum"
+                label="Forum"
+                color="success"
+              ></v-select>
+            </v-col>
+            <v-col cols="6">
               <v-text-field
                 v-model="presentation.faculty_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Faculty Name(s) *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Who presented / Author(s)"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
-            <v-col cols="6">
-              <v-select
-                v-model="presentation.type"
-                :rules="[v => !!v || 'Item is required']"
-                :items="contributionType"
-                label="Type of Contribution *"
-              ></v-select>
-            </v-col>
-            <v-col cols="6">
-              <v-select
-                v-model="presentation.forum"
-                :rules="[v => !!v || 'Item is required']"
-                :items="forum"
-                label="Forum *"
-              ></v-select>
+            <v-col cols="12">
+              <v-text-field
+                v-model="presentation.title"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Title"
+                required
+                color="success"
+              >
+              </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="presentation.coauthors"
-                label="Co-author(s) *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Co-author(s)"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
               ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="presentation.title"
-                :rules="[v => !!v || 'Item is required']"
-                label="Title *"
-                required
-              >
-              </v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-container fluid>
               <v-textarea
                 v-model="presentation.reference"
-                :rules="[v => !!v || 'Item is required']"
-                label="Reference *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Reference"
                 :value="value"
+                color="success"
               ></v-textarea>
-              <span style="color:red; font-size:12px;">* Mandatory fields</span>
+              <span class="caption font-weight-normal">Example: Nalini A, Preethish Kumar V, Polavarapu K, Vengalil S, Engel AG, Shen Xin-Ming. Congenital myasthenic syndromes: Report on 8 cases from India. 13th International Congress of Neuromuscular Disorders, Toronto, Canada, 5-9 July 2016.</span>
             </v-container>
           </v-row>
           <v-row>
-              <v-col cols="12" lg="4" md="12">
+            <v-col cols="12" lg="4" md="12">
               <h3><span class="frm-title">Upload Images (If any)</span></h3>
               <v-hover>
                 <template v-slot:default="{ hover }">
@@ -102,21 +110,21 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
             </v-col>
-            </v-row>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="presentationAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="presentationAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -130,7 +138,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom", "section"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     dataFrom: [],
@@ -152,12 +160,12 @@ export default {
       deleted: false,
       image: null,
       department: 0,
-      user: 0
+      user: 0,
     },
     selectedFile: null,
     image_url: null,
     contributionType: ["Presentation", "Poster"],
-    forum: ["National", "International"]
+    forum: ["National", "International"],
   }),
   methods: {
     getLatestUsers() {
@@ -167,7 +175,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -178,35 +186,36 @@ export default {
       this.$refs.form.reset();
       this.image_url = null;
     },
-    async presentationAdd () {
-			if (this.$refs.form.validate()) {
-				this.presentation.annual_year = this.$store.state.selectedYear;
-				if (this.presentation.user == 0)
-					this.presentation.user = this.$store.state.auth.user.id;
-				if(this.$store.state.auth.user.userType==='DEPARTMENT') {
-					var today = new Date();
+    async presentationAdd() {
+      if (this.$refs.form.validate()) {
+        this.presentation.annual_year = this.$store.state.selectedYear;
+        // if (this.presentation.user == 0)
+        // 	this.presentation.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.userType === "DEPARTMENT") {
+          var today = new Date();
           this.presentation.approved_date = this.$moment(today).format();
-          this.presentation.approval_status = 'Approved';
-				}
-				this.presentation.department = this.$store.state.auth.user.department;
-				var payload = this.presentation;
-				// console.log(payload);
-				var vm = this;
-			 this.$store.dispatch('presentation/addPresentation', payload)
-					.then(resp => {
-						Swal.fire({
-							title: 'Success',
-							text: 'Added Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reset();
-					})
-					.catch(err => {
-						Swal.fire('Something Wrong!')
-					});
-			}
+          this.presentation.approval_status = "Approved";
+        }
+        this.presentation.department = this.$store.state.auth.user.department;
+        var payload = this.presentation;
+        // console.log(payload);
+        var vm = this;
+        this.$store
+          .dispatch("presentation/addPresentation", payload)
+          .then((resp) => {
+            Swal.fire({
+              title: "Success",
+              text: "Added Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.reset();
+          })
+          .catch((err) => {
+            Swal.fire("Something Wrong!");
+          });
+      }
     },
     async handleFileUpload(event) {
       this.selectedFile = event.target.files[0];
@@ -216,11 +225,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.presentation.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

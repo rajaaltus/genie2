@@ -58,7 +58,7 @@ import PublicTable from '@/components/tables/activities/PublicTable'
 export default {
   head() {
     return {
-      title: 'Public Engagements'
+      title: 'Public Engagement & Outreach Activities'
     }
   }, 
   components: {
