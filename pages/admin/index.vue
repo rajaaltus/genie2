@@ -643,6 +643,9 @@ export default {
     },
   },
   async fetch({ store }) {
+    
+    await store.dispatch('user/setUserProfile', {id: store.state.auth.user.id})
+
     this.loading = true;
     let queryString = '';
       queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;

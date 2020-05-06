@@ -16,10 +16,10 @@
       <v-list-item v-else class="px-2 py-6">
         <v-img src="/logo.png" max-width="100%"></v-img>
       </v-list-item>
-
+      <!-- {{avatar.image.url}} -->
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-img :src="avatar.image?`${$axios.defaults.baseURL}${avatar.image.url}`:'/avatar-default-icon.png'"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title class="pl-2"
@@ -366,6 +366,12 @@ export default {
       mini: true
     };
   },
+  computed: {
+    avatar() {
+      return this.$store.state.user.userProfile;
+    }
+  },
+  
   methods: {
     logout() {
       return this.$auth.logout();
