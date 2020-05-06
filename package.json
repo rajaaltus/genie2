@@ -23,6 +23,7 @@
     "minimist": ">=1.2.3",
     "moment": "^2.24.0",
     "nuxt": "^2.0.0",
+    "nuxt-clipboard2": "^0.2.1",
     "nuxt-graphql-request": "^1.0.1",
     "nuxt-pdf": "^1.0.4",
     "sweetalert2": "^9.7.2",

@@ -1,10 +1,14 @@
 <template>
 	<div class="uk-grid">
-		<h1>Welcome</h1>
+		
 	</div>
 </template>
 <script>
 export default {
-	middleware: 'auth'
+	middleware: 'auth',
+	mounted() {
+		if(this.$auth.loggedIn)
+			this.$router.push('/admin');
+	}
 }
 </script>
