@@ -1,77 +1,97 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="publicEngagement.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          placeholder="Select Faculty / Staff from the List"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="publicEngagement.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="12">
               <v-text-field
                 v-model="publicEngagement.faculty_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Faculty Name(s) *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Name of the Faculty"
+                color="success"
               ></v-text-field>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="3">
               <v-select
                 v-model="publicEngagement.type"
-                :rules="[v => !!v || 'Item is required']"
+                :rules="[(v) => !!v || 'Item is required']"
                 :items="activityTypes"
-                label="Type of Activity *"
+                label="Type of Activity"
+                color="success"
               ></v-select>
             </v-col>
-            <v-col v-if="publicEngagement.type === 'Others'" cols="6">
+            <v-col v-if="publicEngagement.type !== 'Others'" cols="9">
               <v-text-field
                 v-model="publicEngagement.program_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Activity Name *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="If others please specify"
                 required
+                disabled
+                color="success"
               >
               </v-text-field>
             </v-col>
-
+            <v-col v-else cols="9">
+              <v-text-field
+                v-model="publicEngagement.program_name"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="If others please specify"
+                required
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="publicEngagement.title"
-                :rules="[v => !!v || 'Item is required']"
-                label="Title *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Title"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="publicEngagement.program_name"
-                v-if="publicEngagement.type!=='Others'"
-                :rules="[v => !!v || 'Item is required']"
-                label="Program Name *"
+                v-if="publicEngagement.type !== 'Others'"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Programme Name"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 v-model="publicEngagement.target_audience"
-                :rules="[v => !!v || 'Item is required']"
-                label="Target Audience *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Target Audience"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -88,9 +108,10 @@
                   <v-text-field
                     v-model="publicEngagement.date"
                     :return-value.sync="date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     readonly
-                    label="Date *"
+                    color="success"
+                    label="Date"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -112,14 +133,14 @@
             <v-col cols="6">
               <v-text-field
                 v-model="publicEngagement.place"
-                :rules="[v => !!v || 'Item is required']"
-                label="Place *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Place"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
           </v-row>
-          <span style="color:red; font-size:12px;">* Mandatory fields</span>
           <v-row>
             <v-col cols="12" lg="4">
               <h3><span class="frm-title">Upload Images (If any)</span></h3>
@@ -145,7 +166,7 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
@@ -156,10 +177,10 @@
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="publicAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="publicAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -173,7 +194,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     dataFrom: [],
@@ -195,11 +216,11 @@ export default {
       deleted: false,
       department: 0,
       image: null,
-      user: 0
+      user: 0,
     },
     activityTypes: ["Public_Lecture", "Mass_Media", "Others"],
     selectedFile: null,
-    image_url: null
+    image_url: null,
   }),
   methods: {
     getLatestUsers() {
@@ -209,7 +230,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -220,36 +241,36 @@ export default {
       this.$refs.form.reset();
       this.image_url = null;
     },
-    async publicAdd () {
-			if (this.$refs.form.validate()) {
-				this.publicEngagement.annual_year = this.$store.state.selectedYear;
-				if (this.publicEngagement.user == 0)
-					this.publicEngagement.user = this.$store.state.auth.user.id;
-				this.publicEngagement.department = this.$store.state.auth.user.department;
-				if(this.$store.state.auth.user.userType==='DEPARTMENT') {
+    async publicAdd() {
+      if (this.$refs.form.validate()) {
+        this.publicEngagement.annual_year = this.$store.state.selectedYear;
+        // if (this.publicEngagement.user == 0)
+        //   this.publicEngagement.user = this.$store.state.auth.user.id;
+        this.publicEngagement.department = this.$store.state.auth.user.department;
+        if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
-          this.publicEngagement.approval_status = 'Approved';
-					this.publicEngagement.approved_date = this.$moment(today).format();
-				}
-				var payload = this.publicEngagement;
-				// console.log(payload);
-			 this.$store.dispatch('public/publicAdd', payload)
-					.then(resp => {
-						Swal.fire({
-							
-							title: 'Success',
-							text: 'Added Successfully!',
-							icon: 'success',
-							showConfirmButton: false,
-							timer: 1500
-						})
-						this.reset();
-					})
-					.catch(err => {
-						Swal.fire('Something Wrong!');
-					});
-			}
-		},
+          this.publicEngagement.approval_status = "Approved";
+          this.publicEngagement.approved_date = this.$moment(today).format();
+        }
+        var payload = this.publicEngagement;
+        // console.log(payload);
+        this.$store
+          .dispatch("public/publicAdd", payload)
+          .then((resp) => {
+            Swal.fire({
+              title: "Success",
+              text: "Added Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.reset();
+          })
+          .catch((err) => {
+            Swal.fire("Something Wrong!");
+          });
+      }
+    },
     async handleFileUpload(event) {
       this.selectedFile = event.target.files[0];
       // console.log(this.selectedFile);
@@ -258,11 +279,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.publicEngagement.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

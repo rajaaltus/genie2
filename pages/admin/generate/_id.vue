@@ -1,13 +1,25 @@
 <template>
   <div>
-    <!-- <PageHeader :title="$metaInfo.title" /> -->
-    <!-- <pre>{{content}}</pre> -->
+    <!-- <pre>{{ item }}</pre> -->
     <v-row>
-      <v-spacer></v-spacer>
-
-      <v-col cols="12" lg="2">
-        <!-- <v-btn color="green" class="mr-2" small @click="copyReport">Copy</v-btn> -->
-        <!-- <v-btn color="primary" class="mr-8" small @click="exportToDoc(`Report-${$route.params.id}`)">Save as MS-Word</v-btn> -->
+      <v-col cols="12" md="10" lg="8">
+        <span
+          class="headline font-weight-bold text-center pl-3"
+          style="border-left: 5px solid #f4511e;"
+          >Consolidated Report Preview</span
+        >
+      </v-col>
+      <v-col cols="12" lg="4">
+        <v-layout align-end justify-end>
+          <v-btn
+            color="#2c549b"
+            small
+            dark
+            class="pr-2 pl-2"
+            @click="exportToDoc(`Annual Report-${$route.params.id}`)"
+            ><v-icon class="pr-1">mdi-file-word</v-icon> Download Report
+          </v-btn>
+        </v-layout>
       </v-col>
     </v-row>
     <!-- <pre>{{content}}</pre> -->
@@ -99,27 +111,31 @@ export default {
     formattedAbout() {
       return `
       <center>
-      <h2>NATIONAL INSTITUTE OF MENTAL HEALTH & NEUROSCIENCES</h2>
+      <h1>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h1>
       <h3>Bengaluru – 560029</h3>
-      <h1>Annual Report for the year ${this.$store.state.selectedYear}-${
-        this.$store.state.selectedYear + 1
-      }</h1>
+      <h2>Period of the report:1st April ${
+        this.$store.state.selectedYear
+      } to 31st March ${this.$store.state.selectedYear + 1}</h2>
       </center>
-      <h2>1. ABOUT THE DEPARTMENT</h2>${this.aboutData.introduction}<br>
-      <h6>${this.aboutData.facilities}<br>
+      <h1><b><u>Section A:</u></b></h1>
+      <h3>1. ABOUT THE DEPARTMENT</h3>
+      <h3>A. Introduction: Specifically indicate the recognition / contribution of the Department during the year to policies, planning and programmes at State / National and International levels.</h3>
+      <p>${this.aboutData.introduction}</p>
+      <h3>B. New facilities developed: New initiatives taken up by the Department(s) within NIMHANS during the year.</h3>
+      <p>${this.aboutData.facilities}</p>
       `;
     },
     formattedClinical() {
       let sum = 0;
       return `
 
-      <h1>2. PATIENT CARE ACTIVITIES</h1>
-      <h2> A. Clinical Services</h2>
+      <h3>2. PATIENT CARE ACTIVITIES</h3>
+      <h3> A. Clinical Services</h3>
       <table>
       <thead>
       <tr>
       <th>Clinical Services</th>
-      <th>No.Of Patients /Cases</th>
+      <th>No. of Patients / Cases</th>
       </tr>
       <thead>
 
@@ -191,7 +207,7 @@ export default {
     formattedEmergency() {
       let sum = 0;
       return `
-      <h2> B. Emergency Services</h2>
+      <h3> B. Emergency Services</h3>
       <table>
       <tr>
       <th>Emergency Services</th>
@@ -254,7 +270,7 @@ export default {
     },
     formattedSpecial() {
       var html = `
-      <h2>D. Special Clinics / Services / Proceduress</h2>
+      <h3>D. Special Clinics / Services / Procedures</h3>
       <table>
       <tr>
       <th>Special Services</th>
@@ -279,12 +295,12 @@ export default {
     },
     formattedOT() {
       var html = `
-      <h2>E.	OT & Other Procedures</h2>
+      <h3>E.	OT & Other Procedures</h3>
       <table>
       <tr>
-      <th>Procedure</th>
+      <th>Procedure Name</th>
       <th>Classification</th>
-      <th>No Of Patients</th>
+      <th>No of Patients</th>
       <th>Description</th>
       </tr>`;
       for (var i = 0; i < this.otservicesData.length; i++) {
@@ -302,16 +318,16 @@ export default {
     },
     formattedHRD() {
       var html = `
-      <h1>3.	HUMAN RESOURCE DEVELOPMENT </h1>
-      <h2>A.	Details of Regular Courses</h2>
+      <h3>3.	HUMAN RESOURCE DEVELOPMENT </h3>
+      <h3>A.	Details of Regular Courses</h3>
       <table>
       <tr>
       <th>Course</th>
       <th>Name of the Candidate</th>
       <th>Duration</th>
       <th>Status</th>
-      <th>Title of the thesis (for Ph.D.)</th>
-      <th>Guide(for Ph.D.)</th>
+      <th>Title of the thesis (If any)</th>
+      <th>Guide(s)(If any)</th>
       </tr>`;
       for (var i = 0; i < this.hrdCourses.length; i++) {
         let sum = 0;
@@ -330,7 +346,7 @@ export default {
     },
     formattedTrainings() {
       var html = `
-      <h2>B.	Faculty/staff/students from other institutions trained at NIMHANS</h2>
+      <h3>B.	Faculty/staff/students from other institutions trained at NIMHANS</h3>
       <table>
       <tr>
       <th>Name of the course / Training</th>
@@ -359,13 +375,13 @@ export default {
     },
     formattedRetaired() {
       var html = `
-      <h1>4.	DETAILS OF DEPARTMENTAL STAFF</h1>
-      <h2>B.	A.	List of Faculty and staff served NIMHANS and superannuated/resigned/VRS</h2>
+      <h3>4.	DETAILS OF DEPARTMENTAL STAFF</h3>
+      <h3>B.	A.	List of Faculty and staff served NIMHANS and Superannuated / Resigned / VRS</h3>
       <table>
       <tr>
-      <th></th>
+      <th>Superannuated / Resigned / VRS</th>
       <th>Name of the Official and Designation</th>
-      <th>Date of Joining </th>
+      <th>Date of Joining</th>
       <th>Date of Leaving</th>
       <th>Image URL</th>
       </tr>`;

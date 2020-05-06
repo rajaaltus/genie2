@@ -58,7 +58,7 @@ import PresentationTable from "@/components/tables/activities/PresentationTable"
 export default {
   head() {
     return {
-      title: "Presentations / Posters"
+      title: "Contribution To Scientific Deliberations - Presentations / Posters"
     };
   },
   components: {

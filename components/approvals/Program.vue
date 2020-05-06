@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-alert border="left" color="indigo" dark>
+    <v-alert tile  border="left" color="grey lighten-3" colored-border style="border:1px solid #f5f5f5;">
       <v-row class="mb-2">
         <h4 class="py-0 mt-1 ml-4">FROM:</h4>
         <v-tooltip top>

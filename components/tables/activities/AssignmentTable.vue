@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify pt-1">
+        		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Key Assignments</span></v-toolbar-title
           >
@@ -30,6 +35,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -41,12 +47,13 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              		  
+<v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Key Assignments | Update Details</v-toolbar-title
+                  >Key Assignments</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -64,7 +71,8 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.faculty_name"
-                        label="Faculty Name(s) *"
+                        label="Faculty Name(s)"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="3">
@@ -73,36 +81,36 @@
                         :items="classifications"
                         item-text="name"
                         item-value="value"
-                        label="Classification *"
+                        label="Classification"
+                        color="success"
                       ></v-select>
                     </v-col>
 
                     <v-col cols="9">
                       <v-text-field
                         v-model="editedItem.roles"
-                        label="Roles *"
+                        label="Roles"
+                        color="success"
                       ></v-text-field>
                     </v-col>
 
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.designation"
-                        label="Designation *"
+                        label="Designation"
+                        color="success"
                       ></v-text-field>
                     </v-col>
 
                     <v-col cols="12">
                       <v-textarea
+                        counter
+                        auto-grow
+                        row-height="15"
                         v-model="editedItem.brief_report"
-                        counter="1000"
-                        maxlength="1000"
-                        label="Brief Report *"
-                        hint="Only 1000 Characters are allowed."
+                        label="Brief Report"
                       ></v-textarea>
                     </v-col>
-                    <span style="color:red; font-size:12px;"
-                      >* Mandatory fields</span
-                    >
                   </v-row>
                   <v-hover>
                     <template v-slot:default="{ hover }">
@@ -181,6 +189,7 @@ export default {
         align: "left",
         value: "updated_at"
       },
+      { text: "Faculty Name", value: "faculty_name" },
       { text: "Classifcation", value: "classification" },
       { text: "Roles", value: "roles" },
       { text: "Designation", value: "designation" },

@@ -18,9 +18,14 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify pt-1">
+        <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
-            ><span class="frm-title">Public Engagement</span></v-toolbar-title
+            ><span class="frm-title">Public Engagement & Outreach Activities</span></v-toolbar-title
           >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-select
@@ -30,6 +35,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -41,13 +47,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Public Engagement & Outreach Activities | Update
-                  Details</v-toolbar-title
+                  >Public Engagement & Outreach Activities</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -62,35 +67,41 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="4">
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.faculty_name"
+                        label="Name of the Faculty"
+                        color="success"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="3">
                       <v-select
                         v-model="editedItem.type"
                         :items="activityTypes"
-                        label="Activity Type *"
+                        label="Type of Activity"
+                        readonly
+                        color="success"
                       ></v-select>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-text-field
-                        v-model="editedItem.faculty_name"
-                        label="Faculty Name(s) *"
-                      ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.title"
-                        label="Title *"
+                        label="Title"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.program_name"
-                        label="Program Name *"
+                        label="Programme Name"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.target_audience"
-                        label="Target Audience *"
+                        label="Target Audience"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
@@ -108,7 +119,8 @@
                             :return-value.sync="date"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
-                            label="Date *"
+                            color="success"
+                            label="Date"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -130,13 +142,11 @@
                     <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.place"
-                        label="Place *"
+                        label="Place"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <span style="color:red; font-size:12px;"
-                    >* Mandatory fields</span
-                  >
                   <v-hover>
                     <template v-slot:default="{ hover }">
                       <v-img

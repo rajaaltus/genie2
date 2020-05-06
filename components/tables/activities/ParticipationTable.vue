@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+          <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Participations</span></v-toolbar-title
           >
@@ -30,6 +35,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -41,12 +47,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Participations | Update Details</v-toolbar-title
+                  >Participations</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -61,41 +67,43 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12">
+                    <v-col cols="8">
                       <v-text-field
                         v-model="editedItem.faculty_name"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Faculty Name(s) *"
+                        label="Who participated"
+                        color="success"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="editedItem.designation"
+                        label="Designation"
+                        required
+                        color="success"
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="4">
                       <v-select
                         v-model="editedItem.forum"
                         :rules="[v => !!v || 'Item is required']"
                         :items="forum"
-                        label="Forum *"
+                        label="Forum"
+                        color="success"
                       ></v-select>
                     </v-col>
-
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="editedItem.designation"
-                        label="Designation *"
-                        required
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
+                    <v-col cols="8">
                       <v-text-field
                         v-model="editedItem.program_name"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Program Name *"
+                        label="Program Name"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
+                    
                   </v-row>
                   <v-row>
                     <v-col cols="4">
@@ -113,7 +121,8 @@
                             :return-value.sync="date"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
-                            label="From Date *"
+                            color="success"
+                            label="From"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -152,7 +161,8 @@
                             :rules="[v => !!v || 'Item is required']"
                             :return-value.sync="date1"
                             readonly
-                            label="To Date *"
+                            color="success"
+                            label="To"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -178,15 +188,13 @@
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.place"
-                        label="place *"
+                        label="place"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
                   </v-row>
-                  <span style="color:red; font-size:12px;"
-                    >* Mandatory fields</span
-                  >
                   <v-hover>
                     <template v-slot:default="{ hover }">
                       <v-img

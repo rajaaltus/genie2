@@ -22,7 +22,12 @@
         {{ getPublicationType(item.publicationTypeId) }}
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+          <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Publications</span></v-toolbar-title
           >
@@ -36,6 +41,7 @@
             label="Reporting Year"
             required
             class="justify-end mt-6"
+            color="success"
             @change="reloadData()"
           ></v-select>
 
@@ -46,7 +52,7 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -276,8 +282,9 @@
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-btn
+                          small
                           class="mx-3 my-5"
-                          color="primary"
+                          color="success"
                           @click="editedComposeReference"
                         >
                           Compose Reference
@@ -336,8 +343,9 @@ export default {
 				align: 'left',
 				value: 'updated_at',
 			},
-			{ text: 'Type of Publication', value: 'publication_type' },
-			{ text: 'Reference', value: 'reference', width: '40%' },
+      { text: 'Type of Publication', value: 'publication_type' },
+      { text: 'Calssification', value: 'classification' },
+			{ text: 'Reference', value: 'reference', width: '60%' },
 			{ text: 'Approval Status', value: 'approval_status' },
 			{ text: 'Actions', value: 'action', sortable: false },
 		],
@@ -354,7 +362,7 @@ export default {
 			edition: "",
 			place: "",
 			publisher: "",
-			year: 0,
+			year: null,
 			chapter_title: "",
 			editor_names: "",
 			reference: "",

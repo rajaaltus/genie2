@@ -1,65 +1,71 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="participation.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          :placeholder="section"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="participation.faculty_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Faculty Name(s) *"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="6">
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
               <v-select
-                v-model="participation.forum"
-                :rules="[v => !!v || 'Item is required']"
-                :items="forum"
-                label="Forum *"
+                v-model="participation.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
               ></v-select>
             </v-col>
-
-            <v-col cols="6">
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="8">
+              <v-text-field
+                v-model="participation.faculty_name"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Who participated"
+                color="success"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
               <v-text-field
                 v-model="participation.designation"
-                label="Designation *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Designation"
+                :rules="[(v) => !!v || 'Item is required']"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="4">
+              <v-select
+                v-model="participation.forum"
+                :rules="[(v) => !!v || 'Item is required']"
+                :items="forum"
+                label="Forum"
+                color="success"
+              ></v-select>
+            </v-col>
+            <v-col cols="8">
               <v-text-field
                 v-model="participation.program_name"
-                :rules="[v => !!v || 'Item is required']"
-                label="Program Name *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Program Name"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
+            
           </v-row>
           <v-row>
             <v-col cols="4">
@@ -75,9 +81,10 @@
                   <v-text-field
                     v-model="participation.from_date"
                     :return-value.sync="date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     readonly
-                    label="From Date *"
+                    color="success"
+                    label="From"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -109,10 +116,11 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="participation.to_date"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     :return-value.sync="date1"
                     readonly
-                    label="To Date *"
+                    color="success"
+                    label="To"
                     v-on="on"
                   ></v-text-field>
                 </template>
@@ -134,9 +142,10 @@
             <v-col cols="4">
               <v-text-field
                 v-model="participation.place"
-                :rules="[v => !!v || 'Item is required']"
-                label="Place *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Place"
                 required
+                color="success"
               >
               </v-text-field>
             </v-col>
@@ -166,7 +175,7 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
@@ -178,10 +187,10 @@
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="participationAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="participationAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -195,11 +204,11 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom", "section"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     dataFrom: [],
-    section: '',
+    section: "",
     loading: false,
     duration_from: false,
     duration_to: false,
@@ -219,11 +228,11 @@ export default {
       approved_date: null,
       deleted: false,
       department: 0,
-      user: 0
+      user: 0,
     },
     selectedFile: null,
     image_url: null,
-    forum: ["National", "International"]
+    forum: ["National", "International"],
   }),
   methods: {
     getLatestUsers() {
@@ -247,12 +256,12 @@ export default {
     async participationAdd() {
       if (this.$refs.form.validate()) {
         this.participation.annual_year = this.$store.state.selectedYear;
-        if (this.participation.user == 0)
-          this.participation.user = this.$store.state.auth.user.id;
+        // if (this.participation.user == 0)
+        //   this.participation.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.participation.approved_date = this.$moment(today).format();
-          this.participation.approval_status = 'Approved';
+          this.participation.approval_status = "Approved";
         }
         this.participation.department = this.$store.state.auth.user.department;
         var payload = this.participation;
@@ -260,17 +269,17 @@ export default {
         var vm = this;
         this.$store
           .dispatch("participation/participationAdd", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire("Something Wrong!");
           });
       }
@@ -283,11 +292,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.participation.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

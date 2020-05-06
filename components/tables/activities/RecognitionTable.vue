@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+       		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title"
               >Recognition - Awards and Honours</span
@@ -32,6 +37,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -43,13 +49,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Recognition - Awards and Honours | Update
-                  Details</v-toolbar-title
+                  >Recognition - Awards and Honours</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -165,7 +170,8 @@ export default {
 				text: 'Last updated',
 				align: 'left',
 				value: 'updated_at'
-			},
+      },
+      { text: 'Faculty Name', value: 'faculty_name' },
 			{ text: 'Award / Honour', value: 'award_title' },
 			{ text: 'Organiztion', value: 'organization' },
 			{ text: 'Date', value: 'date' },

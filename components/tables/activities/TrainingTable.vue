@@ -18,7 +18,12 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title">Trainings Underwent</span></v-toolbar-title
           >
@@ -30,6 +35,7 @@
             item-value="id"
             label="Reporting Year"
             required
+            color="success"
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
@@ -41,12 +47,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Trainings Underwent | Update Details</v-toolbar-title
+                  >Trainings Underwent</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -65,8 +71,9 @@
                       <v-text-field
                         v-model="editedItem.faculty_name"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Faculty Name(s) *"
+                        label="Who all attended"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -74,8 +81,9 @@
                       <v-text-field
                         v-model="editedItem.program_name"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Name of the Program *"
+                        label="Programme Name"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -84,8 +92,9 @@
                       <v-text-field
                         v-model="editedItem.institutional_affiliation"
                         :rules="[v => !!v || 'Item is required']"
-                        label="Institution And Place *"
+                        label="Institution &amp; Place"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -106,7 +115,8 @@
                             :return-value.sync="date"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
-                            label="From Date *"
+                            color="success"
+                            label="From"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -145,7 +155,8 @@
                             :rules="[v => !!v || 'Item is required']"
                             :return-value.sync="date1"
                             readonly
-                            label="To Date *"
+                            color="success"
+                            label="To"
                             v-on="on"
                           ></v-text-field>
                         </template>
@@ -171,8 +182,9 @@
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.funded_by"
-                        label="Funded By *"
+                        label="Funded By"
                         required
+                        color="success"
                       >
                       </v-text-field>
                     </v-col>
@@ -182,14 +194,10 @@
                     <v-container fluid>
                       <v-textarea
                         v-model="editedItem.brief_report"
-                        counter="1000"
-                        maxlength="1000"
-                        hint="Only 1000 Characters are allowed."
-                        label="Brief Report *"
+                        counter
+                        label="Brief Report"
+                        color="success"
                       ></v-textarea>
-                      <span style="color:red; font-size:12px;"
-                        >* Mandatory fields</span
-                      >
                     </v-container>
                   </v-row>
                   <v-hover>
@@ -270,12 +278,12 @@ export default {
 				value: 'updated_at',
 			},
 			{
-				text: 'Name',
+				text: 'Who all attended',
 				align: 'left',
 				value: 'faculty_name',
 			},
 			{ text: 'Programme Name', value: 'program_name' },
-			{ text: 'institution', value: 'institutional_affiliation' },
+			{ text: 'Institution & Place', value: 'institutional_affiliation' },
 			{ text: 'From', value: 'from_date' },
 			{ text: 'To', value: 'to_date' },
 			{ text: 'Approval Status', value: 'approval_status' },

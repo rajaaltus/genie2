@@ -29,7 +29,7 @@
         <v-list-item-title class="pl-2"
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
-            Head of Department
+          Head of the Department 
           </span></v-list-item-title
         >
 
@@ -331,9 +331,9 @@ export default {
             }
           ]
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
-        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" },
-        { title: "Test Report", icon: "mdi-cogs", to:"/admin/medium" }
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" },
+        // { title: "Test Report", icon: "mdi-cogs", to:"/admin/medium" }
       ],
       itemsFaculty: [
         { title: "Home", icon: "mdi-home", to: "/admin" },
@@ -348,8 +348,8 @@ export default {
             }
           ]
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
-        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
       ],
       itemsStudent: [
         { title: "Home", icon: "mdi-home", to: "/admin" },
@@ -364,8 +364,8 @@ export default {
             }
           ]
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
-        { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
       ],
       mini: true
     };

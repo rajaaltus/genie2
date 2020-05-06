@@ -1,287 +1,568 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="publication.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          :placeholder="section"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
-        <v-row>
-          <v-col cols="12">
-            <v-select
-              v-model="publication_type"
-              :items="publicationTypes"
-              :rules="[v => !!v || 'Item is required']"
-              label="Select Publication Type *"
-              item-text="text"
-              item-value="id"
-              @change="reset()"
-            ></v-select>
-          </v-col>
-        </v-row>
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="publication.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser
+                @new-user="getLatestUsers()"
+                @new-student="getLatestStudents()"
+              />
+            </v-col>
+          </v-row>
           <v-row>
-            <v-col v-if="publication_type <= 4" cols="8">
+            <v-col cols="12">
+              <v-select
+                v-model="publication_type"
+                :items="publicationTypes"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Publication Type"
+                item-text="text"
+                item-value="id"
+                color="success"
+              ></v-select>
+            </v-col>
+          </v-row>
+
+          <!-- Pubtype = Journal Article  -->
+          <v-row v-if="publication_type == 1">
+            <v-col cols="6">
               <v-select
                 v-model="publication.classification"
                 :items="classifications"
                 item-text="name"
                 item-value="value"
-                :rules="[v => !!v || 'Item is required']"
-                label="Classification *"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Classification"
                 required
+                color="success"
               >
               </v-select>
             </v-col>
-            <v-col v-if="publication_type == 1" cols="4">
-              <v-row justify="space-around">
-                <v-text-field
-                  v-model="publication.pmid"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Enter PMID to auto-fetch data / Publication ID"
-                  required
-                  @blur="fetchArticle"
-                >
-                </v-text-field>
-                <v-dialog
-                  v-model="loaderdialog"
-                  hide-overlay
-                  persistent
-                  width="300"
-                >
-                  <v-card color="green" dark>
-                    <v-card-text>
-                      Please stand by
-                      <v-progress-linear
-                        indeterminate
-                        color="white"
-                        class="mb-0"
-                      ></v-progress-linear>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-              </v-row>
-            </v-col>
-            <v-col v-if="publication_type == 1" cols="12">
-              <v-combobox
-                v-model="authorNames"
-                :rules="[v => !!v || 'Item is required']"
-                :items="authors"
-                chips
-                label="Authors *"
-                full-width
-                hide-details
-                hide-selected
-                multiple
-                single-line
-              >
-                <template v-slot:no-data>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        No results matching. Press <kbd>enter</kbd> to create a
-                        new one. Press <kbd>tab</kbd> Complete the entry.
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </template>
-              </v-combobox>
-            </v-col>
-            <v-col v-if="publication_type >= 2" cols="12">
+            <v-col cols="6">
               <v-text-field
-                v-model="publication.authors"
-                :rules="[v => !!v || 'Item is required']"
-                label="Name of the Author(s) *"
-                required
+                v-model="publication.pmid"
+                label="PubMed ID"
+                @blur="fetchArticle"
+                color="success"
               >
               </v-text-field>
+              <v-dialog
+                v-model="loaderdialog"
+                hide-overlay
+                persistent
+                width="300"
+              >
+                <v-card color="green" dark>
+                  <v-card-text>
+                    Please stand by
+                    <v-progress-linear
+                      indeterminate
+                      color="white"
+                      class="mb-0"
+                    ></v-progress-linear>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
             </v-col>
             <v-col cols="12">
-              <v-text-field
-                v-if="publication_type == 1"
+              <v-textarea
+                auto-grow
+                row-height="15"
+                v-model="authorNames"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                :items="authors"
+                label="Authors"
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
                 v-model="journalArticle.title"
                 value="journalArticle.title"
-                label="Article Title *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Title of the Article"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
                 text-val="journalArticle.title"
+                color="success"
               >
-              </v-text-field>
+              </v-textarea>
             </v-col>
             <v-col cols="12">
-              <v-text-field
-                v-if="publication_type == 2"
-                v-model="publication.article_title"
-                label="Title *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-if="publication_type == 3"
-                v-model="publication.book_title"
-                label="Book Title *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 4" cols="12">
-              <v-text-field
-                v-model="publication.chapter_title"
-                label="Title of the chapter *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type > 4" cols="12">
-              <v-text-field
-                v-model="publication.article_title"
-                label="Title *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 4" cols="12">
-              <v-text-field
-                v-model="publication.editor_names"
-                label="Name of the Editor *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 1" cols="12">
               <v-text-field
                 v-model="journalArticle.fulljournalname"
                 value="journalArticle.fulljournalname"
-                label="Title of Journal (With standard Abbrevation) *"
-                :rules="[v => !!v || 'Item is required']"
+                label="Title of Journal (With standard Abbrevation)"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
               >
               </v-text-field>
             </v-col>
-            <v-col v-if="publication_type == 2" cols="12">
-              <v-text-field
-                v-model="publication.journal_title"
-                label="Title of Journal (With standard Abbrevation) *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 1" cols="6">
+            <v-col cols="6">
               <v-text-field
                 v-model="journalArticle.epubdate"
                 label="Publication Date"
                 hint="Example: 2011 Jan 26"
                 persistent-hint
                 @blur="dateValidate(journalArticle.epubdate)"
+                color="success"
               >
               </v-text-field>
             </v-col>
-            <v-col v-if="publication_type == 2" cols="3">
-              <v-text-field
-                v-model="publication.pub_date"
-                label="Publication Date"
-                hint="Example: YYYY-MM-DD"
-                persistent-hint
-                @blur="dateValidate1(publication.pub_date)"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 1" cols="3">
+            <v-col cols="3">
               <v-text-field
                 v-model="journalArticle.volume"
                 value="jouralArticle.volume"
                 label="Volume / Issue No"
+                color="success"
               >
               </v-text-field>
             </v-col>
-            <v-col v-if="publication_type == 2" cols="3">
-              <v-text-field
-                v-model="publication.volume_no"
-                label="Volume / Issue No"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type > 2" cols="3">
-              <v-text-field
-                v-model="publication.edition"
-                label="Edition *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type > 2" cols="3">
-              <v-text-field v-model="publication.place" label="Place">
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type > 2" cols="3">
-              <v-text-field
-                v-model="publication.publisher"
-                label="Publisher *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type > 2" cols="3">
-              <v-text-field
-                v-model="publication.year"
-                label="Year *"
-                :rules="[v => !!v || 'Item is required']"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col v-if="publication_type == 1" cols="3">
+            <v-col cols="3">
               <v-text-field
                 v-model="journalArticle.pages"
                 value="jouralArticle.pages"
                 label="Pages"
+                color="success"
               >
               </v-text-field>
             </v-col>
-            <v-col v-if="publication_type == 2" cols="3">
-              <v-text-field v-model="publication.pages" label="Pages">
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="18"
+                v-model="publication.reference"
+                label="Reference"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
+              ></v-textarea>
+              <span class="caption font-weight-normal"
+                >Example: Andrade C, Prasad Y, Devaraj A, Pinto EF, Shukla L.
+                ECT and Pronounced Impairment in Spatial Cognition: The Fallacy
+                of Drawing Conclusions From a Single Case. J ECT. 2018
+                Jun;34(2):75–7.</span
+              >
+            </v-col>
+          </v-row>
+
+          <!-- Pubtype = Articles for Newsletters  -->
+          <v-row v-if="publication_type == 2">
+            <v-col cols="6">
+              <v-select
+                v-model="publication.classification"
+                :items="classifications"
+                item-text="name"
+                item-value="value"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Classification"
+                required
+                color="success"
+              >
+              </v-select>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="publication.pmid"
+                label="PubMed ID"
+                color="success"
+                disabled
+              >
               </v-text-field>
             </v-col>
-            <v-spacer></v-spacer>
-            <v-btn class="mx-3 my-5" color="green" @click="composeReference()">
-              Compose Reference
-            </v-btn>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="15"
+                v-model="publication.authors"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                label="Authors"
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
+                v-model="publication.article_title"
+                label="Title of the Article"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="publication.journal_title"
+                value="journalArticle.fulljournalname"
+                label="Title of Journal (With standard Abbrevation)"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="publication.pub_date"
+                label="Publication Date"
+                hint="Example: 2011 Jan 26"
+                persistent-hint
+                @blur="dateValidate(publication.pub_date)"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.volume_no"
+                label="Volume / Issue No"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.pages"
+                label="Pages"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="18"
+                v-model="publication.reference"
+                label="Reference"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
+              ></v-textarea>
+              <span class="caption font-weight-normal"
+                >Example: Thirthalli J, Basavarajappa C. Role of nurses in
+                psychiatric rehabilitation: Psychiatrists’ perspective.
+                Souvenir, 3rd International Conference of Indian Society of
+                Psychiatry Nurses on Rehabilitation of Persons with Mental
+                Illness, NIMHANS, Bengaluru, 10-12 February 2017.</span
+              >
+            </v-col>
           </v-row>
-          <span style="color:red; font-size:12px;">* Mandatory fields</span>
+
+          <!-- Pubtype = Books  -->
+          <v-row v-if="publication_type == 3">
+            <v-col cols="3">
+              <v-select
+                v-model="publication.classification"
+                :items="classifications"
+                item-text="name"
+                item-value="value"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Classification"
+                required
+                color="success"
+              >
+              </v-select>
+            </v-col>
+            <v-col cols="9">
+              <v-text-field
+                v-model="publication.authors"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                label="Authors"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
+                v-model="publication.book_title"
+                label="Title of the Book"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.edition"
+                label="Edition"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.place"
+                label="Place"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.publisher"
+                label="Publisher"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.year"
+                label="Year"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="18"
+                v-model="publication.reference"
+                label="Reference"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
+              ></v-textarea>
+              <span class="caption font-weight-normal"
+                >Example: Desai G, Chaturvedi SK (Eds.). Medically unexplained
+                somatic symptoms and chronic pain: assessment and management. A
+                primer for healthcare professionals (first edition). Paras
+                Medical Publishers, Hyderabad, India, 2017.</span
+              >
+            </v-col>
+          </v-row>
+
+          <!-- Pubtype = Book Chapter  -->
+          <v-row v-if="publication_type == 4">
+            <v-col cols="3">
+              <v-select
+                v-model="publication.classification"
+                :items="classifications"
+                item-text="name"
+                item-value="value"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Classification"
+                required
+                color="success"
+              >
+              </v-select>
+            </v-col>
+            <v-col cols="9">
+              <v-text-field
+                v-model="publication.authors"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                label="Authors"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
+                v-model="publication.chapter_title"
+                label="Title of the Book Chapter"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
+                v-model="publication.editor_names"
+                label="Editors"
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.edition"
+                label="Edition"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.place"
+                label="Place"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.publisher"
+                label="Publisher"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.year"
+                label="Year"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="18"
+                v-model="publication.reference"
+                label="Reference"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
+              ></v-textarea>
+              <span class="caption font-weight-normal"
+                >Example: Taly AB, Nair KPS. Role of Electrodiagnostics in
+                Spinal Cord Injury and Stroke Rehabilitation. In: Ghatak MM, Sen
+                S, Deogoankar M (eds.). Spinal Injury and Stroke Rehabilitation.
+                Jaypee Brothers Medical Publishers (P) Ltd., 2016.
+                p.222-238</span
+              >
+            </v-col>
+          </v-row>
+
+          <!-- Pubtype = All others -->
+          <v-row v-if="publication_type > 4">
+            <v-col cols="12">
+              <v-text-field
+                v-model="publication.authors"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                label="Authors"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="12"
+                v-model="publication.article_title"
+                label="Title"
+                :rules="[(v) => !!v || 'Item is required']"
+                required
+                color="success"
+              >
+              </v-textarea>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.edition"
+                label="Edition"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.place"
+                label="Place"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.publisher"
+                label="Publisher"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="publication.year"
+                label="Year"
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                auto-grow
+                row-height="18"
+                v-model="publication.reference"
+                label="Reference"
+                :rules="[(v) => !!v || 'Item is required']"
+                color="success"
+              ></v-textarea>
+              <span
+                v-if="publication_type == 5"
+                class="caption font-weight-normal"
+                >Example: Murthy P, Chandra PS, Benegal V, Chand PK, Pandian D,
+                Thennarasu K. Development of a partner focused intervention for
+                alcohol dependence and assessment of impact on couple’s outcome:
+                A pilot study. Project supported by the Indian Council for
+                Medical Research, 2014.</span
+              >
+              <span
+                v-else-if="publication_type == 6"
+                class="caption font-weight-normal"
+                >Example: Aravindraj E, Muralidhar D, Hamza MA. Manual on
+                Counselling Skills for Teachers of Industrial Training
+                Institutes. NIMHANS Publication, 2016.</span
+              >
+              <span
+                v-else-if="publication_type == 7"
+                class="caption font-weight-normal"
+                >Example: Gautham MS, Gururaj G. Report– Health Promotion in
+                Workplaces: A scoping study. Centre for Public Health, NIMHANS,
+                2016.</span
+              >
+              <span
+                v-else-if="publication_type == 8"
+                class="caption font-weight-normal"
+                >Example: Mehta UM. I feel like an outsider - How persons with
+                schizophrenia can understand other people and communicate
+                better. Loudspeaker – A magazine for mental health, published by
+                NIMHANS Centre for Well Being, Summer Edition 2016.</span
+              >
+            </v-col>
+          </v-row>
         </v-form>
-        <v-row>
-          <v-col cols="12">
-            <v-textarea
-              v-model="publication.reference"
-              label="Reference *"
-              :rules="[v => !!v || 'Item is required']"
-              placeholder="Example: Andrade C, Prasad Y, Devaraj A, Pinto EF, Shukla L. ECT and Pronounced Impairment in Spatial Cognition: The Fallacy of Drawing Conclusions From a Single Case. J ECT. 2018 Jun;34(2):75–7."
-            ></v-textarea>
-          </v-col>
-        </v-row>
       </v-col>
-    </v-row>
-    <v-row>
-      <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
-        Reset
-      </v-btn>
-      <v-btn medium color="#57a727" dark @click="publicationAdd" class="mr-4">
-        Submit
-      </v-btn>
+      <v-layout align-end justify-end>
+        <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
+          Reset
+        </v-btn>
+        <v-btn small color="#57a727" dark @click="publicationAdd" class="mr-4">
+          Submit
+        </v-btn>
+      </v-layout>
     </v-row>
   </div>
 </template>
@@ -293,7 +574,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom", "publicationTypes", "section"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     loading: false,
@@ -319,7 +600,7 @@ export default {
       edition: "",
       place: "",
       publisher: "",
-      year: 0,
+      year: null,
       chapter_title: "",
       editor_names: "",
       reference: "",
@@ -330,26 +611,26 @@ export default {
       approval_status: "Pending",
       department: 0,
       user: 0,
-      pages: ""
+      pages: "",
     },
     journalArticle: {
       title: null,
       fulljournalname: null,
       epubdate: null,
       volume: null,
-      pages: null
+      pages: null,
     },
     editedJournal: {
       title: null,
       fulljournalname: null,
       epubdate: "",
       volume: "",
-      pages: ""
+      pages: "",
     },
     loaderdialog: false,
     classifications: ["International", "National", "NotApplicable", "Others"],
     selectedFile: null,
-    image_url: null
+    image_url: null,
   }),
   methods: {
     getLatestUsers() {
@@ -359,7 +640,7 @@ export default {
       this.$store.dispatch("setStaffs", { qs: queryString });
       this.dataFrom = this.$store.state.staffs;
     },
-     getLatestStudents() {
+    getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=STUDENT&blocked_ne=true`;
@@ -388,7 +669,7 @@ export default {
       this.loaderdialog = true;
       this.$store
         .dispatch("publication/setJournalArticle", { id: pmid })
-        .then(resp => {
+        .then((resp) => {
           this.journalArticle = Object.assign(
             {},
             this.$store.state.publication.journalArticle
@@ -396,19 +677,33 @@ export default {
           // this.authors = this.journalArticle.authors;
           console.log(this.journalArticle);
           var authors = [];
-          this.journalArticle.authors.forEach(function(item, index) {
+          this.journalArticle.authors.forEach(function (item, index) {
             authors.push(item.name);
           });
-          this.authors = authors;
+          this.authorNames = authors;
+          // if (this.$store.state.publication.journalArticle.authors === "")
+          //   this.journalArticle.authorNames = "";
           if (this.$store.state.publication.journalArticle.epubdate === "")
             this.journalArticle.epubdate = "";
           if (this.$store.state.publication.journalArticle.volume === "")
             this.journalArticle.volume = "";
           if (this.$store.state.publication.journalArticle.pages === "")
             this.journalArticle.pages = "";
+          this.publication.reference =
+            this.authorNames.join() +
+            ". " +
+            this.journalArticle.title +
+            " " +
+            this.journalArticle.fulljournalname +
+            " " +
+            this.journalArticle.epubdate +
+            ";" +
+            this.journalArticle.volume +
+            ":" +
+            this.journalArticle.pages;
           this.loaderdialog = true;
         })
-        .catch(err => {
+        .catch((err) => {
           this.snackbar = true;
           this.submitMessage = "No data found!";
           this.journalArticle = Object.assign({}, this.editedJournal);
@@ -429,9 +724,9 @@ export default {
               this.authorNames.join() +
               ". " +
               this.journalArticle.title +
-              " " +
+              ". " +
               this.journalArticle.fulljournalname +
-              " " +
+              ". " +
               this.journalArticle.epubdate +
               ";" +
               this.journalArticle.volume +
@@ -504,17 +799,18 @@ export default {
         this.publication.publication_type = this.publicationTypes[
           this.publication_type - 1
         ].value;
-        if (this.publication.user == 0)
-          this.publication.user = this.$store.state.auth.user.id;
+        // if (this.publication.user == 0)
+        //   this.publication.user = this.$store.state.auth.user.id;
         this.publication.department = this.$store.state.auth.user.department;
 
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.publication.approved_date = this.$moment(today).format();
           this.publication.approval_status = "Approved";
-          // this.publication.approved_by = this.$store.state.auth.user.fullname;
+          this.publication.approved_by = this.$store.state.auth.user.fullname;
         }
-        if (this.publication_type == 1) {
+        if (this.publication_type == 1) 
+        {
           this.publication.journal_title = this.journalArticle.fulljournalname;
           this.publication.article_title = this.journalArticle.title;
           this.publication.pages = this.journalArticle.pages;
@@ -525,9 +821,11 @@ export default {
               : this.$moment(this.journalArticle.epubdate).format("YYYY-MM-DD");
           this.publication.authors = this.authorNames.join();
         }
-        if (this.publication.pub_date === "") this.publication.pub_date = null;
+        if (this.publication.pub_date === "") 
+          this.publication.pub_date = null;
 
-        if (this.publication_type > 2) this.publication.pub_date = null;
+        if (this.publication_type > 2) 
+          this.publication.pub_date = null;
 
         if (this.publication_type > 4)
           this.publication.classification = "National";
@@ -537,17 +835,17 @@ export default {
         // var vm = this;
         this.$store
           .dispatch("publication/publicationAdd", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Publication Submitted successfully!",
-							icon: "success",
-							showConfirmButton: false,
-              timer: 1500
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire(err.response);
           });
       }
@@ -560,11 +858,11 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.publication.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>

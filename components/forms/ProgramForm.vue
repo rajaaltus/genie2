@@ -1,26 +1,24 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="program.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          placeholder="Select Faculty / Staff from the List"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
+          <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
+          <v-col cols="11" lg="11">
+            <v-select
+              v-model="program.user"
+              :items="dataFrom"
+              item-value="id"
+              item-text="fullname"
+              label="Data received from?"
+              placeholder="Select Faculty / Staff from the List"
+              color="success"
+              :rules="[v => !!v || 'Selecting the Faculty / Staff is Required']"
+            ></v-select>
+          </v-col>
+          <v-col cols="1" lg="1" sm="1">
+            <AddUser @new-user="getLatestUsers()" @new-student="getLatestStudents()" />
+          </v-col>
+          </v-row>
           <v-row>
             <v-col cols="4">
               <v-select
@@ -28,29 +26,6 @@
                 :rules="[v => !!v || 'Item is required']"
                 :items="programTypes"
                 label="Program Type "
-                color="success"
-              ></v-select>
-            </v-col>
-            <v-col cols="8">
-              <v-combobox
-                v-model="program.name"
-                :rules="[v => !!v || 'Item is required']"
-                :items="programNames"
-                item-text="name"
-                item-value="name"
-                label="Program Name "
-                color="success"
-              >
-              </v-combobox>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="4">
-              <v-select
-                v-model="program.location"
-                :rules="[v => !!v || 'Item is required']"
-                :items="locations"
-                label="Location "
                 color="success"
               ></v-select>
             </v-col>
@@ -74,6 +49,30 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="8">
+              <v-combobox
+                v-model="program.name"
+                :rules="[v => !!v || 'Item is required']"
+                :items="programNames"
+                item-text="name"
+                item-value="name"
+                label="Program Name "
+                color="success"
+              >
+              </v-combobox>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="program.participants_count"
+                :rules="[v => !!v || 'Item is required']"
+                type="number"
+                label="Participants Count "
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col cols="4">
               <v-menu
                 ref="menu"
@@ -89,6 +88,7 @@
                     :return-value.sync="duration_from"
                     :rules="[v => !!v || 'Item is required']"
                     readonly
+                    color="success"
                     label="From Date "
                     v-on="on"
                   ></v-text-field>
@@ -128,6 +128,7 @@
                     :rules="[v => !!v || 'Item is required']"
                     :return-value.sync="duration_to"
                     readonly
+                    color="success"
                     label="To Date "
                     v-on="on"
                   ></v-text-field>
@@ -148,15 +149,15 @@
               </v-menu>
             </v-col>
             <v-col cols="4">
-              <v-text-field
-                v-model="program.participants_count"
+              <v-select
+                v-model="program.location"
                 :rules="[v => !!v || 'Item is required']"
-                type="number"
-                label="Participants Count "
+                :items="locations"
+                label="Location "
                 color="success"
-              >
-              </v-text-field>
+              ></v-select>
             </v-col>
+            
           </v-row>
           <v-row>
             <v-col cols="12">
@@ -173,6 +174,7 @@
               <v-textarea
                 v-model="program.brief_report"
                 counter
+                color="success"
                 label="Brief Report "
               ></v-textarea>
             </v-col>
@@ -310,8 +312,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
-        if (this.program.user == 0)
-          this.program.user = this.$store.state.auth.user.id;
+        // if (this.program.user == 0)
+        //   this.program.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT")
           this.program.approval_status = "Approved";
         if (typeof this.program.name === "object")

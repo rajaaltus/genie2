@@ -75,27 +75,10 @@
                           v-model="editedItem.type"
                           :rules="[v => !!v || 'Item is required']"
                           :items="programTypes"
-                          label="Program Type*"
+                          label="Program Type"
                         ></v-select>
                       </v-col>
                     </template>
-                    <v-col cols="8">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Program Name*"
-                        required
-                      >
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-select
-                        v-model="editedItem.location"
-                        :rules="[v => !!v || 'Item is required']"
-                        :items="locations"
-                        label="Location*"
-                      ></v-select>
-                    </v-col>
                     <v-col cols="4">
                       <v-select
                         v-model="editedItem.forum"
@@ -110,6 +93,25 @@
                         :items="colloborations"
                         label="Colloborations"
                       ></v-select>
+                    </v-col>
+                    <v-col cols="8">
+                      <v-text-field
+                        v-model="editedItem.name"
+                        :rules="[v => !!v || 'Item is required']"
+                        label="Program Name*"
+                        required
+                      >
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="editedItem.participants_count"
+                        :rules="[v => !!v || 'Item is required']"
+                        type="number"
+                        label="Participants Count*"
+                        required
+                      >
+                      </v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -130,15 +132,14 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                      <v-text-field
-                        v-model="editedItem.participants_count"
+                      <v-select
+                        v-model="editedItem.location"
                         :rules="[v => !!v || 'Item is required']"
-                        type="number"
-                        label="Participants Count*"
-                        required
-                      >
-                      </v-text-field>
+                        :items="locations"
+                        label="Location*"
+                      ></v-select>
                     </v-col>
+                    
                   </v-row>
                   <v-row>
                     <v-col cols="12">
@@ -231,21 +232,22 @@ export default {
     annualYear: 0,
     headers: [
       {
-        text: "Updated at",
+        text: "Last Updated",
         align: "left",
         value: "updated_at"
       },
       { text: "Program Type", value: "type" },
+      { text: "Forum", value: "forum" },
       {
-        text: "Name",
+        text: "Programme Name",
         align: "left",
         sortable: false,
         value: "name"
       },
+      { text: "No. of Participants", value: "participants_count" },
+      { text: "From", value: "from_date" },
+      { text: "To", value: "to_date" },
       { text: "Location", value: "location" },
-      { text: "Duration From - To", value: "from_date" },
-      { text: "Duration To", value: "to_date" },
-      { text: "No of Participants", value: "participants_count" },
       { text: "Approval Status", value: "approval_status" },
       { text: "Actions", value: "action", sortable: false }
     ],
