@@ -234,27 +234,23 @@ export default {
     },
     formattedDiagnostics() {
       let sum = 0;
-      return `
+      var html = `
       <h2> C. Diagnostic Services</h2>
       <table>
       <tr>
       <th>Lab Services</th>
       <th>Total No.Of Samples Analyzed</th>
-      </tr>
-      <tr>
-      <td>Routine Test</td>
-      <td>${this.diagnosticsData
-        .filter(({ lab_type }) => lab_type === "Routine_Test")
-        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
-      </tr>
-      <tr>
-      <td>Special Test</td>
-      <td>${this.diagnosticsData
-        .filter(({ lab_type }) => lab_type === "Special_Test")
-        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
-      </tr>
-      </table>
+      </tr>`;
+      for (var i = 0; i < this.diagnosticsData.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.diagnosticsData[i].pc_diagnostic_test.test_name}</td>
+      <td>${this.diagnosticsData[i].samples_analyzed}</td>
+      </tr>`;
+      }
+      html += `</table>
       `;
+      return html;
     },
     formattedSpecial() {
       var html = `
