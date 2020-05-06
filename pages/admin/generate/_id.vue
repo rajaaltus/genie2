@@ -24,9 +24,38 @@
     </v-row>
     <!-- <pre>{{content}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
-
-    <FinalEditor id="content" :content="content" />
-    <div id="download" style="display: none;" v-html="content"></div>
+    <div class="preview">
+      <v-sheet class="pa-4" color="grey lighten-3" width="100%" height="90vh">
+        <v-toolbar color="green" dark>
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-toolbar-title class="white--text"
+            >Generated Report
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-tooltip left>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon @click="exportToDoc(`Report-${$route.params.id}`)"
+                  >mdi-download</v-icon
+                >
+              </v-btn>
+            </template>
+            <span>Download as Word Doc</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-sheet
+          id="download"
+          elevation="6"
+          v-html="content"
+          class="mx-auto py-4 px-6 doc"
+          height="80vh"
+          width="90%"
+        >
+        </v-sheet>
+      </v-sheet>
+    </div>
+    <!-- <FinalEditor id="content" :content="content" />
+    <div id="download" style="display:none" v-html="content"></div> -->
   </div>
 </template>
 
@@ -221,27 +250,23 @@ export default {
     },
     formattedDiagnostics() {
       let sum = 0;
-      return `
-      <h3> C. Diagnostic Services</h3>
+      var html = `
+      <h2> C. Diagnostic Services</h2>
       <table>
       <tr>
       <th>Lab Services</th>
-      <th>Total No. of Samples Analyzed</th>
-      </tr>
-      <tr>
-      <td>Routine Test</td>
-      <td>${this.diagnosticsData
-        .filter(({ lab_type }) => lab_type === "Routine_Test")
-        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
-      </tr>
-      <tr>
-      <td>Special Test</td>
-      <td>${this.diagnosticsData
-        .filter(({ lab_type }) => lab_type === "Special_Test")
-        .reduce((sum, item) => sum + item.samples_analyzed, 0)}</td>
-      </tr>
-      </table>
+      <th>Total No.Of Samples Analyzed</th>
+      </tr>`;
+      for (var i = 0; i < this.diagnosticsData.length; i++) {
+        let sum = 0;
+        html += `<tr>
+      <td>${this.diagnosticsData[i].pc_diagnostic_test.test_name}</td>
+      <td>${this.diagnosticsData[i].samples_analyzed}</td>
+      </tr>`;
+      }
+      html += `</table>
       `;
+      return html;
     },
     formattedSpecial() {
       var html = `
@@ -454,3 +479,27 @@ export default {
   },
 };
 </script>
+
+<style>
+.preview {
+  max-width: 100%;
+}
+.doc {
+  overflow: scroll;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>

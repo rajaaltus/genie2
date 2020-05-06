@@ -805,7 +805,7 @@ export default {
 
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
-          this.publication.approved_date = this.$moment(today).format();
+          this.publication.approved_date = this.$moment(today).format("YYYY-MM-DD");
           this.publication.approval_status = "Approved";
           this.publication.approved_by = this.$store.state.auth.user.fullname;
         }

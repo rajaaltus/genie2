@@ -16,9 +16,11 @@
           <v-card flat>
             <v-card-text class="px-0 py-2">
               <v-row class="pr-4">
-                <v-col cols="12" lg="2">
+                <v-col cols="12" lg="2" class="my-5">
                   <v-select
                     v-model="selectedYear"
+                    outlined
+                    dense
                     ref="year"
                     :items="reportYears"
                     item-value="id"
@@ -27,55 +29,27 @@
                     color="success"
                   ></v-select>
                 </v-col>
-                
-                <v-col cols="12" lg="2">
+                <v-col cols="12" lg="3">
+                  <v-label><small>Select Range</small></v-label>
+                  <vc-date-picker mode="range" v-model="range" />
+                </v-col>
+                <v-col cols="12" lg="2" class="my-5">
                   <v-select
-                    ref="userType"
+                    ref="user-type"
+                    v-if="$auth.user.userType === 'DEPARTMENT'"
+                    outlined
+                    dense
                     v-model="userType"
                     label="User Type"
                     :items="userTypes"
                     color="success"
                   ></v-select>
                 </v-col>
-                <v-col cols="12" lg="3">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="month"
-                    transition="scale-transition"
-                    offset-y
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="month"
-                        label="Pick the month"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="month"
-                      type="month"
-                      no-title
-                      scrollable
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false"
-                        >Cancel</v-btn
-                      >
-                      <v-btn text color="primary" @click="$refs.menu.save(month)"
-                        >OK</v-btn
-                      >
-                    </v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="11" lg="3">
+                <v-col cols="11" lg="3" class="my-5">
                   <v-autocomplete
                     v-model="selectedUser"
+                    outlined
+                    dense
                     v-if="$auth.user.userType === 'DEPARTMENT'"
                     ref="user"
                     :items="assignedPeople"
@@ -130,13 +104,13 @@
                     <div class="mx-4 my-4">
                       <v-btn
                         v-if="selectedYear"
-                        :loading="goBtnLoading"
-                        :disabled="goBtnLoading"
+                        :loading="loading"
+                        :disabled="loading"
                         color="green"
                         x-small
                         class="white--text"
                         fab
-                        @click="loader = 'goBtnLoading'"
+                        @click="loader()"
                       >
                         Go
                       </v-btn>
@@ -521,22 +495,19 @@ export default {
   },
   data() {
     return {
-      month: null,
-      menu: false,
-      modal: false,
-      userTypeFlag: false,
-      monthFlag: false,
-      firstDate: null,
-      lastDate: null,
-      resetCall: false,
-      dataLoaded: false,
-      loader: null,
+      range: {
+        start: null,
+        end: null
+      },
       assignedPeople: [],
       loading: false,
-      goBtnLoading: false,
       selectedUser: null,
       selectedYear: 0,
       query: null,
+      yearParam: null,
+      userTypeParam: null,
+      monthParam: null,
+      userParam: null,
       userType: null,
       userTypes: [
         {
@@ -573,39 +544,25 @@ export default {
     };
   },
   watch: {
-    async loader() {
-      this.dataLoaded = false;
-      const l = this.loader;
-      this[l] = !this[l];
-      if (this.userTypeFlag)
-        console.log(this.query + "&userType=" + this.userType);
-      await setTimeout(() => {
-        (this.loader = null), (this[l] = !this[l]), (this.dataLoaded = true);
-      }, 3000);
-    },
     selectedYear(val) {
-      this.query = null;
-      this.$refs.userType.reset();
-      this.userTypeFlag = false;
-      this.query = "?annual_year=" + val;
-      console.log(this.query);
+      this.yearParam = "annual_year=" + val;
     },
     userType(val) {
-      this.userTypeFlag = true;
+      this.userParam = null;
+      this.userTypeParam = `&user.userType=${val}`;
       if (val === "FACULTY") this.assignedPeople = this.faculties;
       if (val === "STUDENT") this.assignedPeople = this.students;
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
-    month(val) {
-      this.monthFlag = true;
-      var Month = this.$moment(val)
-      this.firstDate = this.$moment(Month).format('DD MM YYYY')
-      console.log('First Date:', this.$moment(Month).format('DD MM YYYY'))
-      console.log('Selected Month', this.$moment(Month).format('MMM'))
-      var lastDate = this.$moment(Month).daysInMonth()
-      console.log(this.$moment(Month).format(`${lastDate}-MM-YYYY`));
-      this.lastDate = this.$moment(Month).format(`${lastDate}-MM-YYYY`)
-    } 
+    range(val) {
+      console.log(val)
+      var range = Object.assign({}, val);
+      this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
+      console.log('Month Param:', this.monthParam)
+    },
+    selectedUser(val) {
+      this.userParam = `&user.id=${val}`;
+    },
   },
   computed: {
     journalArticles() {
@@ -672,11 +629,13 @@ export default {
     },
   },
   async fetch({ store }) {
+    await store.dispatch("user/setUserProfile", {
+      id: store.state.auth.user.id,
+    });
+
+    this.loading = true;
     let queryString = "";
-    if (store.state.auth.user.userType === "DEPARTMENT")
-      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
-    else
-      queryString = `department.id=${store.state.auth.user.department}&user.id=${store.state.auth.user.id}&deleted_ne=true`;
+    queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
@@ -699,66 +658,87 @@ export default {
     let queryString1 = "";
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
+    this.loading = false;
   },
 
   mounted() {
     if (this.userType) {
-      if (this.userType === "FACULTY") this.assignPeople = this.faculties;
+      if (this.userType === "FACULTY") this.assignedPeople = this.faculties;
     } else this.assignedPeople = this.people;
   },
   methods: {
-    assignPeople() {
-      if (this.userType) {
-        if (this.userType === "FACULTY") this.assignPeople = this.faculties;
-      }
-    },
-    resetFilter() {
-      this.resetCall = true;
-      this.$refs.year.reset();
-      if (this.$auth.user.userType === "DEPARTMENT") this.$refs.user.reset();
+    async loader() {
+      this.loading = true;
+      this.query = null;
+      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
+
+      if (this.range) this.query += this.monthParam;
+
+      if (this.userType) this.query += this.userTypeParam;
+
+      if (this.selectedUser) this.query += this.userParam;
+
+      if (
+        this.$auth.user.userType === "FACULTY" ||
+        this.$auth.user.userType === "STUDENT"
+      )
+        this.query += `&user.id=${this.$auth.user.id}`;
+
       let queryString = "";
-      if (this.$store.state.auth.user.userType === "DEPARTMENT")
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
-      else
-        queryString = `department.id=${this.$store.state.auth.user.department}&user.id=${this.$store.state.auth.user.id}&deleted_ne=true`;
-      this.$store.dispatch("program/countProgrammes", {
+      queryString =
+        this.query +
+        `&department.id=${this.$auth.user.department}&deleted_ne=true`;
+        console.log('Final Query', this.query)
+      await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });
-      this.$store.dispatch("visitor/countVisitors", { qs: queryString });
-      this.$store.dispatch("training/countTrainings", {
+      await this.$store.dispatch("visitor/countVisitors", { qs: queryString });
+      await this.$store.dispatch("training/countTrainings", {
         qs: queryString,
       });
-      this.$store.dispatch("presentation/countPresentations", {
+      await this.$store.dispatch("presentation/countPresentations", {
         qs: queryString,
       });
-      this.$store.dispatch("participation/countParticipations", {
+      await this.$store.dispatch("participation/countParticipations", {
         qs: queryString,
       });
-      this.$store.dispatch("public/countPublicEngagements", {
+      await this.$store.dispatch("public/countPublicEngagements", {
         qs: queryString,
       });
-      this.$store.dispatch("research/countResearch", { qs: queryString });
-      this.$store.dispatch("publication/countPublications", {
+      await this.$store.dispatch("research/countResearch", { qs: queryString });
+      await this.$store.dispatch("publication/countPublications", {
         qs: queryString,
       });
-      this.$store.dispatch("publication/setPublicationsData", {
+      await this.$store.dispatch("publication/setPublicationsData", {
         qs: queryString,
       });
-      this.$store.dispatch("recognition/countRecognitions", {
+      await this.$store.dispatch("recognition/countRecognitions", {
         qs: queryString,
       });
-      this.$store.dispatch("patent/countPatents", { qs: queryString });
-      this.$store.dispatch("assignment/countAssignments", {
+      await this.$store.dispatch("patent/countPatents", { qs: queryString });
+      await this.$store.dispatch("assignment/countAssignments", {
         qs: queryString,
       });
+      this.loading = false;
     },
-    async getUserWise() {
+
+    resetFilter() {
+      this.getAllyears();
+      this.range = null;
+      this.selectedYear = 0;
+      this.userType = null;
+      this.yearParam = null;
+      this.monthParam = null;
+      this.userTypeParam = null;
+      this.userParam = null;
+      this.query = null;
+      this.selectedUser = null;
+      this.assignedPeople = this.people;
+    },
+    async getAllyears() {
       this.loading = true;
       let queryString = "";
-      if (this.resetCall) {
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
-      } else
-        queryString = `department.id=${this.$auth.user.department}&user.id=${this.selectedUser}&deleted_ne=true&annual_year=${this.selectedYear}`;
+      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });
@@ -871,10 +851,7 @@ export default {
       });
       this.loading = false;
     },
-    //  setYear() {
-    //     console.log('receiving....')
-    //     this.selectedYear = this.$store.state.selectedYear
-    //   },
+
     remove(item) {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
