@@ -28,13 +28,21 @@
             :rules="[v => !!v || 'Employee ID is Required']"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="3" v-if="$auth.user.userType === 'STUDENT'">
           <v-text-field
             v-model="profile.stu_batch"
-            v-if="$auth.user.userType === 'STUDENT'"
             color="green"
             label="Batch (Years)"
             :rules="[v => !!v || 'Batch is Required']"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" lg="3" v-else>
+          <v-text-field
+            v-model="profile.stu_batch"
+            color="green"
+            label="Batch (Years)"
+            :rules="[v => !!v || 'Batch is Required']"
+            disabled
           ></v-text-field>
         </v-col>
         <v-col cols="12" lg="3">

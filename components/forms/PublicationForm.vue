@@ -230,7 +230,7 @@
                 label="Publication Date"
                 hint="Example: 2011 Jan 26"
                 persistent-hint
-                @blur="dateValidate(publication.pub_date)"
+                @blur="dateValidate1(publication.pub_date)"
                 color="success"
               >
               </v-text-field>
