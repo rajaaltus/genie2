@@ -38,7 +38,8 @@ export default {
     { src: '~/plugins/moment.js' },
     { src : '~/plugins/vue-apexchart.js', ssr : false },
     { src : '~/plugins/highcharts-vue.js' },
-    { src: '~/plugins/TiptapVuetify', mode: 'client' }
+    { src: '~/plugins/TiptapVuetify', mode: 'client' },
+    { src: '~/plugins/v-calendar', ssr: false}
   ],
   /*
   ** Nuxt.js dev-modules

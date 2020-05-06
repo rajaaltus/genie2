@@ -14,16 +14,11 @@
               color="success"
             ></v-select>
           </v-col>
-          <v-col cols="12" lg="2">
-            <v-select
-              ref="month"
-              v-model="month"
-              :items="months"
-              placeholder="Select Month"
-            >
-            </v-select>
-          </v-col>
           <v-col cols="12" lg="3">
+                  <v-label>Select Range</v-label>
+                  <vc-date-picker mode="range" v-model="range" />
+                </v-col>
+          <v-col cols="12" lg="2">
             <v-select
               ref="user-type"
               v-if="$auth.user.userType === 'DEPARTMENT'"
@@ -289,26 +284,13 @@ export default {
   data() {
     return {
       report: 1,
-      months: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      range: {
+        start: null,
+        end: null
+      },
       isPreview: false,
       previewData: [],
-      month: null,
       dataLoaded: false,
-      firstDate: null,
-      lastDate: null,
       assignedPeople: [],
       loading: false,
       selectedUser: null,
@@ -349,13 +331,10 @@ export default {
       if (val === "STUDENT") this.assignedPeople = this.students;
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
-    month(val) {
-      this.isPreview = true;
-      var Month = `01-${val}-${this.selectedYear}`;
-      this.firstDate = this.$moment(Month).format("YYYY-MM-DD");
-      var lastDate = this.$moment(Month).daysInMonth();
-      this.lastDate = this.$moment(Month).format(`YYYY-MM-${lastDate}`);
-      this.monthParam = `&created_at_gt=${this.firstDate}&created_at_lt=${this.lastDate}`;
+    range(val) {
+      var range = Object.assign({}, val);
+      this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
+      console.log('Month Param:', this.monthParam)
     },
     selectedUser(val) {
       this.isPreview = true;
@@ -641,7 +620,8 @@ export default {
       this.loading = true;
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
-      if (this.month) this.query += this.monthParam;
+
+      if (this.range) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
@@ -698,14 +678,13 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
-      this.month = null;
+      this.range = null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;
       this.monthParam = null;
       this.userTypeParam = null;
       this.userParam = null;
-      this.$refs.month.reset();
       this.query = null;
       this.selectedUser = null;
       this.assignedPeople = this.people;

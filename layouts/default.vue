@@ -4,18 +4,22 @@
       v-model="drawer"
       src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
-      permanent
-      stateless
       floating
       app
       dark
     >
-      <v-list-item v-if="!mini" class="px-3 py-3">
-        <v-img src="/logo.png" max-width="35%"></v-img>
+      <div class="py-3" style="max-height:400px">
+      <v-list-item v-if="!mini" >
+        
+        <v-img src="/logo.png" max-width="30%"></v-img>
+        
       </v-list-item>
-      <v-list-item v-else class="px-2 py-6">
-        <v-img src="/logo.png" max-width="100%"></v-img>
+      <v-list-item v-else style="max-height:200px">
+        <v-img src="/logo.png" max-width="30%"></v-img>
+       
       </v-list-item>
+      </div>
+      <v-divider></v-divider>
       <!-- {{avatar.image.url}} -->
       <v-list-item class="px-2">
         <v-list-item-avatar>
