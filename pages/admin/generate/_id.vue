@@ -1,21 +1,49 @@
 <template>
   <div>
-    <PageHeader :title="$metaInfo.title" />
-     <!-- <pre>{{content}}</pre> -->
+    <!-- <PageHeader :title="$metaInfo.title" /> -->
+    <!-- <pre>{{content}}</pre> -->
     <v-row>
       <v-spacer></v-spacer>
-      
+
       <v-col cols="12" lg="2">
         <!-- <v-btn color="green" class="mr-2" small @click="copyReport">Copy</v-btn> -->
-        <v-btn color="primary" class="mr-8" small @click="exportToDoc(`Report-${$route.params.id}`)">Save as MS-Word</v-btn>
+        <!-- <v-btn color="primary" class="mr-8" small @click="exportToDoc(`Report-${$route.params.id}`)">Save as MS-Word</v-btn> -->
       </v-col>
     </v-row>
     <!-- <pre>{{content}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
-
-    <FinalEditor id="content" :content="content" />
-    <div id="download" style="display:none" v-html="content">
+    <div class="preview">
+      <v-sheet class="pa-4" color="grey lighten-3" width="100%" height="90vh">
+        <v-toolbar color="green" dark>
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-toolbar-title class="white--text"
+            >Generated Report
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-tooltip left>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon @click="exportToDoc(`Report-${$route.params.id}`)"
+                  >mdi-download</v-icon
+                >
+              </v-btn>
+            </template>
+            <span>Download as Word Doc</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-sheet
+          id="download"
+          elevation="6"
+          v-html="content"
+          class="mx-auto py-4 px-6 doc"
+          height="80vh"
+          width="90%"
+        >
+        </v-sheet>
+      </v-sheet>
     </div>
+    <!-- <FinalEditor id="content" :content="content" />
+    <div id="download" style="display:none" v-html="content"></div> -->
   </div>
 </template>
 
@@ -73,7 +101,9 @@ export default {
       <center>
       <h2>NATIONAL INSTITUTE OF MENTAL HEALTH & NEUROSCIENCES</h2>
       <h3>Bengaluru – 560029</h3>
-      <h1>Annual Report for the year ${this.$store.state.selectedYear}-${this.$store.state.selectedYear+1}</h1>
+      <h1>Annual Report for the year ${this.$store.state.selectedYear}-${
+        this.$store.state.selectedYear + 1
+      }</h1>
       </center>
       <h2>1. ABOUT THE DEPARTMENT</h2>${this.aboutData.introduction}<br>
       <h6>${this.aboutData.facilities}<br>
@@ -400,7 +430,7 @@ export default {
       var postHtml = "</body></html>";
       var html =
         // preHtml + document.getElementsByClassName('ProseMirror')[0].innerHTML + postHtml;
-        preHtml + document.getElementById('download').innerHTML + postHtml;
+        preHtml + document.getElementById("download").innerHTML + postHtml;
 
       var blob = new Blob(["\ufeff", html], {
         type: "application/msword",
@@ -437,3 +467,27 @@ export default {
   },
 };
 </script>
+
+<style>
+.preview {
+  max-width: 100%;
+}
+.doc {
+  overflow: scroll;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>

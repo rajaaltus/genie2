@@ -154,7 +154,11 @@
           </v-col>
         </v-row>
         <!-- {{ queryData }} -->
-        <v-stepper v-if="dataLoaded" v-model="report" style="border-radius: 0;">
+        <v-stepper
+          v-if="dataLoaded && !isPreview"
+          v-model="report"
+          style="border-radius: 0;"
+        >
           <v-stepper-header>
             <v-stepper-step :complete="report > 1" step="1"
               >Programmes / Events</v-stepper-step
@@ -195,19 +199,13 @@
                 :content="step1Data"
                 :step="1"
                 @next="handleNext(1)"
-                @previous="handlePrevious(1)"
                 :selectedYear="selectedYear"
                 :selectedUserType="userType"
               />
             </v-stepper-content>
 
             <v-stepper-content step="2" style="padding: 0px;">
-              <Editor
-                :content="step2Data"
-                :step="2"
-                @next="handleNext(2)"
-                @previous="handlePrevious(2)"
-              />
+              <Editor :content="step2Data" :step="2" @next="handleNext(2)" />
             </v-stepper-content>
 
             <v-stepper-content step="3" style="padding: 0px;">
@@ -220,33 +218,55 @@
             </v-stepper-content>
 
             <v-stepper-content step="4" style="padding: 0px;">
-              <Editor
-                :content="step4Data"
-                :step="4"
-                @next="handleNext(4)"
-                @previous="handlePrevious(4)"
-              />
+              <Editor :content="step4Data" :step="4" @next="handleNext(4)" />
             </v-stepper-content>
 
             <v-stepper-content step="5" style="padding: 0px;">
-              <Editor
-                :content="step5Data"
-                :step="5"
-                @next="handleNext(5)"
-                @previous="handlePrevious(5)"
-              />
+              <Editor :content="step5Data" :step="5" @next="handleNext(5)" />
             </v-stepper-content>
 
             <v-stepper-content step="6" style="padding: 0px;">
-              <Editor
-                :content="step6Data"
-                :step="6"
-                @next="handleNext(6)"
-                @previous="handlePrevious(6)"
-              />
+              <Editor :content="step6Data" :step="6" @next="handleNext(6)" />
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
+        <div class="preview" v-if="isPreview && dataLoaded">
+          <v-sheet
+            class="pa-4"
+            color="grey lighten-3"
+            width="100%"
+            height="80vh"
+          >
+            <v-toolbar color="green" dark>
+              <v-app-bar-nav-icon></v-app-bar-nav-icon>
+              <v-toolbar-title class="white--text"
+                >Report Preview - {{ this.selectedYear }}-{{
+                  this.selectedYear + 1
+                }}
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-tooltip left>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on">
+                    <v-icon @click="exportToDoc(`Preview-${$auth.user.id}`)"
+                      >mdi-download</v-icon
+                    >
+                  </v-btn>
+                </template>
+                <span>Download as Word Doc</span>
+              </v-tooltip>
+            </v-toolbar>
+            <v-sheet
+              id="download"
+              elevation="6"
+              v-html="previewData"
+              class="mx-auto pa-4 doc"
+              height="70vh"
+              width="90%"
+            >
+            </v-sheet>
+          </v-sheet>
+        </div>
       </v-card-text>
     </v-card>
   </div>
@@ -270,19 +290,21 @@ export default {
     return {
       report: 1,
       months: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ],
+      isPreview: false,
+      previewData: [],
       month: null,
       dataLoaded: false,
       firstDate: null,
@@ -328,16 +350,17 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     month(val) {
+      this.isPreview = true;
       var Month = `01-${val}-${this.selectedYear}`;
       this.firstDate = this.$moment(Month).format("YYYY-MM-DD");
       var lastDate = this.$moment(Month).daysInMonth();
       this.lastDate = this.$moment(Month).format(`YYYY-MM-${lastDate}`);
-      this.monthParam = `&created_at_gt=${this.firstDate}&created_at_lt=${this.lastDate}`
+      this.monthParam = `&created_at_gt=${this.firstDate}&created_at_lt=${this.lastDate}`;
     },
     selectedUser(val) {
-      this.userParam = `&user.id=${val}`
-    }
-    
+      this.isPreview = true;
+      this.userParam = `&user.id=${val}`;
+    },
   },
 
   computed: {
@@ -617,22 +640,24 @@ export default {
       this.report = 1;
       this.loading = true;
       this.query = null;
-      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true"
-      if(this.month)
-        this.query += this.monthParam
-     
-      if(this.userType)
-        this.query += this.userTypeParam
-     
-      if(this.selectedUser)
-        this.query += this.userParam;
+      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
+      if (this.month) this.query += this.monthParam;
 
-      if(this.$auth.user.userType==="FACULTY" || this.$auth.user.userType==="STUDENT")
-        this.query += `&user.id=${this.$auth.user.id}`
-     
-      let queryString = '';
-      queryString = this.query+`&department.id=${this.$auth.user.department}&deleted_ne=true`;
-      
+      if (this.userType) this.query += this.userTypeParam;
+
+      if (this.selectedUser) this.query += this.userParam;
+
+      if (
+        this.$auth.user.userType === "FACULTY" ||
+        this.$auth.user.userType === "STUDENT"
+      )
+        this.query += `&user.id=${this.$auth.user.id}`;
+
+      let queryString = "";
+      queryString =
+        this.query +
+        `&department.id=${this.$auth.user.department}&deleted_ne=true`;
+
       await this.$store.dispatch("program/setProgrammesData", {
         qs: queryString,
       });
@@ -662,6 +687,13 @@ export default {
       await this.$store.dispatch("assignment/setAssignmentsData", {
         qs: queryString,
       });
+      this.previewData =
+        this.step1Data +
+        this.step2Data +
+        this.step3Data +
+        this.step4Data +
+        this.step5Data +
+        this.step6Data;
       this.loading = false;
       this.dataLoaded = true;
     },
@@ -670,13 +702,15 @@ export default {
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;
-      this.monthParam=null;
+      this.monthParam = null;
       this.userTypeParam = null;
       this.userParam = null;
-      this.$refs.month.reset()
+      this.$refs.month.reset();
       this.query = null;
       this.selectedUser = null;
       this.assignedPeople = this.people;
+      this.dataLoaded = false;
+      this.isPreview = false;
     },
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
@@ -693,13 +727,55 @@ export default {
     handlePrevious(step) {
       this.report = step - 1;
     },
-    // reset() {
-    //   this.$refs.annualYear.reset();
-    //   this.$refs.userType.reset();
-    //   this.$refs.people.reset();
-    //   this.dataLoaded = false;
-    //   this.$store.dispatch("updateStepper", 0);
-    // },
+    exportToDoc(filename = "") {
+      var preHtml =
+        "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+      var postHtml = "</body></html>";
+      var html =
+        // preHtml + document.getElementsByClassName('ProseMirror')[0].innerHTML + postHtml;
+        preHtml + document.getElementById("download").innerHTML + postHtml;
+
+      var blob = new Blob(["\ufeff", html], {
+        type: "application/msword",
+      });
+
+      // Specify link url
+      var url =
+        "data:application/vnd.ms-word;charset=utf-8," +
+        encodeURIComponent(html);
+
+      // Specify file name
+      filename = filename ? filename + ".doc" : "document.doc";
+
+      // Create download link element
+      var downloadLink = document.createElement("a");
+
+      document.body.appendChild(downloadLink);
+
+      if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        // Create a link to the file
+        downloadLink.href = url;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        //triggering the function
+        downloadLink.click();
+      }
+
+      document.body.removeChild(downloadLink);
+    },
   },
 };
 </script>
+
+<style scoped>
+.preview {
+  max-width: 100%;
+}
+.doc {
+  overflow: scroll;
+}
+</style>
