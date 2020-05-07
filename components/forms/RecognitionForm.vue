@@ -30,7 +30,7 @@
               <v-text-field
                 v-model="recognition.faculty_name"
                 :rules="[(v) => !!v || 'Item is required']"
-                label="Faculty Name(s)"
+                :label="getLabel()"
                 required
                 color="success" 
               >
@@ -118,7 +118,7 @@ import Swal from "sweetalert2";
 import { mapState } from "vuex";
 import AddUser from "@/components/forms/AddUser";
 export default {
-  props: ["dataFrom", "section"],
+  props: ["dataFrom", "section", "formType"],
   components: {
     AddUser,
   },
@@ -145,6 +145,15 @@ export default {
     },
   }),
   methods: {
+    getLabel() {
+      if(this.formType==='Faculty') 
+        return `Faculty Name(s)`
+      else if(this.formType==='Student')
+        return `Student Name(s)`
+      else
+        return `Faculty Name(s)`
+    },
+    
     getLatestUsers() {
       console.log("recieving....");
       let queryString = "";
@@ -166,8 +175,6 @@ export default {
     async recognitionAdd() {
       if (this.$refs.form.validate()) {
         this.recognition.annual_year = this.$store.state.selectedYear;
-        // if (this.recognition.user == 0)
-        //   this.recognition.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.recognition.approved_date = this.$moment(today).format();
