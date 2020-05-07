@@ -724,7 +724,9 @@ export default {
 
     resetFilter() {
       this.getAllyears();
-      this.range.start = null;
+      this.range={}
+      this.range.start=null;
+      this.range.end=null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;

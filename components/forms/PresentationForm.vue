@@ -79,7 +79,6 @@
                 v-model="presentation.reference"
                 :rules="[(v) => !!v || 'Item is required']"
                 label="Reference"
-                :value="value"
                 color="success"
               ></v-textarea>
               <span class="caption font-weight-normal">Example: Nalini A, Preethish Kumar V, Polavarapu K, Vengalil S, Engel AG, Shen Xin-Ming. Congenital myasthenic syndromes: Report on 8 cases from India. 13th International Congress of Neuromuscular Disorders, Toronto, Canada, 5-9 July 2016.</span>
@@ -91,7 +90,7 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
+                    :src="image_url?'`${$axios.defaults.baseURL}${image_url}`':'/image_placeholder.png'"
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
                     max-width="100%"
@@ -141,7 +140,6 @@ export default {
     AddUser,
   },
   data: () => ({
-    dataFrom: [],
     duration_from: false,
     duration_to: false,
     valid: false,

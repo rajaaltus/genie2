@@ -16,7 +16,7 @@
           </v-col>
           <v-col cols="12" lg="3">
                   <v-label>Select Range</v-label>
-                  <vc-date-picker mode="range" v-model="range" />
+                  <vc-date-picker mode="range" v-model="range" ref="range"/>
                 </v-col>
           <v-col cols="12" lg="2">
             <v-select
@@ -150,7 +150,7 @@
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
-          v-if="dataLoaded && !isPreview && $auth.user.usertype==='DEPARTMENT'"
+          v-if="dataLoaded && !isPreview && $auth.user.userType==='DEPARTMENT'"
           v-model="report"
           style="border-radius: 0;"
         >
@@ -334,6 +334,7 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     range(val) {
+      this.isPreview = true;
       var range = Object.assign({}, val);
       this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
       console.log('Month Param:', this.monthParam)
@@ -680,7 +681,9 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
+      this.range={}
       this.range.start=null;
+      this.range.end=null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;

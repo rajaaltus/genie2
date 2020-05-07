@@ -82,7 +82,7 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
+                    :src="image_url?'`${$axios.defaults.baseURL}${image_url}`':'/image_placeholder.png'"
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
                     max-width="100%"

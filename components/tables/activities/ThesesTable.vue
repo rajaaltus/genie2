@@ -44,7 +44,7 @@
           >
             <v-card>
               <v-toolbar dark color="#4da96b">
-                <v-btn icon dark @click="dialog = false">
+                <v-btn icon dark @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
@@ -114,7 +114,7 @@
                   <v-hover>
                     <template v-slot:default="{ hover }">
                       <v-img
-                        :src="`${$axios.defaults.baseURL}${image_url}`"
+                        :src="image_url==='/image_placeholder.png'?'/image_placeholder.png':`${$axios.defaults.baseURL}${image_url}`"
                         lazy-src="/image_placeholder.png"
                         aspect-ratio="1"
                         class="grey lighten-2"
@@ -384,6 +384,7 @@ export default {
     },
     close() {
       this.dialog = false;
+      this.image_url = '/image_placeholder.png';
     },
     save() {
       if (this.editedIndex > -1) {

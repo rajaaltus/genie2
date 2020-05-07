@@ -53,7 +53,7 @@
           >
             <v-card>
               <v-toolbar dark color="#41704e">
-                <v-btn icon dark @click="dialog = false">
+                <v-btn icon dark @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Publications | Update Details</v-toolbar-title>
@@ -585,6 +585,7 @@ export default {
     },
     close() {
       this.dialog = false;
+      this.image_url = '/image_placeholder.png';
     },
     save () {
 			if (this.editedIndex > -1) {

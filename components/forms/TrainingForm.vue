@@ -72,7 +72,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="training.from_date"
-                    :return-value.sync="date"
+                    :return-value.sync="duration_from"
                     :rules="[(v) => !!v || 'Item is required']"
                     readonly
                     color="success"
@@ -90,7 +90,7 @@
                   <v-btn text color="primary" @click="duration_from = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                  <v-btn text color="primary" @click="$refs.menu.save(duration_from)">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -109,7 +109,7 @@
                   <v-text-field
                     v-model="training.to_date"
                     :rules="[(v) => !!v || 'Item is required']"
-                    :return-value.sync="date1"
+                    :return-value.sync="duration_to"
                     readonly
                     color="success"
                     label="To"
@@ -121,7 +121,7 @@
                   <v-btn text color="primary" @click="duration_to = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu1.save(date1)">
+                  <v-btn text color="primary" @click="$refs.menu1.save(duration_to)">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -155,7 +155,7 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
+                    :src="image_url?'`${$axios.defaults.baseURL}${image_url}`':'/image_placeholder.png'"
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
                     max-width="100%"
@@ -205,7 +205,6 @@ export default {
     AddUser,
   },
   data: () => ({
-    dataFrom: [],
     loading: false,
     duration_from: false,
     duration_to: false,

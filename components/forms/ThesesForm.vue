@@ -193,6 +193,8 @@ export default {
           var today = new Date();
           this.theses.approved_date = this.$moment(today).format();
           this.theses.approval_status = "Approved";
+        }else {
+          this.theses.user = this.$auth.user.id;
         }
         this.theses.department = this.$store.state.auth.user.department;
         var payload = this.theses;

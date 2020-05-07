@@ -584,8 +584,6 @@ export default {
     date: false,
     valid: true,
     authorNames: "",
-    publicationTypes: [],
-    dataFrom: [],
     publication_type: 0,
     publication: {
       annual_year: 0,
@@ -808,6 +806,8 @@ export default {
           this.publication.approved_date = this.$moment(today).format("YYYY-MM-DD");
           this.publication.approval_status = "Approved";
           this.publication.approved_by = this.$store.state.auth.user.fullname;
+        } else {
+          this.publication.user = this.$auth.user.id;
         }
         if (this.publication_type == 1) 
         {
