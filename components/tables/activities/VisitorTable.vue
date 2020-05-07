@@ -49,7 +49,7 @@
           >
             <v-card>
               <v-toolbar dark color="#41704e">
-                <v-btn icon dark @click="closeDialog()">
+                <v-btn icon dark @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
@@ -207,7 +207,7 @@
                   <v-hover>
                       <template v-slot:default="{ hover }">
                         <v-img
-                          :src="`${$axios.defaults.baseURL}${image_url}`"
+                          :src="image_url==='/image_placeholder.png'?'/image_placeholder.png':`${$axios.defaults.baseURL}${image_url}`"
                           lazy-src="/image_placeholder.png"
                           aspect-ratio="1"
                           class="grey lighten-2"
@@ -364,10 +364,6 @@ export default {
     this.reloadData();
   },
   methods: {
-    closeDialog() {
-      this.dialog = false;
-      this.image_url = null;
-    },
     async handleFileUpload(event) {
       console.log(this.image_url);
       if (this.image_url !== undefined) {
