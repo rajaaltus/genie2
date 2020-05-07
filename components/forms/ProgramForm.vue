@@ -185,8 +185,7 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
-                    lazy-src="/image_placeholder.png"
+                    :src="image_url?'`${$axios.defaults.baseURL}${image_url}`':'/image_placeholder.png'"
                     class="mt-3"
                     max-width="100%"
                     max-height="175"
@@ -237,7 +236,6 @@ export default {
   },
   data() {
     return {
-      dataFrom: [],
       duration_from: false,
       duration_to: false,
       editFrom: false,
@@ -285,7 +283,6 @@ export default {
       approvals: ["Pending", "Rejected", "Approved"]
     };
   },
-  
   methods: {
     getLatestUsers() {
       console.log('recieving....');
@@ -312,8 +309,6 @@ export default {
       if (this.$refs.form.validate()) {
         this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
-        // if (this.program.user == 0)
-        //   this.program.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT")
           this.program.approval_status = "Approved";
         if (typeof this.program.name === "object")

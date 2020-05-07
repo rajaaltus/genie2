@@ -16,7 +16,7 @@
           </v-col>
           <v-col cols="12" lg="3">
                   <v-label>Select Range</v-label>
-                  <vc-date-picker mode="range" v-model="range" />
+                  <vc-date-picker mode="range" v-model="range" ref="range"/>
                 </v-col>
           <v-col cols="12" lg="2">
             <v-select
@@ -150,7 +150,7 @@
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
-          v-if="dataLoaded && !isPreview"
+          v-if="dataLoaded && !isPreview && $auth.user.userType==='DEPARTMENT'"
           v-model="report"
           style="border-radius: 0;"
         >
@@ -225,12 +225,14 @@
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
-        <div class="preview" v-if="isPreview && dataLoaded">
+        <div class="preview" v-else>
+        <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
           <v-sheet
             class="pa-4"
             color="grey lighten-3"
             width="100%"
             height="80vh"
+            v-if="dataLoaded"
           >
             <v-toolbar color="green" dark>
               <v-app-bar-nav-icon></v-app-bar-nav-icon>
@@ -332,6 +334,7 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     range(val) {
+      this.isPreview = true;
       var range = Object.assign({}, val);
       this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
       console.log('Month Param:', this.monthParam)
@@ -621,7 +624,7 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
-      if (this.range) this.query += this.monthParam;
+      if (this.range.start) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
@@ -678,7 +681,9 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
-      this.range = null;
+      this.range={}
+      this.range.start=null;
+      this.range.end=null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;

@@ -28,7 +28,7 @@
               </v-col>
               <v-col cols="12" md="9" lg="9">
                 <ProgramForm
-                  :programNames="$store.state.program.programNames"
+                  :programNames="programNames"
                   :dataFrom="staffs"
                   section="Select Faculty / Staff from the list"
                 />
@@ -79,17 +79,24 @@ export default {
   }),
   computed: {
     ...mapState({
-      staffs: state => state.staffs
+      staffs: state => state.staffs,
+      programmesData: state => state.program.programmesData.result
     }),
-    	reportYears() {
-			return this.$store.state.reportYears
-		}
+    reportYears() {
+      return this.$store.state.reportYears
+    },
+    programNames() {
+      return this.programmesData.map(program => program.name);
+    }
   },
   async fetch({ store }) {
     await store.dispatch("setActivities");
     let qs = "";
     qs = `department.id=${store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
     await store.dispatch("setStaffs", { qs: qs });
+    let queryString = '';
+    queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+    await store.dispatch("program/setProgrammesData", {qs: queryString});
   },
 
   methods: {
