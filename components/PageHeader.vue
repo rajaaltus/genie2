@@ -8,18 +8,16 @@
         >
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="12" md="3" sm="4" lg="3" v-if="reportYears">
+      <v-col cols="12" md="3" sm="4" lg="3">
         <v-select
           filled
           color="green"
-          v-model="selectedYear"
-          :value="selectedYear"
+          v-model="year"
           :items="reportYears"
           item-text="val"
           item-value="id"
           label="Reporting Year"
           required
-          
           @input="changeReportingYear"
         ></v-select>
       </v-col>
@@ -38,24 +36,23 @@ export default {
   },
   data () {
     return {
-      
+      year: 0
     }
   },
   computed: {
     ...mapState(["selectedYear"])
   },
   mounted () {
-    this.selectedYear = this.$store.state.selectedYear
+    this.year = this.$store.state.selectedYear
   },
   methods: {
     changeReportingYear() {
-      console.log(this.selectedYear)
-      this.$store.dispatch("setReportingYear", this.selectedYear);
+      console.log(this.year)
+      this.$store.dispatch("setReportingYear", this.year);
       console.log('From store: '+ this.$store.state.selectedYear)
     },
     setYear() {
-      console.log('receiving....')
-      this.selectedYear = this.$store.state.selectedYear
+      this.year = this.$store.state.selectedYear
     }
   }
 };
