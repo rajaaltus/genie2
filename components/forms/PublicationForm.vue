@@ -584,8 +584,6 @@ export default {
     date: false,
     valid: true,
     authorNames: "",
-    publicationTypes: [],
-    dataFrom: [],
     publication_type: 0,
     publication: {
       annual_year: 0,

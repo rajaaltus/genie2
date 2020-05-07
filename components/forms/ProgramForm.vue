@@ -185,8 +185,7 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="`${$axios.defaults.baseURL}${image_url}`"
-                    lazy-src="/image_placeholder.png"
+                    :src="image_url?'`${$axios.defaults.baseURL}${image_url}`':'/image_placeholder.png'"
                     class="mt-3"
                     max-width="100%"
                     max-height="175"
@@ -237,7 +236,6 @@ export default {
   },
   data() {
     return {
-      dataFrom: [],
       duration_from: false,
       duration_to: false,
       editFrom: false,

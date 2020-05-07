@@ -53,7 +53,7 @@
           >
             <v-card>
               <v-toolbar dark color="#41704e">
-                <v-btn icon dark @click="dialog = false">
+                <v-btn icon dark @click="closeDialog()">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Publications | Update Details</v-toolbar-title>
@@ -453,6 +453,10 @@ export default {
     this.reloadData();
   },
   methods: {
+    closeDialog() {
+      this.dialog = false;
+      this.image_url = null;
+    },
     dateValidate (date) {
 			if (date) {
 				this.journalArticle.epubdate = this.$moment(date).format('YYYY MMM DD');
@@ -585,6 +589,7 @@ export default {
     },
     close() {
       this.dialog = false;
+      this.image_url = '/image_placeholder.png';
     },
     save () {
 			if (this.editedIndex > -1) {
