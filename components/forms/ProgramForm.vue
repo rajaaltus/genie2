@@ -285,7 +285,6 @@ export default {
       approvals: ["Pending", "Rejected", "Approved"]
     };
   },
-  
   methods: {
     getLatestUsers() {
       console.log('recieving....');
@@ -312,8 +311,6 @@ export default {
       if (this.$refs.form.validate()) {
         this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
-        // if (this.program.user == 0)
-        //   this.program.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT")
           this.program.approval_status = "Approved";
         if (typeof this.program.name === "object")

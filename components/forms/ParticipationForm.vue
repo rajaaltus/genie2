@@ -262,7 +262,8 @@ export default {
           var today = new Date();
           this.participation.approved_date = this.$moment(today).format();
           this.participation.approval_status = "Approved";
-        }
+        }else
+          this.participation.user = this.$store.state.auth.user.id
         this.participation.department = this.$store.state.auth.user.department;
         var payload = this.participation;
         // console.log(payload);

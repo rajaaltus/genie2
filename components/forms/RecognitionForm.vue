@@ -171,6 +171,8 @@ export default {
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.recognition.approved_date = this.$moment(today).format();
+        }else {
+          this.recognition.user = this.$auth.user.id;
         }
         this.recognition.department = this.$store.state.auth.user.department;
         var payload = this.recognition;

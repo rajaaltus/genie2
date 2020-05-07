@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     changeReportingYear() {
-      console.log(this.year)
       this.$store.dispatch("setReportingYear", this.year);
       console.log('From store: '+ this.$store.state.selectedYear)
     },

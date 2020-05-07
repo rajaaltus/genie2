@@ -1,20 +1,18 @@
 const limit = '&_limit=1000';
 export const state = () => ({
-	// programmesData: []
 	programmesData: {
 		success: false,
 		result: [],
 		error: {},
 	},
 	programmesCount: 0,
-	programNames: []
 });
 
-export const getters =  {
-	programmesData (state) {
-		return state.programmesData;
-	}
-};
+// export const getters =  {
+// 	programmesData (state) {
+// 		return state.programmesData;
+// 	}
+// };
 
 export const mutations = {
 	
@@ -56,17 +54,6 @@ export const actions = {
 			// always executed
 				
 			});
-	},
-	async setProgramNames ({commit}) {
-		const query = `
-			query {
-				programmes(sort: "id:desc", where:{annual_year: 2020, department: {id: 6}}) {
-					name
-				}
-			}
-		`;
-		const programNames = await this.$graphql.request(query);
-		commit('SET_PROGRAM_NAMES', programNames);
 	},
 	async countProgrammes ({commit}, {qs}) {
 		await this.$axios.$get(`/programmes/count?${qs}`)
