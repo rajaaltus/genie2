@@ -629,6 +629,9 @@ export default {
     reportYears() {
       return this.$store.state.reportYears;
     },
+    userProfile() {
+      return this.$store.state.user.userProfile;
+    }
   },
   async fetch({ store }) {
     await store.dispatch("user/setUserProfile", {
@@ -665,6 +668,39 @@ export default {
     if (this.userType) {
       if (this.userType === "FACULTY") this.assignedPeople = this.faculties;
     } else this.assignedPeople = this.people;
+    console.log(this.userProfile)
+    // if (this.userProfile === undefined || this.userProfile.length==0) {
+    //   Swal.fire({
+    //     title: "Alert",
+    //     text:
+    //       "Your profile seems empty! Please wait... we create your basic profile first.",
+    //     icon: "info",
+    //     showConfirmButton: false,
+    //     timer: 1500
+    //   });
+    //   this.$nuxt.$loading.start();
+    //   this.basicProfile = Object.assign(
+    //     {},
+    //     {
+    //       name: this.$auth.user.fullname,
+    //       personal_email: this.$auth.user.email,
+    //       employee_id: this.$auth.user.username,
+    //       active_status: true,
+    //       user: this.$auth.user.id,
+    //       image: null
+    //     }
+    //   );
+    //   var payload = this.basicProfile;
+    //   this.$store
+    //     .dispatch("user/addProfile", payload)
+    //     .then(resp => {
+    //       console.log(resp);
+    //     })
+    //     .catch(e => {})
+    //     .finally(() => {
+    //       this.$nuxt.$loading.finish();
+    //     });
+    // }
   },
   methods: {
     async loader() {
