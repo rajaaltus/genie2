@@ -150,7 +150,7 @@
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
-          v-if="dataLoaded && !isPreview"
+          v-if="dataLoaded && !isPreview && $auth.user.usertype==='DEPARTMENT'"
           v-model="report"
           style="border-radius: 0;"
         >
@@ -225,12 +225,14 @@
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
-        <div class="preview" v-if="isPreview && dataLoaded">
+        <div class="preview" v-else>
+        <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
           <v-sheet
             class="pa-4"
             color="grey lighten-3"
             width="100%"
             height="80vh"
+            v-if="dataLoaded"
           >
             <v-toolbar color="green" dark>
               <v-app-bar-nav-icon></v-app-bar-nav-icon>
@@ -621,7 +623,7 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
-      if (this.range) this.query += this.monthParam;
+      if (this.range.start) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
@@ -678,7 +680,7 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
-      this.range = null;
+      this.range.start=null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;

@@ -195,7 +195,8 @@ export default {
           var today = new Date();
           this.presentation.approved_date = this.$moment(today).format();
           this.presentation.approval_status = "Approved";
-        }
+        } else
+          this.presentation.user = this.$store.state.auth.user.id
         this.presentation.department = this.$store.state.auth.user.department;
         var payload = this.presentation;
         // console.log(payload);

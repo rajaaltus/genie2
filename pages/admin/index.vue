@@ -497,7 +497,7 @@ export default {
     return {
       range: {
         start: null,
-        end: null
+        end: null,
       },
       assignedPeople: [],
       loading: false,
@@ -555,10 +555,12 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     range(val) {
-      console.log(val)
+      console.log(val);
       var range = Object.assign({}, val);
-      this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
-      console.log('Month Param:', this.monthParam)
+      this.monthParam = `&created_at_gt=${this.$moment(range.start).format(
+        "YYYY-MM-DD"
+      )}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
+      console.log("Month Param:", this.monthParam);
     },
     selectedUser(val) {
       this.userParam = `&user.id=${val}`;
@@ -633,7 +635,6 @@ export default {
       id: store.state.auth.user.id,
     });
 
-    this.loading = true;
     let queryString = "";
     queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
@@ -658,7 +659,6 @@ export default {
     let queryString1 = "";
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
-    this.loading = false;
   },
 
   mounted() {
@@ -672,7 +672,7 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
-      if (this.range) this.query += this.monthParam;
+      if (this.range.start) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
@@ -688,7 +688,7 @@ export default {
       queryString =
         this.query +
         `&department.id=${this.$auth.user.department}&deleted_ne=true`;
-        console.log('Final Query', this.query)
+      console.log("Final Query", this.query);
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });
@@ -724,7 +724,7 @@ export default {
 
     resetFilter() {
       this.getAllyears();
-      this.range = null;
+      this.range.start = null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;
