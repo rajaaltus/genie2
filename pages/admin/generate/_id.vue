@@ -90,7 +90,7 @@ export default {
     formattedAbout() {
       return `
       <center>
-      <h1>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h1>
+      <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
       <h3>Bengaluru – 560029</h3>
       <h2>Period of the report:1st April ${this.$store.state.selectedYear} to 31st March ${this.$store.state.selectedYear + 1}</h2>
       </center>

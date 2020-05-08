@@ -59,7 +59,7 @@ import ThesesTable from '@/components/tables/activities/ThesesTable'
 export default {
   head() {
     return {
-      title: 'Theses / Dissertions'
+      title: 'Theses / Dissertations'
     }
   }, 
   components: {

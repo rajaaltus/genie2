@@ -1,93 +1,97 @@
 <template>
   <div>
-    <v-row no-gutters v-if="$auth.user.userType==='DEPARTMENT'">
-      <v-col cols="11" lg="11">
-        <v-select
-          v-model="theses.user"
-          :items="dataFrom"
-          item-value="id"
-          item-text="fullname"
-          outlined
-          label="Data collected From?"
-          placeholder="Select Student from the List"
-          color="success"
-          :rules="[v => !!v || 'Item is required']"
-        ></v-select>
-      </v-col>
-      <v-col cols="1" lg="1" sm="1">
-        <AddUser @new-student="getLatestStudents()" />
-      </v-col>
-    </v-row>
     <v-row>
       <v-col cols="12" md="12">
         <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="theses.student_name"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Name of the Student *"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="theses.thesis_title"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Thesis / Dissertation Title*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="theses.guide"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Guide*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="theses.coguides"
-                  :rules="[v => !!v || 'Item is required']"
-                  label="Co Guides*"
-                  required
-                >
-                </v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-select
-                  v-model="theses.status"
-                  :rules="[v => !!v || 'Item is required']"
-                  :items="thesesStatus"
-                  label="Status"
-                ></v-select>
-              </v-col>
-              <v-col cols="6">
-                <v-select
-                  v-model="theses.funding"
-                  :rules="[v => !!v || 'Item is required']"
-                  :items="thesesFunding"
-                  label="Funding"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="theses.brief_report"
-                  :rules="[v => !!v || 'Item is required']"
-                  counter="1000"
-                  maxlength="1000"
-                  hint="Only 1000 Characters are allowed."
-                  label="Brief Report"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" lg="4" md="12">
+          <v-row no-gutters v-if="$auth.user.userType === 'DEPARTMENT'">
+            <v-col cols="11" lg="11">
+              <v-select
+                v-model="theses.user"
+                :items="dataFrom"
+                item-value="id"
+                item-text="fullname"
+                label="Data received from?"
+                placeholder="Select Faculty / Staff from the List"
+                color="success"
+                :rules="[
+                  (v) => !!v || 'Selecting the Faculty / Staff is Required',
+                ]"
+              ></v-select>
+            </v-col>
+            <v-col cols="1" lg="1" sm="1">
+              <AddUser @new-student="getLatestStudents()" />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="theses.student_name"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Student Name"
+                color="success"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="theses.thesis_title"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Thesis / Dissertation Title"
+                required
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="theses.guide"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Guide"
+                required
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="theses.coguides"
+                :rules="[(v) => !!v || 'Item is required']"
+                label="Co-Guides"
+                required
+                color="success"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-select
+                v-model="theses.status"
+                :rules="[(v) => !!v || 'Item is required']"
+                :items="thesesStatus"
+                label="Status"
+                color="success"
+              ></v-select>
+            </v-col>
+            <v-col cols="6">
+              <v-select
+                v-model="theses.funding"
+                :rules="[(v) => !!v || 'Item is required']"
+                :items="thesesFunding"
+                label="Funding"
+                color="success"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-textarea
+                v-model="theses.brief_report"
+                :rules="[(v) => !!v || 'Item is required']"
+                counter
+                label="Brief Report"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" lg="4" md="12">
               <h3><span class="frm-title">Upload Images (If any)</span></h3>
               <v-hover>
                 <template v-slot:default="{ hover }">
@@ -111,22 +115,21 @@
               <input
                 ref="image"
                 type="file"
-                style="display:none;"
+                style="display: none;"
                 label="File input"
                 @change="handleFileUpload"
               />
             </v-col>
-            </v-row>
-          </v-container>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
     <v-row>
       <v-spacer></v-spacer>
-      <v-btn medium color="#d74f4f" dark @click="reset" class="mr-4">
+      <v-btn small color="#d74f4f" dark @click="reset" class="mr-4">
         Reset
       </v-btn>
-      <v-btn medium color="#57a727" dark @click="thesesAdd" class="mr-4">
+      <v-btn small color="#57a727" dark @click="thesesAdd" class="mr-4">
         Submit
       </v-btn>
     </v-row>
@@ -140,7 +143,7 @@ import AddUser from "@/components/forms/AddUser";
 export default {
   props: ["dataFrom"],
   components: {
-    AddUser
+    AddUser,
   },
   data: () => ({
     dataFrom: [],
@@ -150,29 +153,28 @@ export default {
     valid: false,
     theses: {
       annual_year: 0,
-			thesis_title: "",
-			student_name: "",
-			guide: "",
-			coguides: "",
-			status: "",
-			funding: "",
-			brief_report: "",
-			approval_status: "Pending",
-			approved_by: null,
-			approved_date: null,
-			deleted: false,
-			department: 0,
+      thesis_title: "",
+      student_name: "",
+      guide: "",
+      coguides: "",
+      status: "",
+      funding: "",
+      brief_report: "",
+      approval_status: "Pending",
+      approved_by: null,
+      approved_date: null,
+      deleted: false,
+      department: 0,
       user: 0,
       image: null,
-      rejected_reason: null
+      rejected_reason: null,
     },
     selectedFile: null,
     image_url: null,
-    thesesStatus: ['Submitted', 'Ongoing', "New"],
-		thesesFunding: ['Non_Funded', 'Part_of_Large_Fund'],
+    thesesStatus: ["Submitted", "Ongoing", "New"],
+    thesesFunding: ["Non_Funded", "Part_of_Large_Fund"],
   }),
   methods: {
-    
     getLatestStudents() {
       console.log("recieving...");
       let queryString = "";
@@ -187,13 +189,13 @@ export default {
     async thesesAdd() {
       if (this.$refs.form.validate()) {
         this.theses.annual_year = this.$store.state.selectedYear;
-        if (this.theses.user == 0)
-          this.theses.user = this.$store.state.auth.user.id;
+        // if (this.theses.user == 0)
+        //   this.theses.user = this.$store.state.auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.theses.approved_date = this.$moment(today).format();
           this.theses.approval_status = "Approved";
-        }else {
+        } else {
           this.theses.user = this.$auth.user.id;
         }
         this.theses.department = this.$store.state.auth.user.department;
@@ -201,17 +203,17 @@ export default {
         //  console.log(payload);
         this.$store
           .dispatch("theses/thesesAdd", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
             this.reset();
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire("Something Wrong!");
           });
       }
@@ -224,12 +226,12 @@ export default {
       const uploadRes = await this.$axios({
         method: "POST",
         url: "/upload",
-        data
+        data,
       });
       this.image_url = uploadRes.data[0].url;
       this.theses.image = uploadRes.data[0].id;
-    }
-  }
+    },
+  },
 };
 </script>
 

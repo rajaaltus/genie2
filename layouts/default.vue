@@ -15,7 +15,7 @@
         
       </v-list-item>
       <v-list-item v-else style="max-height:200px">
-        <v-img src="/logo.png" max-width="30%"></v-img>
+        <v-img src="/logo.png" max-width="100%"></v-img>
        
       </v-list-item>
       </div>
@@ -30,8 +30,7 @@
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
           Head of the Department 
-          </span></v-list-item-title
-        >
+          </span></v-list-item-title>
 
         <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
       </v-list-item>

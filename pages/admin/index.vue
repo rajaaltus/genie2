@@ -9,7 +9,7 @@
         </v-tab>
         <v-tab>
           <span class="mdi mdi-file-word cust-icon"></span>
-          Consolidated Report Preview
+          Reports
         </v-tab>
 
         <v-tab-item>
@@ -26,11 +26,14 @@
                     item-value="id"
                     item-text="val"
                     label="Reporting Year"
+                    placeholder="Pick Year"
                     color="success"
+                    class="disp"
                   ></v-select>
                 </v-col>
                 <v-col cols="12" lg="3">
-                  <v-label><small>Select Range</small></v-label>
+
+                  <v-label><small>Months Range</small></v-label>
                   <vc-date-picker mode="range" v-model="range" />
                 </v-col>
                 <v-col cols="12" lg="2" class="my-5">
@@ -41,6 +44,7 @@
                     dense
                     v-model="userType"
                     label="User Type"
+                    placeholder="I am a"
                     :items="userTypes"
                     color="success"
                   ></v-select>
@@ -55,6 +59,7 @@
                     :items="assignedPeople"
                     color="blue-grey lighten-2"
                     label="Faculty / Staff / Student"
+                    placeholder="My Name is"
                     item-text="fullname"
                     item-value="id"
                   >
@@ -101,31 +106,36 @@
 
                 <v-col cols="auto" lg="auto">
                   <v-row>
-                    <div class="mx-4 my-4">
+                    <v-layout align-start justify-start>
                       <v-btn
                         v-if="selectedYear"
                         :loading="loading"
                         :disabled="loading"
                         color="green"
                         x-small
-                        class="white--text"
+                        class="mt-6 mr-1 white--text"
                         fab
                         @click="loader()"
                       >
                         Go
                       </v-btn>
-                    </div>
-                    <div class="my-4">
+                      <v-tooltip right color="blue-grey darken-2">
+                      <template v-slot:activator="{ on }">
                       <v-btn
                         color="blue-grey"
                         fab
                         x-small
+                        class="mt-6 white--text"
                         dark
                         @click="resetFilter"
+                        v-on="on"
                       >
                         <v-icon>mdi-reload</v-icon>
                       </v-btn>
-                    </div>
+                      </template>
+                      <span>Reset Filter</span>
+                      </v-tooltip>
+                    </v-layout>
                   </v-row>
                 </v-col>
               </v-row>

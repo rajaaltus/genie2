@@ -3,40 +3,49 @@
     <v-card tile color="grey lighten-5">
       <v-card-text class="px-0 py-0">
         <v-row class="px-5">
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="2" class="mt-5">
             <v-select
+              outlined
+              dense
               v-model="selectedYear"
               ref="year"
               :items="reportYears"
               item-value="id"
               item-text="val"
               label="Reporting Year"
+              placeholder="Pick Year"
               color="success"
             ></v-select>
           </v-col>
           <v-col cols="12" lg="3">
-                  <v-label>Select Range</v-label>
+                  <v-label><small>Months Range</small></v-label>
                   <vc-date-picker mode="range" v-model="range" ref="range"/>
                 </v-col>
-          <v-col cols="12" lg="2">
+          <v-col cols="12" lg="2" class="mt-5">
             <v-select
+              outlined
+              dense
               ref="user-type"
               v-if="$auth.user.userType === 'DEPARTMENT'"
               v-model="userType"
               label="User Type"
+              placeholder="I am a"
               :items="userTypes"
               color="success"
             ></v-select>
           </v-col>
 
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="3" class="mt-5">
             <v-autocomplete
+              outlined
+              dense
               v-model="selectedUser"
               v-if="$auth.user.userType === 'DEPARTMENT'"
               ref="user"
               :items="assignedPeople"
               color="blue-grey lighten-2"
               label="Faculty / Staff / Student"
+              placeholder="My Name is"
               item-text="fullname"
               item-value="id"
             >
@@ -81,25 +90,36 @@
 
           <v-col cols="auto" lg="auto">
             <v-row>
-              <div class="mx-4 my-4">
-                <v-btn
-                  v-if="selectedYear"
-                  :loading="loading"
-                  :disabled="loading"
-                  color="green"
-                  x-small
-                  class="white--text"
-                  fab
-                  @click="loader()"
-                >
-                  Go
-                </v-btn>
-              </div>
-              <div class="my-4">
-                <v-btn color="blue-grey" fab x-small dark @click="resetFilter">
-                  <v-icon>mdi-reload</v-icon>
-                </v-btn>
-              </div>
+              <v-layout align-start justify-start>
+                      <v-btn
+                        v-if="selectedYear"
+                        :loading="loading"
+                        :disabled="loading"
+                        color="green"
+                        x-small
+                        class="mt-6 mr-1 white--text"
+                        fab
+                        @click="loader()"
+                      >
+                        Go
+                      </v-btn>
+                      <v-tooltip right color="blue-grey darken-2">
+                      <template v-slot:activator="{ on }">
+                      <v-btn
+                        color="blue-grey"
+                        fab
+                        x-small
+                        class="mt-6 white--text"
+                        dark
+                        @click="resetFilter"
+                        v-on="on"
+                      >
+                        <v-icon>mdi-reload</v-icon>
+                      </v-btn>
+                      </template>
+                      <span>Reset Filter</span>
+                      </v-tooltip>
+                    </v-layout>
             </v-row>
           </v-col>
           <v-spacer></v-spacer>
@@ -228,21 +248,18 @@
         <div class="preview" v-else>
         <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
           <v-sheet
-            class="pa-4"
-            color="grey lighten-3"
             width="100%"
-            height="80vh"
+            height="210vh"
             v-if="dataLoaded"
           >
-            <v-toolbar color="green" dark>
-              <v-app-bar-nav-icon></v-app-bar-nav-icon>
+            <v-toolbar color="blue-grey darken-3" dark>
               <v-toolbar-title class="white--text"
-                >Report Preview - {{ this.selectedYear }}-{{
+                >Consolidated Report for the Year - {{ this.selectedYear }} - {{
                   this.selectedYear + 1
                 }}
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-tooltip left>
+              <v-tooltip left color="blue-grey darken-3">
                 <template v-slot:activator="{ on }">
                   <v-btn icon v-on="on">
                     <v-icon @click="exportToDoc(`Preview-${$auth.user.id}`)"
@@ -250,7 +267,7 @@
                     >
                   </v-btn>
                 </template>
-                <span>Download as Word Doc</span>
+                <span>Download Report</span>
               </v-tooltip>
             </v-toolbar>
             <v-sheet
@@ -258,8 +275,8 @@
               elevation="6"
               v-html="previewData"
               class="mx-auto pa-4 doc"
-              height="70vh"
-              width="90%"
+              height="210vh"
+              width="100%"
             >
             </v-sheet>
           </v-sheet>
@@ -392,16 +409,8 @@ export default {
         .map(
           (program, index) =>
             `
-            <h4><b>${
-              index + 1
-            }. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${
-              program.name
-            }"</b> at ${program.location} from ${program.from_date} to ${
-              program.to_date
-            }, Coordinated by ${program.coordinators}.<h4>
-            <h4>Colloboration: ${program.colloborations}, Total Participants: ${
-              program.participants_count
-            }</h4>
+            <p><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}" at ${program.location}</b> from ${program.from_date} to ${ program.to_date }, Coordinated by ${program.coordinators}.</p>
+            <p>Collaboration: ${program.colloborations}, Total Participants: ${program.participants_count}</p>
             <p><b><u>Brief Report:</u></b> ${program.brief_report}</p>
             `
         )
@@ -412,11 +421,7 @@ export default {
         .map(
           (visitor, index) =>
             `
-            <h4>${index + 1}. ${visitor.name}, ${visitor.designation} from ${
-              visitor.institutional_affiliation
-            } visited our department during ${visitor.from_date} - ${
-              visitor.to_date
-            }. He / She had given a lecture titled "${visitor.title}"</h4>
+            <p><b>${index + 1}. ${visitor.name}, ${visitor.designation}</b> from ${visitor.institutional_affiliation} visited our department during ${visitor.from_date} - ${visitor.to_date}. He / She had given a lecture titled "${visitor.title}"</p>
             <p><b><u>Brief Report:</u></b> ${visitor.brief_report}</p>
             `
         )
@@ -427,13 +432,7 @@ export default {
         .map(
           (training, index) =>
             `
-            <h4>${index + 1}. ${
-              training.faculty_name
-            } attended a training programme on "${training.program_name}" at ${
-              training.institutional_affiliation
-            } from ${training.from_date} to ${training.to_date}, funded by ${
-              training.funded_by
-            }.</h4>
+            <p><b>${index + 1}. ${training.faculty_name}</b> attended a training programme on "${training.program_name}" at ${training.institutional_affiliation} from ${training.from_date} to ${training.to_date}, funded by ${training.funded_by}.</p>
             <p><b><u>Brief Report:</u></b> ${training.brief_report}</p>
             `
         )
@@ -444,13 +443,7 @@ export default {
         .map(
           (presentation, index) =>
             `
-            <h4><b>${
-              index + 1
-            }. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${
-              presentation.title
-            }" by ${presentation.faculty_name}. Co-authors: ${
-              presentation.coauthors
-            }</h4>
+            <p><b>${index + 1}. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${presentation.title}" by ${presentation.faculty_name}. Co-authors: ${presentation.coauthors}</p>
             <p><b><u>Reference:</u></b> ${presentation.reference}</p>
             `
         )
@@ -461,13 +454,7 @@ export default {
         .map(
           (participation, index) =>
             `
-            <h4><b>${index + 1}.</b> ${participation.faculty_name}, ${
-              participation.designation
-            } participated in ${participation.forum} programme titled "${
-              participation.program_name
-            }", from ${participation.from_date} to ${
-              participation.to_date
-            } at ${participation.place}.</h4>
+            <p><b>${index + 1}. ${participation.faculty_name}, ${participation.designation}</b> participated in ${participation.forum} programme titled "${participation.program_name}", from ${participation.from_date} to ${participation.to_date} at ${participation.place}.</p>
             `
         )
         .join("");
@@ -477,14 +464,8 @@ export default {
         .map(
           (item, index) =>
             `
-            <h4><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${
-              item.title
-            }" given by ${item.faculty_name} on ${item.date} at ${
-              item.place
-            }.</h4>
-            <h4><b>Program Name: </b>${
-              item.program_name
-            }, <b>Target Audience: </b>${item.target_audience}</h4>
+            <p><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${item.title}" given by ${item.faculty_name} on ${item.date} at ${item.place}.</p>
+            <p><b>Program Name: </b>${item.program_name}, <b>Target Audience: </b>${item.target_audience}</p>
             `
         )
         .join("");
@@ -494,24 +475,10 @@ export default {
         .map(
           (research, index) =>
             `
-            <h4><b>${
-              index + 1
-            }. ${research.research_status.toUpperCase()}:</b> ${
-              research.title
-            }</h4>
-            <h4>${research.investigator_type}: ${
-              research.investigator_name
-            }, Total Duration(in months): ${research.total_durations}</h4>
-            <h4>Source of Funding: ${
-              research.funding_source
-            }, Funding agency : ${research.funding_agency}, Total funding: ${
-              research.total_funds
-            }, Funding during the review period/year: ${
-              research.funding_on_review_period
-            }</h4>
-            <p><b><u>Brief Report/Abstract: </u></b> ${
-              research.research_abstract
-            }</p>
+            <p><b>${index + 1}. ${research.research_status.toUpperCase()}: ${research.title}</b></p>
+            <p>${research.investigator_type}: ${research.investigator_name}, Total Duration(in months): ${research.total_durations}</p>
+            <p>Source of Funding: ${research.funding_source}, Funding agency : ${research.funding_agency}, Total funding: ${research.total_funds}, Funding during the review period/year: ${research.funding_on_review_period}</p>
+            <p><b><u>Brief Report/Abstract: </u></b> ${research.research_abstract}</p>
             `
         )
         .join("");
@@ -521,9 +488,7 @@ export default {
         .map(
           (publication, index) =>
             `
-            <h4><b>${
-              index + 1
-            }. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></h4>
+            <p><b>${index + 1}. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></p>
             <p>${publication.reference}</p>
             `
         )
@@ -534,11 +499,7 @@ export default {
         .map(
           (recognition, index) =>
             `
-            <h4><b>${index + 1}.</b> ${
-              recognition.faculty_name
-            } has been awarded as "${recognition.award_title}" from ${
-              recognition.organization
-            },${recognition.place} on ${recognition.date}.</h4>
+            <p><b>${index + 1}. ${recognition.faculty_name}</b> has been awarded as "${recognition.award_title}" from ${recognition.organization},${recognition.place} on ${recognition.date}.</p>
             `
         )
         .join("");
@@ -548,9 +509,7 @@ export default {
         .map(
           (patent, index) =>
             `
-            <h4><b>${index + 1}. ${patent.registration_no}:</b> ${
-              patent.title
-            }</h4>
+            <p><b>${index + 1}. ${patent.registration_no}:</b> ${patent.title}</p>
             <p><b><u>Brief Report: </u></b> ${patent.brief_report}</p>
             `
         )
@@ -561,11 +520,7 @@ export default {
         .map(
           (assignment, index) =>
             `
-            <h4><b>${
-              index + 1
-            }. ${assignment.classification.toUpperCase()}:</b> ${
-              assignment.faculty_name
-            }, ${assignment.designation}, ${assignment.roles}</b></h4>
+            <p><b>${index + 1}. ${assignment.classification.toUpperCase()}:</b> ${assignment.faculty_name}, ${assignment.designation}, ${assignment.roles}</p>
             <p><b><u>Brief Report: </u></b> ${assignment.brief_report}</p>
             `
         )
@@ -574,12 +529,16 @@ export default {
 
     step1Data() {
       return (
+        `<center>
+        <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
+        <h3>Bengaluru – 560029</h3>
+        </center>`+
         `<h1><b><u>Section B:</u></b></h1>` +
         `<h3><b>1. CONFERENCES / WORKSHOPS / SEMINARS /SYMPOSIUM / SCIENTIFIC PROGRAMMES</b></h3>` +
         this.formattedProgrammes +
-        `<hr><h3><b>2. VISITORS TO THE DEPARTMENT<b></h3>` +
+        `<hr><h3><b>2. VISITORS TO THE DEPARTMENT</b></h3>` +
         this.formattedVisitors +
-        `<hr><h3><b>3. SPECIFIC TRAINING UNDERWENT BY THE FACULTY / STAFF / STUDENTS OUTSIDE NIMHANS<b></h3>` +
+        `<hr><h3><b>3. SPECIFIC TRAINING UNDERWENT BY THE FACULTY / STAFF / STUDENTS OUTSIDE NIMHANS</b></h3>` +
         this.formattedTrainings
       );
     },

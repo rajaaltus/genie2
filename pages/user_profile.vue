@@ -17,7 +17,7 @@
           color="green darken-3"
           light
         >
-          <v-tab>
+          <v-tab v-if="$auth.user.userType !== 'DEPARTMENT'">
             <span class="mdi mdi-face cust-icon"></span>
             My Profile
           </v-tab>
@@ -25,14 +25,14 @@
             <span class="mdi mdi-account-settings cust-icon"></span>
             Settings
           </v-tab>
-          <v-layout align-end justify-end class="pr-4 mb-4">
+          <v-layout align-end justify-end class="pr-4 mb-4" v-if="$auth.user.userType !== 'DEPARTMENT'">
             <v-btn color="red lighten-1" x-small dark>
               <v-icon small class="px-1">mdi-file-pdf</v-icon>
               Download CV
             </v-btn>
           </v-layout>
 
-          <v-tab-item class="pt-1">
+          <v-tab-item class="pt-1" v-if="$auth.user.userType !== 'DEPARTMENT'">
             <v-skeleton-loader
               v-if="loading"
               height="120"

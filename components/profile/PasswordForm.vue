@@ -23,7 +23,7 @@
         </v-col>
       </v-row>
       <v-layout align-end justify-end>
-        <v-btn color="green" small dark @click="updatePassword" >
+        <v-btn color="green darken-1" small dark @click="updatePassword" >
           <v-icon small class="pr-2">mdi-key-change</v-icon>
           Update Password
         </v-btn>
