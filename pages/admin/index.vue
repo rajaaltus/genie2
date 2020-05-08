@@ -633,13 +633,12 @@ export default {
       return this.$store.state.user.userProfile;
     }
   },
-  async fetch({ store }) {
-    await store.dispatch("user/setUserProfile", {
-      id: store.state.auth.user.id,
-    });
-
-    let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+  async fetch({ store, $auth }) {
+    let queryString = '';
+    if ($auth.user.userType==='DEPARTMENT')
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+      else
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&user.id=${$auth.user.id}`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
@@ -663,44 +662,11 @@ export default {
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
   },
-
+ 
   mounted() {
     if (this.userType) {
       if (this.userType === "FACULTY") this.assignedPeople = this.faculties;
     } else this.assignedPeople = this.people;
-    console.log(this.userProfile)
-    // if (this.userProfile === undefined || this.userProfile.length==0) {
-    //   Swal.fire({
-    //     title: "Alert",
-    //     text:
-    //       "Your profile seems empty! Please wait... we create your basic profile first.",
-    //     icon: "info",
-    //     showConfirmButton: false,
-    //     timer: 1500
-    //   });
-    //   this.$nuxt.$loading.start();
-    //   this.basicProfile = Object.assign(
-    //     {},
-    //     {
-    //       name: this.$auth.user.fullname,
-    //       personal_email: this.$auth.user.email,
-    //       employee_id: this.$auth.user.username,
-    //       active_status: true,
-    //       user: this.$auth.user.id,
-    //       image: null
-    //     }
-    //   );
-    //   var payload = this.basicProfile;
-    //   this.$store
-    //     .dispatch("user/addProfile", payload)
-    //     .then(resp => {
-    //       console.log(resp);
-    //     })
-    //     .catch(e => {})
-    //     .finally(() => {
-    //       this.$nuxt.$loading.finish();
-    //     });
-    // }
   },
   methods: {
     async loader() {
@@ -776,7 +742,10 @@ export default {
     async getAllyears() {
       this.loading = true;
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      if (this.$auth.user.userType==='DEPARTMENT')
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      else
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&user.id=${this.$auth.user.id}`;
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });

@@ -20,10 +20,9 @@
       </v-list-item>
       </div>
       <v-divider></v-divider>
-      <!-- {{avatar.image.url}} -->
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="avatar.avatar?`${$axios.defaults.baseURL}${avatar.avatar.url}`:'/avatar-default-icon.png'"></v-img>
+          <v-img :src="user.image?`${$axios.defaults.baseURL}${user.image.url}`:'/avatar-default-icon.png'"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title class="pl-2"
@@ -275,6 +274,7 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
+import {mapState} from 'vuex'
 export default {
   head() {
     return {
@@ -371,11 +371,13 @@ export default {
     };
   },
   computed: {
-    avatar() {
-      return this.$auth.user;
-    }
+    ...mapState({
+      user:state => state.user.userProfile
+    })
   },
-  
+  mounted() {
+    this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
+  },
   methods: {
     logout() {
       return this.$auth.logout();

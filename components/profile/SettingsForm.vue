@@ -42,7 +42,7 @@
             ref="menu"
             v-model="menu"
             :close-on-content-click="false"
-            :return-value.sync="dob"
+            :return-value.sync="menu"
             transition="scale-transition"
             offset-y
             min-width="290px"
@@ -61,7 +61,7 @@
               <v-btn text color="primary" @click="menu = false">
                 Cancel
               </v-btn>
-              <v-btn text color="primary" @click="$refs.menu.save(dob)">
+              <v-btn text color="primary" @click="$refs.menu.save(menu)">
                 OK
               </v-btn>
             </v-date-picker>
@@ -133,10 +133,11 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["userProfile"],
+  // props: ["userProfile"],
   data() {
     return {
       menu: false,
+      valid: false,
       profile: {
         name: "",
         designation: "",

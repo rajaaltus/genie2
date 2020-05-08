@@ -38,6 +38,7 @@ export default {
   props: ['profileId'],
   data () {
     return{
+      valid: false,
       newPassword: {
         password: '',
         confirmpassword: ''
