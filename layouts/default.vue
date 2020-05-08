@@ -23,7 +23,7 @@
       <!-- {{avatar.image.url}} -->
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="avatar.image?`${$axios.defaults.baseURL}${avatar.image.url}`:'/avatar-default-icon.png'"></v-img>
+          <v-img :src="avatar.avatar?`${$axios.defaults.baseURL}${avatar.avatar.url}`:'/avatar-default-icon.png'"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title class="pl-2"
@@ -372,7 +372,7 @@ export default {
   },
   computed: {
     avatar() {
-      return this.$store.state.user.userProfile;
+      return this.$auth.user;
     }
   },
   

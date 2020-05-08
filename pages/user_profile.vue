@@ -325,14 +325,14 @@ export default {
   async mounted() {
     console.log(this.userProfile);
     if (this.userProfile === undefined) {
-      Swal.fire({
-        title: "Alert",
-        text:
-          "Your profile seems empty! Please wait... we create your basic profile first.",
-        icon: "info",
-        showConfirmButton: false,
-        timer: 1500
-      });
+      // Swal.fire({
+      //   title: "Alert",
+      //   text:
+      //     "Your profile seems empty! Please wait... we create your basic profile first.",
+      //   icon: "info",
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
       this.$nuxt.$loading.start();
       this.basicProfile = Object.assign(
         {},
