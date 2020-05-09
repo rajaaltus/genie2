@@ -1,38 +1,16 @@
 <template>
   <div>
     <!-- <pre>{{ item }}</pre> -->
-    <v-row>
-      <v-col cols="12" md="10" lg="8">
-        <span
-          class="headline font-weight-bold text-center pl-3"
-          style="border-left: 5px solid #f4511e;"
-          >Consolidated Report Preview</span
-        >
-      </v-col>
-      <v-col cols="12" lg="4">
-        <v-layout align-end justify-end>
-          <v-btn
-            color="#2c549b"
-            small
-            dark
-            class="pr-2 pl-2"
-            @click="exportToDoc(`Annual Report-${$route.params.id}`)"
-            ><v-icon class="pr-1">mdi-file-word</v-icon> Download Report
-          </v-btn>
-        </v-layout>
-      </v-col>
-    </v-row>
     <!-- <pre>{{content}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
     <div class="preview">
-      <v-sheet class="pa-4" color="grey lighten-3" width="100%" height="90vh">
-        <v-toolbar color="green" dark>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-sheet  color="#41704e" width="100%" height="200vh">
+        <v-toolbar color="#41704e" dark>
           <v-toolbar-title class="white--text"
-            >Generated Report
+            >Consolidated Report Preview
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-tooltip left>
+          <v-tooltip left color="#41704e">
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon @click="exportToDoc(`Report-${$route.params.id}`)"
@@ -40,16 +18,17 @@
                 >
               </v-btn>
             </template>
-            <span>Download as Word Doc</span>
+            <span>Download Report</span>
           </v-tooltip>
         </v-toolbar>
         <v-sheet
+          tile
           id="download"
           elevation="6"
           v-html="content"
           class="mx-auto py-4 px-6 doc"
-          height="80vh"
-          width="90%"
+          height="200vh"
+          width="100%"
         >
         </v-sheet>
       </v-sheet>
@@ -111,11 +90,9 @@ export default {
     formattedAbout() {
       return `
       <center>
-      <h1>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h1>
+      <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
       <h3>Bengaluru – 560029</h3>
-      <h2>Period of the report:1st April ${
-        this.$store.state.selectedYear
-      } to 31st March ${this.$store.state.selectedYear + 1}</h2>
+      <h2>Period of the report:1st April ${this.$store.state.selectedYear} to 31st March ${this.$store.state.selectedYear + 1}</h2>
       </center>
       <h1><b><u>Section A:</u></b></h1>
       <h3>1. ABOUT THE DEPARTMENT</h3>
@@ -251,7 +228,7 @@ export default {
     formattedDiagnostics() {
       let sum = 0;
       var html = `
-      <h2> C. Diagnostic Services</h2>
+      <h3> C. Diagnostic Services</h3>
       <table>
       <tr>
       <th>Lab Services</th>

@@ -12,20 +12,21 @@
     </div>
     <v-card flat class="mb-5" v-if="step == 6">
       <v-layout align-center justify-center>
-        <v-btn id="submit" color="green darken-2" dark @click="save">
-          Save &amp; Generate
+        <v-btn small id="submit" color="green darken-2" dark @click="save">
+          Submit &amp; Generate Report
         </v-btn>
       </v-layout>
     </v-card>
     <v-card flat class="mb-5" v-else>
       <v-layout align-center justify-center>
         <v-btn
+          small
           id="submit"
           color="green darken-2"
           dark
           @click="handleNext(step)"
         >
-          Save &amp; Next
+          Approve &amp; Next
         </v-btn>
       </v-layout>
     </v-card>
