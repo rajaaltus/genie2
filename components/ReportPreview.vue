@@ -122,51 +122,6 @@
                     </v-layout>
             </v-row>
           </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto" md="auto" lg="auto">
-            <v-card
-              v-if="selectedYear && !people"
-              tile
-              class="px-2 py-2"
-              color="yellow lighten-1"
-            >
-              <span class="caption font-weight-bold">Available Reports </span>
-              <v-layout align-end justify-start>
-                <v-tooltip bottom color="#2c549b">
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      to="/admin/reports"
-                      color="#2c549b"
-                      class="mr-1"
-                      x-small
-                      fab
-                      dark
-                      v-on="on"
-                    >
-                      <v-icon small class="px-1">mdi-file-word</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Faculty Report</span>
-                </v-tooltip>
-
-                <v-tooltip bottom color="#2c549b">
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      to="/admin/reports"
-                      color="#2c549b"
-                      x-small
-                      fab
-                      dark
-                      v-on="on"
-                    >
-                      <v-icon small class="px-1">mdi-file-word</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Student Report</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card>
-          </v-col>
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
