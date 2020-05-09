@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <pre>{{selectedYear}}{{selectedUserType}}</pre> -->
     <ClientOnly>
       <tiptap-vuetify v-model="content" :extensions="extensions" />
       <template #placeholder>
@@ -11,20 +12,21 @@
     </div>
     <v-card flat class="mb-5" v-if="step == 6">
       <v-layout align-center justify-center>
-        <v-btn id="submit" color="green darken-2" dark @click="save">
-          Save &amp; Generate
+        <v-btn small id="submit" color="green darken-2" dark @click="save">
+          Submit &amp; Generate Report
         </v-btn>
       </v-layout>
     </v-card>
     <v-card flat class="mb-5" v-else>
       <v-layout align-center justify-center>
         <v-btn
+          small
           id="submit"
           color="green darken-2"
           dark
           @click="handleNext(step)"
         >
-          Save &amp; Next
+          Approve &amp; Next
         </v-btn>
       </v-layout>
     </v-card>
@@ -52,7 +54,7 @@ import {
 } from "tiptap-vuetify";
 import { mapState } from "vuex";
 export default {
-  props: ["content", "step", "selectedYear", "selectedUserType"],
+  props: ["content", "step", "selectedYear", "selectedUserType", "available"],
   components: { TiptapVuetify },
   data() {
     return {
@@ -99,11 +101,13 @@ export default {
       savedReports: state => state.reports.savedReports
     })
   },
+
   methods: {
     async handleNext() {
-    console.log('Response:', this.$store.state.report.savedReports.result);
+    console.log('Response:', this.$store.state.report.savedReport);
     console.log('Report Id: ',this.$store.state.report. reportId);
-      if (this.$store.state.report.reportId == 0) {
+    
+      if (!this.available) {
         if (this.step == 1) {
           var payload = Object.assign(
             {},

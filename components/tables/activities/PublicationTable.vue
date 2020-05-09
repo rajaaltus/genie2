@@ -5,7 +5,6 @@
       :items="publicationsData"
       sort-by="updated_at"
       sort-desc
-      :search="search"
       class="elevation-1"
       :loading="loading"
       loading-text="Loading... Please wait"
@@ -335,6 +334,7 @@ export default {
   props: ["reportYears"],
   data: () => ({
     loading: false,
+    valid: false,
     dialog: false,
     annualYear: 0,
     headers: [

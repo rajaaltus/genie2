@@ -343,6 +343,7 @@ export default {
   props: ["experiences"],
   data() {
     return {
+      fab: null,
       dialog: false,
       editedFrom: false,
       editedTo: false,

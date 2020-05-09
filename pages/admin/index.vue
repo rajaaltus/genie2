@@ -9,7 +9,7 @@
         </v-tab>
         <v-tab>
           <span class="mdi mdi-file-word cust-icon"></span>
-          Consolidated Report Preview
+          Reports
         </v-tab>
 
         <v-tab-item>
@@ -26,11 +26,14 @@
                     item-value="id"
                     item-text="val"
                     label="Reporting Year"
+                    placeholder="Pick Year"
                     color="success"
+                    class="disp"
                   ></v-select>
                 </v-col>
                 <v-col cols="12" lg="3">
-                  <v-label><small>Select Range</small></v-label>
+
+                  <v-label><small>Months Range</small></v-label>
                   <vc-date-picker mode="range" v-model="range" />
                 </v-col>
                 <v-col cols="12" lg="2" class="my-5">
@@ -41,6 +44,7 @@
                     dense
                     v-model="userType"
                     label="User Type"
+                    placeholder="I am a"
                     :items="userTypes"
                     color="success"
                   ></v-select>
@@ -55,6 +59,7 @@
                     :items="assignedPeople"
                     color="blue-grey lighten-2"
                     label="Faculty / Staff / Student"
+                    placeholder="My Name is"
                     item-text="fullname"
                     item-value="id"
                   >
@@ -101,31 +106,36 @@
 
                 <v-col cols="auto" lg="auto">
                   <v-row>
-                    <div class="mx-4 my-4">
+                    <v-layout align-start justify-start>
                       <v-btn
                         v-if="selectedYear"
                         :loading="loading"
                         :disabled="loading"
                         color="green"
                         x-small
-                        class="white--text"
+                        class="mt-6 mr-1 white--text"
                         fab
                         @click="loader()"
                       >
                         Go
                       </v-btn>
-                    </div>
-                    <div class="my-4">
+                      <v-tooltip right color="blue-grey darken-2">
+                      <template v-slot:activator="{ on }">
                       <v-btn
                         color="blue-grey"
                         fab
                         x-small
+                        class="mt-6 white--text"
                         dark
                         @click="resetFilter"
+                        v-on="on"
                       >
                         <v-icon>mdi-reload</v-icon>
                       </v-btn>
-                    </div>
+                      </template>
+                      <span>Reset Filter</span>
+                      </v-tooltip>
+                    </v-layout>
                   </v-row>
                 </v-col>
               </v-row>
@@ -629,14 +639,16 @@ export default {
     reportYears() {
       return this.$store.state.reportYears;
     },
+    userProfile() {
+      return this.$store.state.user.userProfile;
+    }
   },
-  async fetch({ store }) {
-    await store.dispatch("user/setUserProfile", {
-      id: store.state.auth.user.id,
-    });
-
-    let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+  async fetch({ store, $auth }) {
+    let queryString = '';
+    if ($auth.user.userType==='DEPARTMENT')
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+      else
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&user.id=${$auth.user.id}`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
@@ -660,7 +672,7 @@ export default {
     queryString1 = `department.id=${store.state.auth.user.department}&blocked_ne=true`;
     await store.dispatch("user/setActiveUsersList", { qs: queryString1 });
   },
-
+ 
   mounted() {
     if (this.userType) {
       if (this.userType === "FACULTY") this.assignedPeople = this.faculties;
@@ -672,11 +684,15 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
+      
+
       if (this.range.start) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
       if (this.selectedUser) this.query += this.userParam;
+
+      
 
       if (
         this.$auth.user.userType === "FACULTY" ||
@@ -740,7 +756,10 @@ export default {
     async getAllyears() {
       this.loading = true;
       let queryString = "";
-      queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      if (this.$auth.user.userType==='DEPARTMENT')
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+      else
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&user.id=${this.$auth.user.id}`;
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });

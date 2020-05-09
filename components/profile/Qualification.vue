@@ -301,6 +301,7 @@ export default {
   props: ["qualifications"],
   data() {
     return {
+      fab: null,
       dialog: false,
       editedFrom: false,
       editedTo: false,

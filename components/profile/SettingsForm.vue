@@ -28,13 +28,21 @@
             :rules="[v => !!v || 'Employee ID is Required']"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="3" v-if="$auth.user.userType === 'STUDENT'">
           <v-text-field
             v-model="profile.stu_batch"
-            v-if="$auth.user.userType === 'STUDENT'"
             color="green"
             label="Batch (Years)"
             :rules="[v => !!v || 'Batch is Required']"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" lg="3" v-else>
+          <v-text-field
+            v-model="profile.stu_batch"
+            color="green"
+            label="Batch (Years)"
+            :rules="[v => !!v || 'Batch is Required']"
+            disabled
           ></v-text-field>
         </v-col>
         <v-col cols="12" lg="3">
@@ -42,7 +50,7 @@
             ref="menu"
             v-model="menu"
             :close-on-content-click="false"
-            :return-value.sync="dob"
+            :return-value.sync="menu"
             transition="scale-transition"
             offset-y
             min-width="290px"
@@ -61,7 +69,7 @@
               <v-btn text color="primary" @click="menu = false">
                 Cancel
               </v-btn>
-              <v-btn text color="primary" @click="$refs.menu.save(dob)">
+              <v-btn text color="primary" @click="$refs.menu.save(menu)">
                 OK
               </v-btn>
             </v-date-picker>
@@ -133,10 +141,11 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["userProfile"],
+  // props: ["userProfile"],
   data() {
     return {
       menu: false,
+      valid: false,
       profile: {
         name: "",
         designation: "",

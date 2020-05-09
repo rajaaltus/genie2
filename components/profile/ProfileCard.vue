@@ -52,7 +52,7 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-switch
+        <v-switch v-if="$auth.user.userType !== 'DEPARTMENT'"
           color="green darken-3"
           label="Public Access"
           class="pl-2"
@@ -99,45 +99,9 @@ export default {
           id: this.profile.id,
           image: uploadRes.data[0].id
         })
-        this.$store
-          .dispatch("user/updateUserProfile", payload)
-          .then(resp => {
-            Swal.fire({
-              title: "Success",
-              text: "Updated Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500
-            });
-
-            if (this.imageToDelete) {
-              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
-              this.imageToDelete = null;
-            }
-          })
-          .catch(err => {
-            Swal.fire({
-              title: "Something Wrong!",
-              text: err,
-              icon: "warning",
-              showConfirmButton: false,
-              timer: 4500
-            });
-          });
-      } else {
-        this.profile.image = null;
-        this.selectedFile = event.target.files[0];
-        const data = new FormData();
-        data.append("files", this.selectedFile);
-        const uploadRes = await this.$axios({
-          method: "POST",
-          url: "/upload",
-          data
-        });
-        this.image_url = uploadRes.data[0].url;
-        var payload = Object.assign({}, {
-          id: this.profile.id,
-          image: uploadRes.data[0].id
+        var userPayload = Object.assign({}, {
+          id: this.$auth.user.id,
+          avatar: uploadRes.data[0].id
         })
         this.$store
           .dispatch("user/updateUserProfile", payload)
@@ -164,6 +128,52 @@ export default {
               timer: 4500
             });
           });
+          this.$store.dispatch("user/updateUser", userPayload)
+      } else {
+        this.profile.image = null;
+        this.selectedFile = event.target.files[0];
+        const data = new FormData();
+        data.append("files", this.selectedFile);
+        const uploadRes = await this.$axios({
+          method: "POST",
+          url: "/upload",
+          data
+        });
+        this.image_url = uploadRes.data[0].url;
+        var payload = Object.assign({}, {
+          id: this.profile.id,
+          image: uploadRes.data[0].id
+        })
+        var userPayload = Object.assign({}, {
+          id: this.$auth.user.id,
+          avatar: uploadRes.data[0].id
+        })
+        this.$store
+          .dispatch("user/updateUserProfile", payload)
+          .then(resp => {
+            Swal.fire({
+              title: "Success",
+              text: "Updated Successfully!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+
+            if (this.imageToDelete) {
+              this.$store.dispatch("deleteFile", { id: this.imageToDelete });
+              this.imageToDelete = null;
+            }
+          })
+          .catch(err => {
+            Swal.fire({
+              title: "Something Wrong!",
+              text: err,
+              icon: "warning",
+              showConfirmButton: false,
+              timer: 4500
+            });
+          });
+          this.$store.dispatch("user/updateUser", userPayload)
       }
     },
   }

@@ -5,6 +5,7 @@
       src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
       floating
+      permanent
       app
       dark
     >
@@ -15,23 +16,21 @@
         
       </v-list-item>
       <v-list-item v-else style="max-height:200px">
-        <v-img src="/logo.png" max-width="30%"></v-img>
+        <v-img src="/logo.png" max-width="100%"></v-img>
        
       </v-list-item>
       </div>
       <v-divider></v-divider>
-      <!-- {{avatar.image.url}} -->
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="avatar.image?`${$axios.defaults.baseURL}${avatar.image.url}`:'/avatar-default-icon.png'"></v-img>
+          <v-img :src="user.image?`${$axios.defaults.baseURL}${user.image.url}`:'/avatar-default-icon.png'"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title class="pl-2"
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
           Head of the Department 
-          </span></v-list-item-title
-        >
+          </span></v-list-item-title>
 
         <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
       </v-list-item>
@@ -275,6 +274,7 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
+import {mapState} from 'vuex'
 export default {
   head() {
     return {
@@ -371,14 +371,16 @@ export default {
     };
   },
   computed: {
-    avatar() {
-      return this.$store.state.user.userProfile;
-    }
+    ...mapState({
+      user:state => state.user.userProfile
+    })
   },
-  
+  mounted() {
+    this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
+  },
   methods: {
-    logout() {
-      return this.$auth.logout();
+    async logout() {
+      await  this.$auth.logout();
     }
   }
 };

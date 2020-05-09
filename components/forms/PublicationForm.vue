@@ -198,6 +198,7 @@
                 required
                 label="Authors"
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -210,6 +211,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -221,6 +223,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -230,7 +233,7 @@
                 label="Publication Date"
                 hint="Example: 2011 Jan 26"
                 persistent-hint
-                @blur="dateValidate(publication.pub_date)"
+                @blur="dateValidate1(publication.pub_date)"
                 color="success"
               >
               </v-text-field>
@@ -240,6 +243,7 @@
                 v-model="publication.volume_no"
                 label="Volume / Issue No"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -248,6 +252,7 @@
                 v-model="publication.pages"
                 label="Pages"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -292,6 +297,7 @@
                 required
                 label="Authors"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -304,6 +310,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -312,6 +319,7 @@
                 v-model="publication.edition"
                 label="Edition"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -320,6 +328,7 @@
                 v-model="publication.place"
                 label="Place"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -328,6 +337,7 @@
                 v-model="publication.publisher"
                 label="Publisher"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -336,6 +346,7 @@
                 v-model="publication.year"
                 label="Year"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -379,6 +390,7 @@
                 required
                 label="Authors"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -391,6 +403,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -401,6 +414,7 @@
                 v-model="publication.editor_names"
                 label="Editors"
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -417,6 +431,7 @@
                 v-model="publication.place"
                 label="Place"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -425,6 +440,7 @@
                 v-model="publication.publisher"
                 label="Publisher"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -433,6 +449,7 @@
                 v-model="publication.year"
                 label="Year"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -464,6 +481,7 @@
                 required
                 label="Authors"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -476,6 +494,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -484,6 +503,7 @@
                 v-model="publication.edition"
                 label="Edition"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -492,6 +512,7 @@
                 v-model="publication.place"
                 label="Place"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -500,6 +521,7 @@
                 v-model="publication.publisher"
                 label="Publisher"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -508,6 +530,7 @@
                 v-model="publication.year"
                 label="Year"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -576,14 +599,16 @@ export default {
   components: {
     AddUser,
   },
-  data: () => ({
-    loading: false,
+  data() {
+    return {
+      loading: false,
     search: "",
     loader: null,
     loading5: false,
     date: false,
     valid: true,
     authorNames: "",
+    authors: null,
     publication_type: 0,
     publication: {
       annual_year: 0,
@@ -627,11 +652,11 @@ export default {
     },
     loaderdialog: false,
     classifications: ["International", "National", "NotApplicable", "Others"],
-    selectedFile: null,
-    image_url: null,
-  }),
+    }
+  },
+
   methods: {
-    getLatestUsers() {
+    getLatestUsers() {``
       console.log("recieving....");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
@@ -710,7 +735,6 @@ export default {
     },
     composeReference() {
       console.log("Publication Type:" + this.publication_type);
-      if (this.$refs.form.validate()) {
         if (this.publication_type == 1) {
           if (this.authorNames == [])
             Swal.fire("Enter Author Name before composing...");
@@ -789,7 +813,6 @@ export default {
             this.publication.publisher +
             ";" +
             this.publication.year;
-      }
     },
     async publicationAdd() {
       if (this.$refs.form.validate()) {
@@ -797,15 +820,13 @@ export default {
         this.publication.publication_type = this.publicationTypes[
           this.publication_type - 1
         ].value;
-        // if (this.publication.user == 0)
-        //   this.publication.user = this.$store.state.auth.user.id;
         this.publication.department = this.$store.state.auth.user.department;
 
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.publication.approved_date = this.$moment(today).format("YYYY-MM-DD");
           this.publication.approval_status = "Approved";
-          this.publication.approved_by = this.$store.state.auth.user.fullname;
+          // this.publication.approved_by = this.$store.state.auth.user.fullname;
         } else {
           this.publication.user = this.$auth.user.id;
         }
@@ -844,11 +865,32 @@ export default {
               timer: 1500,
             });
             this.reset();
+            this.reloadData();
           })
           .catch((err) => {
             Swal.fire(err.response);
           });
       }
+    },
+    async reloadData() {
+      this.loading = true;
+      let queryString = "";
+
+      if (
+        this.$store.state.auth.user.userType === "Faculty" ||
+        this.$store.state.auth.user.userType === "Student"
+      ) {
+        queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
+        await this.$store.dispatch("publication/setPublicationsData", {
+          qs: queryString
+        });
+      } else {
+        queryString = `department.id=${this.$auth.user.department}&annual_year=${this.$store.state.selectedYear}&deleted_ne=true`;
+        await this.$store.dispatch("publication/setPublicationsData", {
+          qs: queryString
+        });
+      }
+      this.loading = false;
     },
     async handleFileUpload(event) {
       this.selectedFile = event.target.files[0];

@@ -18,10 +18,15 @@
         </v-chip>
       </template>
       <template v-slot:top>
-        <v-toolbar flat color="#ebebeb" class="d-flex justify mt-4 pt-1">
+        		  <v-toolbar
+          flat
+          color="#ebebeb"
+          class="d-flex justify mt-4 pt-1"
+          style="border-radius:0;"
+        >
           <v-toolbar-title
             ><span class="frm-title"
-              >Theses / Dissertions</span
+              >Theses / Dissertations</span
             ></v-toolbar-title
           >
           <v-divider class="mx-4" inset vertical></v-divider>
@@ -33,6 +38,7 @@
             label="Reporting Year"
             required
             class="justify-end mt-6"
+            color="success"
             @change="reloadData()"
           ></v-select>
           <v-spacer></v-spacer>
@@ -43,12 +49,12 @@
             transition="dialog-bottom-transition"
           >
             <v-card>
-              <v-toolbar dark color="#4da96b">
+              <v-toolbar dark color="#41704e">
                 <v-btn icon dark @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title
-                  >Theses / Dissertation | Update Details</v-toolbar-title
+                  >Theses / Dissertation</v-toolbar-title
                 >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -66,48 +72,53 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.student_name"
-                        label="Name of the Student"
+                        label="Student Name"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.thesis_title"
-                        label="Theses Title"
+                        label="Thesis Title"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.guide"
                         label="Guide"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.coguides"
                         label="Co-Guides"
+                        color="success"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-select
                         v-model="editedItem.status"
                         :items="thesesStatus"
-                        label="Theses Status"
+                        label="Status"
+                        color="success"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
                         v-model="editedItem.funding"
                         :items="thesesFunding"
-                        label="Theses Funding"
+                        label="Funding"
+                        color="success"
                       ></v-select>
                     </v-col>
                     <v-col>
                       <v-textarea
                         v-model="editedItem.brief_report"
-                        counter="1000"
-                        maxlength="1000"
-                        hint="Only 1000 Characters are allowed."
+                        counter
                         label="Brief Report"
+                        color="success"
                       ></v-textarea>
                     </v-col>
                   </v-row>

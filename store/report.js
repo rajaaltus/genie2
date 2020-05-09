@@ -1,11 +1,7 @@
 const limit = '&_limit=1000';
 export const state = () => ({
-	
-	savedReports: {
-		success: false,
-		result: [],
-		error: {},
-  },
+  savedReport: null,
+  errors:{},
   reportId: 0,
   generatedReport: null
 	
@@ -15,24 +11,20 @@ export const mutations = {
   INITIALIZE_REPORT_ID(state, val) {
     state.reportId = val;
   },
-  SET_REPORTS(state, response) {
-    state.savedReports.success = true;
-    state.reportId = response[0].id;
-    state.savedReports.result = response;
-    
+  SET_REPORTS(state, savedReport) {
+    state.savedReport = savedReport;
+    state.reportId = savedReport[0].id;
   },
   SET_POST_REPORTS(state, response) {
-    state.savedReports.success = true;
+    state.savedReports = response;
     state.reportId = response.id;
-    state.savedReports.result = response;
-    
   },
   SET_GEN_REPORT(state, response) {
     state.generatedReport = response;
   },
   SET_REPORT_ERRORS(state, response) {
      //console.log('Error: ', response.data.data.errors);
-     state.savedReports.error =  response;
+     state.errors =  response;
   }
 };
 
