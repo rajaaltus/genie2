@@ -656,7 +656,7 @@ export default {
   },
 
   methods: {
-    getLatestUsers() {
+    getLatestUsers() {``
       console.log("recieving....");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
