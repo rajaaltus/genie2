@@ -15,9 +15,9 @@
             ></v-select>
           </v-col>
           <v-col cols="12" lg="3">
-                  <v-label>Select Range</v-label>
-                  <vc-date-picker mode="range" v-model="range" ref="range"/>
-                </v-col>
+            <v-label>Select Range</v-label>
+            <vc-date-picker mode="range" v-model="range" ref="range" />
+          </v-col>
           <v-col cols="12" lg="2">
             <v-select
               ref="user-type"
@@ -150,7 +150,9 @@
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
-          v-if="dataLoaded && !isPreview && $auth.user.userType==='DEPARTMENT'"
+          v-if="
+            dataLoaded && !isPreview && $auth.user.userType === 'DEPARTMENT'
+          "
           v-model="report"
           style="border-radius: 0;"
         >
@@ -194,39 +196,35 @@
                 :content="step1Data"
                 :step="1"
                 @next="handleNext(1)"
+                :available="showAvailableReports"
                 :selectedYear="selectedYear"
                 :selectedUserType="userType"
               />
             </v-stepper-content>
 
             <v-stepper-content step="2" style="padding: 0px;">
-              <Editor :content="step2Data" :step="2" @next="handleNext(2)" />
+              <Editor :content="step2Data" :step="2" @next="handleNext(2)" :available="showAvailableReports"/>
             </v-stepper-content>
 
             <v-stepper-content step="3" style="padding: 0px;">
-              <Editor
-                :content="step3Data"
-                :step="3"
-                @next="handleNext(3)"
-                @previous="handlePrevious(3)"
-              />
+              <Editor :content="step3Data" :step="3" @next="handleNext(3)" :available="showAvailableReports"/>
             </v-stepper-content>
 
             <v-stepper-content step="4" style="padding: 0px;">
-              <Editor :content="step4Data" :step="4" @next="handleNext(4)" />
+              <Editor :content="step4Data" :step="4" @next="handleNext(4)" :available="showAvailableReports"/>
             </v-stepper-content>
 
             <v-stepper-content step="5" style="padding: 0px;">
-              <Editor :content="step5Data" :step="5" @next="handleNext(5)" />
+              <Editor :content="step5Data" :step="5" @next="handleNext(5)" :available="showAvailableReports"/>
             </v-stepper-content>
 
             <v-stepper-content step="6" style="padding: 0px;">
-              <Editor :content="step6Data" :step="6" @next="handleNext(6)" />
+              <Editor :content="step6Data" :step="6" @next="handleNext(6)" :available="showAvailableReports"/>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
         <div class="preview" v-else>
-        <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
+          <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
           <v-sheet
             class="pa-4"
             color="grey lighten-3"
@@ -266,13 +264,13 @@
         </div>
       </v-card-text>
     </v-card>
-    <AvailableReports  :report="showAvailableReports" />
+    <AvailableReports :report="showAvailableReports" />
   </div>
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import AvailableReports from "@/components/AvailableReports"
+import Swal from "sweetalert2";
+import AvailableReports from "@/components/AvailableReports";
 import { mapState } from "vuex";
 import PageHeader from "@/components/PageHeader";
 import Editor from "@/components/Editor";
@@ -285,14 +283,14 @@ export default {
   components: {
     PageHeader,
     Editor,
-    AvailableReports
+    AvailableReports,
   },
   data() {
     return {
       report: 1,
       range: {
         start: null,
-        end: null
+        end: null,
       },
       showAvailableReports: false,
       isPreview: false,
@@ -341,8 +339,10 @@ export default {
     range(val) {
       this.isPreview = true;
       var range = Object.assign({}, val);
-      this.monthParam = `&created_at_gt=${this.$moment(range.start).format("YYYY-MM-DD")}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
-      console.log('Month Param:', this.monthParam)
+      this.monthParam = `&created_at_gt=${this.$moment(range.start).format(
+        "YYYY-MM-DD"
+      )}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
+      console.log("Month Param:", this.monthParam);
     },
     selectedUser(val) {
       this.isPreview = true;
@@ -388,7 +388,7 @@ export default {
       patents: (state) => state.patent.patentsData.result,
       assignments: (state) => state.assignment.assignmentsData.result,
       theses: (state) => state.theses.thesesData.result,
-      savedReport: state => state.report.savedReports
+      savedReport: (state) => state.report.savedReports,
     }),
     // formattedAbout() {
     //   return this.aboutData
@@ -637,16 +637,21 @@ export default {
       if (this.selectedUser) this.query += this.userParam;
 
       if (this.yearParam && this.userTypeParam) {
-        let queryString = '';
-        queryString = this.yearParam+`&userType=${this.userType}&department.id=${this.$auth.user.department}`;
-        await this.$store.dispatch('report/setSavedReport', {fq: queryString})
-        if(this.$store.state.report.savedReport[0] && this.$store.state.report.savedReport[0].id){
+        let queryString = "";
+        queryString =
+          this.yearParam +
+          `&userType=${this.userType}&department.id=${this.$auth.user.department}`;
+        await this.$store.dispatch("report/setSavedReport", {
+          fq: queryString,
+        });
+        if (
+          this.$store.state.report.savedReport[0] &&
+          this.$store.state.report.savedReport[0].id
+        ) {
           this.showAvailableReports = true;
-        }
-        else{
+        } else {
           this.showAvailableReports = false;
         }
-          
       }
 
       if (
@@ -700,12 +705,12 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
-      this.report=1;
-      this.range={}
-      this.previewData=[];
-      this.range.start=null;
-      this.showAvailableReports= false;
-      this.range.end=null;
+      this.report = 1;
+      this.range = {};
+      this.previewData = [];
+      this.range.start = null;
+      this.showAvailableReports = false;
+      this.range.end = null;
       this.selectedYear = 0;
       this.userType = null;
       this.yearParam = null;

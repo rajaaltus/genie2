@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <pre>{{selectedYear}}{{selectedUserType}}</pre> -->
     <ClientOnly>
       <tiptap-vuetify v-model="content" :extensions="extensions" />
       <template #placeholder>
@@ -52,7 +53,7 @@ import {
 } from "tiptap-vuetify";
 import { mapState } from "vuex";
 export default {
-  props: ["content", "step", "selectedYear", "selectedUserType"],
+  props: ["content", "step", "selectedYear", "selectedUserType", "available"],
   components: { TiptapVuetify },
   data() {
     return {
@@ -100,14 +101,12 @@ export default {
     })
   },
 
-  
   methods: {
-    
     async handleNext() {
-    console.log('Response:', this.$store.state.report.savedReports.result);
+    console.log('Response:', this.$store.state.report.savedReport);
     console.log('Report Id: ',this.$store.state.report. reportId);
     
-      if (this.$store.state.report.reportId == 0) {
+      if (!this.available) {
         if (this.step == 1) {
           var payload = Object.assign(
             {},
