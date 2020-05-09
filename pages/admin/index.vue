@@ -674,11 +674,15 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
+      
+
       if (this.range.start) this.query += this.monthParam;
 
       if (this.userType) this.query += this.userTypeParam;
 
       if (this.selectedUser) this.query += this.userParam;
+
+      
 
       if (
         this.$auth.user.userType === "FACULTY" ||

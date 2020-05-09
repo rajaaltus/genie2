@@ -86,7 +86,7 @@ export default {
 				},
         tokenType: 'Bearer',
 			}
-		}
+    }
   },
     /*
   ** Axios module configuration

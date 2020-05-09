@@ -266,10 +266,13 @@
         </div>
       </v-card-text>
     </v-card>
+    <AvailableReports  :report="showAvailableReports" />
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+import AvailableReports from "@/components/AvailableReports"
 import { mapState } from "vuex";
 import PageHeader from "@/components/PageHeader";
 import Editor from "@/components/Editor";
@@ -282,6 +285,7 @@ export default {
   components: {
     PageHeader,
     Editor,
+    AvailableReports
   },
   data() {
     return {
@@ -290,6 +294,7 @@ export default {
         start: null,
         end: null
       },
+      showAvailableReports: false,
       isPreview: false,
       previewData: [],
       dataLoaded: false,
@@ -383,6 +388,7 @@ export default {
       patents: (state) => state.patent.patentsData.result,
       assignments: (state) => state.assignment.assignmentsData.result,
       theses: (state) => state.theses.thesesData.result,
+      savedReport: state => state.report.savedReports
     }),
     // formattedAbout() {
     //   return this.aboutData
@@ -630,6 +636,19 @@ export default {
 
       if (this.selectedUser) this.query += this.userParam;
 
+      if (this.yearParam && this.userTypeParam) {
+        let queryString = '';
+        queryString = this.yearParam+`&userType=${this.userType}&department.id=${this.$auth.user.department}`;
+        await this.$store.dispatch('report/setSavedReport', {fq: queryString})
+        if(this.$store.state.report.savedReport[0] && this.$store.state.report.savedReport[0].id){
+          this.showAvailableReports = true;
+        }
+        else{
+          this.showAvailableReports = false;
+        }
+          
+      }
+
       if (
         this.$auth.user.userType === "FACULTY" ||
         this.$auth.user.userType === "STUDENT"
@@ -681,8 +700,11 @@ export default {
       this.dataLoaded = true;
     },
     resetFilter() {
+      this.report=1;
       this.range={}
+      this.previewData=[];
       this.range.start=null;
+      this.showAvailableReports= false;
       this.range.end=null;
       this.selectedYear = 0;
       this.userType = null;

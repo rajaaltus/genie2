@@ -5,6 +5,7 @@
       src="/dashboard_back_1.jpg"
       :mini-variant.sync="mini"
       floating
+      permanent
       app
       dark
     >
@@ -379,8 +380,8 @@ export default {
     this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
   },
   methods: {
-    logout() {
-      return this.$auth.logout();
+    async logout() {
+      await  this.$auth.logout();
     }
   }
 };

@@ -99,10 +99,14 @@ export default {
       savedReports: state => state.reports.savedReports
     })
   },
+
+  
   methods: {
+    
     async handleNext() {
     console.log('Response:', this.$store.state.report.savedReports.result);
     console.log('Report Id: ',this.$store.state.report. reportId);
+    
       if (this.$store.state.report.reportId == 0) {
         if (this.step == 1) {
           var payload = Object.assign(
