@@ -256,7 +256,14 @@ export default {
 				}
 			})
 				.then(data => {
-					this.$router.push('/admin');
+          console.log(data.data.user)
+          if(data.data.user.userType==='SUPER_ADMIN') {
+            this.$store.dispatch('setUserData',data.data.user);
+            this.$router.push('/super');
+          }
+            
+          else
+            this.$router.push('/admin');
 				})
 				.catch(err => {
 					Swal.fire({

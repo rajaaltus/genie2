@@ -381,6 +381,7 @@ export default {
   methods: {
     async logout() {
       await  this.$auth.logout();
+      window.location.reload();
     }
   }
 };
