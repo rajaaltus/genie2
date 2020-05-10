@@ -21,7 +21,7 @@
           >
         </v-list-item>
       </v-list>
-       <div id="savedDoc" v-html="formattedDoc" style="display:none"></div>
+       <div id="savedDoc" v-if="savedDoc" v-html="formattedDoc" style="display:none"></div>
     </v-bottom-sheet>
   </div>
 </template>
@@ -47,16 +47,17 @@ export default {
     }),
     formattedDoc() {
       var final = '';
-      final = this.savedDoc.section_a;
-      if(this.savedDoc.section_b)
+      if(this.savedDoc)
+        final = this.savedDoc.section_a;
+      if(this.savedDoc.section_b!==null)
         final += this.savedDoc.section_b
-      if(this.savedDoc.section_c)
+      if(this.savedDoc.section_c!==null)
         final += this.savedDoc.section_c
-      if(this.savedDoc.section_d)
+      if(this.savedDoc.section_d!==null)
         final += this.savedDoc.section_d
-      if(this.savedDoc.section_e)
+      if(this.savedDoc.section_e!==null)
         final += this.savedDoc.section_e
-      if(this.savedDoc.section_f)
+      if(this.savedDoc.section_f!==null)
         final += this.savedDoc.section_f
       return final;
     }

@@ -90,6 +90,7 @@
                 :items="authors"
                 label="Authors"
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -104,6 +105,7 @@
                 required
                 text-val="journalArticle.title"
                 color="success"
+                @blur="composeReference"
               >
               </v-textarea>
             </v-col>
@@ -115,6 +117,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 required
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -135,6 +138,7 @@
                 value="jouralArticle.volume"
                 label="Volume / Issue No"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -144,6 +148,7 @@
                 value="jouralArticle.pages"
                 label="Pages"
                 color="success"
+                @blur="composeReference"
               >
               </v-text-field>
             </v-col>
@@ -602,61 +607,62 @@ export default {
   data() {
     return {
       loading: false,
-    search: "",
-    loader: null,
-    loading5: false,
-    date: false,
-    valid: true,
-    authorNames: "",
-    authors: null,
-    publication_type: 0,
-    publication: {
-      annual_year: 0,
-      publication_type: "",
-      classification: "",
-      pmid: "",
-      article_title: "",
-      journal_title: "",
-      pub_date: "",
-      volume_no: "",
-      book_title: "",
-      edition: "",
-      place: "",
-      publisher: "",
-      year: null,
-      chapter_title: "",
-      editor_names: "",
-      reference: "",
-      approved_by: "",
-      approved_date: "",
-      deleted: false,
-      authors: "",
-      approval_status: "Pending",
-      department: 0,
-      user: 0,
-      pages: "",
-    },
-    journalArticle: {
-      title: null,
-      fulljournalname: null,
-      epubdate: null,
-      volume: null,
-      pages: null,
-    },
-    editedJournal: {
-      title: null,
-      fulljournalname: null,
-      epubdate: "",
-      volume: "",
-      pages: "",
-    },
-    loaderdialog: false,
-    classifications: ["International", "National", "NotApplicable", "Others"],
-    }
+      search: "",
+      loader: null,
+      loading5: false,
+      date: false,
+      valid: true,
+      authorNames: "",
+      authors: null,
+      publication_type: 0,
+      publication: {
+        annual_year: 0,
+        publication_type: "",
+        classification: "",
+        pmid: "",
+        article_title: "",
+        journal_title: "",
+        pub_date: "",
+        volume_no: "",
+        book_title: "",
+        edition: "",
+        place: "",
+        publisher: "",
+        year: null,
+        chapter_title: "",
+        editor_names: "",
+        reference: "",
+        approved_by: "",
+        approved_date: "",
+        deleted: false,
+        authors: "",
+        approval_status: "Pending",
+        department: 0,
+        user: 0,
+        pages: "",
+      },
+      journalArticle: {
+        title: "",
+        fulljournalname: "",
+        epubdate: "",
+        volume: "",
+        pages: "",
+      },
+      editedJournal: {
+        title: "",
+        fulljournalname: "",
+        epubdate: "",
+        volume: "",
+        pages: "",
+      },
+      loaderdialog: false,
+      classifications: ["International", "National", "NotApplicable", "Others"],
+    };
   },
 
   methods: {
-    getLatestUsers() {``
+    getLatestUsers() {
+      ``;
       console.log("recieving....");
       let queryString = "";
       queryString = `department.id=${this.$store.state.auth.user.department}&userType=FACULTY&blocked_ne=true`;
@@ -671,7 +677,36 @@ export default {
       this.dataFrom = this.$store.state.students;
     },
     reset() {
-      this.$refs.form.reset();
+       this.$refs.form.reset();
+       this.journalArticle.title = "";
+          this.journalArticle.fulljournalname = "";
+          this.journalArticle.epubdate = "";
+          this.journalArticle.volume = "";
+          this.journalArticle.pages = "";
+      this.publication.annual_year= 0,
+        this.publication.publication_type= "",
+        this.publication.classification= "",
+        this.publication.pmid= "",
+        this.publication.article_title= "",
+        this.publication.journal_title= "",
+        this.publication.pub_date= "",
+        this.publication.volume_no= "",
+        this.publication.book_title= "",
+        this.publication.edition= "",
+        this.publication.place= "",
+        this.publication.publisher= "",
+        this.publication.chapter_title= "",
+        this.publication.editor_names= "",
+        this.publication.reference= "",
+        this.publication.approved_by= "",
+        this.publication.approved_date= "",
+        this.publication.deleted= false,
+        this.publication.authors= "",
+        this.publication.approval_status= "Pending",
+        this.publication.department= 0,
+        this.publication.user= 0,
+        this.publication.pages= "",
+      
       this.image_url = null;
     },
     dateValidate(date) {
@@ -735,87 +770,69 @@ export default {
     },
     composeReference() {
       console.log("Publication Type:" + this.publication_type);
-        if (this.publication_type == 1) {
-          if (this.authorNames == [])
-            Swal.fire("Enter Author Name before composing...");
-          else {
-            console.log(
-              "Journal Article:" + JSON.stringify(this.journalArticle)
-            );
-            this.publication.reference =
-              this.authorNames.join() +
-              ". " +
-              this.journalArticle.title +
-              ". " +
-              this.journalArticle.fulljournalname +
-              ". " +
-              this.journalArticle.epubdate +
-              ";" +
-              this.journalArticle.volume +
-              ":" +
-              this.journalArticle.pages;
-          }
-        }
-        if (this.publication_type == 2) {
-          // console.log(this.publication.reference)
+      this.publication.year= this.publication.year>0?this.publication.year:''
+      if (this.publication_type == 1) {
+          
           this.publication.reference =
-            this.publication.authors +
-            ". " +
-            this.publication.article_title +
-            ". " +
-            this.publication.journal_title +
-            ". " +
-            this.publication.pub_date +
-            ":" +
-            this.publication.pages;
-        }
-        if (this.publication_type == 3) {
-          this.publication.reference =
-            this.publication.authors +
-            ". " +
-            this.publication.book_title +
-            ". " +
-            this.publication.edition +
-            ". " +
-            this.publication.place +
-            ":" +
-            this.publication.publisher +
-            ";" +
-            this.publication.year;
-        }
-        if (this.publication_type == 4)
-          this.publication.reference =
-            this.publication.authors +
-            ". " +
-            this.publication.chapter_title +
-            ". In: " +
-            this.publication.editor_names +
-            ". " +
-            this.publication.book_title +
-            "." +
-            this.publication.edition +
-            "." +
-            this.publication.place +
-            ":" +
-            this.publication.publisher +
-            ";" +
-            this.publication.year;
-        if (this.publication_type > 4)
-          this.publication.reference =
-            this.publication.authors +
-            ". " +
-            this.publication.article_title +
-            "." +
-            this.publication.edition +
-            "." +
-            this.publication.place +
-            ":" +
-            this.publication.publisher +
-            ";" +
-            this.publication.year;
+            this.authorNames + ". " + 
+            this.journalArticle.title + ". " + 
+            this.journalArticle.fulljournalname + ". " + 
+            this.journalArticle.epubdate + ";" + 
+            this.journalArticle.volume + ":" + 
+            this.journalArticle.pages
+      }
+      if (this.publication_type == 2) {
+        // console.log(this.publication.reference)
+        this.publication.reference = 
+        this.publication.authors + ". " + 
+        this.publication.article_title + ". " + 
+        this.publication.journal_title + ". " + 
+        this.publication.pub_date + ":" + 
+        this.publication.pages;
+      }
+      if (this.publication_type == 3) {
+        this.publication.reference =
+          this.publication.authors + ". " +
+          this.publication.book_title + ". " +
+          this.publication.edition + ". " +
+          this.publication.place + ":" + 
+          this.publication.publisher + ";" +
+          this.publication.year;
+      }
+      if (this.publication_type == 4)
+        this.publication.reference =
+          this.publication.authors +
+          ". " +
+          this.publication.chapter_title +
+          ". In: " +
+          this.publication.editor_names +
+          ". " +
+          this.publication.book_title +
+          "." +
+          this.publication.edition +
+          "." +
+          this.publication.place +
+          ":" +
+          this.publication.publisher +
+          ";" +
+          this.publication.year;
+      if (this.publication_type > 4)
+        this.publication.reference =
+          this.publication.authors +
+          ". " +
+          this.publication.article_title +
+          "." +
+          this.publication.edition +
+          "." +
+          this.publication.place +
+          ":" +
+          this.publication.publisher +
+          ";" +
+          this.publication.year;
     },
     async publicationAdd() {
       if (this.$refs.form.validate()) {
+        this.publication.year=this.publication.year?this.publication.year:0;
         this.publication.annual_year = this.$store.state.selectedYear;
         this.publication.publication_type = this.publicationTypes[
           this.publication_type - 1
@@ -824,14 +841,15 @@ export default {
 
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
-          this.publication.approved_date = this.$moment(today).format("YYYY-MM-DD");
+          this.publication.approved_date = this.$moment(today).format(
+            "YYYY-MM-DD"
+          );
           this.publication.approval_status = "Approved";
           // this.publication.approved_by = this.$store.state.auth.user.fullname;
         } else {
           this.publication.user = this.$auth.user.id;
         }
-        if (this.publication_type == 1) 
-        {
+        if (this.publication_type == 1) {
           this.publication.journal_title = this.journalArticle.fulljournalname;
           this.publication.article_title = this.journalArticle.title;
           this.publication.pages = this.journalArticle.pages;
@@ -840,13 +858,13 @@ export default {
             this.journalArticle.epubdate === ""
               ? null
               : this.$moment(this.journalArticle.epubdate).format("YYYY-MM-DD");
-          this.publication.authors = this.authorNames.join();
-        }
-        if (this.publication.pub_date === "") 
-          this.publication.pub_date = null;
+          if(typeof this.publication.authors==='array')
+            this.authorNames.join();
 
-        if (this.publication_type > 2) 
-          this.publication.pub_date = null;
+        }
+        if (this.publication.pub_date === "") this.publication.pub_date = null;
+
+        if (this.publication_type > 2) this.publication.pub_date = null;
 
         if (this.publication_type > 4)
           this.publication.classification = "National";
@@ -882,12 +900,12 @@ export default {
       ) {
         queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.$store.state.selectedYear}`;
         await this.$store.dispatch("publication/setPublicationsData", {
-          qs: queryString
+          qs: queryString,
         });
       } else {
         queryString = `department.id=${this.$auth.user.department}&annual_year=${this.$store.state.selectedYear}&deleted_ne=true`;
         await this.$store.dispatch("publication/setPublicationsData", {
-          qs: queryString
+          qs: queryString,
         });
       }
       this.loading = false;
