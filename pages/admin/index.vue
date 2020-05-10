@@ -677,6 +677,11 @@ export default {
     if (this.userType) {
       if (this.userType === "FACULTY") this.assignedPeople = this.faculties;
     } else this.assignedPeople = this.people;
+
+    if(this.$auth.loggedIn) {
+      if(this.$auth.user.userType==='SUPER_ADMIN')
+        this.$router.push('/super');
+    }
   },
   methods: {
     async loader() {
