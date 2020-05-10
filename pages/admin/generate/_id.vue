@@ -4,13 +4,13 @@
     <!-- <pre>{{content}}</pre> -->
     <!-- <pre>{{ formattedDiagnostics }}</pre> -->
     <div class="preview">
-      <v-sheet  color="#41704e" width="100%" height="200vh">
-        <v-toolbar color="#41704e" dark>
+      <v-sheet  color="blue-grey darken-3" width="100%" height="200vh">
+        <v-toolbar color="blue-grey darken-3" dark>
           <v-toolbar-title class="white--text"
             >Consolidated Report Preview
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-tooltip left color="#41704e">
+          <v-tooltip left color="blue-grey darken-3">
             <template v-slot:activator="{ on }">
               <v-btn icon v-on="on">
                 <v-icon @click="exportToDoc(`Report-${$route.params.id}`)"
@@ -111,68 +111,68 @@ export default {
       <table>
       <thead>
       <tr>
-      <th>Clinical Services</th>
-      <th>No. of Patients / Cases</th>
+      <th style="border: 1px solid #dddddd;">Clinical Services</th>
+      <th style="border: 1px solid #dddddd;">No. of Patients / Cases</th>
       </tr>
       <thead>
 
       <tbody>
       <tr>
-      <td>Screenings</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Screenings</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.screenings,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Registrations</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Registrations</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.registrations,
         0
       )}</td>
       </tr>
       <tr>
-      <td>followups</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">followups</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.followups,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Admissions</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Admissions</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.admissions,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Discharges</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Discharges</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.discharges,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Deaths</td>
-      <td>${this.clinicalData.reduce((sum, item) => sum + item.deaths, 0)}</td>
+      <td style="border: 1px solid #dddddd;">Deaths</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce((sum, item) => sum + item.deaths, 0)}</td>
       </tr>
       <tr>
-      <td>Emergencies</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Emergencies</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.emergencies,
         0
       )}</td>
       </tr>
       <tr>
-      <td>External Reference</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">External Reference</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.external_ref,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Internal Reference</td>
-      <td>${this.clinicalData.reduce(
+      <td style="border: 1px solid #dddddd;">Internal Reference</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
         (sum, item) => sum + item.internal_ref,
         0
       )}</td>
@@ -187,37 +187,37 @@ export default {
       <h3> B. Emergency Services</h3>
       <table>
       <tr>
-      <th>Emergency Services</th>
-      <th>No.Of Patients /Cases</th>
+      <th style="border: 1px solid #dddddd;">Emergency Services</th>
+      <th style="border: 1px solid #dddddd;">No.Of Patients /Cases</th>
       </tr>
 
-      <td>Registrations</td>
-      <td>${this.emergencyData.reduce(
+      <td style="border: 1px solid #dddddd;">Registrations</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce(
         (sum, item) => sum + item.registrations,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Admissions</td>
-      <td>${this.emergencyData.reduce(
+      <td style="border: 1px solid #dddddd;">Admissions</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce(
         (sum, item) => sum + item.admissions,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Deaths</td>
-      <td>${this.emergencyData.reduce((sum, item) => sum + item.deaths, 0)}</td>
+      <td style="border: 1px solid #dddddd;">Deaths</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce((sum, item) => sum + item.deaths, 0)}</td>
       </tr>
       <tr>
-      <td>External Reference</td>
-      <td>${this.emergencyData.reduce(
+      <td style="border: 1px solid #dddddd;">External Reference</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce(
         (sum, item) => sum + item.external_ref,
         0
       )}</td>
       </tr>
       <tr>
-      <td>Internal Reference</td>
-      <td>${this.emergencyData.reduce(
+      <td style="border: 1px solid #dddddd;">Internal Reference</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce(
         (sum, item) => sum + item.internal_ref,
         0
       )}</td>
@@ -231,14 +231,14 @@ export default {
       <h3> C. Diagnostic Services</h3>
       <table>
       <tr>
-      <th>Lab Services</th>
-      <th>Total No.Of Samples Analyzed</th>
+      <th style="border: 1px solid #dddddd;">Lab Services</th>
+      <th style="border: 1px solid #dddddd;">Total No.Of Samples Analyzed</th>
       </tr>`;
       for (var i = 0; i < this.diagnosticsData.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.diagnosticsData[i].pc_diagnostic_test.test_name}</td>
-      <td>${this.diagnosticsData[i].samples_analyzed}</td>
+      <td style="border: 1px solid #dddddd;">${this.diagnosticsData[i].pc_diagnostic_test.test_name}</td>
+      <td style="border: 1px solid #dddddd;">${this.diagnosticsData[i].samples_analyzed}</td>
       </tr>`;
       }
       html += `</table>
@@ -250,20 +250,20 @@ export default {
       <h3>D. Special Clinics / Services / Procedures</h3>
       <table>
       <tr>
-      <th>Special Services</th>
-      <th>New Patients</th>
-      <th>Follow-up Patients</th>
-      <th>Referrals</th>
-      <th>Description</th>
+      <th style="border: 1px solid #dddddd;">Special Services</th>
+      <th style="border: 1px solid #dddddd;">New Patients</th>
+      <th style="border: 1px solid #dddddd;">Follow-up Patients</th>
+      <th style="border: 1px solid #dddddd;">Referrals</th>
+      <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
       for (var i = 0; i < this.specialData.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.specialData[i].service_name}</td>
-      <td>${this.specialData[i].new_patients}</td>
-      <td>${this.specialData[i].followup_patients}</td>
-      <td>${this.specialData[i].referrals}</td>
-      <td>${this.specialData[i].description}</td>
+      <td style="border: 1px solid #dddddd;">${this.specialData[i].service_name}</td>
+      <td style="border: 1px solid #dddddd;">${this.specialData[i].new_patients}</td>
+      <td style="border: 1px solid #dddddd;">${this.specialData[i].followup_patients}</td>
+      <td style="border: 1px solid #dddddd;">${this.specialData[i].referrals}</td>
+      <td style="border: 1px solid #dddddd;">${this.specialData[i].description}</td>
       </tr>`;
       }
       html += `</table>
@@ -275,18 +275,18 @@ export default {
       <h3>E.	OT & Other Procedures</h3>
       <table>
       <tr>
-      <th>Procedure Name</th>
-      <th>Classification</th>
-      <th>No of Patients</th>
-      <th>Description</th>
+      <th style="border: 1px solid #dddddd;">Procedure Name</th>
+      <th style="border: 1px solid #dddddd;">Classification</th>
+      <th style="border: 1px solid #dddddd;">No of Patients</th>
+      <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
       for (var i = 0; i < this.otservicesData.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.otservicesData[i].Procedure}</td>
-      <td>${this.otservicesData[i].classification}</td>
-      <td>${this.otservicesData[i].no_of_patients}</td>
-      <td>${this.otservicesData[i].description}</td>
+      <td style="border: 1px solid #dddddd;">${this.otservicesData[i].Procedure}</td>
+      <td style="border: 1px solid #dddddd;">${this.otservicesData[i].classification}</td>
+      <td style="border: 1px solid #dddddd;">${this.otservicesData[i].no_of_patients}</td>
+      <td style="border: 1px solid #dddddd;">${this.otservicesData[i].description}</td>
       </tr>`;
       }
       html += `</table>
@@ -299,22 +299,22 @@ export default {
       <h3>A.	Details of Regular Courses</h3>
       <table>
       <tr>
-      <th>Course</th>
-      <th>Name of the Candidate</th>
-      <th>Duration</th>
-      <th>Status</th>
-      <th>Title of the thesis (If any)</th>
-      <th>Guide(s)(If any)</th>
+      <th style="border: 1px solid #dddddd;">Course</th>
+      <th style="border: 1px solid #dddddd;">Name of the Candidate</th>
+      <th style="border: 1px solid #dddddd;">Duration</th>
+      <th style="border: 1px solid #dddddd;">Status</th>
+      <th style="border: 1px solid #dddddd;">Title of the thesis (If any)</th>
+      <th style="border: 1px solid #dddddd;">Guide(s)(If any)</th>
       </tr>`;
       for (var i = 0; i < this.hrdCourses.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.hrdCourses[i].course_name}</td>
-      <td>${this.hrdCourses[i].candidate_name}</td>
-      <td>${this.hrdCourses[i].durations} Years</td>
-      <td>${this.hrdCourses[i].remarks_status}</td>
-      <td>${this.hrdCourses[i].thesis_title}</td>
-      <td>${this.hrdCourses[i].guides}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].course_name}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].candidate_name}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].durations} Years</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].remarks_status}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].thesis_title}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].guides}</td>
       </tr>`;
       }
       html += `</table>
@@ -326,24 +326,24 @@ export default {
       <h3>B.	Faculty/staff/students from other institutions trained at NIMHANS</h3>
       <table>
       <tr>
-      <th>Name of the course / Training</th>
-      <th>Institutional affiliation</th>
-      <th>Number of Candidates</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Status</th>
-      <th>Description</th>
+      <th style="border: 1px solid #dddddd;">Name of the course / Training</th>
+      <th style="border: 1px solid #dddddd;">Institutional affiliation</th>
+      <th style="border: 1px solid #dddddd;">Number of Candidates</th>
+      <th style="border: 1px solid #dddddd;">From</th>
+      <th style="border: 1px solid #dddddd;">To</th>
+      <th style="border: 1px solid #dddddd;">Status</th>
+      <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
       for (var i = 0; i < this.hrdTrainings.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.hrdTrainings[i].training_name}</td>
-      <td>${this.hrdTrainings[i].institutional_affiliation}</td>
-      <td>${this.hrdTrainings[i].no_of_candidates} Years</td>
-      <td>${this.hrdTrainings[i].from_date}</td>
-      <td>${this.hrdTrainings[i].to_date}</td>
-      <td>${this.hrdTrainings[i].remarks_status}</td>
-      <td>${this.hrdTrainings[i].brief_report}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].training_name}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].institutional_affiliation}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].no_of_candidates} Years</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].from_date}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].to_date}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].remarks_status}</td>
+      <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].brief_report}</td>
       </tr>`;
       }
       html += `</table>
@@ -356,20 +356,20 @@ export default {
       <h3>B.	A.	List of Faculty and staff served NIMHANS and Superannuated / Resigned / VRS</h3>
       <table>
       <tr>
-      <th>Superannuated / Resigned / VRS</th>
-      <th>Name of the Official and Designation</th>
-      <th>Date of Joining</th>
-      <th>Date of Leaving</th>
-      <th>Image URL</th>
+      <th style="border: 1px solid #dddddd;">Superannuated / Resigned / VRS</th>
+      <th style="border: 1px solid #dddddd;">Name of the Official and Designation</th>
+      <th style="border: 1px solid #dddddd;">Date of Joining</th>
+      <th style="border: 1px solid #dddddd;">Date of Leaving</th>
+      <th style="border: 1px solid #dddddd;">Image URL</th>
       </tr>`;
       for (var i = 0; i < this.retaired.length; i++) {
         let sum = 0;
         html += `<tr>
-      <td>${this.retaired[i].faculty_status}</td>
-      <td>${this.retaired[i].faculty_name}</td>
-      <td></td>
-      <td>${this.retaired[i].leaving_date}</td>
-      <td>${this.retaired[i].image ? this.retaired[i].image : ""}</td>
+      <td style="border: 1px solid #dddddd;">${this.retaired[i].faculty_status}</td>
+      <td style="border: 1px solid #dddddd;">${this.retaired[i].faculty_name}</td>
+      <td style="border: 1px solid #dddddd;"></td>
+      <td style="border: 1px solid #dddddd;">${this.retaired[i].leaving_date}</td>
+      <td style="border: 1px solid #dddddd;">${this.retaired[i].image ? this.retaired[i].image : ""}</td>
       </tr>`;
       }
       html += `</table>
