@@ -3,7 +3,8 @@ export const state = () => ({
   savedReport: null,
   errors:{},
   reportId: 0,
-  generatedReport: null
+  generatedReport: null,
+  availableReports: null
 	
 });
 
@@ -25,10 +26,21 @@ export const mutations = {
   SET_REPORT_ERRORS(state, response) {
      //console.log('Error: ', response.data.data.errors);
      state.errors =  response;
+  },
+  SET_AVAILABLE_REPORTS(state, response) {
+    state.availableReports = response;
   }
 };
 
 export const actions =  {
+  async setAvailableReports({commit}, {qs}) {
+    await this.$axios.$get(`/saved-reports?${qs}`)
+    .then(response => {
+      commit("SET_AVAILABLE_REPORTS", response);
+    })
+    .catch((e)=> {
+    });
+  },
   async getById({commit}, {id}) {
     await this.$axios.$get(`/saved-reports/${id}`)
     .then(response=> {

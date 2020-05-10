@@ -133,6 +133,45 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-hover>
+                    <template v-slot:default="{ hover }">
+                      <v-img
+                        :src="image_url==='/image_placeholder.png'?'/image_placeholder.png':`${$axios.defaults.baseURL}${image_url}`"
+                        lazy-src="/image_placeholder.png"
+                        aspect-ratio="1"
+                        class="grey lighten-2"
+                        max-width="100%"
+                        max-height="400"
+                      >
+                        <template v-slot:placeholder>
+                          <v-row
+                            class="fill-height ma-0"
+                            align="center"
+                            justify="center"
+                          >
+                            <v-progress-circular
+                              indeterminate
+                              color="grey lighten-5"
+                            ></v-progress-circular>
+                          </v-row>
+                        </template>
+                        <v-fade-transition>
+                          <v-overlay v-if="hover" absolute color="#036358">
+                            <v-btn @click="$refs.image.click()">
+                              {{ image_url ? "Edit Image" : "Upload Image" }}
+                            </v-btn>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </v-img>
+                    </template>
+                  </v-hover>
+                  <input
+                    ref="image"
+                    type="file"
+                    style="display:none;"
+                    label="File input"
+                    @change="handleFileUpload"
+                  />
                 </v-container>
               </v-card-text>
             </v-card>
@@ -192,11 +231,11 @@ export default {
 			deleted: false,
 			department: 0,
 			user: 0,
-			image_1: null,
-			image_2: null,
-			image_3: null,
+			image: null,
       rejected_reason: null
     },
+    image_url: "/image_placeholder.png",
+    selectedFile: null,
     deletedItem: {
       annual_year: 0,
 			award_title: "",
@@ -210,11 +249,10 @@ export default {
 			deleted: false,
 			department: 0,
 			user: 0,
-			image_1: null,
-			image_2: null,
-			image_3: null,
+			image: null,
       rejected_reason: null
     },
+    imageToDelete: null,
     fundingSource: ["Intramural", "Extramural", "Non_Funded"],
     investigatorTypes: ["Principal_Investigator", "CoInvestigator"],
     researchStatus: ["Completed", "Ongoing", "New"]
@@ -291,6 +329,9 @@ export default {
     editItem(item) {
       this.editedIndex = this.recognitionsData.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      if (this.editedItem.image) {
+        this.image_url = this.editedItem.image.url;
+      } else this.editedItem.image = 0;
       this.dialog = true;
     },
 

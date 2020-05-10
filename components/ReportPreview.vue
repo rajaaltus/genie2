@@ -18,9 +18,9 @@
             ></v-select>
           </v-col>
           <v-col cols="12" lg="3">
-                  <v-label><small>Months Range</small></v-label>
-                  <vc-date-picker mode="range" v-model="range" ref="range"/>
-                </v-col>
+            <v-label><small>Months Range</small></v-label>
+            <vc-date-picker mode="range" v-model="range" ref="range" />
+          </v-col>
           <v-col cols="12" lg="2" class="mt-5">
             <v-select
               outlined
@@ -91,42 +91,42 @@
           <v-col cols="auto" lg="auto">
             <v-row>
               <v-layout align-start justify-start>
-                      <v-btn
-                        v-if="selectedYear"
-                        :loading="loading"
-                        :disabled="loading"
-                        color="green"
-                        x-small
-                        class="mt-6 mr-1 white--text"
-                        fab
-                        @click="loader()"
-                      >
-                        Go
-                      </v-btn>
-                      <v-tooltip right color="blue-grey darken-2">
-                      <template v-slot:activator="{ on }">
-                      <v-btn
-                        color="blue-grey"
-                        fab
-                        x-small
-                        class="mt-6 white--text"
-                        dark
-                        @click="resetFilter"
-                        v-on="on"
-                      >
-                        <v-icon>mdi-reload</v-icon>
-                      </v-btn>
-                      </template>
-                      <span>Reset Filter</span>
-                      </v-tooltip>
-                    </v-layout>
+                <v-btn
+                  v-if="selectedYear"
+                  :loading="loading"
+                  :disabled="loading"
+                  color="green"
+                  x-small
+                  class="mt-6 mr-1 white--text"
+                  fab
+                  @click="loader()"
+                >
+                  Go
+                </v-btn>
+                <v-tooltip right color="blue-grey darken-2">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      color="blue-grey"
+                      fab
+                      x-small
+                      class="mt-6 white--text"
+                      dark
+                      @click="resetFilter"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-reload</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Reset Filter</span>
+                </v-tooltip>
+              </v-layout>
             </v-row>
           </v-col>
         </v-row>
         <!-- {{ queryData }} -->
         <v-stepper
           v-if="
-            dataLoaded && !isPreview && $auth.user.userType === 'DEPARTMENT'
+            dataLoaded && isPreview!==true && $auth.user.userType === 'DEPARTMENT'
           "
           v-model="report"
           style="border-radius: 0;"
@@ -178,38 +178,58 @@
             </v-stepper-content>
 
             <v-stepper-content step="2" style="padding: 0px;">
-              <Editor :content="step2Data" :step="2" @next="handleNext(2)" :available="showAvailableReports"/>
+              <Editor
+                :content="step2Data"
+                :step="2"
+                @next="handleNext(2)"
+                :available="showAvailableReports"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="3" style="padding: 0px;">
-              <Editor :content="step3Data" :step="3" @next="handleNext(3)" :available="showAvailableReports"/>
+              <Editor
+                :content="step3Data"
+                :step="3"
+                @next="handleNext(3)"
+                :available="showAvailableReports"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="4" style="padding: 0px;">
-              <Editor :content="step4Data" :step="4" @next="handleNext(4)" :available="showAvailableReports"/>
+              <Editor
+                :content="step4Data"
+                :step="4"
+                @next="handleNext(4)"
+                :available="showAvailableReports"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="5" style="padding: 0px;">
-              <Editor :content="step5Data" :step="5" @next="handleNext(5)" :available="showAvailableReports"/>
+              <Editor
+                :content="step5Data"
+                :step="5"
+                @next="handleNext(5)"
+                :available="showAvailableReports"
+              />
             </v-stepper-content>
 
             <v-stepper-content step="6" style="padding: 0px;">
-              <Editor :content="step6Data" :step="6" @next="handleNext(6)" :available="showAvailableReports"/>
+              <Editor
+                :content="step6Data"
+                :step="6"
+                @next="handleNext(6)"
+                :available="showAvailableReports"
+              />
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
         <div class="preview" v-else>
           <!-- <div class="preview" v-if="isPreview && dataLoaded"> -->
-          <v-sheet
-            width="100%"
-            height="210vh"
-            v-if="dataLoaded"
-          >
+          <v-sheet width="100%" height="210vh" v-if="dataLoaded">
             <v-toolbar color="blue-grey darken-3" dark>
               <v-toolbar-title class="white--text"
-                >Consolidated Report for the Year - {{ this.selectedYear }} - {{
-                  this.selectedYear + 1
-                }}
+                >Consolidated Report for the Year - {{ this.selectedYear }} -
+                {{ this.selectedYear + 1 }}
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-tooltip left color="blue-grey darken-3">
@@ -236,7 +256,7 @@
         </div>
       </v-card-text>
     </v-card>
-    <AvailableReports :report="showAvailableReports" />
+    <AvailableReports :availableReports="availableReports" v-if="sheet" />
   </div>
 </template>
 
@@ -265,6 +285,7 @@ export default {
         end: null,
       },
       showAvailableReports: false,
+      sheet: false,
       isPreview: false,
       previewData: [],
       dataLoaded: false,
@@ -309,12 +330,14 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     range(val) {
-      this.isPreview = true;
+      if (val.start)
+        this.isPreview = true;
       var range = Object.assign({}, val);
       this.monthParam = `&created_at_gt=${this.$moment(range.start).format(
         "YYYY-MM-DD"
       )}&created_at_lt=${this.$moment(range.end).format("YYYY-MM-DD")}`;
       console.log("Month Param:", this.monthParam);
+      // console.log("at Range:", this.isPreview);
     },
     selectedUser(val) {
       this.isPreview = true;
@@ -361,6 +384,7 @@ export default {
       assignments: (state) => state.assignment.assignmentsData.result,
       theses: (state) => state.theses.thesesData.result,
       savedReport: (state) => state.report.savedReports,
+      availableReports: (state) => state.report.availableReports,
     }),
     // formattedAbout() {
     //   return this.aboutData
@@ -370,8 +394,16 @@ export default {
         .map(
           (program, index) =>
             `
-            <p><b>${index + 1}. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${program.name}" at ${program.location}</b> from ${program.from_date} to ${ program.to_date }, Coordinated by ${program.coordinators}.</p>
-            <p>Collaboration: ${program.colloborations}, Total Participants: ${program.participants_count}</p>
+            <p><b>${
+              index + 1
+            }. ${program.forum.toUpperCase()} ${program.type.toUpperCase()} on "${
+              program.name
+            }" at ${program.location}</b> from ${program.from_date} to ${
+              program.to_date
+            }, Coordinated by ${program.coordinators}.</p>
+            <p>Collaboration: ${program.colloborations}, Total Participants: ${
+              program.participants_count
+            }</p>
             <p><b><u>Brief Report:</u></b> ${program.brief_report}</p>
             `
         )
@@ -382,7 +414,13 @@ export default {
         .map(
           (visitor, index) =>
             `
-            <p><b>${index + 1}. ${visitor.name}, ${visitor.designation}</b> from ${visitor.institutional_affiliation} visited our department during ${visitor.from_date} - ${visitor.to_date}. He / She had given a lecture titled "${visitor.title}"</p>
+            <p><b>${index + 1}. ${visitor.name}, ${
+              visitor.designation
+            }</b> from ${
+              visitor.institutional_affiliation
+            } visited our department during ${visitor.from_date} - ${
+              visitor.to_date
+            }. He / She had given a lecture titled "${visitor.title}"</p>
             <p><b><u>Brief Report:</u></b> ${visitor.brief_report}</p>
             `
         )
@@ -393,7 +431,13 @@ export default {
         .map(
           (training, index) =>
             `
-            <p><b>${index + 1}. ${training.faculty_name}</b> attended a training programme on "${training.program_name}" at ${training.institutional_affiliation} from ${training.from_date} to ${training.to_date}, funded by ${training.funded_by}.</p>
+            <p><b>${index + 1}. ${
+              training.faculty_name
+            }</b> attended a training programme on "${
+              training.program_name
+            }" at ${training.institutional_affiliation} from ${
+              training.from_date
+            } to ${training.to_date}, funded by ${training.funded_by}.</p>
             <p><b><u>Brief Report:</u></b> ${training.brief_report}</p>
             `
         )
@@ -404,7 +448,13 @@ export default {
         .map(
           (presentation, index) =>
             `
-            <p><b>${index + 1}. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${presentation.title}" by ${presentation.faculty_name}. Co-authors: ${presentation.coauthors}</p>
+            <p><b>${
+              index + 1
+            }. ${presentation.forum.toUpperCase()} ${presentation.type.toUpperCase()}</b> on "${
+              presentation.title
+            }" by ${presentation.faculty_name}. Co-authors: ${
+              presentation.coauthors
+            }</p>
             <p><b><u>Reference:</u></b> ${presentation.reference}</p>
             `
         )
@@ -415,7 +465,13 @@ export default {
         .map(
           (participation, index) =>
             `
-            <p><b>${index + 1}. ${participation.faculty_name}, ${participation.designation}</b> participated in ${participation.forum} programme titled "${participation.program_name}", from ${participation.from_date} to ${participation.to_date} at ${participation.place}.</p>
+            <p><b>${index + 1}. ${participation.faculty_name}, ${
+              participation.designation
+            }</b> participated in ${participation.forum} programme titled "${
+              participation.program_name
+            }", from ${participation.from_date} to ${
+              participation.to_date
+            } at ${participation.place}.</p>
             `
         )
         .join("");
@@ -425,8 +481,14 @@ export default {
         .map(
           (item, index) =>
             `
-            <p><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${item.title}" given by ${item.faculty_name} on ${item.date} at ${item.place}.</p>
-            <p><b>Program Name: </b>${item.program_name}, <b>Target Audience: </b>${item.target_audience}</p>
+            <p><b>${index + 1}. ${item.type.toUpperCase()}</b> titled "${
+              item.title
+            }" given by ${item.faculty_name} on ${item.date} at ${
+              item.place
+            }.</p>
+            <p><b>Program Name: </b>${
+              item.program_name
+            }, <b>Target Audience: </b>${item.target_audience}</p>
             `
         )
         .join("");
@@ -436,10 +498,22 @@ export default {
         .map(
           (research, index) =>
             `
-            <p><b>${index + 1}. ${research.research_status.toUpperCase()}: ${research.title}</b></p>
-            <p>${research.investigator_type}: ${research.investigator_name}, Total Duration(in months): ${research.total_durations}</p>
-            <p>Source of Funding: ${research.funding_source}, Funding agency : ${research.funding_agency}, Total funding: ${research.total_funds}, Funding during the review period/year: ${research.funding_on_review_period}</p>
-            <p><b><u>Brief Report/Abstract: </u></b> ${research.research_abstract}</p>
+            <p><b>${index + 1}. ${research.research_status.toUpperCase()}: ${
+              research.title
+            }</b></p>
+            <p>${research.investigator_type}: ${
+              research.investigator_name
+            }, Total Duration(in months): ${research.total_durations}</p>
+            <p>Source of Funding: ${
+              research.funding_source
+            }, Funding agency : ${research.funding_agency}, Total funding: ${
+              research.total_funds
+            }, Funding during the review period/year: ${
+              research.funding_on_review_period
+            }</p>
+            <p><b><u>Brief Report/Abstract: </u></b> ${
+              research.research_abstract
+            }</p>
             `
         )
         .join("");
@@ -449,7 +523,9 @@ export default {
         .map(
           (publication, index) =>
             `
-            <p><b>${index + 1}. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></p>
+            <p><b>${
+              index + 1
+            }. ${publication.classification.toUpperCase()}, ${publication.publication_type.toUpperCase()}</b></p>
             <p>${publication.reference}</p>
             `
         )
@@ -460,7 +536,11 @@ export default {
         .map(
           (recognition, index) =>
             `
-            <p><b>${index + 1}. ${recognition.faculty_name}</b> has been awarded as "${recognition.award_title}" from ${recognition.organization},${recognition.place} on ${recognition.date}.</p>
+            <p><b>${index + 1}. ${
+              recognition.faculty_name
+            }</b> has been awarded as "${recognition.award_title}" from ${
+              recognition.organization
+            },${recognition.place} on ${recognition.date}.</p>
             `
         )
         .join("");
@@ -470,7 +550,9 @@ export default {
         .map(
           (patent, index) =>
             `
-            <p><b>${index + 1}. ${patent.registration_no}:</b> ${patent.title}</p>
+            <p><b>${index + 1}. ${patent.registration_no}:</b> ${
+              patent.title
+            }</p>
             <p><b><u>Brief Report: </u></b> ${patent.brief_report}</p>
             `
         )
@@ -481,7 +563,11 @@ export default {
         .map(
           (assignment, index) =>
             `
-            <p><b>${index + 1}. ${assignment.classification.toUpperCase()}:</b> ${assignment.faculty_name}, ${assignment.designation}, ${assignment.roles}</p>
+            <p><b>${
+              index + 1
+            }. ${assignment.classification.toUpperCase()}:</b> ${
+              assignment.faculty_name
+            }, ${assignment.designation}, ${assignment.roles}</p>
             <p><b><u>Brief Report: </u></b> ${assignment.brief_report}</p>
             `
         )
@@ -493,7 +579,7 @@ export default {
         `<center>
         <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
         <h3>Bengaluru – 560029</h3>
-        </center>`+
+        </center>` +
         `<h1><b><u>Section B:</u></b></h1>` +
         `<h3><b>1. CONFERENCES / WORKSHOPS / SEMINARS /SYMPOSIUM / SCIENTIFIC PROGRAMMES</b></h3>` +
         this.formattedProgrammes +
@@ -538,11 +624,20 @@ export default {
   },
   methods: {
     async loader() {
+      this.sheet = false;
       this.$store.dispatch("report/initializeReportId", 0);
       this.report = 1;
       this.loading = true;
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
+
+      if (this.yearParam) {
+        let findQuery = "";
+        findQuery = `annual_year=${this.selectedYear}&department.id=${this.$store.state.auth.user.department}`;
+        await this.$store.dispatch("report/setAvailableReports", {
+          qs: findQuery,
+        });
+      }
 
       if (this.range.start) this.query += this.monthParam;
 
@@ -558,14 +653,9 @@ export default {
         await this.$store.dispatch("report/setSavedReport", {
           fq: queryString,
         });
-        if (
-          this.$store.state.report.savedReport[0] &&
-          this.$store.state.report.savedReport[0].id
-        ) {
-          this.showAvailableReports = true;
-        } else {
-          this.showAvailableReports = false;
-        }
+        if (this.availableReports.length > 0) {
+          this.sheet = true;
+        } else this.sheet = false;
       }
 
       if (
@@ -617,9 +707,10 @@ export default {
         this.step6Data;
       this.loading = false;
       this.dataLoaded = true;
+      
     },
-    resetFilter() {
-      this.report = 1;
+    async resetFilter() {
+      this.isPreview = false;
       this.range = {};
       this.previewData = [];
       this.range.start = null;
@@ -635,7 +726,7 @@ export default {
       this.selectedUser = null;
       this.assignedPeople = this.people;
       this.dataLoaded = false;
-      this.isPreview = false;
+      
     },
     async changeReportingYear() {
       await this.$store.dispatch("setReportingYear", this.selectedYear);
