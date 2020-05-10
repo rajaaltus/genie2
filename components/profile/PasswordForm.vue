@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form ref="form" v-model="valid" lazy-validation>
-      <h2>Password Change</h2>
+      <h2>Change Password</h2>
       <v-row>
         <v-col cols="6">
           <v-text-field

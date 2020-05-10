@@ -36,10 +36,9 @@
                   <v-label><small>Months Range</small></v-label>
                   <vc-date-picker mode="range" v-model="range" />
                 </v-col>
-                <v-col cols="12" lg="2" class="my-5">
+                <v-col cols="12" lg="2" class="my-5" v-if="$auth.user.userType === 'DEPARTMENT'">
                   <v-select
                     ref="user-type"
-                    v-if="$auth.user.userType === 'DEPARTMENT'"
                     outlined
                     dense
                     v-model="userType"
@@ -49,12 +48,11 @@
                     color="success"
                   ></v-select>
                 </v-col>
-                <v-col cols="11" lg="3" class="my-5">
+                <v-col cols="11" lg="3" class="my-5" v-if="$auth.user.userType === 'DEPARTMENT'">
                   <v-autocomplete
                     v-model="selectedUser"
                     outlined
                     dense
-                    v-if="$auth.user.userType === 'DEPARTMENT'"
                     ref="user"
                     :items="assignedPeople"
                     color="blue-grey lighten-2"
@@ -64,17 +62,9 @@
                     item-value="id"
                   >
                     <template v-slot:selection="data">
-                      <!-- <v-chip
-                        v-bind="data.attrs"
-                        :input-value="data.selected"
-                        @click="data.select"
-                      > -->
-                      <!-- <v-avatar left>
-                          <v-img :src="data.item.avatar"></v-img>
-                        </v-avatar> -->
+                      
                       {{ data.item.fullname }}
-                      <!-- </v-chip> -->
-                    </template>
+                   </template>
                     <template v-slot:item="data">
                       <template v-if="typeof data.item !== 'object'">
                         <v-list-item-content

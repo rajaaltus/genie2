@@ -9,7 +9,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">Add New User</span><br>
-          <span class="caption font-weight-light">This credentials can be given to the respective faculty / student for their use of this application.<br>The default <b>PASSWORD</b> is: user@2020</span>
+          <span class="caption font-weight-light">This credentials can be given to the respective faculty / student for their use of this application.<br>The default <b>PASSWORD</b> is: changemenow</span>
         </v-card-title>
         <v-card-text>
           <v-row>
@@ -128,8 +128,8 @@ export default {
         .then(resp => {
           console.log(resp);
           Swal.fire({
-            title: "Test",
-            text: "User added",
+            title: "Added",
+            text: "This account credentials should be given to the respective faculy / staff.",
             icon: "success",
             showConfirmButton: false,
             timer: 1500

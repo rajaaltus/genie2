@@ -29,7 +29,7 @@
         <v-list-item-title class="pl-2"
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
-          Head of the Department 
+          {{ user.designation }} 
           </span></v-list-item-title>
 
         <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
@@ -340,13 +340,7 @@ export default {
         {
           title: "Activities & Resources",
           icon: "mdi-library",
-          children: [
-            {
-              title: "Faculty / Staff",
-              icon: "mdi-chevron-double-right",
-              to: "/admin/activities/faculties"
-            }
-          ]
+          to: "/admin/activities/faculties"
         },
         { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
@@ -356,13 +350,7 @@ export default {
         {
           title: "Activities & Resources",
           icon: "mdi-library",
-          children: [
-            {
-              title: "Student",
-              icon: "mdi-chevron-double-right",
-              to: "/admin/activities/students"
-            }
-          ]
+          to: "/admin/activities/students"
         },
         { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }

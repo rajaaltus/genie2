@@ -457,7 +457,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+
 .preview {
   max-width: 100%;
 }

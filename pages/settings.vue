@@ -177,13 +177,13 @@ export default {
       username: "",
       fullname: "",
       email: "",
-      password: "user@2020",
+      password: "changemenow",
       userType: "",
       department: 0,
       confirmed: true,
       blocked: false
     },
-    password: 'user@2020',
+    password: 'changemenow',
     userTypes: [
       {
         text: "Faculty / Staff",
