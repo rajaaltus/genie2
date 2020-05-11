@@ -58,7 +58,7 @@
                     :type="show ? 'text' : 'password'"
                     @click:append="show = !show"
                     label="Password"
-                    value="user@2020"
+                    value="changemenow"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
@@ -121,7 +121,7 @@ export default {
   methods: {
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
-      this.newUser.password = "user@2020";
+      this.newUser.password = "changemenow";
       this.newUser.username = this.newUser.email;
       this.userType = this.newUser.userType;
       var payload = this.newUser;
