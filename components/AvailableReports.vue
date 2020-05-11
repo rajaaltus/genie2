@@ -1,8 +1,21 @@
 <template>
   <div class="text-center">
-    <v-bottom-sheet v-model="sheet" inset>
-      <v-list>
-        <v-subheader>Saved Reports</v-subheader>
+    <v-bottom-sheet v-model="sheet" persistent>
+      <v-list color="#fff" tile>
+        <v-subheader><span class="subtitle-1 font-weight-normal black--text">Available reports for the selected reporting year. Click to download or close this window to create the new report.</span>
+        <v-layout align-end justify-end>
+        <v-btn
+          class="mt-0"
+          x-small
+          fab
+          dark
+          color="red darken-3"
+          @click="sheet = !sheet"
+        >
+        <v-icon>mdi-close</v-icon>
+        </v-btn>
+        </v-layout>
+        </v-subheader>
         <v-list-item
           v-for="tile in availableReports"
           :key="tile.id"
@@ -11,14 +24,14 @@
           <v-list-item-avatar>
             <v-avatar size="32px" tile>
               <img
-                :src="`https://cdn.vuetifyjs.com/images/bottom-sheets/${tiles[0].img}`"
+                :src="`https://img.icons8.com/color/48/000000/microsoft-word-2019--v2.png`"
                 :alt="tile.annual_year"
               />
             </v-avatar>
           </v-list-item-avatar>
-          <v-list-item-title
-            >{{ tile.annual_year }} - {{ tile.userType }}</v-list-item-title
-          >
+          <v-list-item-title>
+            <span class="body-2 font-weight-normal">{{ tile.userType }} Report for the year of {{ tile.annual_year }} - {{ tile.annual_year+1 }}</span>
+            </v-list-item-title>
         </v-list-item>
       </v-list>
        <div id="savedDoc" v-if="savedDoc" v-html="formattedDoc" style="display:none"></div>

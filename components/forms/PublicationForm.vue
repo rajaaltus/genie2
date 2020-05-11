@@ -774,9 +774,9 @@ export default {
       if (this.publication_type == 1) {
           
           this.publication.reference =
-            this.authorNames + ". " + 
-            this.journalArticle.title + ". " + 
-            this.journalArticle.fulljournalname + ". " + 
+            this.authorNames + "." + 
+            this.journalArticle.title + "." + 
+            this.journalArticle.fulljournalname + "." + 
             this.journalArticle.epubdate + ";" + 
             this.journalArticle.volume + ":" + 
             this.journalArticle.pages
@@ -784,50 +784,50 @@ export default {
       if (this.publication_type == 2) {
         // console.log(this.publication.reference)
         this.publication.reference = 
-        this.publication.authors + ". " + 
-        this.publication.article_title + ". " + 
-        this.publication.journal_title + ". " + 
-        this.publication.pub_date + ":" + 
+        this.publication.authors + "." + 
+        this.publication.article_title + "." + 
+        this.publication.journal_title + "," + 
+        this.publication.pub_date + "," + 
         this.publication.pages;
       }
       if (this.publication_type == 3) {
         this.publication.reference =
-          this.publication.authors + ". " +
-          this.publication.book_title + ". " +
-          this.publication.edition + ". " +
-          this.publication.place + ":" + 
-          this.publication.publisher + ";" +
+          this.publication.authors + "." +
+          this.publication.book_title + "." +
+          this.publication.edition + "," +
+          this.publication.place + "," + 
+          this.publication.publisher + "," +
           this.publication.year;
       }
       if (this.publication_type == 4)
         this.publication.reference =
           this.publication.authors +
-          ". " +
+          "." +
           this.publication.chapter_title +
-          ". In: " +
+          "In: " +
           this.publication.editor_names +
-          ". " +
+          "" +
           this.publication.book_title +
-          "." +
+          "," +
           this.publication.edition +
-          "." +
+          "," +
           this.publication.place +
-          ":" +
+          "," +
           this.publication.publisher +
-          ";" +
+          "," +
           this.publication.year;
       if (this.publication_type > 4)
         this.publication.reference =
           this.publication.authors +
-          ". " +
+          "." +
           this.publication.article_title +
           "." +
           this.publication.edition +
-          "." +
+          "," +
           this.publication.place +
-          ":" +
+          "," +
           this.publication.publisher +
-          ";" +
+          "," +
           this.publication.year;
     },
     async publicationAdd() {

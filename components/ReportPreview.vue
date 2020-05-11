@@ -21,12 +21,11 @@
             <v-label><small>Months Range</small></v-label>
             <vc-date-picker mode="range" v-model="range" ref="range" />
           </v-col>
-          <v-col cols="12" lg="2" class="mt-5">
+          <v-col cols="12" lg="2" class="mt-5" v-if="$auth.user.userType === 'DEPARTMENT'">
             <v-select
               outlined
               dense
               ref="user-type"
-              v-if="$auth.user.userType === 'DEPARTMENT'"
               v-model="userType"
               label="User Type"
               placeholder="I am a"
@@ -35,12 +34,11 @@
             ></v-select>
           </v-col>
 
-          <v-col cols="12" lg="3" class="mt-5">
+          <v-col cols="12" lg="3" class="mt-5" v-if="$auth.user.userType === 'DEPARTMENT'">
             <v-autocomplete
               outlined
               dense
               v-model="selectedUser"
-              v-if="$auth.user.userType === 'DEPARTMENT'"
               ref="user"
               :items="assignedPeople"
               color="blue-grey lighten-2"
