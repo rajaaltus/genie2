@@ -269,7 +269,7 @@ export default {
 					Swal.fire({
 						title: 'Login Failed!',
 						text: err.response.data.data[0].messages[0].message,
-						type: 'error'
+						icon: 'error'
 					});
 					this.resetLogin();
 				});
@@ -284,7 +284,7 @@ export default {
             Swal.fire({
               title: "Successfully Registered your Account.",
               text: "Please login to continue using our system",
-              type: "info"
+              icon: "info"
             });
             this.reset();
             this.loginForm();
@@ -293,7 +293,7 @@ export default {
             Swal.fire({
               title: "Oops!",
               text: err.response.data.data[0].messages[0].message,
-              type: "error",
+              icon: "error",
               showConfirmButton: false,
               timer: 3000,
               timerProgressBar: true

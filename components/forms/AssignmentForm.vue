@@ -177,8 +177,9 @@ export default {
     async assignmentAdd() {
       if (this.$refs.form.validate()) {
         this.assignment.annual_year = this.$store.state.selectedYear;
-        if (this.assignment.user == 0)
-          this.assignment.user = this.$store.state.auth.user.id;
+        
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.assignment.user = this.$auth.user.id;
 
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();

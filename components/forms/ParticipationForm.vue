@@ -11,7 +11,7 @@
                 item-value="id"
                 item-text="fullname"
                 label="Data received from?"
-                placeholder="Select Faculty / Staff from the List"
+                :placeholder="section"
                 color="success"
                 :rules="[
                   (v) => !!v || 'Selecting the Faculty / Staff is Required',
@@ -254,14 +254,13 @@ export default {
     async participationAdd() {
       if (this.$refs.form.validate()) {
         this.participation.annual_year = this.$store.state.selectedYear;
-        // if (this.participation.user == 0)
-        //   this.participation.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.participation.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.participation.approved_date = this.$moment(today).format();
           this.participation.approval_status = "Approved";
-        }else
-          this.participation.user = this.$store.state.auth.user.id
+        }
         this.participation.department = this.$store.state.auth.user.department;
         var payload = this.participation;
         // console.log(payload);

@@ -11,7 +11,7 @@
                 item-value="id"
                 item-text="fullname"
                 label="Data received from?"
-                placeholder="Select Faculty / Staff from the List"
+                :placeholder="section"
                 color="success"
                 :rules="[
                   (v) => !!v || 'Selecting the Faculty / Staff is Required',
@@ -187,14 +187,13 @@ export default {
     async presentationAdd() {
       if (this.$refs.form.validate()) {
         this.presentation.annual_year = this.$store.state.selectedYear;
-        // if (this.presentation.user == 0)
-        // 	this.presentation.user = this.$store.state.auth.user.id;
+         if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.presentation.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.presentation.approved_date = this.$moment(today).format();
           this.presentation.approval_status = "Approved";
-        } else
-          this.presentation.user = this.$store.state.auth.user.id
+        } 
         this.presentation.department = this.$store.state.auth.user.department;
         var payload = this.presentation;
         // console.log(payload);

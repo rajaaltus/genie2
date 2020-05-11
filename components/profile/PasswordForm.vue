@@ -6,18 +6,22 @@
         <v-col cols="6">
           <v-text-field
             v-model="newPassword.password"
+            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show ? 'text' : 'password'"
+            @click:append="show = !show"
             color="green"
             label="New Password"
-            type="password"
             :rules="[v => !!v || 'New Password is Required']"
           ></v-text-field>
         </v-col>
         <v-col cols="6">
           <v-text-field
             v-model="newPassword.confirmpassword"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show1 ? 'text' : 'password'"
+            @click:append="show1 = !show1"
             color="green"
             label="Confirm the New Password"
-            type="password"
             :rules="[v => !!v || 'Confirmation is Required', passwordConfirmation]"
           ></v-text-field>
         </v-col>
@@ -39,6 +43,8 @@ export default {
   data () {
     return{
       valid: false,
+      show: false,
+      show1: false,
       newPassword: {
         password: '',
         confirmpassword: ''
@@ -48,7 +54,7 @@ export default {
 
   computed: {
     passwordConfirmation() {
-      return () => (this.password === this.confirmpassword) || 'Password must match'
+      return () => (this.newPassword.password === this.newPassword.confirmpassword) || 'Password must match'
     }
   },
   methods: {

@@ -38,7 +38,7 @@
           <v-card-text class="px-0 py-1"> 
             <v-row>
               <v-col cols="12" md="12">
-                <PresentationTable :reportYears="reportYears" />
+                <PresentationTable :reportYears="reportYears" dataFrom="FACULTY"/>
               </v-col>
             </v-row>
           </v-card-text>

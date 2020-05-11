@@ -54,8 +54,10 @@
                   <v-text-field
                     color="green"
                     :rules="[v => !!v || 'Password is Required']"
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show ? 'text' : 'password'"
+                    @click:append="show = !show"
                     label="Password"
-                    type="password"
                     value="user@2020"
                   ></v-text-field>
                 </v-col>
@@ -91,6 +93,7 @@ export default {
   data() {
     return {
       dialog: false,
+      show: false,
       newUser: {
         username: "",
         fullname: "",
@@ -118,7 +121,7 @@ export default {
   methods: {
     addUser() {
       this.newUser.department = this.$store.state.auth.user.department;
-      this.newUser.password = "changemenow";
+      this.newUser.password = "user@2020";
       this.newUser.username = this.newUser.email;
       this.userType = this.newUser.userType;
       var payload = this.newUser;

@@ -11,7 +11,7 @@
                 item-value="id"
                 item-text="fullname"
                 label="Data received from?"
-                placeholder="Select Faculty / Staff from the List"
+                :placeholder="section"
                 color="success"
                 :rules="[
                   (v) => !!v || 'Selecting the Faculty / Staff is Required',
@@ -632,8 +632,6 @@ export default {
         chapter_title: "",
         editor_names: "",
         reference: "",
-        approved_by: "",
-        approved_date: "",
         deleted: false,
         authors: "",
         approval_status: "Pending",
@@ -838,7 +836,8 @@ export default {
           this.publication_type - 1
         ].value;
         this.publication.department = this.$store.state.auth.user.department;
-
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.publication.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.publication.approved_date = this.$moment(today).format(
@@ -846,9 +845,7 @@ export default {
           );
           this.publication.approval_status = "Approved";
           // this.publication.approved_by = this.$store.state.auth.user.fullname;
-        } else {
-          this.publication.user = this.$auth.user.id;
-        }
+        } 
         if (this.publication_type == 1) {
           this.publication.journal_title = this.journalArticle.fulljournalname;
           this.publication.article_title = this.journalArticle.title;

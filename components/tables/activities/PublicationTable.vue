@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="publicationsData"
+      :items="dataFrom==='FACULTY'?facultiesData:studentsData"
       sort-by="updated_at"
       sort-desc
       class="elevation-1"
@@ -331,7 +331,7 @@ Cognition: The Fallacy of Drawing Conclusions from a Single Case. J ECT. 2018 Ju
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears"],
+  props: ["reportYears", "dataFrom"],
   data: () => ({
     loading: false,
     valid: false,
@@ -420,7 +420,13 @@ export default {
       staffs: state => state.staffs,
       publicationTypes: state => state.publication.publicationTypes,
 			journalArticles: state => state.publication.journalArticle,
-    })
+    }),
+    studentsData() {
+      return this.publicationsData.filter(publication => publication.user.userType==='STUDENT')
+    },
+    facultiesData() {
+      return this.publicationsData.filter(publication => publication.user.userType==='FACULTY')
+    }
   },
   watch: {
     dialog(val) {

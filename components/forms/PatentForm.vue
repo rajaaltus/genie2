@@ -180,8 +180,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.patent.annual_year = this.$store.state.selectedYear;
 
-        // if (this.patent.user == 0)
-        //   this.patent.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.patent.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.patent.approved_date = this.$moment(today).format();

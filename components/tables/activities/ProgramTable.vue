@@ -322,7 +322,6 @@ export default {
   },
   async fetch({ store }) {
     //Filter Query Fetch
-
     let userId = store.state.auth.user.id;
     let deptId = store.state.user.fullUser.department.id;
     let queryString = "";
