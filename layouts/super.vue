@@ -9,18 +9,30 @@
       app
       dark
     >
+    <div class="py-3" style="max-height:400px">
+      <v-list-item v-if="!mini" >
+        
+        <v-img src="/logo.png" max-width="30%"></v-img>
+        
+      </v-list-item>
+      <v-list-item v-else style="max-height:200px">
+        <v-img src="/logo.png" max-width="100%"></v-img>
+       
+      </v-list-item>
+      </div>
+      <v-divider></v-divider>
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-img :src="userData.avatar?`${$axios.defaults.baseURL}${userData.avatar.url}`:'/avatar-default-icon.png'"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>John Leider</v-list-item-title>
+          <v-list-item-title>Super Admin</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
-      <v-divider></v-divider>
-      <v-list-item nav dense link @click="logout">
+
+      <v-list-item nav link @click="logout">
         <v-list-item-icon>
           <v-icon color="red darken-2">mdi-logout</v-icon>
         </v-list-item-icon>
@@ -30,28 +42,17 @@
       </v-list-item>
       <v-divider></v-divider>
 
-      <v-list dense>
+      <v-list>
         <v-list-item :to="item.to" router exact v-for="(item,index) in items" :key="index" link>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title class="menu-title">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
-      <template v-slot:append>
-        <v-list-item nav dense>
-          <v-list-item-icon>
-            <v-icon color="blue darken-2">mdi-email-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="menu-title">Contact Us</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
     </v-navigation-drawer>
     <v-app-bar flat dense app color="#fff">
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
@@ -82,8 +83,8 @@ export default {
       drawer: true,
       mini: true,
       items: [
-        { title: "Home", icon: "home", to: '/super'},
-        { title: "Departments", icon: "domain", to: '/super/departments' },
+        { title: "Reports", icon: "mdi-chart-areaspline", to: '/super'},
+        { title: "Settings", icon: "mdi-shape-circle-plus", to: '/super/department' },
       ],
     };
   },
