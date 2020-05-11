@@ -328,8 +328,10 @@ export default {
       if (val === "DEPARTMENT") this.assignedPeople = this.people;
     },
     range(val) {
-      if (val.start)
+      if (val.start) {
+        this.dataLoaded = false;
         this.isPreview = true;
+      }
       var range = Object.assign({}, val);
       this.monthParam = `&created_at_gt=${this.$moment(range.start).format(
         "YYYY-MM-DD"
