@@ -107,7 +107,7 @@ export default {
     console.log('Response:', this.$store.state.report.savedReport);
     console.log('Report Id: ',this.$store.state.report. reportId);
     
-      if (!this.available) {
+      if (this.$store.state.report.reportId==0) {
         if (this.step == 1) {
           var payload = Object.assign(
             {},

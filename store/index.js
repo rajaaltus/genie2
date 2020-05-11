@@ -8,6 +8,7 @@ const srcs = {
 export const state = () => ({
   selectedYear: 0,
   reportStepper: 0,
+  userData: {},
   reportYears: [
     {
       id: 2018,
@@ -153,6 +154,9 @@ export const getters = {
   },
 };
 export const mutations = {
+  SET_USER_DATA(state, userData) {
+    state.userData = userData;
+  },
   UPDATE_STEPPER(state, reportStepper) {
     state.reportStepper = reportStepper;
   },
@@ -381,6 +385,9 @@ export const mutations = {
 };
 
 export const actions = {
+  async setUserData({commit}, data) {
+    commit("SET_USER_DATA", data);
+  },
   async nuxtClientInit({ commit }) {
     await this.$axios
       .$get(`/users/${this.$auth.user.id}`)
