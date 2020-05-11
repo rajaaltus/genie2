@@ -30,7 +30,7 @@
         <v-list-item-title class="pl-2"
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
-          {{ user.designation }} 
+          {{ user?user.designation:'' }} 
           </span></v-list-item-title>
 
         <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
