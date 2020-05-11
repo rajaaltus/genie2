@@ -261,8 +261,8 @@ export default {
     async researchAdd() {
       if (this.$refs.form.validate()) {
         this.research.annual_year = this.$store.state.selectedYear;
-        // if (this.research.user == 0)
-        //   this.research.user = this.$store.state.auth.user;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.research.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.research.approved_date = this.$moment(today).format();

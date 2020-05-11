@@ -23,7 +23,8 @@
       <v-divider></v-divider>
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="user.image?`${$axios.defaults.baseURL}${user.image.url}`:'/avatar-default-icon.png'"></v-img>
+          <!-- <v-img :src="user.image?`${$axios.defaults.baseURL}${user.image.url}`:'/avatar-default-icon.png'"></v-img> -->
+          <v-img :src="avatar_url"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title class="pl-2"
@@ -287,6 +288,7 @@ export default {
   data() {
     return {
       drawer: true,
+      
       items: [
         { title: "Home", icon: "mdi-home", to: "/admin" },
         {
@@ -373,12 +375,25 @@ export default {
   computed: {
     ...mapState({
       user:state => state.user.userProfile
-    })
+    }),
+    avatar_url() {
+      return this.$store.state.user.avatar_url;
+    }
   },
   mounted() {
     this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
+    this.setAvatar();
   },
   methods: {
+    async setAvatar() {
+      if (this.user) {
+        if (this.user.image)
+          this.avatar_url=  `${this.$axios.defaults.baseURL}${this.user.image.url}`
+        else
+          this.avatar_url= '/avatar-default-icon.png'
+      } else
+        this.avatar_url = '/avatar-default-icon.png'
+    },
     async logout() {
       await  this.$auth.logout();
       window.location.reload();

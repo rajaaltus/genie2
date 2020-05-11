@@ -11,7 +11,7 @@
                 item-value="id"
                 item-text="fullname"
                 label="Data received from?"
-                placeholder="Select Faculty / Staff from the List"
+                :placeholder="section"
                 color="success"
                 :rules="[
                   (v) => !!v || 'Selecting the Faculty / Staff is Required',
@@ -838,7 +838,8 @@ export default {
           this.publication_type - 1
         ].value;
         this.publication.department = this.$store.state.auth.user.department;
-
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.publication.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.publication.approved_date = this.$moment(today).format(

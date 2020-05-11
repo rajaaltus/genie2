@@ -340,7 +340,8 @@ export default {
       // console.log("at Range:", this.isPreview);
     },
     selectedUser(val) {
-      this.isPreview = true;
+      if(val)
+        this.isPreview = true;
       this.userParam = `&user.id=${val}`;
     },
   },
@@ -653,7 +654,7 @@ export default {
         await this.$store.dispatch("report/setSavedReport", {
           fq: queryString,
         });
-        if (this.availableReports.length > 0) {
+        if (this.availableReports.length > 0 && !this.isPreview) {
           this.sheet = true;
         } else this.sheet = false;
       }

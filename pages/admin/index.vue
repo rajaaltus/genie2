@@ -646,9 +646,9 @@ export default {
   async fetch({ store, $auth }) {
     let queryString = '';
     if ($auth.user.userType==='DEPARTMENT')
-        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true`;
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&approval_status=Approved`;
       else
-        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&user.id=${$auth.user.id}`;
+        queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&user.id=${$auth.user.id}&approval_status=Approved`;
     await store.dispatch("program/countProgrammes", { qs: queryString });
     await store.dispatch("visitor/countVisitors", { qs: queryString });
     await store.dispatch("training/countTrainings", { qs: queryString });
@@ -689,15 +689,9 @@ export default {
       this.query = null;
       this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
 
-      
-
       if (this.range.start) this.query += this.monthParam;
-
       if (this.userType) this.query += this.userTypeParam;
-
       if (this.selectedUser) this.query += this.userParam;
-
-      
 
       if (
         this.$auth.user.userType === "FACULTY" ||

@@ -251,8 +251,9 @@ export default {
     async trainingAdd() {
       if (this.$refs.form.validate()) {
         this.training.annual_year = this.$store.state.selectedYear;
-        // if (this.training.user == 0)
-        // 	this.training.user = this.$store.state.auth.user.id;
+               
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.training.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.training.approved_date = this.$moment(today).format();

@@ -5,6 +5,7 @@ export const state = () => ({
 	strategy: "local",
 	user: false,
 	fullUser: {},
+	avatar_url: '/avatar-default-icon.png',
 	userProfile: [],
 	departments: {
 		success: false,
@@ -36,6 +37,8 @@ export const getters = {
 export const mutations = {
 	SET_USERPROFILE (state, userProfile) {
 		state.userProfile = userProfile;
+		if(userProfile.image)
+			state.avatar_url = this.$axios.defaults.baseURL+userProfile.image.url;
 	},
 	SET_FULL_USER (state, fullUser) {
 		state.fullUser = fullUser;

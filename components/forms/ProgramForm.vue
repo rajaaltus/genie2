@@ -240,7 +240,7 @@ export default {
       duration_to: false,
       editFrom: false,
       editTo: false,
-      valid: true,
+      valid: false,
       program: {
         annual_year: 0,
         type: "",
@@ -302,13 +302,12 @@ export default {
       this.$refs.form.reset();
       this.image_url = null;
     },
-    setUser(user) {
-      this.program.user = user;
-    },
     async programAdd() {
       if (this.$refs.form.validate()) {
         this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.program.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT")
           this.program.approval_status = "Approved";
         if (typeof this.program.name === "object")
@@ -327,7 +326,6 @@ export default {
             });
             this.reset();
             this.reloadData();
-            this.$store.dispatch("program/setProgramNames");
           })
           .catch(err => {
             Swal.fire({

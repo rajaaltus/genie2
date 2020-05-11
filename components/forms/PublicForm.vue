@@ -243,8 +243,8 @@ export default {
     async publicAdd() {
       if (this.$refs.form.validate()) {
         this.publicEngagement.annual_year = this.$store.state.selectedYear;
-        // if (this.publicEngagement.user == 0)
-        //   this.publicEngagement.user = this.$store.state.auth.user.id;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.publicEngagement.user = this.$auth.user.id;
         this.publicEngagement.department = this.$store.state.auth.user.department;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();

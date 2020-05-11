@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="presentationsData"
+      :items="dataFrom==='FACULTY'?facultiesData:studentsData"
       sort-by="updated_at"
       sort-desc
       class="elevation-1"
@@ -194,7 +194,7 @@
 import { mapState } from "vuex";
 import Swal from "sweetalert2";
 export default {
-  props: ["reportYears"],
+  props: ["reportYears", "dataFrom"],
   data: () => ({
     loading: false,
     dialog: false,
@@ -257,7 +257,13 @@ export default {
     ...mapState({
       presentationsData: state => state.presentation.presentationsData.result,
       staffs: state => state.staffs
-    })
+    }),
+    studentsData() {
+      return this.presentationsData.filter(presentation => presentation.user.userType==='STUDENT')
+    },
+    facultiesData() {
+      return this.presentationsData.filter(presentation => presentation.user.userType==='FACULTY')
+    }
   },
   watch: {
     dialog(val) {

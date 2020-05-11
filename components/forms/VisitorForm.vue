@@ -268,13 +268,13 @@ export default {
     async visitorAdd() {
       if (this.$refs.form.validate()) {
         this.visitor.annual_year = this.$store.state.selectedYear;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.visitor.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.visitor.approved_date = this.$moment(today).format();
           this.visitor.approval_status = "Approved";
         }
-        // if (this.visitor.user == 0)
-        //   this.visitor.user = this.$store.state.auth.user.id;
         this.visitor.department = this.$store.state.auth.user.department;
         var payload = this.visitor;
         // console.log(payload);
