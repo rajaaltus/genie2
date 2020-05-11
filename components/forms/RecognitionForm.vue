@@ -205,6 +205,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.recognition.annual_year = this.$store.state.selectedYear;
         this.recognition.department = this.$store.state.auth.user.department;
+        if (this.$store.state.auth.user.userType !== "DEPARTMENT")
+          this.recognition.user = this.$auth.user.id;
         if (this.$store.state.auth.user.userType === "DEPARTMENT") {
           var today = new Date();
           this.recognition.approval_status = "Approved";
@@ -212,7 +214,6 @@ export default {
         }
         var payload = this.recognition;
         // console.log(payload);
-        var vm = this;
         this.$store
           .dispatch("recognition/recognitionAdd", payload)
           .then((resp) => {

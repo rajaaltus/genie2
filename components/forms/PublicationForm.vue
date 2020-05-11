@@ -632,8 +632,6 @@ export default {
         chapter_title: "",
         editor_names: "",
         reference: "",
-        approved_by: "",
-        approved_date: "",
         deleted: false,
         authors: "",
         approval_status: "Pending",
@@ -847,9 +845,7 @@ export default {
           );
           this.publication.approval_status = "Approved";
           // this.publication.approved_by = this.$store.state.auth.user.fullname;
-        } else {
-          this.publication.user = this.$auth.user.id;
-        }
+        } 
         if (this.publication_type == 1) {
           this.publication.journal_title = this.journalArticle.fulljournalname;
           this.publication.article_title = this.journalArticle.title;

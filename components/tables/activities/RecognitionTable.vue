@@ -389,7 +389,6 @@ export default {
     },
     async reloadData() {
       this.loading = true;
-
       if (
         this.$store.state.auth.user.userType === "FACULTY" ||
         this.$store.state.auth.user.userType === "STUDENT"

@@ -73,7 +73,7 @@ export const actions = {
 			})
 			.catch((e) => {
 			// handle error
-				// commit("SET_RECOGNITIONSDATA", error);
+				commit("SET_RECOGNITIONSDATA", error);
 			})
 			.finally(function () {
 			// always executed
