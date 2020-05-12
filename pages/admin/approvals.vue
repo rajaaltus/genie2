@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PageHeader :title="$metaInfo.title" />
     <v-row>
       <v-col cols="12" lg="3">
         <ApprovalActivities />

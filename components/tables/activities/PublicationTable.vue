@@ -13,7 +13,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:item.approval_status="{ item }">
-        <v-chip :color="getColor(item.approval_status)" dark>
+        <v-chip :color="getColor(item.approval_status)" dark @click="handleclick(item)">
           {{ item.approval_status }}
         </v-chip>
       </template>
@@ -459,6 +459,17 @@ export default {
     this.reloadData();
   },
   methods: {
+    handleclick(item)
+    {
+      var index = this.publicationsData.indexOf(item);
+      if(item.approval_status === 'Rejected')
+      {
+       Swal.fire({
+         title:'Reason for Rejection',
+         text:this.publicationsData[index].rejected_reason,
+       });
+      }
+    },
     dateValidate (date) {
 			if (date) {
 				this.journalArticle.epubdate = this.$moment(date).format('YYYY MMM DD');

@@ -106,8 +106,8 @@ export default {
     let id = store.state.auth.user.id;
     let queryString = "";
     if (store.state.auth.user.userType === "DEPARTMENT")
-      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
-    else queryString = `department.id=${store.state.auth.user.department}&user.id=${id}&deleted_ne=true&annual_year=${store.state.selectedYear}`;
+      queryString = `department.id=${store.state.auth.user.department}&deleted_ne=true&annual_year=${store.state.selectedYear}&approval_status=Approved`;
+    else queryString = `department.id=${store.state.auth.user.department}&user.id=${id}&deleted_ne=true&annual_year=${store.state.selectedYear}&approval_status=Approved`;
 
     await store.dispatch("presentation/countPresentations", {
       qs: queryString
