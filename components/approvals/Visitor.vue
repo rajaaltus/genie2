@@ -15,7 +15,13 @@
 
           <!-- Main Content End -->
         </v-list-item-content>
-        <!-- <v-list-item-avatar tile size="100" color="grey"></v-list-item-avatar> -->
+        <v-list-item-avatar tile size="100" color="grey" v-if="info.image">
+            <v-img
+            :src="info.image?`${$axios.defaults.baseURL}${info.image.url}`:''"
+            max-width="100%"
+            >
+            </v-img>
+          </v-list-item-avatar>
       </v-list-item>
 
       <v-card-actions>

@@ -539,7 +539,7 @@ export default {
             `
             <p><b>${index + 1}. ${
               recognition.faculty_name
-            }</b> has been awarded as "${recognition.award_title}" from ${
+            }</b> has been awarded as "${recognition.award_title}" by ${
               recognition.organization
             },${recognition.place} on ${recognition.date}.</p>
             `
