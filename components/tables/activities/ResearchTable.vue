@@ -13,7 +13,7 @@
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:item.approval_status="{ item }">
-        <v-chip :color="getColor(item.approval_status)" dark>
+        <v-chip :color="getColor(item.approval_status)" dark @click="handleclick(item)">
           {{ item.approval_status }}
         </v-chip>
       </template>
@@ -357,6 +357,17 @@ export default {
     this.reloadData();
   },
   methods: {
+    handleclick(item)
+    {
+      var index = this.researchData.indexOf(item);
+      if(item.approval_status === 'Rejected')
+      {
+       Swal.fire({
+         title:'Reason for Rejection',
+         text:this.researchData[index].rejected_reason,
+       });
+      }
+    },
     async handleFileUpload(event) {
       console.log(this.image_url);
       if (this.image_url !== undefined) {

@@ -61,7 +61,7 @@
             <v-col cols="6">
               <v-text-field
                 v-model="patent.patent_status"
-                label="Patent Status *"
+                label="Patent Status"
                 color="success"
               ></v-text-field>
             </v-col>
