@@ -364,8 +364,9 @@ export default {
     ...mapState({
       user:state => state.user.userProfile
     }),
-    avatar_url() {
-      return this.$store.state.user.avatar_url;
+    avatar_url: {
+      get() { return this.$store.state.user.avatar_url },
+      set() { }
     }
   },
   mounted() {
