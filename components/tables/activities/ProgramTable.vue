@@ -44,6 +44,9 @@
             @change="reloadData()"
           ></v-select>
           <v-spacer></v-spacer>
+           <v-btn color="green" @click="reloadData">
+          Reload
+        </v-btn>
           <v-dialog
             v-model="dialog"
             fullscreen
@@ -213,7 +216,7 @@
         >
       </template>
       <template v-slot:no-data>
-        <v-btn color="green">
+        <v-btn color="green" @click="reloadData">
           Reload
         </v-btn>
       </template>

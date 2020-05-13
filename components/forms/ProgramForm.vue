@@ -184,12 +184,20 @@
               <!-- <input type="file" style="display:none;" label="File input" ref="image"  @change="handleFileUpload"> -->
               <v-hover>
                 <template v-slot:default="{ hover }">
+                 
                   <v-img
                     :src="image_url?`${$axios.defaults.baseURL}${image_url}`:'/image_placeholder.png'"
                     class="mt-3"
                     max-width="100%"
                     max-height="175"
                   >
+                   <v-progress-linear
+                    :active="imgLoader"
+                    :indeterminate="imgLoader"
+                    absolute
+                    bottom
+                    color="deep-purple accent-4"
+                  ></v-progress-linear>
                     <v-fade-transition>
                       <v-overlay v-if="hover" absolute color="#00564c">
                         <v-btn @click="$refs.image.click()">
@@ -236,6 +244,7 @@ export default {
   },
   data() {
     return {
+      imgLoader: false,
       duration_from: false,
       duration_to: false,
       editFrom: false,
@@ -362,6 +371,7 @@ export default {
       this.loading = false;
     },
     async handleFileUpload(event) {
+      this.imgLoader=true;
       this.selectedFile = event.target.files[0];
       // console.log(this.selectedFile);
       const data = new FormData();
@@ -373,6 +383,7 @@ export default {
       });
       this.image_url = uploadRes.data[0].url;
       this.program.image = uploadRes.data[0].id;
+      this.imgLoader=false;
     }
   }
 };
