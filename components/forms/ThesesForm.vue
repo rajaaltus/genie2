@@ -87,6 +87,7 @@
                 :rules="[(v) => !!v || 'Item is required']"
                 counter
                 label="Brief Report"
+                color="success"
               ></v-textarea>
             </v-col>
           </v-row>

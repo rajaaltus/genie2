@@ -344,7 +344,7 @@ export default {
           icon: "mdi-library",
           to: "/admin/activities/faculties"
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        // { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
       ],
       itemsStudent: [
@@ -354,7 +354,7 @@ export default {
           icon: "mdi-library",
           to: "/admin/activities/students"
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        // { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
       ],
       mini: true

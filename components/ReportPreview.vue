@@ -419,7 +419,7 @@ export default {
               visitor.designation
             }</b> from ${
               visitor.institutional_affiliation
-            } visited our department during ${visitor.from_date} - ${
+            } visited to our department during ${visitor.from_date} - ${
               visitor.to_date
             }. He / She had given a lecture titled "${visitor.title}"</p>
             <p><b><u>Brief Report:</u></b> ${visitor.brief_report}</p>
@@ -434,7 +434,7 @@ export default {
             `
             <p><b>${index + 1}. ${
               training.faculty_name
-            }</b> attended a training programme on "${
+            }</b> has attended a training programme on "${
               training.program_name
             }" at ${training.institutional_affiliation} from ${
               training.from_date
@@ -539,7 +539,7 @@ export default {
             `
             <p><b>${index + 1}. ${
               recognition.faculty_name
-            }</b> has been awarded as "${recognition.award_title}" from ${
+            }</b> has been awarded as "${recognition.award_title}" by ${
               recognition.organization
             },${recognition.place} on ${recognition.date}.</p>
             `

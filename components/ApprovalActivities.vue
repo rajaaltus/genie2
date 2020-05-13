@@ -13,8 +13,9 @@
           <v-list-item-title class="disp"
             >{{ item.title }}
             <v-chip
-              text-color="white"
-              color="green"
+              x-small
+              text-color="black"
+              color="yellow"
               v-if="getApprovalCount(item.id) !== 0"
             >
               {{ getApprovalCount(item.id) }}

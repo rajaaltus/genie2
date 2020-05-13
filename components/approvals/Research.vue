@@ -1,105 +1,38 @@
 <template>
   <div>
-    <v-alert border="left" color="indigo" dark>
-      <v-row class="mb-2">
-        <h4 class="py-0 mt-1 ml-4">FROM:</h4>
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-chip
-              class="mx-2 my-0"
-              color="green"
-              text-color="white"
-              v-on="on"
+    <v-card class="mx-auto mb-1" outlined>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="overline mb-4">
+          Submitted By {{ info.user.fullname }} on {{ $moment(info.created_at).format("DD MMM YYYY, HH:MM") }}  
+          </div>
+          <!-- Main Content -->
+          
+          <p class="body-1"><b>{{info.research_status}}:</b> {{info.title}}</p>
+          <p class="body-2" v-if="info.investigator_type==='CoInvestigator'"><b>PIs: </b>{{info.investigator_name}}, <b>Co-PI:</b> {{info.faculty_name}}</p>
+          <p class="body-2" v-else><b>PIs: </b>{{info.faculty_name}}, <b>Co-PI:</b> {{info.investigator_name}}</p>
+          <p class="body-2"><b>Total Duration(in months):</b> {{info.total_durations}}, <b>Source of Funding: </b>{{info.funding_source}}, <b>Funding Agency: </b>{{info.funding_agency}}, <b>Total Funds: </b>{{info.total_funds}} lakhs, <b>Funding during the review period/year: </b>{{info.funding_on_review_period}} lakhs</p>
+          <p class="body-2 font-weight-medium"><b><u>Research Abstract</u></b></p>
+					<p class="body-2 font-weight-normal">{{ info.research_abstract}}</p>
+
+          <!-- Main Content End -->
+        </v-list-item-content>
+        <v-list-item-avatar tile size="100" color="grey" v-if="info.image">
+            <v-img
+            :src="info.image?`${$axios.defaults.baseURL}${info.image.url}`:''"
+            max-width="100%"
             >
-              <v-avatar left>
-                <v-icon>mdi-account-circle</v-icon>
-              </v-avatar>
-              {{
-                $auth.user.userType !== "DEPARTMENT"
-                  ? "You"
-                  : info.user.fullname
-              }}
-            </v-chip>
-          </template>
-          <span>{{ info.user.userType }}</span>
-        </v-tooltip>
-        <span class="mt-1">
-          Submitted on &nbsp;<strong>
-            {{ $moment(info.created_at).fromNow() }}
-          </strong>
-        </span>
-      </v-row>
-      <v-divider class="my-4 info" style="opacity: 0.22"></v-divider>
-      <v-row class="my-2 mx-1">
-        <span
-          >From:
-          <strong>{{ $moment(info.from_date).format("DD MMM YYYY") }}</strong>
-          to:
-          <strong>{{
-            $moment(info.to_date).format("DD MMM YYYY")
-          }}</strong></span
-        >
-      </v-row>
-      <v-row class="my-2 mx-1">
-        <span
-          >{{ info.forum }} {{ info.program_type }} on
-          <strong>{{ info.name }},</strong> {{ info.location }}, Banglore.</span
-        >
-      </v-row>
-      <v-row class="my-2 mx-1">
-        <h4>Coordinators: &nbsp;</h4>
-        <span>Authors, One, Three</span>
-      </v-row>
-      <div class="my-2">
-        Brief Report
-      </div>
-      <v-divider class="my-4 info" style="opacity: 0.22"></v-divider>
-      <v-row align="center" no-gutters>
-        <v-row v-if="$auth.user.userType === 'DEPARTMENT'">
-          <v-spacer></v-spacer>
-          <v-btn class="mr-2" color="success" @click="handleApprove()">
-            Approve
-          </v-btn>
-          <v-btn class="mr-2" color="error" @click="handleReject()">
-            Reject
-          </v-btn>
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            color="orange"
-            @click="handleDelete()"
-          >
-            <v-icon dark>mdi-delete</v-icon>
-          </v-btn>
-        </v-row>
-        <v-row v-else>
-          <v-spacer></v-spacer>
-          <v-chip
-            class="ma-2"
-            close
-            :color="getColor(info.approval_status)"
-            text-color="white"
-          >
-            <v-avatar left>
-              <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-avatar>
-            {{ info.approval_status }}
-          </v-chip>
-          <!-- <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            color="orange"
-            @click="handleDelete()"
-          >
-            <v-icon dark>mdi-delete</v-icon>
-          </v-btn> -->
-        </v-row>
-      </v-row>
-    </v-alert>
+            </v-img>
+          </v-list-item-avatar>
+      </v-list-item>
+
+      <v-card-actions>
+        <v-layout align-end justify-end>
+        <v-btn small color="red darken-3" class="mr-2" dark @click="handleReject()"><v-icon small class="pr-2">mdi-message-bulleted-off</v-icon>Reject</v-btn>
+        <v-btn small color="green darken-3" dark @click="handleApprove()"><v-icon small class="pr-2">mdi-check-all</v-icon> Approve</v-btn>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
     <!-- <pre>{{info}}</pre> -->
   </div>
 </template>
