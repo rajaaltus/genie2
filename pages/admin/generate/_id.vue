@@ -88,6 +88,7 @@ export default {
       );
     },
     formattedAbout() {
+      if(this.aboutData){
       return `
       <center>
       <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
@@ -101,9 +102,16 @@ export default {
       <h3>B. New facilities developed: New initiatives taken up by the Department(s) within NIMHANS during the year.</h3>
       <p>${this.aboutData.facilities}</p>
       `;
+      }
+      else
+      {
+        return '';
+      }
     },
     formattedClinical() {
       let sum = 0;
+      console.log(this.clinicalData);
+      if(this.clinicalData.length>0){
       return `
 
       <h3>2. PATIENT CARE ACTIVITIES</h3>
@@ -180,9 +188,13 @@ export default {
       </tbody>
       </table>
       `;
+      }
+      else { return ''; }
     },
     formattedEmergency() {
       let sum = 0;
+      if(this.emergencyData.length>0)
+      {
       return `
       <h3> B. Emergency Services</h3>
       <table>
@@ -224,9 +236,13 @@ export default {
       </tr>
       </table>
       `;
+      }
+      else { return ''; }
     },
     formattedDiagnostics() {
       let sum = 0;
+      if(this.diagnosticsData.length>0)
+      {
       var html = `
       <h3> C. Diagnostic Services</h3>
       <table>
@@ -244,8 +260,12 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return ''; }
     },
     formattedSpecial() {
+      if(this.specialData.length>0)
+      {
       var html = `
       <h3>D. Special Clinics / Services / Procedures</h3>
       <table>
@@ -269,8 +289,12 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return ''; }
     },
     formattedOT() {
+      if(this.otservicesData.length>0)
+      {
       var html = `
       <h3>E.	OT & Other Procedures</h3>
       <table>
@@ -292,8 +316,12 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return''; }
     },
     formattedHRD() {
+      if(this.hrdCourses.length>0)
+      {
       var html = `
       <h3>3.	HUMAN RESOURCE DEVELOPMENT </h3>
       <h3>A.	Details of Regular Courses</h3>
@@ -320,8 +348,12 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return ''; }
     },
     formattedTrainings() {
+      if(this.hrdTrainings.length>0)
+      {
       var html = `
       <h3>B.	Faculty/staff/students from other institutions trained at NIMHANS</h3>
       <table>
@@ -349,8 +381,12 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return ''; }
     },
     formattedRetaired() {
+      if(this.retaired.length>0)
+      {
       var html = `
       <h3>4.	DETAILS OF DEPARTMENTAL STAFF</h3>
       <h3>B.	A.	List of Faculty and staff served NIMHANS and Superannuated / Resigned / VRS</h3>
@@ -375,6 +411,8 @@ export default {
       html += `</table>
       `;
       return html;
+      }
+      else { return ''; }
     },
     sectionA() {
       if (this.savedData.section_a) return this.savedData.section_a;
@@ -398,7 +436,7 @@ export default {
   async fetch({ store, params }) {
     await store.dispatch("report/getById", { id: params.id });
     let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&annual_year=2019`;
+    queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.report.generatedReport.annual_year}`;
     await store.dispatch("about/setAboutData", { query: queryString });
     await store.dispatch("clinical/setClinicalData", { qs: queryString });
     await store.dispatch("emergency/setEmergencyData", { qs: queryString });

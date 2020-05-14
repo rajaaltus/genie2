@@ -108,6 +108,13 @@
                     max-width="100%"
                     max-height="175"
                   >
+                  <v-progress-linear
+                    :active="imgLoader"
+                    :indeterminate="imgLoader"
+                    absolute
+                    bottom
+                    color="deep-purple accent-4"
+                  ></v-progress-linear>
                     <v-fade-transition>
                       <v-overlay v-if="hover" absolute color="#00564c">
                         <v-btn @click="$refs.image.click()">
@@ -152,6 +159,7 @@ export default {
     AddUser,
   },
   data: () => ({
+    imgLoader: false,
     loading: false,
     date: false,
     valid: true,
@@ -233,6 +241,7 @@ export default {
       }
     },
     async handleFileUpload(event) {
+      this.imgLoader=true;
       this.selectedFile = event.target.files[0];
       // console.log(this.selectedFile);
       const data = new FormData();
@@ -244,6 +253,7 @@ export default {
       });
       this.image_url = uploadRes.data[0].url;
       this.recognition.image = uploadRes.data[0].id;
+      this.imgLoader=false;
     },
   },
 };

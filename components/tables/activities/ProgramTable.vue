@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-      style="border-radius:0;"
+      style="border-radius: 0;"
       :headers="headers"
       :items="programmesData"
       sort-by="updated_at"
@@ -10,14 +10,18 @@
       :loading="loading"
       loading-text="Loading... Please wait"
       :footer-props="{
-    'items-per-page-options': [10, 20, 30, 40, 50]
-  }"
+        'items-per-page-options': [10, 20, 30, 40, 50],
+      }"
     >
       <template v-slot:item.updated_at="{ item }">
         {{ $moment(item.updated_at).fromNow() }}
       </template>
       <template v-slot:item.approval_status="{ item }">
-        <v-chip :color="getColor(item.approval_status)" dark @click="handleclick(item)">
+        <v-chip
+          :color="getColor(item.approval_status)"
+          dark
+          @click="handleclick(item)"
+        >
           {{ item.approval_status }}
         </v-chip>
       </template>
@@ -26,7 +30,7 @@
           flat
           color="#ebebeb"
           class="d-flex justify mt-4 pt-1"
-          style="border-radius:0;"
+          style="border-radius: 0;"
         >
           <v-toolbar-title
             ><span class="frm-title">Programmes / Events</span></v-toolbar-title
@@ -43,7 +47,22 @@
             class="justify-end mt-6"
             @change="reloadData()"
           ></v-select>
-          <v-spacer></v-spacer>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-tooltip right color="blue-grey darken-2">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                x-small
+                fab
+                color="green"
+                dark
+                @click="reloadData"
+                v-on="on"
+              >
+                <v-icon>mdi-reload</v-icon>
+              </v-btn>
+            </template>
+            <span>Reload Data</span>
+          </v-tooltip>
           <v-dialog
             v-model="dialog"
             fullscreen
@@ -73,7 +92,7 @@
                       <v-col cols="4">
                         <v-select
                           v-model="editedItem.type"
-                          :rules="[v => !!v || 'Item is required']"
+                          :rules="[(v) => !!v || 'Item is required']"
                           :items="programTypes"
                           label="Program Type"
                         ></v-select>
@@ -82,7 +101,7 @@
                     <v-col cols="4">
                       <v-select
                         v-model="editedItem.forum"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
                         :items="programLevels"
                         label="Forum"
                       ></v-select>
@@ -97,7 +116,7 @@
                     <v-col cols="8">
                       <v-text-field
                         v-model="editedItem.name"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
                         label="Program Name*"
                         required
                       >
@@ -106,7 +125,7 @@
                     <v-col cols="4">
                       <v-text-field
                         v-model="editedItem.participants_count"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
                         type="number"
                         label="Participants Count*"
                         required
@@ -134,12 +153,11 @@
                     <v-col cols="4">
                       <v-select
                         v-model="editedItem.location"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
                         :items="locations"
                         label="Location*"
                       ></v-select>
                     </v-col>
-                    
                   </v-row>
                   <v-row>
                     <v-col cols="12">
@@ -161,7 +179,11 @@
                     <v-hover>
                       <template v-slot:default="{ hover }">
                         <v-img
-                          :src="image_url==='/image_placeholder.png'?'/image_placeholder.png':`${$axios.defaults.baseURL}${image_url}`"
+                          :src="
+                            image_url === '/image_placeholder.png'
+                              ? '/image_placeholder.png'
+                              : `${$axios.defaults.baseURL}${image_url}`
+                          "
                           lazy-src="/image_placeholder.png"
                           aspect-ratio="1"
                           class="grey lighten-2"
@@ -193,7 +215,7 @@
                     <input
                       ref="image"
                       type="file"
-                      style="display:none;"
+                      style="display: none;"
                       label="File input"
                       @change="handleFileUpload"
                     />
@@ -212,11 +234,6 @@
           >mdi-delete-circle</v-icon
         >
       </template>
-      <template v-slot:no-data>
-        <v-btn color="green">
-          Reload
-        </v-btn>
-      </template>
     </v-data-table>
   </div>
 </template>
@@ -234,7 +251,7 @@ export default {
       {
         text: "Last Updated",
         align: "left",
-        value: "updated_at"
+        value: "updated_at",
       },
       { text: "Program Type", value: "type" },
       { text: "Forum", value: "forum" },
@@ -242,14 +259,14 @@ export default {
         text: "Programme Name",
         align: "left",
         sortable: false,
-        value: "name"
+        value: "name",
       },
       { text: "No. of Participants", value: "participants_count" },
       { text: "From", value: "from_date" },
       { text: "To", value: "to_date" },
       { text: "Location", value: "location" },
       { text: "Approval Status", value: "approval_status" },
-      { text: "Actions", value: "action", sortable: false }
+      { text: "Actions", value: "action", sortable: false },
     ],
     editedItem: {
       annual_year: 0,
@@ -270,7 +287,7 @@ export default {
       rejected_reason: null,
       image: null,
       department: 0,
-      user: 0
+      user: 0,
     },
     image_url: "/image_placeholder.png",
     selectedFile: null,
@@ -293,7 +310,7 @@ export default {
       rejected_reason: null,
       image: null,
       department: 0,
-      user: 0
+      user: 0,
     },
     imageToDelete: null,
     editedIndex: -1,
@@ -302,23 +319,23 @@ export default {
       "Workshop",
       "Seminar",
       "Symposium",
-      "Scientific"
+      "Scientific",
     ],
     programLevels: ["International", "National", "Regional", "State", "Local"],
     locations: ["NIMHANS", "OUTSIDE_NIMHANS"],
     colloborations: ["Departmental", "Interdepartmental"],
-    approvals: ["Pending", "Rejected", "Approved"]
+    approvals: ["Pending", "Rejected", "Approved"],
   }),
   computed: {
     ...mapState({
-      programmesData: state => state.program.programmesData.result,
-      staffs: state => state.staffs
-    })
+      programmesData: (state) => state.program.programmesData.result,
+      staffs: (state) => state.staffs,
+    }),
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   async fetch({ store }) {
     //Filter Query Fetch
@@ -345,15 +362,13 @@ export default {
     this.reloadData();
   },
   methods: {
-    handleclick(item)
-    {
+    handleclick(item) {
       var index = this.programmesData.indexOf(item);
-      if(item.approval_status === 'Rejected')
-      {
-       Swal.fire({
-         title:'Reason for Rejection',
-         text:this.programmesData[index].rejected_reason,
-       });
+      if (item.approval_status === "Rejected") {
+        Swal.fire({
+          title: "Reason for Rejection",
+          text: this.programmesData[index].rejected_reason,
+        });
       }
     },
     async handleFileUpload(event) {
@@ -366,7 +381,7 @@ export default {
         const uploadRes = await this.$axios({
           method: "POST",
           url: "/upload",
-          data
+          data,
         });
         this.image_url = uploadRes.data[0].url;
         this.editedItem.image = uploadRes.data[0].id;
@@ -380,7 +395,7 @@ export default {
         const uploadRes = await this.$axios({
           method: "POST",
           url: "/upload",
-          data
+          data,
         });
         this.image_url = uploadRes.data[0].url;
         this.editedItem.image = uploadRes.data[0].id;
@@ -406,7 +421,7 @@ export default {
         {},
         {
           id: item.id,
-          deleted: item.deleted
+          deleted: item.deleted,
         }
       );
       // confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
@@ -421,27 +436,29 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then(result => {
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
         if (result.value) {
           this.loading = true;
-          this.$store.dispatch("program/updateProgram", payload).then(resp => {
-            this.loading = false;
-            Swal.fire({
-              title: "Success",
-              text: "Deleted Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500
+          this.$store
+            .dispatch("program/updateProgram", payload)
+            .then((resp) => {
+              this.loading = false;
+              Swal.fire({
+                title: "Success",
+                text: "Deleted Successfully!",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.reloadData();
             });
-            this.reloadData();
-          });
           Swal.fire({
             title: "Something Wrong!",
             text: err,
             icon: "warning",
             showConfirmButton: false,
-            timer: 4500
+            timer: 4500,
           });
         }
       });
@@ -455,20 +472,20 @@ export default {
         let queryString = "";
         queryString = `department.id=${this.$auth.user.department}&user.id=${this.$auth.user.id}&deleted_ne=true&annual_year=${this.annualYear}`;
         await this.$store.dispatch("program/setProgrammesData", {
-          qs: queryString
+          qs: queryString,
         });
       } else {
         let queryString = "";
         queryString = `department.id=${this.$auth.user.department}&annual_year=${this.annualYear}&deleted_ne=true`;
         await this.$store.dispatch("program/setProgrammesData", {
-          qs: queryString
+          qs: queryString,
         });
       }
       this.loading = false;
     },
     close() {
       this.dialog = false;
-      this.image_url = '/image_placeholder.png';
+      this.image_url = "/image_placeholder.png";
     },
 
     save() {
@@ -482,13 +499,13 @@ export default {
         console.log(payload);
         this.$store
           .dispatch("program/updateProgram", payload)
-          .then(resp => {
+          .then((resp) => {
             Swal.fire({
               title: "Success",
               text: "Updated Successfully!",
               icon: "success",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
             });
 
             if (this.imageToDelete) {
@@ -498,20 +515,22 @@ export default {
             this.reloadData();
             this.image_url = null;
           })
-          .catch(err => {
+          .catch((err) => {
             Swal.fire({
               title: "Something Wrong!",
               text: err,
               icon: "warning",
               showConfirmButton: false,
-              timer: 4500
+              timer: 4500,
             });
           })
-          .finally(()=>{this.image_url=null})
+          .finally(() => {
+            this.image_url = null;
+          });
       }
       this.close();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -519,5 +538,8 @@ export default {
 .frm-title {
   border-left: 5px solid #e16949;
   padding: 3px 10px;
+}
+.pullright {
+  float: right;
 }
 </style>

@@ -261,9 +261,9 @@
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
       <v-spacer></v-spacer>
       <h2>Reporting Year</h2>
-      <span class="yellow darken-1 ml-3 px-2 display-1 font-weight-bold">
+      <v-card elevation="0" class="amber ml-3 mr-2 px-2 display-1 font-weight-bold">
         {{ $store.state.selectedYear }} - {{ $store.state.selectedYear + 1 }}
-      </span>
+      </v-card>
     </v-app-bar>
     <v-content>
       <v-container fluid>
@@ -365,13 +365,8 @@ export default {
       user:state => state.user.userProfile
     }),
     avatar_url: {
-      get() {
-        return this.$store.state.user.avatar_url;
-      },
-      set() {
-        
-      }
-      
+      get() { return this.$store.state.user.avatar_url },
+      set() { }
     }
   },
   mounted() {

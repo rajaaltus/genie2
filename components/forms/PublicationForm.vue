@@ -696,8 +696,6 @@ export default {
         this.publication.chapter_title= "",
         this.publication.editor_names= "",
         this.publication.reference= "",
-        this.publication.approved_by= "",
-        this.publication.approved_date= "",
         this.publication.deleted= false,
         this.publication.authors= "",
         this.publication.approval_status= "Pending",
@@ -710,11 +708,13 @@ export default {
     dateValidate(date) {
       if (date) {
         this.journalArticle.epubdate = this.$moment(date).format("YYYY MMM DD");
+        this.composeReference();
       }
     },
     dateValidate1(date) {
       if (date) {
         this.publication.pub_date = this.$moment(date).format("YYYY-MM-DD");
+        this.composeReference();
       }
     },
     getPublicationType(id) {
@@ -785,7 +785,8 @@ export default {
         this.publication.authors + "." + 
         this.publication.article_title + "." + 
         this.publication.journal_title + "," + 
-        this.publication.pub_date + "," + 
+        this.publication.pub_date + "," +
+        this.publication.volume_no+ ":" + 
         this.publication.pages;
       }
       if (this.publication_type == 3) {
