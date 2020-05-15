@@ -19,12 +19,13 @@
           ></v-select>
         </v-col>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters :key="updateList">
         <v-col
           cols="3"
           lg="2"
-          v-for="department in departments"
-          :key="department"
+          v-for="(department, index) in departments"
+          :index="index"
+          :key="index"
         >
           <DepartmentCard
             :selectedYear="selectedYear"
@@ -50,6 +51,7 @@ export default {
       cardColor: "white",
       dark: false,
       available: "default",
+      updateList: 0
     };
   },
   computed: {
@@ -67,6 +69,7 @@ export default {
      fetchData() {
       console.log(this.selectedYear)
       this.$store.dispatch("user/getAllDepartment");
+      this.updateList++;
     }
   }
 };

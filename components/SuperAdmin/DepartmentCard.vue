@@ -1,6 +1,19 @@
 <template>
   <div>
-    <v-card tile elevation="1" :color="cardColor" :dark="dark">
+    <ReportDialog
+      v-if="dialog"
+      :selectedYear="selectedYear"
+      :department="selectedDepartment"
+      :activityData="activityData"
+      @closed="dialog = false"
+    />
+    <v-card
+      :loading="loading"
+      tile
+      elevation="1"
+      :color="cardColor"
+      :dark="dark"
+    >
       <v-card-title>
         <span
           class="subtitle-1 font-weight-normal d-inline-block text-truncate"
@@ -20,22 +33,16 @@
       </v-card-text>
       <v-card-text v-if="available === 'available'">
         <v-layout align-start justify-start>
-          <v-tooltip right color="green">
-            <template v-slot:activator="{ on }">
-              <v-btn fab x-small color="white" v-on="on" class="mr-1"
-                ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-              >
-            </template>
-            <span>Download Faculty Report</span>
-          </v-tooltip>
-          <v-tooltip right color="green">
-            <template v-slot:activator="{ on }">
-              <v-btn fab x-small color="white" v-on="on"
-                ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-              >
-            </template>
-            <span>Download Student Report</span>
-          </v-tooltip>
+          <FacultyReport
+            :departmentId="department.id"
+            :selectedYear="selectedYear"
+            @downloadFaculty="downloadFaculty"
+          />
+          <StudentReport
+            :departmentId="department.id"
+            :selectedYear="selectedYear"
+            @downloadStudent="downloadStudent"
+          />
         </v-layout>
       </v-card-text>
       <v-card-text v-if="available === 'notSubmitted'">
@@ -55,41 +62,72 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
+import FacultyReport from "@/components/SuperAdmin/reports/FacultyReport";
+import StudentReport from "@/components/SuperAdmin/reports/StudentReport";
+import ReportDialog from "@/components/SuperAdmin/reports/ReportDialog";
 export default {
   props: ["selectedYear", "department"],
+  components: {
+    FacultyReport,
+    StudentReport,
+    ReportDialog,
+  },
   data() {
     return {
       report: null,
-      available: 'notSubmitted',
-      cardColor: 'red',
+      available: "notSubmitted",
+      cardColor: "red",
       dark: true,
-      availableData: null
-    }
+      availableData: null,
+      loading: false,
+      facultyData: null,
+      studentData: null,
+      activityData: null,
+      selectedDepartment: null,
+      dialog: false,
+    };
   },
   computed: {
     ...mapState({
-      availableReports:  state => state.report.availableReports
-    })
+      availableReports: (state) => state.report.availableReports,
+    }),
   },
-  
- async mounted() {
+  async mounted() {
     this.setReport();
   },
   methods: {
+    async downloadFaculty(fData) {
+      this.activityData = fData;
+      this.facultyData = fData;
+      this.selectedDepartment = fData.department;
+      this.dialog = true;
+    },
+    async downloadStudent(sData) {
+      this.activityData = sData;
+      this.studentData = sData;
+      this.selectedDepartment = sData.department;
+      this.dialog = true;
+    },
     async setReport() {
-    let queryString = '';
-    queryString = `department.id=${this.department.id}&annual_year=${this.selectedYear}`
-    await this.$store.dispatch('report/setAvailableReports', {qs: queryString})  
-    console.log(this.$store.state.report.availableReports[0])
-    if(this.availableReports[0]){
-      this.available='available';
-      this.cardColor='light-green';
-      this.dark=true
-    }
-  }
-  }
-  
-  
+      let queryString = "";
+      if (this.selectedYear == 0) {
+        this.available = "default";
+        (this.cardColor = "white"), (this.dark = false);
+      } else {
+        this.loading = true;
+        queryString = `department.id=${this.department.id}&annual_year=${this.selectedYear}`;
+        await this.$store.dispatch("report/setAvailableReports", {
+          qs: queryString,
+        });
+        if (this.availableReports.length > 0) {
+          this.available = "available";
+          this.cardColor = "light-green";
+          this.dark = true;
+        }
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
