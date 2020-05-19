@@ -34,11 +34,13 @@
       <v-card-text v-if="available === 'available'">
         <v-layout align-start justify-start>
           <FacultyReport
+            v-if="isFacultyReport"
             :departmentId="department.id"
             :selectedYear="selectedYear"
             @downloadFaculty="downloadFaculty"
           />
           <StudentReport
+            v-if="isStudentReport"
             :departmentId="department.id"
             :selectedYear="selectedYear"
             @downloadStudent="downloadStudent"
@@ -81,11 +83,11 @@ export default {
       dark: true,
       availableData: null,
       loading: false,
-      facultyData: null,
-      studentData: null,
       activityData: null,
       selectedDepartment: null,
       dialog: false,
+      isStudentReport: false,
+      isFacultyReport: false
     };
   },
   computed: {
@@ -113,7 +115,8 @@ export default {
       let queryString = "";
       if (this.selectedYear == 0) {
         this.available = "default";
-        (this.cardColor = "white"), (this.dark = false);
+        this.cardColor = "white";
+        this.dark = false;
       } else {
         this.loading = true;
         queryString = `department.id=${this.department.id}&annual_year=${this.selectedYear}`;
@@ -124,6 +127,9 @@ export default {
           this.available = "available";
           this.cardColor = "light-green";
           this.dark = true;
+          var reports = this.availableReports.map(report => report.userType)
+          this.isFacultyReport = reports.includes('FACULTY');
+          this.isStudentReport = reports.includes('STUDENT');
         }
         this.loading = false;
       }

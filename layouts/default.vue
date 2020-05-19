@@ -267,9 +267,25 @@
     </v-app-bar>
     <v-content>
       <v-container fluid>
+        <v-snackbar></v-snackbar>
         <nuxt />
       </v-container>
     </v-content>
+    <v-snackbar
+      v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+      :key="snackbar.text + Math.random()"
+      :value="snackbar.showing"
+      @input="removeSnackbar(snackbar)"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      :style="`bottom: ${(index * 60) + 8}px`"
+    >
+      {{snackbar.text}}
+
+      <v-btn text @click="removeSnackbar(snackbar)">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -362,18 +378,22 @@ export default {
   },
   computed: {
     ...mapState({
-      user:state => state.user.userProfile
+      user:state => state.user.userProfile,
+      snackbars: state => state.snackbar.snackbars
     }),
     avatar_url: {
       get() { return this.$store.state.user.avatar_url },
       set() { }
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
     this.setAvatar();
   },
   methods: {
+    removeSnackbar(snackbar) {
+      this.$store.dispatch('snackbar/remove', snackbar)
+    },
     async setAvatar() {
       if (this.user) {
         if (this.user.image)
