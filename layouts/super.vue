@@ -63,6 +63,23 @@
         <nuxt />
       </v-container>
     </v-content>
+    <v-snackbar
+      v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+      right
+      top
+      :key="snackbar.text + Math.random()"
+      :value="snackbar.showing"
+      @input="removeSnackbar(snackbar)"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      :style="`top: ${(index * 60) + 8}px`"
+    >
+      {{snackbar.text}}
+
+      <v-btn text @click="removeSnackbar(snackbar)">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -91,6 +108,7 @@ export default {
   computed: {
     ...mapState({
       userData: (state) => state.userData,
+      snackbars: state => state.snackbar.snackbars
     }),
   },
   mounted() {
@@ -100,6 +118,9 @@ export default {
     async logout() {
       await this.$auth.logout();
       window.location.reload();
+    },
+    removeSnackbar(snackbar) {
+      this.$store.dispatch('snackbar/remove', snackbar)
     },
   },
 };

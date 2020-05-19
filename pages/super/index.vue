@@ -33,7 +33,9 @@
           />
         </v-col>
       </v-row>
+       <TheSnackbar />
     </v-container>
+   
   </div>
 </template>
 
@@ -64,6 +66,9 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch("user/getAllDepartment");
+  },
+  mounted() {
+    this.$store.dispatch('snackbar/setSnackbar', {text: "Successfully logged In."})
   },
   methods: {
      fetchData() {
