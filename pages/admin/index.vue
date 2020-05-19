@@ -677,7 +677,7 @@ export default {
     async loader() {
       this.loading = true;
       this.query = null;
-      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true";
+      this.query = this.yearParam ? this.yearParam : "?deleted_ne=true&approval_status=Approved";
 
       if (this.range.start) this.query += this.monthParam;
       if (this.userType) this.query += this.userTypeParam;
@@ -692,7 +692,7 @@ export default {
       let queryString = "";
       queryString =
         this.query +
-        `&department.id=${this.$auth.user.department}&deleted_ne=true`;
+        `&department.id=${this.$auth.user.department}&deleted_ne=true&approval_status=Approved`;
       console.log("Final Query", this.query);
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
@@ -746,9 +746,9 @@ export default {
       this.loading = true;
       let queryString = "";
       if (this.$auth.user.userType==='DEPARTMENT')
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true`;
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&approval_status=Approved`;
       else
-        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&user.id=${this.$auth.user.id}`;
+        queryString = `department.id=${this.$store.state.auth.user.department}&deleted_ne=true&user.id=${this.$auth.user.id}&approval_status=Approved`;
       await this.$store.dispatch("program/countProgrammes", {
         qs: queryString,
       });

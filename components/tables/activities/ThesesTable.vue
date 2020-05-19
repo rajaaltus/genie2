@@ -41,7 +41,22 @@
             color="success"
             @change="reloadData()"
           ></v-select>
-          <v-spacer></v-spacer>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-tooltip right color="blue-grey darken-2">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                x-small
+                fab
+                color="green"
+                dark
+                @click="reloadData"
+                v-on="on"
+              >
+                <v-icon>mdi-reload</v-icon>
+              </v-btn>
+            </template>
+            <span>Reload Data</span>
+          </v-tooltip>
           <v-dialog
             v-model="dialog"
             fullscreen
@@ -175,11 +190,7 @@
           >mdi-delete-circle</v-icon
         >
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary">
-          Reset
-        </v-btn>
-      </template>
+      
     </v-data-table>
   </div>
 </template>

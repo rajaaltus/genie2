@@ -86,13 +86,13 @@
                   <v-col cols="3" md="3" lg="3">
                     <v-img
                       :src="
-                        item.image_1 !== null && item.image_1 !== undefined
-                          ? $axios.defaults.baseURL + item.image_1.url
+                        item.image !== null && item.image !== undefined
+                          ? $axios.defaults.baseURL + item.image.url
                           : '/award_ph.jpg'
                       "
                       lazy-src="/award_ph.jpg"
                       aspect-ratio="1"
-                      class="grey lighten-2"
+                      class="grey lighten-2 expandimg"
                       max-width="200"
                       max-height="120"
                     >
@@ -143,8 +143,8 @@
                   <v-col cols="3" md="3" lg="3">
                     <v-img
                       :src="
-                        item.image_1 !== null && item.image_1 !== undefined
-                          ? $axios.defaults.baseURL + item.image_1.url
+                        item.image !== null && item.image !== undefined
+                          ? $axios.defaults.baseURL + item.image.url
                           : '/presentation_ph.jpg'
                       "
                       lazy-src="/presentation_ph.jpg"
@@ -203,8 +203,8 @@
                   <v-col cols="3" md="3" lg="3">
                     <v-img
                       :src="
-                        item.image_1 !== null && item.image_1 !== undefined
-                          ? $axios.defaults.baseURL + item.image_1.url
+                        item.image !== null && item.image !== undefined
+                          ? $axios.defaults.baseURL + item.image.url
                           : '/participation_ph.jpg'
                       "
                       lazy-src="/participation_ph.jpg"

@@ -1,63 +1,27 @@
 <template>
-  <div>
-    <!-- <pre>{{ item }}</pre> -->
-    <!-- <pre>{{content}}</pre> -->
-    <!-- <pre>{{ formattedDiagnostics }}</pre> -->
-    <div class="preview">
-      <v-sheet  color="blue-grey darken-3" width="100%" height="200vh">
-        <v-toolbar color="blue-grey darken-3" dark>
-          <v-toolbar-title class="white--text"
-            >Consolidated Report Preview
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-tooltip left color="blue-grey darken-3">
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
-                <v-icon @click="exportToDoc(`Report-${$route.params.id}`)"
-                  >mdi-download</v-icon
-                >
-              </v-btn>
-            </template>
-            <span>Download Report</span>
-          </v-tooltip>
-        </v-toolbar>
-        <v-sheet
-          tile
-          id="download"
-          elevation="6"
-          v-html="content"
-          class="mx-auto py-4 px-6 doc"
-          height="200vh"
-          width="100%"
-        >
-        </v-sheet>
-      </v-sheet>
-    </div>
-    <!-- <FinalEditor id="content" :content="content" />
-    <div id="download" style="display:none" v-html="content"></div> -->
-  </div>
+    <v-dialog v-model="dialog" scrollable max-width="400px" persistent>
+      <v-card class="align-center">
+         <v-sheet id="savedDoc" v-html="departmentData" style="display:none"></v-sheet>
+           <v-card-actions>
+          <v-btn class="ma-2" tile outlined color="success" @click="exportToDoc(`${department.name}`)">
+            <v-icon left>mdi-file-word</v-icon> Download report
+          </v-btn>
+          <v-btn color="red" text @click="handleClose">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
-
 <script>
 import { mapState } from "vuex";
-import PageHeader from "@/components/PageHeader";
-import FinalEditor from "@/components/FinalEditor";
 export default {
-  head() {
-    return {
-      title: "Generated Report",
-    };
-  },
-  components: {
-    PageHeader,
-    FinalEditor,
-  },
+  props: ["selectedYear", "department", "activityData"],
   data() {
-    return {};
+    return {
+      dialog: false,
+    }
   },
   computed: {
     ...mapState({
-      savedData: (state) => state.report.generatedReport,
       aboutData: (state) => state.about.newAbout[0],
       clinicalData: (state) => state.clinical.clinicalData.result,
       emergencyData: (state) => state.emergency.emergencyData,
@@ -68,7 +32,7 @@ export default {
       hrdTrainings: (state) => state.hrdTraining.hrdTrainings.result,
       retaired: (state) => state.faculty.facultyData.result,
     }),
-    content() {
+    departmentData() {
       return (
         this.formattedAbout +
         this.formattedClinical +
@@ -79,21 +43,23 @@ export default {
         this.formattedHRD +
         this.formattedTrainings +
         this.formattedRetaired +
-        this.sectionA +
-        this.sectionB +
-        this.sectionC +
-        this.sectionD +
-        this.sectionE +
-        this.sectionF
+        this.activityData?this.activityData.section_a:'' +
+        this.activityData.section_b +
+        this.activityData.section_c +
+        this.activityData.section_d +
+        this.activityData.section_e +
+        this.activityData.section_f 
       );
     },
     formattedAbout() {
-      if(this.aboutData){
-      return `
+      if (this.aboutData) {
+        return `
       <center>
       <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
       <h3>Bengaluru – 560029</h3>
-      <h2>Period of the report:1st April ${this.$store.state.selectedYear} to 31st March ${this.$store.state.selectedYear + 1}</h2>
+      <h2>Period of the report:1st April ${
+        this.$store.state.selectedYear
+      } to 31st March ${this.$store.state.selectedYear + 1}</h2>
       </center>
       <h1><b><u>Section A:</u></b></h1>
       <h3>1. ABOUT THE DEPARTMENT</h3>
@@ -102,17 +68,15 @@ export default {
       <h3>B. New facilities developed: New initiatives taken up by the Department(s) within NIMHANS during the year.</h3>
       <p>${this.aboutData.facilities}</p>
       `;
-      }
-      else
-      {
-        return '';
+      } else {
+        return "";
       }
     },
     formattedClinical() {
       let sum = 0;
-      console.log(this.clinicalData);
-      if(this.clinicalData.length>0){
-      return `
+      // console.log(this.clinicalData);
+      if (this.clinicalData.length > 0) {
+        return `
 
       <h3>2. PATIENT CARE ACTIVITIES</h3>
       <h3> A. Clinical Services</h3>
@@ -162,7 +126,10 @@ export default {
       </tr>
       <tr>
       <td style="border: 1px solid #dddddd;">Deaths</td>
-      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce((sum, item) => sum + item.deaths, 0)}</td>
+      <td style="border: 1px solid #dddddd;">${this.clinicalData.reduce(
+        (sum, item) => sum + item.deaths,
+        0
+      )}</td>
       </tr>
       <tr>
       <td style="border: 1px solid #dddddd;">Emergencies</td>
@@ -188,14 +155,14 @@ export default {
       </tbody>
       </table>
       `;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedEmergency() {
       let sum = 0;
-      if(this.emergencyData.length>0)
-      {
-      return `
+      if (this.emergencyData.length > 0) {
+        return `
       <h3> B. Emergency Services</h3>
       <table>
       <tr>
@@ -218,7 +185,10 @@ export default {
       </tr>
       <tr>
       <td style="border: 1px solid #dddddd;">Deaths</td>
-      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce((sum, item) => sum + item.deaths, 0)}</td>
+      <td style="border: 1px solid #dddddd;">${this.emergencyData.reduce(
+        (sum, item) => sum + item.deaths,
+        0
+      )}</td>
       </tr>
       <tr>
       <td style="border: 1px solid #dddddd;">External Reference</td>
@@ -236,37 +206,37 @@ export default {
       </tr>
       </table>
       `;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedDiagnostics() {
       let sum = 0;
-      if(this.diagnosticsData.length>0)
-      {
-      var html = `
+      if (this.diagnosticsData.length > 0) {
+        var html = `
       <h3> C. Diagnostic Services</h3>
       <table>
       <tr>
       <th style="border: 1px solid #dddddd;">Lab Services</th>
       <th style="border: 1px solid #dddddd;">Total No.Of Samples Analyzed</th>
       </tr>`;
-      for (var i = 0; i < this.diagnosticsData.length; i++) {
-        let sum = 0;
-        html += `<tr>
+        for (var i = 0; i < this.diagnosticsData.length; i++) {
+          let sum = 0;
+          html += `<tr>
       <td style="border: 1px solid #dddddd;">${this.diagnosticsData[i].pc_diagnostic_test.test_name}</td>
       <td style="border: 1px solid #dddddd;">${this.diagnosticsData[i].samples_analyzed}</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedSpecial() {
-      if(this.specialData.length>0)
-      {
-      var html = `
+      if (this.specialData.length > 0) {
+        var html = `
       <h3>D. Special Clinics / Services / Procedures</h3>
       <table>
       <tr>
@@ -276,26 +246,26 @@ export default {
       <th style="border: 1px solid #dddddd;">Referrals</th>
       <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
-      for (var i = 0; i < this.specialData.length; i++) {
-        let sum = 0;
-        html += `<tr>
+        for (var i = 0; i < this.specialData.length; i++) {
+          let sum = 0;
+          html += `<tr>
       <td style="border: 1px solid #dddddd;">${this.specialData[i].service_name}</td>
       <td style="border: 1px solid #dddddd;">${this.specialData[i].new_patients}</td>
       <td style="border: 1px solid #dddddd;">${this.specialData[i].followup_patients}</td>
       <td style="border: 1px solid #dddddd;">${this.specialData[i].referrals}</td>
       <td style="border: 1px solid #dddddd;">${this.specialData[i].description}</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedOT() {
-      if(this.otservicesData.length>0)
-      {
-      var html = `
+      if (this.otservicesData.length > 0) {
+        var html = `
       <h3>E.	OT & Other Procedures</h3>
       <table>
       <tr>
@@ -304,25 +274,25 @@ export default {
       <th style="border: 1px solid #dddddd;">No of Patients</th>
       <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
-      for (var i = 0; i < this.otservicesData.length; i++) {
-        let sum = 0;
-        html += `<tr>
+        for (var i = 0; i < this.otservicesData.length; i++) {
+          let sum = 0;
+          html += `<tr>
       <td style="border: 1px solid #dddddd;">${this.otservicesData[i].Procedure}</td>
       <td style="border: 1px solid #dddddd;">${this.otservicesData[i].classification}</td>
       <td style="border: 1px solid #dddddd;">${this.otservicesData[i].no_of_patients}</td>
       <td style="border: 1px solid #dddddd;">${this.otservicesData[i].description}</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return''; }
     },
     formattedHRD() {
-      if(this.hrdCourses.length>0)
-      {
-      var html = `
+      if (this.hrdCourses.length > 0) {
+        var html = `
       <h3>3.	HUMAN RESOURCE DEVELOPMENT </h3>
       <h3>A.	Details of Regular Courses</h3>
       <table>
@@ -334,9 +304,9 @@ export default {
       <th style="border: 1px solid #dddddd;">Title of the thesis (If any)</th>
       <th style="border: 1px solid #dddddd;">Guide(s)(If any)</th>
       </tr>`;
-      for (var i = 0; i < this.hrdCourses.length; i++) {
-        let sum = 0;
-        html += `<tr>
+        for (var i = 0; i < this.hrdCourses.length; i++) {
+          let sum = 0;
+          html += `<tr>
       <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].course_name}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].candidate_name}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].durations} Years</td>
@@ -344,17 +314,17 @@ export default {
       <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].thesis_title}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdCourses[i].guides}</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedTrainings() {
-      if(this.hrdTrainings.length>0)
-      {
-      var html = `
+      if (this.hrdTrainings.length > 0) {
+        var html = `
       <h3>B.	Faculty/staff/students from other institutions trained at NIMHANS</h3>
       <table>
       <tr>
@@ -366,9 +336,9 @@ export default {
       <th style="border: 1px solid #dddddd;">Status</th>
       <th style="border: 1px solid #dddddd;">Description</th>
       </tr>`;
-      for (var i = 0; i < this.hrdTrainings.length; i++) {
-        let sum = 0;
-        html += `<tr>
+        for (var i = 0; i < this.hrdTrainings.length; i++) {
+          let sum = 0;
+          html += `<tr>
       <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].training_name}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].institutional_affiliation}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].no_of_candidates} Years</td>
@@ -377,17 +347,17 @@ export default {
       <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].remarks_status}</td>
       <td style="border: 1px solid #dddddd;">${this.hrdTrainings[i].brief_report}</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return ''; }
     },
     formattedRetaired() {
-      if(this.retaired.length>0)
-      {
-      var html = `
+      if (this.retaired.length > 0) {
+        var html = `
       <h3>4.	DETAILS OF DEPARTMENTAL STAFF</h3>
       <h3>B.	A.	List of Faculty and staff served NIMHANS and Superannuated / Resigned / VRS</h3>
       <table>
@@ -398,125 +368,99 @@ export default {
       <th style="border: 1px solid #dddddd;">Date of Leaving</th>
       <th style="border: 1px solid #dddddd;">Image URL</th>
       </tr>`;
-      for (var i = 0; i < this.retaired.length; i++) {
-        let sum = 0;
-        html += `<tr>
-      <td style="border: 1px solid #dddddd;">${this.retaired[i].faculty_status}</td>
-      <td style="border: 1px solid #dddddd;">${this.retaired[i].faculty_name}</td>
+        for (var i = 0; i < this.retaired.length; i++) {
+          let sum = 0;
+          html += `<tr>
+      <td style="border: 1px solid #dddddd;">${
+        this.retaired[i].faculty_status
+      }</td>
+      <td style="border: 1px solid #dddddd;">${
+        this.retaired[i].faculty_name
+      }</td>
       <td style="border: 1px solid #dddddd;"></td>
-      <td style="border: 1px solid #dddddd;">${this.retaired[i].leaving_date}</td>
-      <td style="border: 1px solid #dddddd;">${this.retaired[i].image ? this.retaired[i].image : ""}</td>
+      <td style="border: 1px solid #dddddd;">${
+        this.retaired[i].leaving_date
+      }</td>
+      <td style="border: 1px solid #dddddd;">${
+        this.retaired[i].image ? this.retaired[i].image : ""
+      }</td>
       </tr>`;
-      }
-      html += `</table>
+        }
+        html += `</table>
       `;
-      return html;
+        return html;
+      } else {
+        return "";
       }
-      else { return ''; }
-    },
-    sectionA() {
-      if (this.savedData.section_a) return this.savedData.section_a;
-    },
-    sectionB() {
-      if (this.savedData.section_a) return this.savedData.section_b;
-    },
-    sectionC() {
-      if (this.savedData.section_c) return this.savedData.section_c;
-    },
-    sectionD() {
-      if (this.savedData.section_d) return this.savedData.section_d;
-    },
-    sectionE() {
-      if (this.savedData.section_e) return this.savedData.section_e;
-    },
-    sectionF() {
-      if (this.savedData.section_f) return this.savedData.section_f;
     },
   },
-  async fetch({ store, params }) {
-    await store.dispatch("report/getById", { id: params.id });
+  mounted() {
     let queryString = "";
-    queryString = `department.id=${store.state.auth.user.department}&annual_year=${store.state.report.generatedReport.annual_year}`;
-    await store.dispatch("about/setAboutData", { query: queryString });
-    await store.dispatch("clinical/setClinicalData", { qs: queryString });
-    await store.dispatch("emergency/setEmergencyData", { qs: queryString });
-    await store.dispatch("diagnostic/setDiagnosticData", { qs: queryString });
-    await store.dispatch("special/setSpecialData", { qs: queryString });
-    await store.dispatch("otservice/setOTServicesData", { qs: queryString });
-    await store.dispatch("hrdCourse/setHRDCourses", { qs: queryString });
-    await store.dispatch("hrdTraining/setHRDTrainings", { qs: queryString });
-    await store.dispatch("faculty/setFacultyData", { qs: queryString });
+    queryString = `department.id=${this.department.id}&annual_year=${this.selectedYear}`;
+    this.$store.dispatch("about/setAboutData", { query: queryString });
+    this.$store.dispatch("clinical/setClinicalData", { qs: queryString });
+    this.$store.dispatch("emergency/setEmergencyData", {
+      qs: queryString,
+    });
+    this.$store.dispatch("diagnostic/setDiagnosticData", {
+      qs: queryString,
+    });
+    this.$store.dispatch("special/setSpecialData", { qs: queryString });
+    this.$store.dispatch("otservice/setOTServicesData", {
+      qs: queryString,
+    });
+    this.$store.dispatch("hrdCourse/setHRDCourses", { qs: queryString });
+    this.$store.dispatch("hrdTraining/setHRDTrainings", {
+      qs: queryString,
+    });
+    this.$store.dispatch("faculty/setFacultyData", { qs: queryString });
+    this.dialog = true;
   },
   methods: {
-    copyReport() {
-      console.log("copied!");
+    handleClose() {
+      this.$emit("closed");
+      this.dialog = false;
     },
     exportToDoc(filename = "") {
-      var preHtml =
-        "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
-      var postHtml = "</body></html>";
-      var html =
-        // preHtml + document.getElementsByClassName('ProseMirror')[0].innerHTML + postHtml;
-        preHtml + document.getElementById("download").innerHTML + postHtml;
+    var preHtml =
+      "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html =
+      // preHtml + document.getElementsByClassName('ProseMirror')[0].innerHTML + postHtml;
+      preHtml + document.getElementById("savedDoc").innerHTML + postHtml;
 
-      var blob = new Blob(["\ufeff", html], {
-        type: "application/msword",
-      });
+    var blob = new Blob(["\ufeff", html], {
+      type: "application/msword",
+    });
 
-      // Specify link url
-      var url =
-        "data:application/vnd.ms-word;charset=utf-8," +
-        encodeURIComponent(html);
+    // Specify link url
+    var url =
+      "data:application/vnd.ms-word;charset=utf-8," +
+      encodeURIComponent(html);
 
-      // Specify file name
-      filename = filename ? filename + ".doc" : "document.doc";
+    // Specify file name
+    filename = filename ? filename + ".doc" : "document.doc";
 
-      // Create download link element
-      var downloadLink = document.createElement("a");
+    // Create download link element
+    var downloadLink = document.createElement("a");
 
-      document.body.appendChild(downloadLink);
+    document.body.appendChild(downloadLink);
 
-      if (navigator.msSaveOrOpenBlob) {
-        navigator.msSaveOrOpenBlob(blob, filename);
-      } else {
-        // Create a link to the file
-        downloadLink.href = url;
+    if (navigator.msSaveOrOpenBlob) {
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      // Create a link to the file
+      downloadLink.href = url;
 
-        // Setting the file name
-        downloadLink.download = filename;
+      // Setting the file name
+      downloadLink.download = filename;
 
-        //triggering the function
-        downloadLink.click();
-      }
+      //triggering the function
+      downloadLink.click();
+    }
 
-      document.body.removeChild(downloadLink);
-    },
+    document.body.removeChild(downloadLink);
+  },
   },
 };
 </script>
-
-<style scoped>
-
-
-.preview {
-  max-width: 100%;
-}
-.doc {
-  overflow: scroll;
-}
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>

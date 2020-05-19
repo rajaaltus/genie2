@@ -29,7 +29,8 @@ export const mutations = {
   },
   SET_AVAILABLE_REPORTS(state, response) {
     state.availableReports = response;
-  }
+  },
+  
 };
 
 export const actions =  {

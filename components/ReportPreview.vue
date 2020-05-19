@@ -576,51 +576,97 @@ export default {
     },
 
     step1Data() {
-      return (
-        `<center>
-        <h2>NATIONAL INSTITUTE OF MENTAL HEALTH &amp; NEUROSCIENCES</h2>
-        <h3>Bengaluru – 560029</h3>
-        </center>` +
-        `<h1><b><u>Section B:</u></b></h1>` +
+      var html ='';
+      if(this.formattedProgrammes.length>0)
+      {
+      
+       html = `<h1><b><u>Section B:</u></b></h1>` +
         `<h3><b>1. CONFERENCES / WORKSHOPS / SEMINARS /SYMPOSIUM / SCIENTIFIC PROGRAMMES</b></h3>` +
-        this.formattedProgrammes +
+        this.formattedProgrammes;
+      }
+      if(this.formattedVisitors.length>0) { 
+        html += 
         `<hr><h3><b>2. VISITORS TO THE DEPARTMENT</b></h3>` +
-        this.formattedVisitors +
+        this.formattedVisitors;
+        }
+      if(this.formattedTrainings) { 
+        html +=
         `<hr><h3><b>3. SPECIFIC TRAINING UNDERWENT BY THE FACULTY / STAFF / STUDENTS OUTSIDE NIMHANS</b></h3>` +
-        this.formattedTrainings
-      );
+        this.formattedTrainings; 
+      
+      }
+      return html;
     },
     step2Data() {
-      return (
-        `<h3><b>4. CONTRIBUTION TO SCIENTIFIC DELIBERATIONS</b></h3>` +
+      var html ='';
+      if( this.formattedPresentations.length>0)
+      {
+        html = `<h3><b>4. CONTRIBUTION TO SCIENTIFIC DELIBERATIONS</b></h3>` +
         `<h3><b>A. PRESENTATIONS/ POSTERS</b></h3>` +
-        this.formattedPresentations +
+        this.formattedPresentations;
+      }
+      if( this.formattedParticipations.length>0)
+      {
+      
+        html += 
         `<hr><h3><b>B. PARTICIPATIONS</b></h3>` +
         this.formattedParticipations
-      );
+      }
+      return html;
+    
     },
     step3Data() {
-      return (
+      var html ='';
+      if( this.formattedPublics.length>0)
+      {
+        html =
         `<h3><b>5. PUBLIC ENGAGEMENT & OUTREACH ACTIVITIES</b></h3>` +
         this.formattedPublics
-      );
+      }
+      return html;
     },
     step4Data() {
-      return `<h3><b>6. RESEARCH ACTIVITIES</b></h3>` + this.formattedResearch;
+       var html ='';
+      if( this.formattedResearch.length>0)
+      {
+        html =
+      `<h3><b>6. RESEARCH ACTIVITIES</b></h3>` + this.formattedResearch;
+      }
+      return html;
     },
     step5Data() {
-      return `<h3><b>5. PUBLICATIONS</b></h3>` + this.formattedPublications;
+      var html ='';
+      if( this.formattedPublications.length>0)
+      {
+        html =
+      `<h3><b>5. PUBLICATIONS</b></h3>` + this.formattedPublications;
+      }
+      return html;
     },
     step6Data() {
-      return (
+     var html ='';
+      if( this.formattedRecognitions.length>0)
+      {
+        html = 
         `<h3><b>5. RECOGNITION OF NIMHANS CONTRIBUTION </b></h3>` +
         `<h3><b>A. AWARDS AND HONORS </b></h3>` +
-        this.formattedRecognitions +
+        this.formattedRecognitions ;
+      }
+      if( this.formattedPatents.length>0)
+      {
+        html += 
+
         `<hr><h3><b>B. PATENTS </b></h3>` +
-        this.formattedPatents +
+        this.formattedPatents 
+      }
+      if( this.formattedAssignments.length>0)
+      {
+        html += 
         `<hr><h3><b>C. KEY ASSIGNMENTS </b></h3>` +
         this.formattedAssignments
-      );
+      }
+      return html;
+      
     },
   },
   methods: {
