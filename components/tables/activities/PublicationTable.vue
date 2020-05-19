@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="dataFrom==='FACULTY'?facultiesData:studentsData"
+      :items="publicationsData"
       sort-by="updated_at"
       sort-desc
       class="elevation-1"

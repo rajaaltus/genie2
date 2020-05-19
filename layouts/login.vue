@@ -192,11 +192,29 @@
         </div>
       </div>
     </v-content>
+    <v-snackbar
+      v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+      right
+      top
+      :key="snackbar.text + Math.random()"
+      :value="snackbar.showing"
+      @input="removeSnackbar(snackbar)"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      :style="`top: ${(index * 60) + 8}px`"
+    >
+      {{snackbar.text}}
+
+      <v-btn text @click="removeSnackbar(snackbar)">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 import Swal from "sweetalert2";
+import {mapState} from 'vuex';
 export default {
   head() {
     return {
@@ -240,6 +258,11 @@ export default {
       department: 0
     }
   }),
+  computed: {
+   ...mapState({
+      snackbars: state => state.snackbar.snackbars
+    }),
+  },
   async fetch({ store }) {
     await store.dispatch("user/getAllDepartment");
   },
@@ -247,6 +270,9 @@ export default {
     this.departments = this.$store.state.user.departments.result;
   },
   methods: {
+    removeSnackbar(snackbar) {
+      this.$store.dispatch('snackbar/remove', snackbar)
+    },
     async signIn () {
 			await this.$auth.loginWith("local", {
 				data: {
@@ -261,16 +287,16 @@ export default {
             this.$store.dispatch('setUserData',data.data.user);
             this.$router.push('/super');
           }
-            
           else
             this.$router.push('/admin');
 				})
 				.catch(err => {
-					Swal.fire({
-						title: 'Login Failed!',
-						text: err.response.data.data[0].messages[0].message,
-						icon: 'error'
-					});
+          this.$store.dispatch('snackbar/setSnackbar', {color: 'red', text: err.response.data.data[0].messages[0].message, timer: '1000'})
+					// Swal.fire({
+					// 	title: 'Login Failed!',
+					// 	text: err.response.data.data[0].messages[0].message,
+					// 	icon: 'error'
+					// });
 					this.resetLogin();
 				});
 		},

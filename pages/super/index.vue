@@ -15,323 +15,67 @@
             placeholder="Pick Year"
             color="success"
             class="disp"
+            @change="fetchData"
           ></v-select>
         </v-col>
       </v-row>
-      <v-row no-gutters>
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Biophysics</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Biostatistics</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Child & Adolescent Psychiatry</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Clinical Neurosciences</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Clinical Psychology</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Epidemiology</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="light-green" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Human Genetics</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="light-green">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on" class="mr-1"
-                      ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Download Faculty Report</span>
-                </v-tooltip>
-
-                <v-tooltip right color="light-green">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Download Student Report</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Mental Health Education</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Neuroanaesthesia and Neurocritical Care</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Neurochemistry</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >NIIR</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1" color="red" dark>
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Neurological Rehabilitation</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-tooltip right color="red">
-                  <template v-slot:activator="{ on }">
-                    <v-btn fab x-small color="white" v-on="on"
-                      ><v-icon color="blue">mdi-send</v-icon></v-btn
-                    >
-                  </template>
-                  <span>Send Reminder</span>
-                </v-tooltip>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-col>
-
-        <v-col cols="3" lg="2">
-          <v-card tile elevation="1">
-            <v-card-title>
-              <span
-                class="subtitle-1 font-weight-normal d-inline-block text-truncate"
-                >Neurological Rehabilitation</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-layout align-start justify-start>
-                <v-btn fab x-small color="white" class="mr-1" disabled
-                  ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-                >
-
-                <v-btn fab x-small color="white" disabled
-                  ><v-icon color="blue">mdi-file-word</v-icon></v-btn
-                >
-              </v-layout>
-            </v-card-text>
-          </v-card>
+      <v-row no-gutters :key="updateList">
+        <v-col
+          cols="3"
+          lg="2"
+          v-for="(department, index) in departments"
+          :index="index"
+          :key="index"
+        >
+          <DepartmentCard
+            :selectedYear="selectedYear"
+            :department="department"
+          />
         </v-col>
       </v-row>
+       <TheSnackbar />
     </v-container>
+   
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import DepartmentCard from "@/components/SuperAdmin/DepartmentCard";
 export default {
   layout: "super",
+  components: {
+    DepartmentCard,
+  },
+  data() {
+    return {
+      selectedYear: 0,
+      cardColor: "white",
+      dark: false,
+      available: "default",
+      updateList: 0
+    };
+  },
+  computed: {
+    ...mapState({
+      departments: (state) => state.user.departments.result,
+    }),
+    reportYears() {
+      return this.$store.state.reportYears;
+    },
+  },
+  async fetch({ store }) {
+    await store.dispatch("user/getAllDepartment");
+  },
+  mounted() {
+    this.$store.dispatch('snackbar/setSnackbar', {text: "Successfully logged In."})
+  },
+  methods: {
+     fetchData() {
+      console.log(this.selectedYear)
+      this.$store.dispatch("user/getAllDepartment");
+      this.updateList++;
+    }
+  }
 };
 </script>
