@@ -53,6 +53,7 @@
 
       <v-card-actions>
         <v-switch v-if="$auth.user.userType !== 'DEPARTMENT'"
+          v-model="publicProfile"
           color="green darken-3"
           label="Public Access"
           class="pl-2"

@@ -220,13 +220,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .pro-content {
   margin: 10px 0 0 0;
   /* padding: 0px; */
   background-color: #f9f9f9;
 }
-.a i{
-  text-decoration: none;
+a {
+  text-decoration: none !important;
 }
 </style>
