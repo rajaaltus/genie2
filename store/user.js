@@ -7,6 +7,8 @@ export const state = () => ({
 	fullUser: {},
 	avatar_url: '/avatar-default-icon.png',
 	userProfile: [],
+	publicProfile: null,
+	sameDepartmentProfiles: [],
 	departments: {
 		success: false,
 		result: [],
@@ -35,6 +37,9 @@ export const getters = {
 };
 
 export const mutations = {
+	SET_PUBLIC_USER_PROFILE(state, publicProfile) {
+		state.publicProfile = publicProfile;
+	},
 	SET_USERPROFILE (state, userProfile) {
 		state.userProfile = userProfile;
 		if(userProfile.image)
@@ -86,6 +91,9 @@ export const mutations = {
 				}
 			};
 		}
+	},
+	SET_SAME_DEPT_PROFILE (state, sameDepartmentProfiles) {
+		state.sameDepartmentProfiles = sameDepartmentProfiles;
 	}
 };
 
@@ -237,5 +245,30 @@ export const actions = {
 			// always executed
 				// console.log('finally');
 			});
+	},
+	async setPublicUserProfile ({commit}, {id}) {
+		await this.$axios.$get(`/user-profiles?employee_id=${id}`)
+			.then(response =>  {
+			// handle success
+				// console.log(response);
+				commit("SET_PUBLIC_USER_PROFILE", response[0]);
+			})
+			.catch((e) => {
+			// handle error
+				// commit("SET_USERPROFILE", error);
+			})
+			.finally(function () {
+			// always executed
+				// console.log('finally');
+			});
+	},
+	async setSameDepartmentProfiles ({commit}, {id}) {
+		await this.$axios.$get(`/user-profiles?user.department=${id}&active_status=true`)
+		.then(response => {
+			commit("SET_SAME_DEPT_PROFILE", response);
+		})
+		.catch((e) => {
+			return e;
+		});
 	}
 };
