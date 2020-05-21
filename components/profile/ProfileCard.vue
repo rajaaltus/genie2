@@ -65,9 +65,11 @@
       </v-card-actions>
       <v-divider></v-divider>
       <nuxt-link :to="`/profile/${profile.employee_id}`">
-      <v-chip class="ma-2" label>
-        {{$nuxt.context.env.baseUrl+'/profile/'+profile.employee_id}}
+      <div v-if="publicProfile">
+      <v-chip class="ma-2" label >
+        <small>{{'http://arms.nimhans.ac.in/profile/'+profile.employee_id}}</small>
       </v-chip>
+      </div>
       </nuxt-link>
     </v-card>
   </div>
@@ -82,17 +84,15 @@ export default {
     return {
       image_url: null,
       imageToDelete: null,
+      publicProfile: false,
     };
   },
   computed: {
-    publicProfile() {
-      if (this.profile.active_status !== null)
-        return this.profile.active_status;
-      else return false;
-    },
+    
   },
   mounted() {
-    console.log(this.profile);
+    // console.log(this.profile);
+    this.publicProfile = this.profile.active_status;
     if (this.profile.image !== null) this.image_url = this.profile.image.url;
     // console.log('its not null')
     // else

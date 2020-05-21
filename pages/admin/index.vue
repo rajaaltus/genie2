@@ -134,7 +134,6 @@
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
                     v-if="loading"
-                    light
                     height="120"
                     type="list-item-avatar-two-line"
                   >
