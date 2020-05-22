@@ -80,7 +80,7 @@
                     /></v-toolbar-title>
                   </v-toolbar>
                   <v-card-text>
-                    <v-form ref="registerForm" lazy-validation @submit.prevent>
+                    <v-form ref="regForm" lazy-validation @submit.prevent>
                     <v-row>
                       <v-col cols="6" md="6" lg="6">
                       <v-select
@@ -230,11 +230,11 @@ export default {
       password: ""
     },
     departments: [],
-    registerData: {
-      name: "",
-      email: "",
-      password: ""
-    },
+    // registerData: {
+    //   name: "",
+    //   email: "",
+    //   password: ""
+    // },
     recoverPassEmail: "",
     roles: [
       {
@@ -301,31 +301,33 @@ export default {
 				});
 		},
     async registerMe() {
-      if (this.$refs.registerForm.validate()) {
-        var payload = this.register;
-        // console.log(payload);
-        await this.$axios
-          .$post("/auth/local/register", payload)
-          .then(resp => {
-            Swal.fire({
-              title: "Successfully Registered your Account.",
-              text: "Please login to continue using our system",
-              icon: "info"
-            });
-            this.reset();
-            this.loginForm();
-          })
-          .catch(err => {
-            Swal.fire({
-              title: "Oops!",
-              text: err.response.data.data[0].messages[0].message,
-              icon: "error",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true
-            });
-            this.reset();
-          });
+      if (this.$refs.regForm.validate()) {
+        var regPayload = this.register;
+        console.log(regPayload);
+        var res =  await this.$store.dispatch('user/addUser', regPayload)
+        console.log(res);
+        // this.$axios
+        //   .$post("/auth/local/register", regPayload)
+        //   .then(resp => {
+        //     Swal.fire({
+        //       title: "Successfully Registered your Account.",
+        //       text: "Please login to continue using our system",
+        //       icon: "info"
+        //     });
+        //     this.reset();
+        //     this.loginForm();
+        //   })
+        //   .catch(err => {
+        //     Swal.fire({
+        //       title: "Oops!",
+        //       text: err.response.data.data[0].messages[0].message,
+        //       icon: "error",
+        //       showConfirmButton: false,
+        //       timer: 3000,
+        //       timerProgressBar: true
+        //     });
+        //     this.reset();
+        //   });
       }
     },
 

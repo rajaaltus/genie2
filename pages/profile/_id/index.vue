@@ -6,7 +6,7 @@
 
       <v-container>
         <v-row>
-          <ProfileCard :userProfile="userProfile" />
+          <ProfileCard :userProfile="userProfile" :publicationTypeCounts="publicationTypeCounts" />
 
           <v-col cols="12" md="7" lg="7" class="pro-content">
             <Publication
@@ -39,9 +39,18 @@
             <span class="body-2 font-weight-normal"> Same Department</span>
             <!-- {{sameDepartmentProfiles}} -->
             <v-list>
-              <v-list-item v-for="item in sameDepartmentProfiles" :key="item.id">
+              <v-list-item
+                v-for="item in sameDepartmentProfiles"
+                :key="item.id"
+              >
                 <v-list-item-avatar>
-                  <v-img :src="item.image?`${$axios.defaults.baseURL}${item.image.url}`:'/avatar-default-icon.png'"></v-img>
+                  <v-img
+                    :src="
+                      item.image
+                        ? `${$axios.defaults.baseURL}${item.image.url}`
+                        : '/avatar-default-icon.png'
+                    "
+                  ></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -50,9 +59,11 @@
 
                 <v-list-item-icon>
                   <nuxt-link :to="`/profile/${item.employee_id}`">
-                  <v-icon :color="item.active ? 'deep-purple accent-4' : 'grey'"
-                    >mdi-eye</v-icon
-                  ></nuxt-link>
+                    <v-icon
+                      :color="item.active ? 'deep-purple accent-4' : 'grey'"
+                      >mdi-eye</v-icon
+                    ></nuxt-link
+                  >
                 </v-list-item-icon>
               </v-list-item>
             </v-list>
@@ -94,13 +105,7 @@ export default {
   },
   data() {
     return {
-      codeGreen: false,
-      items: [
-        { active: true, title: 'Jason Oner', avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
-        { active: true, title: 'Ranee Carlson', avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
-        { title: 'Cindy Baker', avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
-        { title: 'Ali Connors', avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
-      ],
+      codeGreen: false
     };
   },
   computed: {
@@ -110,13 +115,12 @@ export default {
       experiences: (state) => state.profile.experienceData.result,
       recognitionsData: (state) => state.recognition.recognitionsData.result,
       presentationsData: (state) => state.presentation.presentationsData.result,
-      participationsData: (state) =>
-        state.participation.participationsData.result,
+      participationsData: (state) => state.participation.participationsData.result,
       publicationsData: (state) => state.publication.publicationsData.result,
       researchData: (state) => state.research.researchData.result,
       patentsData: (state) => state.patent.patentsData.result,
       stats: (state) => state.publication.stats,
-  
+
       journalArticles() {
         var result = this.$store.state.publication.publicationsData.result.filter(
           (publication) => publication.publication_type === "Journal_Article"
@@ -170,12 +174,19 @@ export default {
       people() {
         return this.$store.state.user.activeUsersList.result;
       },
+      publicationTypeCounts() {
+        var counts=[];
+        counts.push(this.journalArticles, this.articles, this.books, this.bookChapters, this.monoGraphs, this.manuals, this.reports, this.general);
+        return counts;
+      },
       reportYears() {
         return this.$store.state.reportYears;
       },
     }),
     sameDepartmentProfiles() {
-      return this.$store.state.user.sameDepartmentProfiles.filter(profile => profile.id!=this.userProfile.id);
+      return this.$store.state.user.sameDepartmentProfiles.filter(
+        (profile) => profile.id != this.userProfile.id
+      );
     },
   },
   async fetch({ store, params }) {
@@ -183,14 +194,16 @@ export default {
     await store.dispatch("user/setPublicUserProfile", {
       id: empId,
     });
-    
+
     if (store.state.user.publicProfile)
       var userId = store.state.user.publicProfile.user.id;
     else {
       this.codeGreen = false;
     }
 
-    await store.dispatch('user/setSameDepartmentProfiles', {id: store.state.user.publicProfile.user.department});
+    await store.dispatch("user/setSameDepartmentProfiles", {
+      id: store.state.user.publicProfile.user.department,
+    });
     await store.dispatch("profile/setEducationData", { id: userId });
     await store.dispatch("profile/setExperienceData", { id: userId });
     let queryString = "";
@@ -211,6 +224,7 @@ export default {
     });
   },
   mounted() {
+    console.log('Publication Type Count: ',this.publicationTypeCounts);
     if (this.$store.state.user.publicProfile) {
       this.codeGreen = true;
     } else {
