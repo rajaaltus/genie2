@@ -1,12 +1,13 @@
 import colors from 'vuetify/es5/util/colors';
+require('dotenv').config();
 export default {
   mode: 'spa',
   /*
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    titleTemplate: '%s - ' + process.env.npm_package_description,
+    title: process.env.npm_package_description || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -46,6 +47,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
   ],
   /*
   ** Nuxt.js modules
@@ -94,8 +96,8 @@ export default {
   */
 	axios: {
         // baseURL: 'http://armsbackend.localhost'
-		//  baseURL: 'http://site1.localhost'
-		 baseURL: 'https://genie2.rotihouselao.com'
+		 baseURL: 'http://site1.localhost'
+		//  baseURL: 'https://genie2.rotihouselao.com'
      // baseURL: 'http://14.139.159.112:1338'
      // baseURL: 'https://5ebcef27624fa50006e2b90e--genie2.netlify.app'
 	},

@@ -34,7 +34,7 @@
                 <v-col cols="12" lg="3">
 
                   <v-label><small>Months Range</small></v-label>
-                  <vc-date-picker mode="range" v-model="range" />
+                  <vc-date-picker mode="range" :class="$vuetify.theme.dark?'customMonth':''" v-model="range" />
                 </v-col>
                 <v-col cols="12" lg="2" class="my-5" v-if="$auth.user.userType === 'DEPARTMENT'">
                   <v-select
@@ -134,7 +134,6 @@
                 <v-col cols="12" lg="3">
                   <v-skeleton-loader
                     v-if="loading"
-                    light
                     height="120"
                     type="list-item-avatar-two-line"
                   >
@@ -870,7 +869,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.customMonth input {
+  background-color: transparent !important;
+  border-color: rgba(255,255,255,0.3) !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+.customMonth input:hover {
+  border-color: rgba(255,255,255,0.9) !important;
+}
 .cust-icon {
   font-size: 20px;
   color: #ff7e00;

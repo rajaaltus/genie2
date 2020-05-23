@@ -1,7 +1,7 @@
 {
   "name": "genie2",
-  "version": "1.0.0",
-  "description": "Genie 2 for ARMS NIMHANS",
+  "version": "2.0.0",
+  "description": "ARMS NIMHANS",
   "author": "Altus InfoTech",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "@ckeditor/ckeditor5-vue": "^1.0.1",
     "@nuxtjs/auth": "^4.8.5",
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "apexcharts": "^3.18.1",
     "highcharts": "^8.0.4",

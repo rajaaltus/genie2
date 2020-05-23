@@ -9,16 +9,13 @@
       app
       dark
     >
-      <div class="py-3" style="max-height:400px">
-      <v-list-item v-if="!mini" >
-        
-        <v-img src="/logo.png" max-width="30%"></v-img>
-        
-      </v-list-item>
-      <v-list-item v-else style="max-height:200px">
-        <v-img src="/logo.png" max-width="100%"></v-img>
-       
-      </v-list-item>
+      <div class="py-3" style="max-height: 400px;">
+        <v-list-item v-if="!mini">
+          <v-img src="/logo.png" max-width="30%"></v-img>
+        </v-list-item>
+        <v-list-item v-else style="max-height: 200px;">
+          <v-img src="/logo.png" max-width="100%"></v-img>
+        </v-list-item>
       </div>
       <v-divider></v-divider>
       <v-list-item class="px-2">
@@ -30,8 +27,9 @@
         <v-list-item-title class="pl-2"
           >{{ this.$store.state.auth.user.fullname }} <br />
           <span class="caption font-weight-light">
-          {{ user?user.designation:'' }} 
-          </span></v-list-item-title>
+            {{ user ? user.designation : "" }}
+          </span></v-list-item-title
+        >
 
         <!-- <v-btn icon small color="green" @click.stop="mini = !mini"> </v-btn> -->
       </v-list-item>
@@ -47,7 +45,12 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item dense link to="/settings" v-if="$auth.user.userType==='DEPARTMENT'">
+      <v-list-item
+        dense
+        link
+        to="/settings"
+        v-if="$auth.user.userType === 'DEPARTMENT'"
+      >
         <v-list-item-icon>
           <v-icon color="orange">mdi-cogs</v-icon>
         </v-list-item-icon>
@@ -68,181 +71,181 @@
       <v-divider></v-divider>
 
       <v-list nav>
-        <div v-if="$auth.user.userType==='DEPARTMENT'">
-        <template v-for="item in items">
-          <v-list-group
-            v-if="item.children"
-            :key="item.title"
-            :to="item.to"
-            v-model="item.model"
-            :prepend-icon="item.icon"
-            append-icon=""
-            color="green"
-          >
-            <template v-slot:activator>
+        <div v-if="$auth.user.userType === 'DEPARTMENT'">
+          <template v-for="item in items">
+            <v-list-group
+              v-if="item.children"
+              :key="item.title"
+              :to="item.to"
+              v-model="item.model"
+              :prepend-icon="item.icon"
+              append-icon=""
+              color="green"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ item.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(child, i) in item.children"
+                :key="i"
+                :to="child.to"
+                link
+                router
+                dense
+                exact
+                class="px-2"
+              >
+                <v-list-item-action v-if="child.icon">
+                  <v-icon>{{ child.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ child.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-item
+              v-else
+              :key="item.title"
+              :to="item.to"
+              link
+              router
+              exact
+              dense
+            >
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title class="menu-title">
                   {{ item.title }}
                 </v-list-item-title>
               </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="(child, i) in item.children"
-              :key="i"
-              :to="child.to"
-              link
-              router
-              dense
-              exact
-              class="px-2"
-            >
-              <v-list-item-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title class="menu-title">
-                  {{ child.title }}
-                </v-list-item-title>
-              </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-          <v-list-item
-            v-else
-            :key="item.title"
-            :to="item.to"
-            link
-            router
-            exact
-            dense
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="menu-title">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+          </template>
         </div>
         <!-- Faculty forms -->
-        <div v-if="$auth.user.userType==='FACULTY'">
-        <template v-for="item in itemsFaculty" >
-          <v-list-group
-            v-if="item.children"
-            :key="item.title"
-            :to="item.to"
-            v-model="item.model"
-            :prepend-icon="item.icon"
-            append-icon=""
-            color="green"
-          >
-            <template v-slot:activator>
+        <div v-if="$auth.user.userType === 'FACULTY'">
+          <template v-for="item in itemsFaculty">
+            <v-list-group
+              v-if="item.children"
+              :key="item.title"
+              :to="item.to"
+              v-model="item.model"
+              :prepend-icon="item.icon"
+              append-icon=""
+              color="green"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ item.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(child, i) in item.children"
+                :key="i"
+                :to="child.to"
+                link
+                router
+                dense
+                exact
+                class="px-2"
+              >
+                <v-list-item-action v-if="child.icon">
+                  <v-icon>{{ child.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ child.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-item
+              v-else
+              :key="item.title"
+              :to="item.to"
+              link
+              router
+              exact
+              dense
+            >
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title class="menu-title">
                   {{ item.title }}
                 </v-list-item-title>
               </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="(child, i) in item.children"
-              :key="i"
-              :to="child.to"
-              link
-              router
-              dense
-              exact
-              class="px-2"
-            >
-              <v-list-item-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title class="menu-title">
-                  {{ child.title }}
-                </v-list-item-title>
-              </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-          <v-list-item
-            v-else
-            :key="item.title"
-            :to="item.to"
-            link
-            router
-            exact
-            dense
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="menu-title">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+          </template>
         </div>
         <!-- Student forms -->
-        <div v-if="$auth.user.userType==='STUDENT'">
-        <template v-for="item in itemsStudent" >
-          <v-list-group
-            v-if="item.children"
-            :key="item.title"
-            :to="item.to"
-            v-model="item.model"
-            :prepend-icon="item.icon"
-            append-icon=""
-            color="green"
-          >
-            <template v-slot:activator>
+        <div v-if="$auth.user.userType === 'STUDENT'">
+          <template v-for="item in itemsStudent">
+            <v-list-group
+              v-if="item.children"
+              :key="item.title"
+              :to="item.to"
+              v-model="item.model"
+              :prepend-icon="item.icon"
+              append-icon=""
+              color="green"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ item.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(child, i) in item.children"
+                :key="i"
+                :to="child.to"
+                link
+                router
+                dense
+                exact
+                class="px-2"
+              >
+                <v-list-item-action v-if="child.icon">
+                  <v-icon>{{ child.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title class="menu-title">
+                    {{ child.title }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-item
+              v-else
+              :key="item.title"
+              :to="item.to"
+              link
+              router
+              exact
+              dense
+            >
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title class="menu-title">
                   {{ item.title }}
                 </v-list-item-title>
               </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="(child, i) in item.children"
-              :key="i"
-              :to="child.to"
-              link
-              router
-              dense
-              exact
-              class="px-2"
-            >
-              <v-list-item-action v-if="child.icon">
-                <v-icon>{{ child.icon }}</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title class="menu-title">
-                  {{ child.title }}
-                </v-list-item-title>
-              </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-          <v-list-item
-            v-else
-            :key="item.title"
-            :to="item.to"
-            link
-            router
-            exact
-            dense
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title class="menu-title">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+          </template>
         </div>
       </v-list>
 
@@ -257,11 +260,26 @@
         </v-list-item>
       </template>
     </v-navigation-drawer>
-    <v-app-bar flat dense app color="#fff">
+    <v-app-bar flat dense app>
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
+      <v-app-bar-nav-icon
+        @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
+        >
+        <v-tooltip right>
+      <template v-slot:activator="{ on }" class="ml-4">
+        <v-icon v-on="on">mdi-owl</v-icon>
+      </template>
+      <span>Switch to Dark/Light mode</span>
+    </v-tooltip>
+        
+        </v-app-bar-nav-icon
+      >
       <v-spacer></v-spacer>
       <h2>Reporting Year</h2>
-      <v-card elevation="0" class="amber ml-3 mr-2 px-2 display-1 font-weight-bold">
+      <v-card
+        elevation="0"
+        class="amber ml-3 mr-2 px-2 display-1 font-weight-bold"
+      >
         {{ $store.state.selectedYear }} - {{ $store.state.selectedYear + 1 }}
       </v-card>
     </v-app-bar>
@@ -272,15 +290,17 @@
       </v-container>
     </v-content>
     <v-snackbar
-      v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+      v-for="(snackbar, index) in snackbars.filter((s) => s.showing)"
+      top
+      right
       :key="snackbar.text + Math.random()"
       :value="snackbar.showing"
       @input="removeSnackbar(snackbar)"
       :timeout="snackbar.timeout"
       :color="snackbar.color"
-      :style="`bottom: ${(index * 60) + 8}px`"
+      :style="`top: ${index * 60 + 8}px`"
     >
-      {{snackbar.text}}
+      {{ snackbar.text }}
 
       <v-btn text @click="removeSnackbar(snackbar)">
         Close
@@ -291,20 +311,20 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
   head() {
     return {
-      title: "ARMS Admin - " + this.$route.name
+      title: "ARMS Admin - " + this.$route.name,
     };
   },
   components: {
-    PageHeader
+    PageHeader,
   },
   data() {
     return {
       drawer: true,
-      
+
       items: [
         { title: "Home", icon: "mdi-home", to: "/admin" },
         {
@@ -314,24 +334,24 @@ export default {
             {
               title: "About",
               icon: "mdi-chevron-double-right",
-              to: "/admin/departments"
+              to: "/admin/departments",
             },
             {
               title: "Patient Care Activities",
               icon: "mdi-chevron-double-right",
-              to: "/admin/departments/pcActivities"
+              to: "/admin/departments/pcActivities",
             },
             {
               title: "HRD",
               icon: "mdi-chevron-double-right",
-              to: "/admin/departments/hrd"
+              to: "/admin/departments/hrd",
             },
             {
               title: "Departmental Staff",
               icon: "mdi-chevron-double-right",
-              to: "/admin/departments/faculty"
-            }
-          ]
+              to: "/admin/departments/faculty",
+            },
+          ],
         },
         {
           title: "Activities & Resources",
@@ -340,16 +360,16 @@ export default {
             {
               title: "Faculty / Staff",
               icon: "mdi-chevron-double-right",
-              to: "/admin/activities/faculties"
+              to: "/admin/activities/faculties",
             },
             {
               title: "Students",
               icon: "mdi-chevron-double-right",
-              to: "/admin/activities/students"
-            }
-          ]
+              to: "/admin/activities/students",
+            },
+          ],
         },
-        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
+        { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" },
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" },
         // { title: "Test Report", icon: "mdi-cogs", to:"/admin/medium" }
       ],
@@ -358,7 +378,7 @@ export default {
         {
           title: "Activities & Resources",
           icon: "mdi-library",
-          to: "/admin/activities/faculties"
+          to: "/admin/activities/faculties",
         },
         // { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
@@ -368,46 +388,46 @@ export default {
         {
           title: "Activities & Resources",
           icon: "mdi-library",
-          to: "/admin/activities/students"
+          to: "/admin/activities/students",
         },
         // { title: "Approval Status", icon: "mdi-cards", to: "/admin/approvals" }
         // { title: "Reports", icon: "mdi-chart-bar", to: "/admin/reports" }
       ],
-      mini: true
+      mini: true,
     };
   },
   computed: {
     ...mapState({
-      user:state => state.user.userProfile,
-      snackbars: state => state.snackbar.snackbars
+      user: (state) => state.user.userProfile,
+      snackbars: (state) => state.snackbar.snackbars,
     }),
     avatar_url: {
-      get() { return this.$store.state.user.avatar_url },
-      set() { }
+      get() {
+        return this.$store.state.user.avatar_url;
+      },
+      set() {},
     },
   },
   mounted() {
-    this.$store.dispatch('user/setUserProfile',{id: this.$auth.user.id})
+    this.$store.dispatch("user/setUserProfile", { id: this.$auth.user.id });
     this.setAvatar();
   },
   methods: {
     removeSnackbar(snackbar) {
-      this.$store.dispatch('snackbar/remove', snackbar)
+      this.$store.dispatch("snackbar/remove", snackbar);
     },
     async setAvatar() {
       if (this.user) {
         if (this.user.image)
-          this.avatar_url=  `${this.$axios.defaults.baseURL}${this.user.image.url}`
-        else
-          this.avatar_url= '/avatar-default-icon.png'
-      } else
-        this.avatar_url = '/avatar-default-icon.png'
+          this.avatar_url = `${this.$axios.defaults.baseURL}${this.user.image.url}`;
+        else this.avatar_url = "/avatar-default-icon.png";
+      } else this.avatar_url = "/avatar-default-icon.png";
     },
     async logout() {
-      await  this.$auth.logout();
+      await this.$auth.logout();
       window.location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 
