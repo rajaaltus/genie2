@@ -4,6 +4,7 @@ export const state = () => ({
   
 export const mutations = {
   SET_SNACKBAR(state, snackbar) {
+    console.log('It has been committed!');
     state.snackbars = state.snackbars.concat(snackbar);
   },
   REMOVE(state, snackbar) {

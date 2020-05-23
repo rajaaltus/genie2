@@ -296,6 +296,7 @@
       :key="snackbar.text + Math.random()"
       :value="snackbar.showing"
       @input="removeSnackbar(snackbar)"
+      @errors="handleErrors"
       :timeout="snackbar.timeout"
       :color="snackbar.color"
       :style="`top: ${index * 60 + 8}px`"
@@ -413,6 +414,9 @@ export default {
     this.setAvatar();
   },
   methods: {
+    handleErrors() {
+      this.$store.dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Creation Failed!', timeout: 3000})
+    },
     removeSnackbar(snackbar) {
       this.$store.dispatch("snackbar/remove", snackbar);
     },
