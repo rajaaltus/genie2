@@ -313,7 +313,8 @@ export default {
     },
     async programAdd() {
       if (this.$refs.form.validate()) {
-        this.program.annual_year = this.$store.state.selectedYear;
+        // this.program.annual_year = this.$store.state.selectedYear;
+        this.program.annual_year = 'abcd';
         this.program.department = this.$store.state.auth.user.department;
         if (this.$store.state.auth.user.userType !== "DEPARTMENT")
           this.program.user = this.$auth.user.id;
@@ -323,9 +324,10 @@ export default {
           this.program.name = this.program.name.name;
         var payload = this.program;
         console.log(payload);
-        this.$store
+        await this.$store
           .dispatch("program/addProgram", payload)
           .then(resp => {
+            if (resp.status == 200) {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
@@ -335,16 +337,19 @@ export default {
             });
             this.reset();
             this.reloadData();
+            }
           })
           .catch(err => {
-            Swal.fire({
-							title: 'Oops!',
-							text: 'Something Wrong',
-							icon: 'error',
-							showConfirmButton: false,
-							timer: 3000,
-							timerProgressBar: true,
-						})
+            console.log(err);
+            this.$store.dispatch("snackbar/setSnackbar", {color: 'red', text:'Program Creation Failed!', timeout: 3000});
+            // Swal.fire({
+						// 	title: 'Oops!',
+						// 	text: err.response.data.data[0].messages[0].message,
+						// 	icon: 'error',
+						// 	showConfirmButton: false,
+						// 	timer: 3000,
+						// 	timerProgressBar: true,
+						// })
           });
       }
     },

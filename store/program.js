@@ -41,18 +41,16 @@ export const mutations = {
 
 export const actions = {
 	async setProgrammesData ({commit}, {qs}) {
-		 await this.$axios.$get(`/programmes?${qs}${limit}`)
+			await this.$axios.$get(`/programmes?${qs}${limit}`)
 			.then(response =>  {
 			// handle success
 				commit("SET_PROGRAMMESDATA", response);
 			})
 			.catch((e) => {
-			// handle error
-				// commit("SET_PROGRAMMESDATA", error);
+				
 			})
 			.finally(function () {
 			// always executed
-				
 			});
 	},
 	async countProgrammes ({commit}, {qs}) {
@@ -70,14 +68,13 @@ export const actions = {
 		 });
  },
 	async addProgram ({commit}, payload) {
-		await this.$axios.$post('/programmes', payload)
+		return await this.$axios.$post('/programmes', payload)
 			.then(response =>  {
 				commit("SET_PROGRAMMESDATA", response);
 			})
 			.catch((e) => {
-			// handle error
-			
-				// commit("SET_PROGRAMMESDATA", error);
+				console.log('From Store:', e);
+				
 			})
 			.finally(function () {
 			// always executed

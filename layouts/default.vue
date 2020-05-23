@@ -291,12 +291,14 @@
     </v-content>
     <v-snackbar
       v-for="(snackbar, index) in snackbars.filter((s) => s.showing)"
+      top
+      right
       :key="snackbar.text + Math.random()"
       :value="snackbar.showing"
       @input="removeSnackbar(snackbar)"
       :timeout="snackbar.timeout"
       :color="snackbar.color"
-      :style="`bottom: ${index * 60 + 8}px`"
+      :style="`top: ${index * 60 + 8}px`"
     >
       {{ snackbar.text }}
 

@@ -224,7 +224,6 @@ export default {
     });
   },
   mounted() {
-    console.log('Publication Type Count: ',this.publicationTypeCounts);
     if (this.$store.state.user.publicProfile) {
       this.codeGreen = true;
     } else {
