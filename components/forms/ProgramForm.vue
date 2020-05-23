@@ -313,8 +313,7 @@ export default {
     },
     async programAdd() {
       if (this.$refs.form.validate()) {
-        // this.program.annual_year = this.$store.state.selectedYear;
-        this.program.annual_year = 'abcd';
+        this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
         if (this.$store.state.auth.user.userType !== "DEPARTMENT")
           this.program.user = this.$auth.user.id;
@@ -327,7 +326,6 @@ export default {
         await this.$store
           .dispatch("program/addProgram", payload)
           .then(resp => {
-            if (resp.status == 200) {
             Swal.fire({
               title: "Success",
               text: "Added Successfully!",
@@ -337,7 +335,6 @@ export default {
             });
             this.reset();
             this.reloadData();
-            }
           })
           .catch(err => {
             console.log(err);
