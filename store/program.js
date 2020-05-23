@@ -68,7 +68,8 @@ export const actions = {
 					text: "Added Successfully!",
 					icon: "success",
 					showConfirmButton: false,
-					timer: 1500
+					timer: 1500,
+					timerProgressBar: true,
 				});
 				return true;
 			})
@@ -78,26 +79,40 @@ export const actions = {
 			});
 			
 	},
-	async updateProgram ({commit}, payload) {
-		await this.$axios.$put(`/programmes/${payload.id}`, payload)
+	async updateProgram ({commit, dispatch}, payload) {
+		return await this.$axios.$put(`/programmes/${payload.id}`, payload)
 			.then(response =>  {
-		
+				Swal.fire({
+					title: "Success",
+					text: "Updated Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-	
-			})
-			.finally(function () {
-		
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program update Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-	
 	},
 	async deleteProgram ({commit}, {id}) {
-		await this.$axios.$delete(`/programmes/${id}`)
+		return await this.$axios.$delete(`/programmes/${id}`)
 			.then(response =>  {
-		
+				Swal.fire({
+					title: "Success",
+					text: "Deleted Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-				console.log(error);
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Delete Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
 			
 	}

@@ -1,6 +1,6 @@
 const limit = '&_limit=1000';
+import Swal from 'sweetalert2';
 export const state = () => ({
-	// programmesData: []
 	trainingsData: {
 		success: false,
 		result: [],
@@ -16,21 +16,16 @@ export const getters =  {
 };
 
 export const mutations = {
-	
+	ADD_TO_TRAININGSDATA(state, response) {
+		state.trainingsData.success = true;
+		state.trainingsData.result.push(response);
+	},
 	SET_TRAININGSDATA (state, trainingsData) {
 		if (trainingsData && Array.isArray(trainingsData)) {
 			state.trainingsData.success = true;
 			state.trainingsData.result = trainingsData;
 			state.trainingsData.error = {};
-		} else {
-			// console.log('error'+trainingsData);
-			state.trainingsData.success = false;
-			state.trainingsData.error = {
-				message: {
-					message: 'Error occured!'
-				}
-			};
-		}
+		} 
 	},
 	SET_TRAININGS_COUNT (state, trainingsCount) {
 		state.trainingsCount = trainingsCount;
@@ -41,84 +36,53 @@ export const actions = {
 	async setTrainingsData ({commit}, {qs}) {
 		 await this.$axios.$get(`/trainings?${qs}${limit}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_TRAININGSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				console.log(error);
-				commit("SET_TRAININGSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
-			}); 
+			});
 	},
 	async countTrainings ({commit}, {qs}) {
 		await this.$axios.$get(`/trainings/count?${qs}`)
 		 .then(response =>  {
-		 // handle success
 			 commit("SET_TRAININGS_COUNT", response);
 		 })
 		 .catch((e) => {
-		 // handle error
-			 commit("SET_TRAININGS_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
 		 });
  },
-	async addTraining ({commit}, payload) {
-		await this.$axios.$post('/trainings', payload)
+	async addTraining ({commit, dispatch}, payload) {
+		return await this.$axios.$post('/trainings', payload)
 			.then(response =>  {
-			// handle success
-				commit("SET_TRAININGSDATA", response);
-				// console.log(response);
+				commit("ADD_TO_TRAININGSDATA", response);
+				Swal.fire({
+					title: "Success",
+					text: "Added Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				commit("SET_TRAININGSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Training Creation Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-		
 	},
 	async updateTraining ({commit}, payload) {
 		await this.$axios.$put(`/trainings/${payload.id}`, payload)
 			.then(response =>  {
-			// handle success
 				commit("SET_TRAININGSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				//console.log(error);
-				// commit("SET_TRAININGSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				//console.log('finally');
 			});
+			
 	},
 	async deleteTraining ({commit}, {id}) {
 		await this.$axios.$delete(`/trainings/${id}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_TRAININGSDATA", response);
-				//console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				//console.log(error);
-				commit("SET_TRAININGSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				//console.log('finally');
 			});
 	}
 };

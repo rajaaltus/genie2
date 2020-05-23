@@ -1,6 +1,6 @@
 const limit = '&_limit=1000';
+import Swal from 'sweetalert2';
 export const state = () => ({
-	
 	presentationsData: {
 		success: false,
 		result: [],
@@ -16,20 +16,15 @@ export const getters =  {
 };
 
 export const mutations = {
-	
+	ADD_TO_PRESENTATIONSDATA(state, response) {
+		state.presentationsData.success = true;
+		state.presentationsData.result.push(response);
+	},
 	SET_PRESENTATIONSDATA (state, presentationsData) {
 		if (presentationsData && Array.isArray(presentationsData)) {
 			state.presentationsData.success = true;
 			state.presentationsData.result = presentationsData;
 			state.presentationsData.error = {};
-		} else {
-			console.log('error'+presentationsData);
-			state.presentationsData.success = false;
-			state.presentationsData.error = {
-				message: {
-					message: 'Error occured!'
-				}
-			};
 		}
 	},
 	SET_PRESENTATIONS_COUNT (state, presentationsCount) {
@@ -41,86 +36,54 @@ export const actions = {
 	async setPresentationsData ({commit}, {qs}) {
 		 await this.$axios.$get(`/presentations?${qs}${limit}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_PRESENTATIONSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				// commit("SET_PRESENTATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
 			});
 	},
 	async countPresentations ({commit}, {qs}) {
 		await this.$axios.$get(`/presentations/count?${qs}`)
 		 .then(response =>  {
-		 // handle success
 			 commit("SET_PRESENTATIONS_COUNT", response);
 		 })
 		 .catch((e) => {
-		 // handle error
-			 commit("SET_PRESENTATIONS_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
 		 });
  },
-	async addPresentation ({commit}, payload) {
-		await this.$axios.$post('/presentations', payload)
+	async addPresentation ({commit, dispatch}, payload) {
+		return await this.$axios.$post('/presentations', payload)
 			.then(response =>  {
-			// handle success
-				commit("SET_PRESENTATIONSDATA", response);
-				// console.log(response);
+				commit("ADD_TO_PRESENTATIONSDATA", response);
+				Swal.fire({
+					title: "Success",
+					text: "Added Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				commit("SET_PRESENTATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Presentation Creation Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-		
 	},
 	async updatePresentation ({commit}, payload) {
 		await this.$axios.$put(`/presentations/${payload.id}`, payload)
 			.then(response =>  {
-			// handle success
 				commit("SET_PRESENTATIONSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				commit("SET_PRESENTATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
 			});
-	
 	},
 	async deletePresentation ({commit}, {id}) {
 		await this.$axios.$delete(`/presentations/${id}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_PRESENTATIONSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				commit("SET_PRESENTATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
 			});
+		
 	}
 };
 

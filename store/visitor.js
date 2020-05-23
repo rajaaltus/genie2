@@ -1,6 +1,6 @@
 const limit = '&_limit=1000';
+import Swal from 'sweetalert2';
 export const state = () => ({
-	// programmesData: []
 	visitorsData: {
 		success: false,
 		result: [],
@@ -17,21 +17,16 @@ export const getters =  {
 };
 
 export const mutations = {
-	
+	ADD_TO_VISITORSDATA(state, response) {
+		state.visitorsData.success = true;
+		state.visitorsData.result.push(response);
+	},
 	SET_VISITORSDATA (state, visitorsData) {
 		if (visitorsData && Array.isArray(visitorsData)) {
 			state.visitorsData.success = true;
 			state.visitorsData.result = visitorsData;
 			state.visitorsData.error = {};
-		} else {
-			// console.log('error'+visitorsData);
-			state.visitorsData.success = false;
-			state.visitorsData.error = {
-				message: {
-					message: 'Error occured!'
-				}
-			};
-		}
+		} 
 	},
 	SET_VISITORS_COUNT (state, visitorsCount) {
 		state.visitorsCount = visitorsCount;
@@ -45,84 +40,56 @@ export const actions = {
 	async setVisitorsData ({commit}, {qs}) {
 		 await this.$axios.$get(`/visitors?${qs}${limit}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_VISITORSDATA", response);
-				// console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				console.log(error);
-				// commit("SET_VISITORSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
 			});
+			
 	},
 	async countVisitors ({commit}, {qs}) {
 		await this.$axios.$get(`/visitors/count?${qs}`)
 		 .then(response =>  {
-		 // handle success
 			 commit("SET_VISITORS_COUNT", response);
 		 })
 		 .catch((e) => {
-		 // handle error
-			//  commit("SET_VISITORS_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
 		 });
  },
-	async addVisitor ({commit}, payload) {
-		await this.$axios.$post('/visitors', payload)
+	async addVisitor ({commit, dispatch}, payload) {
+		return await this.$axios.$post('/visitors', payload)
 			.then(response =>  {
-			// handle success
-				commit("SET_VISITORSDATA", response);
-				// console.log(response);
+				commit("ADD_TO_VISITORSDATA", response);
+				Swal.fire({
+					title: "Success",
+					text: "Added Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-				commit("SET_ERROR", response);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Creation Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-		// commit('SET_VISITORSDATA', programmesData)
 	},
 	async updateVisitor ({commit}, payload) {
 		await this.$axios.$put(`/visitors/${payload.id}`, payload)
 			.then(response =>  {
-			// handle success
 				commit("SET_VISITORSDATA", response);
-				// console.log(response);
+				
 			})
 			.catch((e) => {
-			// handle error
-				// console.log(error);
-				// commit("SET_VISITORSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				// console.log('finally');
 			});
-		// commit('SET_VISITORSDATA', programmesData)
 	},
 	async deleteVisitor ({commit}, {id}) {
 		await this.$axios.$delete(`/visitors/${id}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_VISITORSDATA", response);
-				console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				console.log(error);
-				// commit("SET_VISITORSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				console.log('finally');
 			});
+		
 	}
 };
 

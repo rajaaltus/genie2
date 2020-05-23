@@ -206,21 +206,11 @@ export default {
         var payload = this.presentation;
         // console.log(payload);
         var vm = this;
-        this.$store
-          .dispatch("presentation/addPresentation", payload)
-          .then((resp) => {
-            Swal.fire({
-              title: "Success",
-              text: "Added Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            this.reset();
+        let res = this.$store.dispatch("presentation/addPresentation", payload)
+          res.then((data) => {
+            if (data)
+              this.reset();
           })
-          .catch((err) => {
-            Swal.fire("Something Wrong!");
-          });
       }
     },
     async handleFileUpload(event) {

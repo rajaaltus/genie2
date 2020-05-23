@@ -427,7 +427,7 @@ export default {
       // confirm('Are you sure you want to delete this item?') && this.programmesData.splice(index, 1)
       this.deletedItem.deleted = true;
       var payload = this.deletedItem;
-      console.log(payload);
+      // console.log(payload);
       var vm = this;
       Swal.fire({
         title: "Are you sure?",
@@ -453,13 +453,6 @@ export default {
               });
               this.reloadData();
             });
-          Swal.fire({
-            title: "Something Wrong!",
-            text: err,
-            icon: "warning",
-            showConfirmButton: false,
-            timer: 4500,
-          });
         }
       });
     },
@@ -497,36 +490,17 @@ export default {
         this.editedItem.department = this.editedItem.department.id;
         var payload = this.editedItem;
         console.log(payload);
-        this.$store
-          .dispatch("program/updateProgram", payload)
-          .then((resp) => {
-            Swal.fire({
-              title: "Success",
-              text: "Updated Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-
+        let res = this.$store.dispatch("program/updateProgram", payload)
+          res.then(data => {
+            if (data) {
             if (this.imageToDelete) {
               this.$store.dispatch("deleteFile", { id: this.imageToDelete });
               this.imageToDelete = null;
             }
             this.reloadData();
             this.image_url = null;
-          })
-          .catch((err) => {
-            Swal.fire({
-              title: "Something Wrong!",
-              text: err,
-              icon: "warning",
-              showConfirmButton: false,
-              timer: 4500,
-            });
-          })
-          .finally(() => {
-            this.image_url = null;
-          });
+            }
+      })
       }
       this.close();
     },

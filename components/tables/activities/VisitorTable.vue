@@ -142,7 +142,7 @@
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="editedItem.from_date"
-                            :return-value.sync="date"
+                            :return-value.sync="editFrom"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
                             color="success"
@@ -163,7 +163,7 @@
                           <v-btn
                             text
                             color="success"
-                            @click="$refs.menu.save(date)"
+                            @click="$refs.menu.save(editFrom)"
                           >
                             OK
                           </v-btn>
@@ -183,7 +183,7 @@
                           <v-text-field
                             v-model="editedItem.to_date"
                             :rules="[v => !!v || 'Item is required']"
-                            :return-value.sync="date1"
+                            :return-value.sync="editTo"
                             readonly
                             color="success"
                             label="To"
@@ -202,7 +202,7 @@
                           <v-btn
                             text
                             color="success"
-                            @click="$refs.menu1.save(date1)"
+                            @click="$refs.menu1.save(editTo)"
                           >
                             OK
                           </v-btn>
@@ -285,6 +285,8 @@ export default {
   data: () => ({
     loading: false,
     dialog: false,
+    editFrom: null,
+    editTo: null,
     annualYear: 0,
     headers: [
       {
@@ -323,6 +325,7 @@ export default {
       image: null,
       rejected_reason: null
     },
+    editedIndex: -1,
     image_url: "/image_placeholder.png",
     selectedFile: null,
     deletedItem: {
@@ -507,7 +510,7 @@ export default {
         this.editedItem.user = this.editedItem.user.id;
         this.editedItem.department = this.editedItem.department.id;
         var payload = this.editedItem;
-        console.log(payload);
+        // console.log(payload);
         this.$store
           .dispatch("visitor/updateVisitor", payload)
           .then(resp => {

@@ -100,7 +100,11 @@
                   <v-btn text color="success" @click="duration_from = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="success" @click="$refs.menu.save(duration_from)">
+                  <v-btn
+                    text
+                    color="success"
+                    @click="$refs.menu.save(duration_from)"
+                  >
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -131,7 +135,11 @@
                   <v-btn text color="success" @click="duration_to = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="success" @click="$refs.menu1.save(duration_to)">
+                  <v-btn
+                    text
+                    color="success"
+                    @click="$refs.menu1.save(duration_to)"
+                  >
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -156,19 +164,23 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="image_url?`${$axios.defaults.baseURL}${image_url}`:'/image_placeholder.png'"
+                    :src="
+                      image_url
+                        ? `${$axios.defaults.baseURL}${image_url}`
+                        : '/image_placeholder.png'
+                    "
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
                     max-width="100%"
                     max-height="175"
                   >
-                  <v-progress-linear
-                    :active="imgLoader"
-                    :indeterminate="imgLoader"
-                    absolute
-                    bottom
-                    color="deep-purple accent-4"
-                  ></v-progress-linear>
+                    <v-progress-linear
+                      :active="imgLoader"
+                      :indeterminate="imgLoader"
+                      absolute
+                      bottom
+                      color="deep-purple accent-4"
+                    ></v-progress-linear>
                     <v-fade-transition>
                       <v-overlay v-if="hover" absolute color="#00564c">
                         <v-btn @click="$refs.image.click()">
@@ -261,7 +273,7 @@ export default {
       this.image_url = null;
     },
     async handleFileUpload(event) {
-      this.imgLoader=true;
+      this.imgLoader = true;
       this.selectedFile = event.target.files[0];
       // console.log(this.selectedFile);
       const data = new FormData();
@@ -273,7 +285,7 @@ export default {
       });
       this.image_url = uploadRes.data[0].url;
       this.visitor.image = uploadRes.data[0].id;
-      this.imgLoader=false;
+      this.imgLoader = false;
     },
     async visitorAdd() {
       if (this.$refs.form.validate()) {
@@ -288,27 +300,12 @@ export default {
         this.visitor.department = this.$store.state.auth.user.department;
         var payload = this.visitor;
         // console.log(payload);
-        this.$store
-          .dispatch("visitor/addVisitor", payload)
-          .then((resp) => {
-            Swal.fire({
-              title: "Success",
-              text: "Added Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            this.reset();
+        let res = this.$store.dispatch("visitor/addVisitor", payload)
+          res.then((data) => {
+            if (data)
+              this.reset();
           })
-          .catch((err) => {
-            Swal.fire({
-              title: "Oops!",
-              text: "Someting Wrong!",
-              icon: "error",
-              showConfirmButton: false,
-              timer: 3000,
-            });
-          });
+          
       }
     },
   },
