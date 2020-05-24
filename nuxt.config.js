@@ -95,8 +95,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
 	axios: {
-        // baseURL: 'http://armsbackend.localhost'
-		 baseURL: 'http://site1.localhost'
+         baseURL: 'http://armsbackend.localhost'
+		 // baseURL: 'http://site1.localhost'
 		//  baseURL: 'https://genie2.rotihouselao.com'
      // baseURL: 'http://14.139.159.112:1338'
      // baseURL: 'https://5ebcef27624fa50006e2b90e--genie2.netlify.app'
