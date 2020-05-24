@@ -28,16 +28,24 @@
       </div>
 
       <v-card-text>
-        <v-icon small class="mdi mdi-email-outline mr-3"></v-icon>
+        <v-icon color="red" small class="mdi mdi-email-outline mr-3"></v-icon>
         <span class="body-2 black-text"> {{ userProfile.personal_email }}</span
         ><br />
-        <v-icon small class="mdi mdi-phone mr-3"></v-icon>
+        <v-icon color="blue" small class="mdi mdi-phone mr-3"></v-icon>
         <span class="body-2 text--black">
           {{ userProfile.contact_no }}
         </span>
       </v-card-text>
     </v-card>
-    <div class="mt-4">
+    <v-card
+      tile
+      elevation="1"
+      class="mt-1"
+    >
+    <v-card-title>
+      <v-icon color="green" class="pr-1">mdi-bookshelf</v-icon> Publications
+    </v-card-title>
+    <v-card-text>
       <apexchart
         width="100%"
         height="350"
@@ -45,8 +53,9 @@
         :options="chartOptions"
         :series="series"
       ></apexchart>
-        <!-- <v-btn x-small color="green"  @click="updateChart">Update!</v-btn> -->
-    </div>
+    </v-card-text>
+    </v-card>
+
   </v-col>
 </template>
 
@@ -56,6 +65,7 @@ export default {
   data() {
     return {
       avatar_url: null,
+
       chartOptions: {
         plotOptions: {
           bar: {
@@ -65,6 +75,7 @@ export default {
         xaxis: {
           categories: ['Journal Articles', 'Articles', 'Books', 'Book Chapters', 'Monographs', 'Manuals', 'Reports', 'General'],
         },
+        
       },
       series: [
         {

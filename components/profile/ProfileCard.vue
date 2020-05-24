@@ -51,26 +51,16 @@
         <span class="body-2">{{ profile.personal_email }}</span
         ><br />
         <v-icon small color="blue" class="mdi mdi-phone mr-3"></v-icon>
-        <span class="body-2">{{ profile.contact_no }}</span>
+        <span class="body-2">{{ profile.contact_no }}</span><br>
       </v-card-text>
-
-      <v-card-actions>
-        <v-switch
-          v-if="$auth.user.userType !== 'DEPARTMENT'"
-          v-model="publicProfile"
-          color="green darken-3"
-          label="Public Access"
-          class="pl-2"
-        ></v-switch>
-      </v-card-actions>
-      <v-divider></v-divider>
-      <nuxt-link :to="`/profile/${profile.employee_id}`">
-      <div v-if="publicProfile">
-      <v-chip class="ma-2" label >
-        <small>{{'http://arms.nimhans.ac.in/profile/'+profile.employee_id}}</small>
-      </v-chip>
-      </div>
-      </nuxt-link>
+    </v-card>
+    <v-card tile elevation="1">
+      <v-card-title>
+        Public Profile Link
+      </v-card-title>
+      <v-card-text>
+       <small><span class="body-2">{{'http://arms.nimhans.ac.in/profile/'+profile.employee_id}}</span></small>
+      </v-card-text>
     </v-card>
   </div>
 </template>

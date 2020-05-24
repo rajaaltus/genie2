@@ -9,7 +9,7 @@
           <ProfileCard :userProfile="userProfile" :publicationTypeCounts="publicationTypeCounts" />
 
           <v-col cols="12" md="7" lg="7" class="pro-content">
-            <Publication
+            <!-- <Publication
               :publicationsData="publicationsData"
               :journalArticles="journalArticles"
               :articles="articles"
@@ -19,7 +19,7 @@
               :manuals="manuals"
               :reports="reports"
               :general="general"
-            />
+            /> -->
 
             <Qualification :qualifications="qualifications" />
 
@@ -241,5 +241,6 @@ export default {
 }
 a {
   text-decoration: none !important;
+  color: black;
 }
 </style>
