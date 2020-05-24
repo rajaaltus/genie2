@@ -1,7 +1,7 @@
 {
   "name": "genie2",
-  "version": "1.0.0",
-  "description": "Genie 2 for ARMS NIMHANS",
+  "version": "2.0.0",
+  "description": "ARMS NIMHANS",
   "author": "Altus InfoTech",
   "private": true,
   "scripts": {

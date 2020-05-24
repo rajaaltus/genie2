@@ -1,8 +1,8 @@
 <template>
   <div class="text-center">
     <v-bottom-sheet v-model="sheet" persistent>
-      <v-list color="#fff" tile>
-        <v-subheader><span class="subtitle-1 font-weight-normal black--text">Available reports for the selected reporting year. Click to download or close this window to create the new report.</span>
+      <v-list  tile>
+        <v-subheader><span class="subtitle-1 font-weight-normal">Available reports for the selected reporting year. Click to download or close this window to create the new report.</span>
         <v-layout align-end justify-end>
         <v-btn
           class="mt-0"

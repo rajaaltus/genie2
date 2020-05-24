@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card tile color="grey lighten-5">
+    <v-card tile >
       <v-card-text class="px-0 py-0">
         <v-row class="px-5">
           <v-col cols="12" lg="2" class="mt-5">
@@ -19,7 +19,7 @@
           </v-col>
           <v-col cols="12" lg="3">
             <v-label><small>Months Range</small></v-label>
-            <vc-date-picker mode="range" v-model="range" ref="range" />
+            <vc-date-picker mode="range" v-model="range" :class="$vuetify.theme.dark?'customMonth':''" ref="range" />
           </v-col>
           <v-col cols="12" lg="2" class="mt-5" v-if="$auth.user.userType === 'DEPARTMENT'">
             <v-select
