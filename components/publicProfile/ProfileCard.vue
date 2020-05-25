@@ -38,13 +38,13 @@
       </v-card-text>
     </v-card>
     <div class="mt-4">
-      <apexchart
+      <!-- <apexchart
         width="100%"
         height="350"
         type="bar"
         :options="chartOptions"
         :series="series"
-      ></apexchart>
+      ></apexchart> -->
         <!-- <v-btn x-small color="green"  @click="updateChart">Update!</v-btn> -->
     </div>
   </v-col>
@@ -52,26 +52,26 @@
 
 <script>
 export default {
-  props: ["userProfile", "publicationTypeCounts"],
+  props: ["userProfile"],
   data() {
     return {
       avatar_url: null,
-      chartOptions: {
-        plotOptions: {
-          bar: {
-            horizontal: false,
-          },
-        },
-        xaxis: {
-          categories: ['Journal Articles', 'Articles', 'Books', 'Book Chapters', 'Monographs', 'Manuals', 'Reports', 'General'],
-        },
-      },
-      series: [
-        {
-          name: "Publications",
-          data: [0, 0, 0, 0, 0, 0, 0, 0],
-        },
-      ],
+      // chartOptions: {
+      //   plotOptions: {
+      //     bar: {
+      //       horizontal: false,
+      //     },
+      //   },
+      //   xaxis: {
+      //     categories: ['Journal Articles', 'Articles', 'Books', 'Book Chapters', 'Monographs', 'Manuals', 'Reports', 'General'],
+      //   },
+      // },
+      // series: [
+      //   {
+      //     name: "Publications",
+      //     data: [0, 0, 0, 0, 0, 0, 0, 0],
+      //   },
+      // ],
     };
   },
   async mounted() {
@@ -79,16 +79,16 @@ export default {
       this.avatar_url =
         this.$axios.defaults.baseURL + this.userProfile.image.url;
     }
-    this.updateChart();
+    // this.updateChart();
   },
   methods: {
-    updateChart() {
-      this.series = [
-        {
-          data: this.publicationTypeCounts
-        }
-      ]
-    },
+    // updateChart() {
+    //   this.series = [
+    //     {
+    //       data: this.publicationTypeCounts
+    //     }
+    //   ]
+    // },
   },
 };
 </script>

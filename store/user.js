@@ -100,17 +100,12 @@ export const mutations = {
 
 export const actions = {
 	async addUser ({commit}, payload) {
-		await this.$axios.$post('/users', payload)
+		return await this.$axios.$post('/users', payload)
 		.then(response =>  {
-			// handle success
 				return true;
 			})
 			.catch((e) => {
-			// handle error
-				// commit("SET_USERPROFILE", error);
-			})
-			.finally(function () {
-			// always executed
+				return e;
 			});
 	},
 	async deleteUser ({commit}, {id}) {

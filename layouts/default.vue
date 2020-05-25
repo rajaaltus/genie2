@@ -262,7 +262,7 @@
     </v-navigation-drawer>
     <v-app-bar flat dense app>
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <v-app-bar-nav-icon
+      <!-- <v-app-bar-nav-icon
         @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
         >
         <v-tooltip right>
@@ -271,9 +271,7 @@
       </template>
       <span>Switch to Dark/Light mode</span>
     </v-tooltip>
-        
-        </v-app-bar-nav-icon
-      >
+    </v-app-bar-nav-icon> -->
       <v-spacer></v-spacer>
       <h2>Reporting Year</h2>
       <v-card
