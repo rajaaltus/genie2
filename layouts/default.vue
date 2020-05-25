@@ -262,7 +262,7 @@
     </v-navigation-drawer>
     <v-app-bar flat dense app>
       <v-app-bar-nav-icon @click.stop="mini = !mini" />
-      <v-app-bar-nav-icon
+      <!-- <v-app-bar-nav-icon
         @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
         >
         <v-tooltip right>
@@ -271,9 +271,7 @@
       </template>
       <span>Switch to Dark/Light mode</span>
     </v-tooltip>
-        
-        </v-app-bar-nav-icon
-      >
+    </v-app-bar-nav-icon> -->
       <v-spacer></v-spacer>
       <h2>Reporting Year</h2>
       <v-card
@@ -296,6 +294,7 @@
       :key="snackbar.text + Math.random()"
       :value="snackbar.showing"
       @input="removeSnackbar(snackbar)"
+      @errors="handleErrors"
       :timeout="snackbar.timeout"
       :color="snackbar.color"
       :style="`top: ${index * 60 + 8}px`"
@@ -413,6 +412,9 @@ export default {
     this.setAvatar();
   },
   methods: {
+    handleErrors() {
+      this.$store.dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Creation Failed!', timeout: 3000})
+    },
     removeSnackbar(snackbar) {
       this.$store.dispatch("snackbar/remove", snackbar);
     },

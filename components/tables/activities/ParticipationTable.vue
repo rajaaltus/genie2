@@ -133,7 +133,7 @@
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             v-model="editedItem.from_date"
-                            :return-value.sync="date"
+                            :return-value.sync="editFrom"
                             :rules="[v => !!v || 'Item is required']"
                             readonly
                             color="success"
@@ -154,7 +154,7 @@
                           <v-btn
                             text
                             color="primary"
-                            @click="$refs.menu.save(date)"
+                            @click="$refs.menu.save(editFrom)"
                           >
                             OK
                           </v-btn>
@@ -174,7 +174,7 @@
                           <v-text-field
                             v-model="editedItem.to_date"
                             :rules="[v => !!v || 'Item is required']"
-                            :return-value.sync="date1"
+                            :return-value.sync="editTo"
                             readonly
                             color="success"
                             label="To"
@@ -193,7 +193,7 @@
                           <v-btn
                             text
                             color="primary"
-                            @click="$refs.menu1.save(date1)"
+                            @click="$refs.menu1.save(editTo)"
                           >
                             OK
                           </v-btn>
@@ -275,6 +275,8 @@ export default {
   props: ["reportYears", "dataFrom"],
   data: () => ({
     loading: false,
+    editFrom: null, 
+    editTo: null,
     dialog: false,
     annualYear: 0,
     headers: [
@@ -316,6 +318,7 @@ export default {
       image: null,
       rejected_reason: null
     },
+    editedIndex: -1,
     image_url: "/image_placeholder.png",
     selectedFile: null,
     deletedItem: {

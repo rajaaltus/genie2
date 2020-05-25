@@ -28,7 +28,7 @@
               </v-col>
               <v-col cols="12" md="9" lg="9">
                 <ProgramForm
-                  :programNames="programNames"
+                  :programNames = "programNames"
                   :dataFrom="staffs"
                   section="Select Faculty / Staff from the list"
                 />

@@ -6,19 +6,11 @@
 
       <v-container>
         <v-row>
-          <ProfileCard :userProfile="userProfile" :publicationTypeCounts="publicationTypeCounts" />
+          <ProfileCard :userProfile="userProfile" />
 
           <v-col cols="12" md="7" lg="7" class="pro-content">
             <Publication
-              :publicationsData="publicationsData"
-              :journalArticles="journalArticles"
-              :articles="articles"
-              :books="books"
-              :bookChapters="bookChapters"
-              :monoGraphs="monoGraphs"
-              :manuals="manuals"
-              :reports="reports"
-              :general="general"
+              :publicationTypeCounts="publicationTypeCounts"
             />
 
             <Qualification :qualifications="qualifications" />

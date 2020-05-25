@@ -1,4 +1,5 @@
 const limit = '&_limit=1000';
+import Swal from 'sweetalert2';
 export const state = () => ({
 	
 	participationsData: {
@@ -16,21 +17,16 @@ export const getters =  {
 };
 
 export const mutations = {
-	
+	ADD_TO_PARTICIPATIONSDATA(state, response) {
+		state.participationsData.success = true;
+		state.participationsData.result.push(response);
+	},
 	SET_PARTICIPATIONSDATA (state, participationsData) {
 		if (participationsData && Array.isArray(participationsData)) {
 			state.participationsData.success = true;
 			state.participationsData.result = participationsData;
 			state.participationsData.error = {};
-		} else {
-			// console.log('error'+participationsData);
-			state.participationsData.success = false;
-			state.participationsData.error = {
-				message: {
-					message: 'Error occured!'
-				}
-			};
-		}
+		} 
 	},
 	SET_PARTICIPATIONS_COUNT (state, participationsCount) {
 		state.participationsCount = participationsCount;
@@ -41,78 +37,54 @@ export const actions = {
 	async setParticipationsData ({commit}, {qs}) {
 		 await this.$axios.$get(`/participations?${qs}${limit}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_PARTICIPATIONSDATA", response);
 			})
 			.catch((e) => {
-			// handle error
-				commit("SET_PARTICIPATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
 			});
-
+			
 		  
 	},
 	async countParticipations ({commit}, {qs}) {
 		await this.$axios.$get(`/participations/count?${qs}`)
 		 .then(response =>  {
-		 // handle success
 			 commit("SET_PARTICIPATIONS_COUNT", response);
 		 })
 		 .catch((e) => {
-		 // handle error
-			 commit("SET_PARTICIPATIONS_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
 		 });
  },
-	async participationAdd ({commit}, payload) {
-		await this.$axios.$post('/participations', payload)
+	async participationAdd ({commit, dispatch}, payload) {
+		return await this.$axios.$post('/participations', payload)
 			.then(response =>  {
-			// handle success
-				commit("SET_PARTICIPATIONSDATA", response);
+				commit("ADD_TO_PARTICIPATIONSDATA", response);
+				Swal.fire({
+					title: "Success",
+					text: "Added Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-			// handle error
-				commit("SET_PARTICIPATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Participation Creation Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-		
 	},
 	async updateParticipation ({commit}, payload) {
 		await this.$axios.$put(`/participations/${payload.id}`, payload)
 			.then(response =>  {
-			// handle success
 				commit("SET_PARTICIPATIONSDATA", response);
 			})
 			.catch((e) => {
-			// handle error
-				// commit("SET_PARTICIPATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
 			});
-	
 	},
 	async deleteParticipation ({commit}, {id}) {
 		await this.$axios.$delete(`/participations/${id}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_PARTICIPATIONSDATA", response);
-				//console.log(response);
 			})
 			.catch((e) => {
-			// handle error
-				//console.log(error);
-				// commit("SET_PARTICIPATIONSDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				//console.log('finally');
 			});
 	}
 };

@@ -65,7 +65,6 @@
               >
               </v-text-field>
             </v-col>
-            
           </v-row>
           <v-row>
             <v-col cols="4">
@@ -98,7 +97,11 @@
                   <v-btn text color="primary" @click="duration_from = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(duration_from)">
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.menu.save(duration_from)"
+                  >
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -133,7 +136,11 @@
                   <v-btn text color="primary" @click="duration_to = false">
                     Cancel
                   </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu1.save(duration_to)">
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.menu1.save(duration_to)"
+                  >
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -156,19 +163,23 @@
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-img
-                    :src="image_url?`${$axios.defaults.baseURL}${image_url}`:'/image_placeholder.png'"
+                    :src="
+                      image_url
+                        ? `${$axios.defaults.baseURL}${image_url}`
+                        : '/image_placeholder.png'
+                    "
                     lazy-src="/image_placeholder.png"
                     class="mt-3"
                     max-width="100%"
                     max-height="175"
                   >
-                  <v-progress-linear
-                    :active="imgLoader"
-                    :indeterminate="imgLoader"
-                    absolute
-                    bottom
-                    color="deep-purple accent-4"
-                  ></v-progress-linear>
+                    <v-progress-linear
+                      :active="imgLoader"
+                      :indeterminate="imgLoader"
+                      absolute
+                      bottom
+                      color="deep-purple accent-4"
+                    ></v-progress-linear>
                     <v-fade-transition>
                       <v-overlay v-if="hover" absolute color="#00564c">
                         <v-btn @click="$refs.image.click()">
@@ -273,25 +284,16 @@ export default {
         var payload = this.participation;
         // console.log(payload);
         var vm = this;
-        this.$store
-          .dispatch("participation/participationAdd", payload)
-          .then((resp) => {
-            Swal.fire({
-              title: "Success",
-              text: "Added Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            this.reset();
+        let res = this.$store.dispatch("participation/participationAdd", payload)
+          res.then((data) => {
+            if(data) {
+              this.reset();
+            }
           })
-          .catch((err) => {
-            Swal.fire("Something Wrong!");
-          });
       }
     },
     async handleFileUpload(event) {
-       this.imgLoader=true;
+      this.imgLoader = true;
       this.selectedFile = event.target.files[0];
       // console.log(this.selectedFile);
       const data = new FormData();
@@ -303,7 +305,7 @@ export default {
       });
       this.image_url = uploadRes.data[0].url;
       this.participation.image = uploadRes.data[0].id;
-       this.imgLoader=false;
+      this.imgLoader = false;
     },
   },
 };

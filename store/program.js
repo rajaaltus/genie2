@@ -1,4 +1,5 @@
 const limit = '&_limit=1000';
+import Swal from 'sweetalert2';
 export const state = () => ({
 	programmesData: {
 		success: false,
@@ -8,14 +9,12 @@ export const state = () => ({
 	programmesCount: 0,
 });
 
-// export const getters =  {
-// 	programmesData (state) {
-// 		return state.programmesData;
-// 	}
-// };
-
 export const mutations = {
 	
+	ADD_TO_PROGRAMMESDATA (state, response) {
+		state.programmesData.success = true;
+		state.programmesData.result.push(response);	
+	},
 	SET_PROGRAMMESDATA (state, programmesData) {
 		if (programmesData && Array.isArray(programmesData)) {
 			state.programmesData.success = true;
@@ -43,74 +42,79 @@ export const actions = {
 	async setProgrammesData ({commit}, {qs}) {
 			await this.$axios.$get(`/programmes?${qs}${limit}`)
 			.then(response =>  {
-			// handle success
 				commit("SET_PROGRAMMESDATA", response);
 			})
 			.catch((e) => {
 				
-			})
-			.finally(function () {
-			// always executed
 			});
+			
 	},
 	async countProgrammes ({commit}, {qs}) {
 		await this.$axios.$get(`/programmes/count?${qs}`)
 		 .then(response =>  {
-		 // handle success
 			 commit("SET_PROGRAMMES_COUNT", response);
 		 })
 		 .catch((e) => {
-		 // handle error
 			 commit("SET_PROGRAMMES_COUNT", error);
-		 })
-		 .finally(function () {
-		 // always executed
 		 });
+		 
  },
-	async addProgram ({commit}, payload) {
+	async addProgram ({commit, dispatch}, payload) {
 		return await this.$axios.$post('/programmes', payload)
 			.then(response =>  {
-				commit("SET_PROGRAMMESDATA", response);
+				commit("ADD_TO_PROGRAMMESDATA", response);
+				Swal.fire({
+					title: "Success",
+					text: "Added Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-				console.log('From Store:', e);
-				
-			})
-			.finally(function () {
-			// always executed
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Creation Failed!', timeout: 3000}, {root: true});
+				return false;
+			});
 			
-			});
-		// commit('SET_PROGRAMMESDATA', programmesData)
 	},
-	async updateProgram ({commit}, payload) {
-		await this.$axios.$put(`/programmes/${payload.id}`, payload)
+	async updateProgram ({commit, dispatch}, payload) {
+		return await this.$axios.$put(`/programmes/${payload.id}`, payload)
 			.then(response =>  {
-		
+				Swal.fire({
+					title: "Success",
+					text: "Updated Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-	
-			})
-			.finally(function () {
-		
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program update Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
-	
 	},
 	async deleteProgram ({commit}, {id}) {
-		await this.$axios.$delete(`/programmes/${id}`)
+		return await this.$axios.$delete(`/programmes/${id}`)
 			.then(response =>  {
-			// handle success
-				// commit("SET_PROGRAMMESDATA", response);
-				// console.log(response);
+				Swal.fire({
+					title: "Success",
+					text: "Deleted Successfully!",
+					icon: "success",
+					showConfirmButton: false,
+					timer: 1500,
+					timerProgressBar: true,
+				});
+				return true;
 			})
 			.catch((e) => {
-			// handle error
-				console.log(error);
-				// commit("SET_PROGRAMMESDATA", error);
-			})
-			.finally(function () {
-			// always executed
-				console.log('finally');
+				dispatch('snackbar/setSnackbar', {color: 'red', text:'Program Delete Failed!', timeout: 3000}, {root: true});
+				return false;
 			});
+			
 	}
 };
 

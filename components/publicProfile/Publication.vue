@@ -1,5 +1,15 @@
 <template>
-  <v-alert
+  <div class="mt-4">
+    <apexchart
+      width="100%"
+      height="350"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
+    <!-- <v-btn x-small color="green"  @click="updateChart">Update!</v-btn> -->
+  </div>
+  <!-- <v-alert
     tile
     elevation="0"
     border="left"
@@ -82,21 +92,43 @@
       </template>
       <span>Articles for General Public / IEC Materials</span>
     </v-tooltip>
-  </v-alert>
+  </v-alert> -->
 </template>
 
 <script>
 export default {
-  props: [
-    "publicationsData",
-    "journalArticles",
-    "articles",
-    "books",
-    "bookChapters",
-    "monoGraphs",
-    "manuals",
-    "reports",
-    "general"
-  ],
+  props: ["publicationTypeCounts"],
+  data() {
+    return {
+      chartOptions: {
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
+        },
+        xaxis: {
+          categories: ['Journal Articles', 'Articles', 'Books', 'Book Chapters', 'Monographs', 'Manuals', 'Reports', 'General'],
+        },
+      },
+      series: [
+        {
+          name: "Publications",
+          data: [0, 0, 0, 0, 0, 0, 0, 0],
+        },
+      ],
+    }
+  },
+  async mounted() {
+    this.updateChart();
+  },
+  methods: {
+    updateChart() {
+      this.series = [
+        {
+          data: this.publicationTypeCounts
+        }
+      ]
+    },
+  },
 };
 </script>

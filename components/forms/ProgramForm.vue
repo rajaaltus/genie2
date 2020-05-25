@@ -292,6 +292,7 @@ export default {
       approvals: ["Pending", "Rejected", "Approved"]
     };
   },
+  
   methods: {
     getLatestUsers() {
       console.log('recieving....');
@@ -311,7 +312,7 @@ export default {
       this.$refs.form.reset();
       this.image_url = null;
     },
-    async programAdd() {
+    programAdd() {
       if (this.$refs.form.validate()) {
         this.program.annual_year = this.$store.state.selectedYear;
         this.program.department = this.$store.state.auth.user.department;
@@ -322,32 +323,12 @@ export default {
         if (typeof this.program.name === "object")
           this.program.name = this.program.name.name;
         var payload = this.program;
-        console.log(payload);
-        await this.$store
-          .dispatch("program/addProgram", payload)
-          .then(resp => {
-            Swal.fire({
-              title: "Success",
-              text: "Added Successfully!",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 1500
-            });
+        // console.log(payload);
+        let res = this.$store.dispatch("program/addProgram", payload)
+        res.then(data => {
+          if (data)
             this.reset();
-            this.reloadData();
-          })
-          .catch(err => {
-            console.log(err);
-            this.$store.dispatch("snackbar/setSnackbar", {color: 'red', text:'Program Creation Failed!', timeout: 3000});
-            // Swal.fire({
-						// 	title: 'Oops!',
-						// 	text: err.response.data.data[0].messages[0].message,
-						// 	icon: 'error',
-						// 	showConfirmButton: false,
-						// 	timer: 3000,
-						// 	timerProgressBar: true,
-						// })
-          });
+        })
       }
     },
     async reloadData() {

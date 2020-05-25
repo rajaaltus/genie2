@@ -292,31 +292,37 @@ export default {
 				})
 				.catch(err => {
           this.$store.dispatch('snackbar/setSnackbar', {color: 'red', text: err.response.data.data[0].messages[0].message, timer: '1000'})
-					// Swal.fire({
-					// 	title: 'Login Failed!',
-					// 	text: err.response.data.data[0].messages[0].message,
-					// 	icon: 'error'
-					// });
 					this.resetLogin();
 				});
 		},
     async registerMe() {
       if (this.$refs.regForm.validate()) {
         var regPayload = this.register;
-        console.log(regPayload);
-        var res =  await this.$store.dispatch('user/addUser', regPayload)
-        console.log(res);
+        let res = this.$store.dispatch('user/addUser', regPayload)
+        res.then((data) => {
+          console.log('Result:' , data);
+          if(data==true) {
+            Swal.fire({
+              title: "Successfully Registered your Account.",
+              text: "Please contact to your department to activate your account.",
+              icon: "info"
+            });
+            this.reset();
+            this.loginForm(); 
+          } else {
+            Swal.fire({
+              title: "Failure!",
+              text: data.response.data.message?data.response.data.message[0].messages[0].message:'Something Wrong! Please try again.',
+              icon: "error"
+            });
+            // console.log('Reg Failure:', data.response.data.message[0].messages[0].message)
+          }
+          
+        });
         // this.$axios
         //   .$post("/auth/local/register", regPayload)
         //   .then(resp => {
-        //     Swal.fire({
-        //       title: "Successfully Registered your Account.",
-        //       text: "Please login to continue using our system",
-        //       icon: "info"
-        //     });
-        //     this.reset();
-        //     this.loginForm();
-        //   })
+            
         //   .catch(err => {
         //     Swal.fire({
         //       title: "Oops!",
@@ -332,7 +338,7 @@ export default {
     },
 
     reset() {
-      this.$refs.registerForm.reset();
+      this.$refs.regForm.reset();
     },
     resetLogin() {
       this.$refs.login.reset();
