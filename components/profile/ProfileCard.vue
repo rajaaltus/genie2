@@ -64,7 +64,7 @@
         ></v-switch>
       </v-card-actions>
       <v-divider></v-divider>
-      <nuxt-link :to="`/profile/${profile.employee_id}`" target="_blank">
+      <nuxt-link :to="`/profile/${profile.employee_id}`">
       <div v-if="publicProfile">
       <v-chip class="ma-2" label >
         <small>{{'http://arms.nimhans.ac.in/profile/'+profile.employee_id}}</small>
