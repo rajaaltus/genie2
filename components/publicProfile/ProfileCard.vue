@@ -28,25 +28,15 @@
       </div>
 
       <v-card-text>
-        <v-icon small class="mdi mdi-email-outline mr-3"></v-icon>
+        <v-icon color="red" small class="mdi mdi-email-outline mr-3"></v-icon>
         <span class="body-2 black-text"> {{ userProfile.personal_email }}</span
         ><br />
-        <v-icon small class="mdi mdi-phone mr-3"></v-icon>
+        <v-icon color="blue" small class="mdi mdi-phone mr-3"></v-icon>
         <span class="body-2 text--black">
           {{ userProfile.contact_no }}
         </span>
       </v-card-text>
     </v-card>
-    <div class="mt-4">
-      <!-- <apexchart
-        width="100%"
-        height="350"
-        type="bar"
-        :options="chartOptions"
-        :series="series"
-      ></apexchart> -->
-        <!-- <v-btn x-small color="green"  @click="updateChart">Update!</v-btn> -->
-    </div>
   </v-col>
 </template>
 
