@@ -1,12 +1,24 @@
 <template>
-  <div class="mt-4">
+  <div>
+    <v-alert
+    tile
+    elevation="0"
+    border="left"
+    color="green lighten-1"
+    colored-border
+    icon="mdi-bookshelf"
+  >
+    <h2 class="font-weight-bold">Publications ({{ total }}) </h2>
     <apexchart
       width="100%"
-      height="350"
+      height="250"
       type="bar"
       :options="chartOptions"
       :series="series"
     ></apexchart>
+    </v-alert>
+ 
+   
     <!-- <v-btn x-small color="green"  @click="updateChart">Update!</v-btn> -->
   </div>
   <!-- <v-alert
@@ -97,15 +109,22 @@
 
 <script>
 export default {
-  props: ["publicationTypeCounts"],
+  props: ["publicationTypeCounts", "total"],
   data() {
     return {
       chartOptions: {
+        dataLabels: {
+          enabled: true
+        },
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal: true,
+            distributed: false
           },
         },
+        theme: {
+            palette: 'palette5' // upto palette10
+          },
         xaxis: {
           categories: ['Journal Articles', 'Articles', 'Books', 'Book Chapters', 'Monographs', 'Manuals', 'Reports', 'General'],
         },

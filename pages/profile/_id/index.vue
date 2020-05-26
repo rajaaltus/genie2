@@ -9,8 +9,9 @@
           <ProfileCard :userProfile="userProfile" />
 
           <v-col cols="12" md="7" lg="7" class="pro-content">
-            <Publication
+            <Publication v-if="total>0"
               :publicationTypeCounts="publicationTypeCounts"
+              :total="total"
             />
 
             <Qualification :qualifications="qualifications" />
@@ -170,6 +171,10 @@ export default {
         var counts=[];
         counts.push(this.journalArticles, this.articles, this.books, this.bookChapters, this.monoGraphs, this.manuals, this.reports, this.general);
         return counts;
+      },
+      total()
+      {
+        return this.$store.state.publication.publicationsData.result.length;
       },
       reportYears() {
         return this.$store.state.reportYears;
